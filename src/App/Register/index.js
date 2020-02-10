@@ -13,22 +13,34 @@ const Register = () => {
 	const [isLoading, setIsLoading] = useState(false)
 	const [isError, setIsError] = useState(false)
 	// form fields
+	const [fName, setFName] = useState('')
+	const [lName, setLName] = useState('')
 	const [email, setEmail] = useState('')
 	const [pass, setPass] = useState('')
 	const [confirmPass, setConfirmPass] = useState('')
-	const state = { email, pass, confirmPass }
+	const state = { fName, lName, email, pass, confirmPass }
 	const validations = [
 		{
+			name: 'fname',
+			validation: value => !/^.{0,2}$/g.test(value), // tests for min length of 3 char
+			value: pass,
+			message: 'Mínimo 3 caracteres'
+		}, {
+			name: 'lname',
+			validation: value => !/^.{0,2}$/g.test(value), // tests for min length of 3 char
+			value: pass,
+			message: 'Mínimo 3 caracteres'
+		}, {
 			name: 'email',
 			validation: value => /^\S+@\S+\.\S+$/g.test(value), // tests for pattern a@b.c
 			value: email,
 			message: 'Formato inválido'
-		},{
+		}, {
 			name: 'pass',
 			validation: value => !/^.{0,5}$/g.test(value), // tests for min length of 6 char
 			value: pass,
 			message: 'Mínimo 6 caracteres'
-		},{
+		}, {
 			name: 'confirmPass',
 			validation: value => value === pass,
 			value: confirmPass,
@@ -41,19 +53,33 @@ const Register = () => {
 		<div style={containerWithPadding}>
 			<HeaderHome linkPath='/login' linkText='Tem cadastro? LOGIN' />
 			<h1 style={welcome}>
-				Crie sua conta de <span style={marker}>{`<INSIRA UM NOME>`}</span>,
+				Crie sua conta de <span style={marker}>{`Colaborador`}</span>,
 			</h1>
 			<Form
 				validations={validations}
 				sendToBackend={sendToBackend ? sendToBackend(state) : () => null}
 				inputs={[
+					<FormInput name='fname' label='Nome' input={
+						<InputText
+							value={fName}
+							onChange={({ target: { value } }) => setFName(value)}
+							placeholder='Para acesso ao app'
+						/>
+					} />,
+					<FormInput name='lname' label='Sobrenome' input={
+						<InputText
+							value={lName}
+							onChange={({ target: { value } }) => setLName(value)}
+							placeholder='Para acesso ao app'
+						/>
+					} />,
 					<FormInput name='email' label='Email' input={
 						<InputText
 							value={email}
 							onChange={({ target: { value } }) => setEmail(value.toLowerCase())}
 							placeholder='Para acesso ao app'
 						/>
-					}/>,
+					} />,
 					<FormInput name='pass' label='Senha' input={
 						<InputText
 							value={pass}
@@ -61,7 +87,7 @@ const Register = () => {
 							placeholder='Mínimo 6 caracteres'
 							type='password'
 						/>
-					}/>,
+					} />,
 					<FormInput name='confirmPass' label='Confirme a senha' input={
 						<InputText
 							value={confirmPass}
@@ -69,7 +95,7 @@ const Register = () => {
 							placeholder='Igual ao campo anterior'
 							type='password'
 						/>
-					}/>
+					} />
 				]}
 			/>
 		</div>

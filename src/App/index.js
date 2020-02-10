@@ -11,24 +11,32 @@ export const App = () => {
 	const [errorLoading, setErrorLoading] = useState(false)
 	const [uid, setUid] = useState(null)
 	const [name, setName] = useState(null)
+	const [lname, setLName] = useState(null)
 	useEffect(() => {
 		return auth.onAuthStateChanged(async user => {
-			if (user && user.emailVerified) setUid(user.uid)
-			else setUid('')
+			if (user && user.emailVerified) {
+				setUid(user.uid)
+				setName(user.fname)
+				setLName(user.lname)
+			} else {
+				setUid('')
+				setName('')
+				setLName('')
+			}
 		})
 	}, [])
 	useEffect(() => {
 		const getUserData = async () => {
 			if (uid) {
 				try {
-					// TODO -> Criar team Firebase
-					// const docRef = await db.collection('team').where('uid','==',uid).get()	
-					// if (!docRef.empty) {
-					// 	docRef.forEach(doc => {
-					// 		const data = doc.data()
-					// 		setName(`${data.fname} ${data.lname}`)
-					// 	})
-					// }
+					const docRef = await db.collection('team').where('uid', '==', uid).get()
+					if (!docRef.empty) {
+						docRef.forEach(doc => {
+							const data = doc.data()
+							setName(data.fname)
+							setLName(data.lname)
+						})
+					}
 				} catch (error) {
 					if (error.response) console.log(error.response)
 					else console.log(error)
@@ -39,7 +47,7 @@ export const App = () => {
 		}
 		getUserData()
 	}, [uid])
-	const userData = { uid }
+	const userData = { uid, name, lname }
 	if (loading) return <InitialLoader />
 	if (errorLoading) return <Error />
 	return (

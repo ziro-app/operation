@@ -2,20 +2,18 @@ import { auth, db } from '../../Firebase/index'
 import { post } from 'axios'
 
 const sendToBackend = state => () => {
-	const { brand, branch, insta, fname, lname, cpf, whats, email, pass } = state
-	const branchTrim = branch ? branch.trim() : ''
-	const instaTrim = insta ? insta.replace('@','').trim().toLowerCase() : ''
-	const fnameTrim = fname ? fname.trim() : ''
-	const lnameTrim = lname ? lname.trim() : ''
+	const { fName, lName, email, pass } = state
+	const fnameTrim = fName ? fName.trim().toLowerCase() : ''
+	const lnameTrim = lName ? lName.trim().toLowerCase() : ''
 	const url = process.env.SHEET_URL
 	const body = {
 		apiResource: 'values',
 		apiMethod: 'append',
-		spreadsheetId: process.env.SHEET_ID_REGISTER_APPEND,
-		range: 'Afiliados!A1',
+		spreadsheetId: process.env.SHEET_ID,
+		range: 'Team!A1:D1',
 		resource: {
 			values: [
-				[new Date(), cpf, fnameTrim, lnameTrim, whats, email, brand, branchTrim, instaTrim]
+				[new Date(), fnameTrim, lnameTrim, email]
 			]
 		},
 		valueInputOption: 'raw'
@@ -34,11 +32,14 @@ const sendToBackend = state => () => {
 				try {
 					await auth.currentUser.sendEmailVerification({ url: `${process.env.CONTINUE_URL}` })
 					try {
-						await db.collection('').add({
-							cadastro: new Date(), uid: user.uid, brand, branch: branchTrim, insta: instaTrim,
-							fname: fnameTrim, lname: lnameTrim, cpf, whats, email
+						await db.collection('team').add({
+							cadastro: new Date(),
+							uid: user.uid,
+							fname: fnameTrim,
+							lname: lnameTrim,
+							email
 						})
-						await db.collection('users').add({ email, app: '' })
+						await db.collection('users').add({ email, app: 'operation' })
 						try {
 							await auth.signOut() // user needs to validate email before signing in to app
 						} catch (error) {
