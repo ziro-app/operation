@@ -8,6 +8,7 @@ import FormInput from '@bit/vitorbarbosa19.ziro.form-input'
 import InputText from '@bit/vitorbarbosa19.ziro.input-text'
 import { containerWithPadding } from '@ziro/theme'
 import { welcome, marker } from './styles'
+import { maskCpfOrCnpj } from '../Services/masks'
 
 const Register = () => {
 	const [isLoading, setIsLoading] = useState(false)
@@ -15,21 +16,27 @@ const Register = () => {
 	// form fields
 	const [fName, setFName] = useState('')
 	const [lName, setLName] = useState('')
+	const [documento, setDocumento] = useState('')
 	const [email, setEmail] = useState('')
 	const [pass, setPass] = useState('')
 	const [confirmPass, setConfirmPass] = useState('')
-	const state = { fName, lName, email, pass, confirmPass }
+	const state = { fName, lName, documento, email, pass, confirmPass }
 	const validations = [
 		{
 			name: 'fname',
 			validation: value => !/^.{0,2}$/g.test(value), // tests for min length of 3 char
-			value: pass,
+			value: fName,
 			message: 'Mínimo 3 caracteres'
 		}, {
 			name: 'lname',
 			validation: value => !/^.{0,2}$/g.test(value), // tests for min length of 3 char
-			value: pass,
+			value: lName,
 			message: 'Mínimo 3 caracteres'
+		}, {
+			name: 'documento',
+			validation: value => /(^\d{3}\.\d{3}\.\d{3}\-\d{2}$)|(^\d{2}\.\d{3}\.\d{3}\/\d{4}\-\d{2}$)/.test(value), // tests for min length of 3 char
+			value: documento,
+			message: 'Documento inválido'
 		}, {
 			name: 'email',
 			validation: value => /^\S+@\S+\.\S+$/g.test(value), // tests for pattern a@b.c
@@ -70,6 +77,13 @@ const Register = () => {
 						<InputText
 							value={lName}
 							onChange={({ target: { value } }) => setLName(value)}
+							placeholder='Para acesso ao app'
+						/>
+					} />,
+					<FormInput name='documento' label='CPF/CNPJ' input={
+						<InputText
+							value={documento}
+							onChange={({ target: { value } }) => setDocumento(maskCpfOrCnpj(value))}
 							placeholder='Para acesso ao app'
 						/>
 					} />,

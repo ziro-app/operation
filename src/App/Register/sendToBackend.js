@@ -2,7 +2,7 @@ import { auth, db } from '../../Firebase/index'
 import { post } from 'axios'
 
 const sendToBackend = state => () => {
-	const { fName, lName, email, pass } = state
+	const { fName, lName, documento, email, pass } = state
 	const fnameTrim = fName ? fName.trim().toLowerCase() : ''
 	const lnameTrim = lName ? lName.trim().toLowerCase() : ''
 	const url = process.env.SHEET_URL
@@ -10,10 +10,10 @@ const sendToBackend = state => () => {
 		apiResource: 'values',
 		apiMethod: 'append',
 		spreadsheetId: process.env.SHEET_ID,
-		range: 'Team!A1:D1',
+		range: 'Team!A1:E1',
 		resource: {
 			values: [
-				[new Date(), fnameTrim, lnameTrim, email]
+				[new Date(), fnameTrim, lnameTrim, documento, email]
 			]
 		},
 		valueInputOption: 'raw'
@@ -37,6 +37,7 @@ const sendToBackend = state => () => {
 							uid: user.uid,
 							fname: fnameTrim,
 							lname: lnameTrim,
+							documento,
 							email
 						})
 						await db.collection('users').add({ email, app: 'operation' })

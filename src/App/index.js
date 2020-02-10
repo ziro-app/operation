@@ -12,16 +12,19 @@ export const App = () => {
 	const [uid, setUid] = useState(null)
 	const [name, setName] = useState(null)
 	const [lname, setLName] = useState(null)
+	const [documento, setDocumento] = useState(null)
 	useEffect(() => {
 		return auth.onAuthStateChanged(async user => {
 			if (user && user.emailVerified) {
 				setUid(user.uid)
 				setName(user.fname)
 				setLName(user.lname)
+				setDocumento(user.documento)
 			} else {
 				setUid('')
 				setName('')
 				setLName('')
+				setDocumento('')
 			}
 		})
 	}, [])
@@ -35,6 +38,7 @@ export const App = () => {
 							const data = doc.data()
 							setName(data.fname)
 							setLName(data.lname)
+							setDocumento(data.documento)
 						})
 					}
 				} catch (error) {
@@ -47,7 +51,7 @@ export const App = () => {
 		}
 		getUserData()
 	}, [uid])
-	const userData = { uid, name, lname }
+	const userData = { uid, name, lname, documento }
 	if (loading) return <InitialLoader />
 	if (errorLoading) return <Error />
 	return (
