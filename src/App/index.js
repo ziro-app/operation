@@ -11,20 +11,17 @@ export const App = () => {
 	const [errorLoading, setErrorLoading] = useState(false)
 	const [uid, setUid] = useState(null)
 	const [name, setName] = useState(null)
-	const [lname, setLName] = useState(null)
-	const [documento, setDocumento] = useState(null)
+	const [cpf, setCpf] = useState(null)
 	useEffect(() => {
 		return auth.onAuthStateChanged(async user => {
 			if (user && user.emailVerified) {
 				setUid(user.uid)
-				setName(user.fname)
-				setLName(user.lname)
-				setDocumento(user.documento)
+				setName(user.nome)
+				setCpf(user.cpf)
 			} else {
 				setUid('')
 				setName('')
-				setLName('')
-				setDocumento('')
+				setCpf('')
 			}
 		})
 	}, [])
@@ -36,9 +33,8 @@ export const App = () => {
 					if (!docRef.empty) {
 						docRef.forEach(doc => {
 							const data = doc.data()
-							setName(data.fname)
-							setLName(data.lname)
-							setDocumento(data.documento)
+							setName(data.nome)
+							setCpf(data.cpf)
 						})
 					}
 				} catch (error) {
@@ -51,7 +47,7 @@ export const App = () => {
 		}
 		getUserData()
 	}, [uid])
-	const userData = { uid, name, lname, documento }
+	const userData = { uid, name, cpf }
 	if (loading) return <InitialLoader />
 	if (errorLoading) return <Error />
 	return (

@@ -1,19 +1,40 @@
 import { auth, db } from '../../Firebase/index'
 import { post } from 'axios'
+import bcrypt from 'bcryptjs';
 
 const sendToBackend = state => () => {
-	const { fName, lName, documento, email, pass } = state
-	const fnameTrim = fName ? fName.trim().toLowerCase() : ''
-	const lnameTrim = lName ? lName.trim().toLowerCase() : ''
+	const { name, nickname, birthDate, cpf, rg, issuingBody, shippingDate, maritalStatus,
+		personalPhone, email, github, address, cep, city, cityState, initialDate, scope, amountCharged,
+		paymentModel, height, weight, emergencyName, kinship, emergencyContact, pass } = state
+	const nome = name ? name.trim() : ''
+	const apelido = nickname ? nickname.trim() : ''
+	const rgTrim = rg ? rg.trim() : ''
+	const orgExp = issuingBody ? issuingBody.trim() : ''
+	const telefone = personalPhone ? '+55 ' + personalPhone.trim() : ''
+	const emailTrim = email ? email.trim().toLowerCase() : ''
+	const githubTrim = github ? github.trim() : ''
+	const endereco = address ? address.trim() : ''
+	const cidade = city ? city.trim() : ''
+	const estado = cityState ? cityState.trim() : ''
+	const valorCobrado = amountCharged ? amountCharged.trim() : ''
+	const nomeEmergencia = emergencyName ? emergencyName.trim() : ''
+	const parentesco = kinship ? kinship.trim() : ''
+	const contatoEmergencia = emergencyContact ? '+55 ' + emergencyContact.trim() : ''
+
 	const url = process.env.SHEET_URL
+
 	const body = {
 		apiResource: 'values',
 		apiMethod: 'append',
 		spreadsheetId: process.env.SHEET_ID,
-		range: 'Team!A1:E1',
+		range: 'Team!A1:AA1',
 		resource: {
 			values: [
-				[new Date(), fnameTrim, lnameTrim, documento, email]
+				[new Date(), bcrypt.hashSync(emailTrim, 8), nome, apelido, birthDate, cpf, rgTrim,
+					orgExp, shippingDate, maritalStatus, telefone, emailTrim, githubTrim,
+					endereco, cep, cidade, estado, initialDate, '-', scope,
+					valorCobrado, paymentModel, height, weight, nomeEmergencia,
+					parentesco, contatoEmergencia]
 			]
 		},
 		valueInputOption: 'raw'
@@ -35,10 +56,31 @@ const sendToBackend = state => () => {
 						await db.collection('team').add({
 							cadastro: new Date(),
 							uid: user.uid,
-							fname: fnameTrim,
-							lname: lnameTrim,
-							documento,
-							email
+							nome,
+							apelido,
+							nascimento: birthDate,
+							cpf,
+							rg: rgTrim,
+							orgExp,
+							shippingDate,
+							estadoCivil: maritalStatus,
+							telefone,
+							email: emailTrim,
+							github: githubTrim,
+							endereco,
+							cep,
+							cidade,
+							estado,
+							dataInicio: initialDate,
+							dataFim: '-',
+							escopo: scope,
+							valorCobrado,
+							modeloPagamento: paymentModel,
+							altura: height,
+							peso: weight,
+							nomeEmergencia,
+							parentesco,
+							contatoEmergencia
 						})
 						await db.collection('users').add({ email, app: 'operation' })
 						try {

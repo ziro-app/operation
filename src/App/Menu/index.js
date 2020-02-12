@@ -10,14 +10,14 @@ import { containerWithPadding } from '@ziro/theme'
 
 export const Menu = ({ title, children }) => {
 	const [isOpen, setIsOpen] = useState(false)
-	const { name, lname, documento } = useContext(userContext)
+	const { name, cpf } = useContext(userContext)
 	return (
 		<div style={containerWithPadding}>
 			<Header type='icon' title={title} icon='menu' setIsOpen={() => setIsOpen(true)} />
 			<Drawer isOpen={isOpen} setIsOpen={() => setIsOpen(false)}>
 				<DrawerPanel
-					username={`${name} ${lname}` || 'Usuário'}
-					userdata={(documento && documento.length === 14) ? `CPF: ${documento}` : `CNPJ: ${documento}`}
+					username={name || 'Usuário'}
+					userdata={cpf ? `CPF: ${cpf}` : ''}
 					options={[
 						{
 							path: '/conta',
