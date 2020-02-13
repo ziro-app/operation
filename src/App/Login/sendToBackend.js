@@ -3,7 +3,7 @@ import { db, auth } from '../../Firebase/index'
 const sendToBackend = state => () => new Promise(async (resolve, reject) => {
 	try {
 		const { email, pass } = state
-		const snapshot = await db.collection('users').where('email', '==', email).get()
+		const snapshot = await db.collection('users').where('email', '==', email.toLowerCase()).get()
 		let userApp
 		snapshot.forEach(doc => userApp = doc.data().app)
 		if (!(userApp === 'admin' || userApp === 'operation')) throw { msg: 'Não cadastrado no app', customError: true }

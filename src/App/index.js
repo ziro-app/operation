@@ -11,16 +11,19 @@ export const App = () => {
 	const [errorLoading, setErrorLoading] = useState(false)
 	const [uid, setUid] = useState(null)
 	const [name, setName] = useState(null)
+	const [nickname, setNickname] = useState(null)
 	const [cpf, setCpf] = useState(null)
 	useEffect(() => {
 		return auth.onAuthStateChanged(async user => {
 			if (user && user.emailVerified) {
 				setUid(user.uid)
 				setName(user.nome)
+				setNickname(user.apelido)
 				setCpf(user.cpf)
 			} else {
 				setUid('')
 				setName('')
+				setNickname('')
 				setCpf('')
 			}
 		})
@@ -34,6 +37,7 @@ export const App = () => {
 						docRef.forEach(doc => {
 							const data = doc.data()
 							setName(data.nome)
+							setNickname(data.apelido)
 							setCpf(data.cpf)
 						})
 					}
@@ -47,7 +51,7 @@ export const App = () => {
 		}
 		getUserData()
 	}, [uid])
-	const userData = { uid, name, cpf }
+	const userData = { uid, name, nickname, cpf }
 	if (loading) return <InitialLoader />
 	if (errorLoading) return <Error />
 	return (

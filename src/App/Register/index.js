@@ -49,6 +49,8 @@ const Register = () => {
 	const maritalStatusList = ['Casado(a)', 'Divorciado(a)', 'Separado(a)', 'Solteiro(a)', 'Viúvo(a)']
 	const scopeList = ['Assessoria', 'Logística', 'Vendas', 'Dev', 'Dados', 'Processos']
 	const paymentModelList = ['assessoria2019', 'assessoria2020', 'cobranca2019', 'logistica2019', 'nenhum', 'vendas2019', 'vendas2020']
+	const statesList = ['AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA', 'MT', 'MS', 'MG', 'PA', 'PB', 'PR', 'PE', 'PI', 'RJ', 'RN', 'RS', 'RO', 'RR', 'SC', 'SP', 'SE', 'TO']
+
 	const state = {
 		name, nickname, birthDate, cpf, rg, issuingBody, shippingDate,
 		maritalStatus, personalPhone, email, github, address, cep, city, cityState, initialDate,
@@ -60,6 +62,11 @@ const Register = () => {
 			name: 'name',
 			validation: value => !/^.{0,2}$/g.test(value), // tests for min length of 3 char
 			value: name,
+			message: 'Mínimo 3 caracteres'
+		}, {
+			name: 'nickname',
+			validation: value => !/^.{0,2}$/g.test(value), // tests for min length of 3 char
+			value: nickname,
 			message: 'Mínimo 3 caracteres'
 		}, {
 			name: 'birthDate',
@@ -78,6 +85,11 @@ const Register = () => {
 			value: rg,
 			message: 'Documento inválido'
 		}, {
+			name: 'issuingBody',
+			validation: value => /[a-zA-Z]+/g.test(value),
+			value: issuingBody,
+			message: 'Campo obrigatório'
+		}, {
 			name: 'shippingDate',
 			validation: value => /^(?:(?:31(\/)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(\/)(?:0?[13-9]|1[0-2])\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$|^(?:29(\/)0?2\3(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\d|2[0-8])(\/)(?:(?:0?[1-9])|(?:1[0-2]))\4(?:(?:1[6-9]|[2-9]\d)?\d{2})$/.test(value),
 			value: shippingDate,
@@ -91,22 +103,67 @@ const Register = () => {
 			name: 'personalPhone',
 			validation: value => /(^\(\d{2}\) \d{5}\-\d{4}$)/.test(value),
 			value: personalPhone,
-			message: 'Número de telefone inválido'
+			message: 'Telefone inválido'
+		}, {
+			name: 'cep',
+			validation: value => /(^\d{5}\-\d{3}$)/.test(value),
+			value: cep,
+			message: 'CEP inválido'
+		}, {
+			name: 'address',
+			validation: value => /[a-zA-Z]+/g.test(value),
+			value: address,
+			message: 'Campo obrigatório'
+		}, {
+			name: 'city',
+			validation: value => /[a-zA-Z]+/g.test(value),
+			value: city,
+			message: 'Campo obrigatória'
+		}, {
+			name: 'cityState',
+			validation: value => /(^\D{2}$)/.test(value) & statesList.includes(value),
+			value: cityState,
+			message: 'Campo obrigatória'
 		}, {
 			name: 'initialDate',
 			validation: value => /^(?:(?:31(\/)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(\/)(?:0?[13-9]|1[0-2])\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$|^(?:29(\/)0?2\3(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\d|2[0-8])(\/)(?:(?:0?[1-9])|(?:1[0-2]))\4(?:(?:1[6-9]|[2-9]\d)?\d{2})$/.test(value),
 			value: initialDate,
 			message: 'Data inválida'
 		}, {
+			name: 'scope',
+			validation: value => scopeList.includes(value),
+			value: scope,
+			message: 'Campo obrigatório'
+		}, {
+			name: 'amountCharged',
+			validation: value => /[a-zA-Z]+/g.test(value),
+			value: amountCharged,
+			message: 'Campo obrigatório'
+		}, {
 			name: 'paymentModel',
 			validation: value => paymentModelList.includes(value),
 			value: paymentModel,
 			message: 'Modelo de pagamento inválido'
 		}, {
-			name: 'scope',
-			validation: value => scopeList.includes(value) | /^$/.test(value),
-			value: scope,
-			message: 'Área inválida'
+			name: 'height',
+			validation: value => (/((^\d{1}\.\d{2}$))/.test(value) | /((^\d{1}\.\d{1}$))/.test(value)) && parseFloat(value) <= 2.5,
+			value: height,
+			message: 'Altura inválida'
+		}, {
+			name: 'weight',
+			validation: value => (/((^\d{3}\.\d{2}$))/.test(value) | /((^\d{2}\.\d{2}$))/.test(value) | /((^\d{2}\.\d{1}$))/.test(value)) && parseFloat(value) <= 200.0,
+			value: weight,
+			message: 'Peso inválido'
+		}, {
+			name: 'emergencyName',
+			validation: value => /[a-zA-Z]+/g.test(value),
+			value: emergencyName,
+			message: 'Campo obrigatório'
+		}, {
+			name: 'kinship',
+			validation: value => /[a-zA-Z]+/g.test(value),
+			value: kinship,
+			message: 'Campo obrigatório'
 		}, {
 			name: 'emergencyContact',
 			validation: value => /(^\(\d{2}\) \d{5}\-\d{4}$)/.test(value),
@@ -183,42 +240,42 @@ const Register = () => {
 						<InputText
 							value={nickname}
 							onChange={({ target: { value } }) => setNickname(capitalize(value))}
-							placeholder='Para armazenamento interno'
+							placeholder='Como quer ser chamado'
 						/>
 					} />,
 					<FormInput name='birthDate' label='Nascimento' input={
 						<InputText
 							value={birthDate}
 							onChange={({ target: { value } }) => setBirthDate(maskInput(value, '##/##/####', true))}
-							placeholder='Exemplo: 01/10/1990'
+							placeholder='01/10/1990'
 						/>
 					} />,
 					<FormInput name='cpf' label='CPF' input={
 						<InputText
 							value={cpf}
 							onChange={({ target: { value } }) => setCpf(maskInput(value, '###.###.###-##', true))}
-							placeholder='Exemplo: 000.111.222-33'
+							placeholder='000.111.222-33'
 						/>
 					} />,
 					<FormInput name='rg' label='RG' input={
 						<InputText
 							value={rg}
 							onChange={({ target: { value } }) => setRg(value)}
-							placeholder='Exemplo: 000.111.222'
+							placeholder='000.111.222'
 						/>
 					} />,
 					<FormInput name='issuingBody' label='Órgão Expeditor' input={
 						<InputText
 							value={issuingBody}
 							onChange={({ target: { value } }) => setIssuingBody(value.toUpperCase())}
-							placeholder='Exemplo: SSP - PI'
+							placeholder='SSP - PI'
 						/>
 					} />,
 					<FormInput name='shippingDate' label='Data de Expedição' input={
 						<InputText
 							value={shippingDate}
 							onChange={({ target: { value } }) => setShippingDate(maskInput(value, '##/##/####', true))}
-							placeholder='Exemplo: 01/10/1990'
+							placeholder='01/10/1990'
 						/>
 					} />,
 					<FormInput name='maritalStatus' label='Estado Civil' input={
@@ -229,21 +286,21 @@ const Register = () => {
 								element ? setMaritalStatus(element.value) : null
 							}
 							list={maritalStatusList}
-							placeholder="Exemplo: Solteiro(a)"
+							placeholder="Solteiro(a)"
 						/>
 					} />,
 					<FormInput name='personalPhone' label='Telefone Pessoal' input={
 						<InputText
 							value={personalPhone}
 							onChange={({ target: { value } }) => setPersonalPhone(maskInput(value, '(##) #####-####', true))}
-							placeholder='Exemplo: (86) 99743-6822'
+							placeholder='(86) 99743-6822'
 						/>
 					} />,
 					<FormInput name='github' label='Github' input={
 						<InputText
 							value={github}
 							onChange={({ target: { value } }) => setGithub(value)}
-							placeholder='Exemplo: github.com/usuário'
+							placeholder='Apenas usuário'
 						/>
 					} />,
 					<FormInput name='cep' label='CEP' input={
@@ -252,35 +309,35 @@ const Register = () => {
 							disabled={searchingCep}
 							submitting={searchingCep}
 							onChange={(e) => cepHandleChange(e)}
-							placeholder='Exemplo: 00000-111'
+							placeholder='00000-111'
 						/>
 					} />,
 					<FormInput name='address' label='Endereço' input={
 						<InputText
 							value={address}
 							onChange={({ target: { value } }) => setAddress(value)}
-							placeholder='Exemplo: Rua Lubavitch, nº 71, Bom Retiro'
+							placeholder='Rua Lubavitch, nº 71, Bom Retiro'
 						/>
 					} />,
 					<FormInput name='city' label='Cidade' input={
 						<InputText
 							value={city}
 							onChange={({ target: { value } }) => setCity(capitalize(value))}
-							placeholder='Exemplo: São Paulo'
+							placeholder='São Paulo'
 						/>
 					} />,
 					<FormInput name='cityState' label='Estado' input={
 						<InputText
 							value={cityState}
-							onChange={({ target: { value } }) => setCityState(value.toUpperCase())}
-							placeholder='Exemplo: SP'
+							onChange={({ target: { value } }) => setCityState(maskInput(value.toUpperCase(), '##', false))}
+							placeholder='SP'
 						/>
 					} />,
 					<FormInput name='initialDate' label='Data de Início' input={
 						<InputText
 							value={initialDate}
 							onChange={({ target: { value } }) => setInitialDate(maskInput(value, '##/##/####', true))}
-							placeholder='Exemplo: 01/10/1990'
+							placeholder='01/10/1990'
 						/>
 					} />,
 					<FormInput name='scope' label='Escopo' input={
@@ -313,7 +370,7 @@ const Register = () => {
 								element ? setScope(element.value) : null
 							}
 							list={paymentModelList}
-							placeholder="Caso não tenha, escolha a opção 'nenhum'"
+							placeholder="'nenhum' caso não haja"
 						/>
 					} />,
 					<FormInput name='height' label='Altura em metros' input={

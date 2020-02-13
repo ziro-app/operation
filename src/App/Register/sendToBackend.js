@@ -1,6 +1,6 @@
 import { auth, db } from '../../Firebase/index'
 import { post } from 'axios'
-import bcrypt from 'bcryptjs';
+import md5 from 'md5';
 
 const sendToBackend = state => () => {
 	const { name, nickname, birthDate, cpf, rg, issuingBody, shippingDate, maritalStatus,
@@ -30,7 +30,7 @@ const sendToBackend = state => () => {
 		range: 'Team!A1:AA1',
 		resource: {
 			values: [
-				[new Date(), bcrypt.hashSync(emailTrim, 8), nome, apelido, birthDate, cpf, rgTrim,
+				[new Date(), md5(emailTrim), nome, apelido, birthDate, cpf, rgTrim,
 					orgExp, shippingDate, maritalStatus, telefone, emailTrim, githubTrim,
 					endereco, cep, cidade, estado, initialDate, '-', scope,
 					valorCobrado, paymentModel, height, weight, nomeEmergencia,
