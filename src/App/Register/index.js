@@ -30,7 +30,10 @@ const Register = () => {
 	const [personalPhone, setPersonalPhone] = useState('')
 	const [email, setEmail] = useState('')
 	const [github, setGithub] = useState('')
-	const [address, setAddress] = useState('')
+	const [street, setStreet] = useState('')
+	const [number, setNumber] = useState('')
+	const [complement, setComplement] = useState('')
+	const [neighborhood, setNeighborhood] = useState('')
 	const [cep, setCep] = useState('')
 	const [city, setCity] = useState('')
 	const [cityState, setCityState] = useState('')
@@ -53,7 +56,7 @@ const Register = () => {
 
 	const state = {
 		name, nickname, birthDate, cpf, rg, issuingBody, shippingDate,
-		maritalStatus, personalPhone, email, github, address, cep, city, cityState, initialDate,
+		maritalStatus, personalPhone, email, github, street, number, complement, neighborhood, cep, city, cityState, initialDate,
 		scope, amountCharged, paymentModel, height, weight, emergencyName, kinship,
 		emergencyContact, pass
 	}
@@ -110,9 +113,19 @@ const Register = () => {
 			value: cep,
 			message: 'CEP inválido'
 		}, {
-			name: 'address',
-			validation: value => /[a-zA-Z]+/g.test(value),
-			value: address,
+			name: 'street',
+			validation: value => !!value,
+			value: street,
+			message: 'Campo obrigatório'
+		}, {
+			name: 'number',
+			validation: value => !!value,
+			value: number,
+			message: 'Campo obrigatório'
+		}, {
+			name: 'neighborhood',
+			validation: value => !!value,
+			value: neighborhood,
 			message: 'Campo obrigatório'
 		}, {
 			name: 'city',
@@ -194,9 +207,11 @@ const Register = () => {
 			isSearchingCep(true)
 			try {
 				const { data } = await get(`https://viacep.com.br/ws/${cep}/json/`)
-				setAddress(data.logradouro ? `${data.logradouro}, nº , ${data.bairro}` : '')
-				setCity(data.localidade)
-				setCityState(data.uf)
+				setStreet(data.logradouro.toUpperCase())
+				setNeighborhood(data.bairro.toUpperCase())
+				setComplement(data.complemento.toUpperCase())
+				setCity(data.localidade.toUpperCase())
+				setCityState(data.uf.toUpperCase())
 			} finally {
 				isSearchingCep(false)
 			}
@@ -312,18 +327,39 @@ const Register = () => {
 							placeholder='00000-111'
 						/>
 					} />,
-					<FormInput name='address' label='Endereço' input={
+					<FormInput name='street' label='Rua' input={
 						<InputText
-							value={address}
-							onChange={({ target: { value } }) => setAddress(value)}
-							placeholder='Rua Lubavitch, nº 71, Bom Retiro'
+							value={street}
+							onChange={({ target: { value } }) => setStreet(value.toUpperCase())}
+							placeholder='R HERMELINO CARDOSO'
+						/>
+					} />,
+					<FormInput name='number' label='Número' input={
+						<InputText
+							value={number}
+							onChange={({ target: { value } }) => setNumber(maskInput(value.toUpperCase(), '######', true))}
+							placeholder='1283'
+						/>
+					} />,
+					<FormInput name='complement' label='Complemento' input={
+						<InputText
+							value={complement}
+							onChange={({ target: { value } }) => setComplement(value.toUpperCase())}
+							placeholder='BLOCO K'
+						/>
+					} />,
+					<FormInput name='neighborhood' label='Bairro' input={
+						<InputText
+							value={neighborhood}
+							onChange={({ target: { value } }) => setNeighborhood(value.toUpperCase())}
+							placeholder='COHAB'
 						/>
 					} />,
 					<FormInput name='city' label='Cidade' input={
 						<InputText
 							value={city}
 							onChange={({ target: { value } }) => setCity(capitalize(value))}
-							placeholder='São Paulo'
+							placeholder='SÃO PAULO'
 						/>
 					} />,
 					<FormInput name='cityState' label='Estado' input={
@@ -356,7 +392,7 @@ const Register = () => {
 							value={amountCharged}
 							onChange={({ target: { value } }) => {
 								setAmountCharged(value)
-								value = value.replace('R', '').replace('$', '').replace(',', '')
+								value = value.replace(/[R*$*\,*\.*]/g, '')
 								setAmountCharged(currencyFormat(parseInt(value)))
 							}}
 							placeholder='Valor cobrado pelo trabalho'

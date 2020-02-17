@@ -4,7 +4,7 @@ import md5 from 'md5';
 
 const sendToBackend = state => () => {
 	const { name, nickname, birthDate, cpf, rg, issuingBody, shippingDate, maritalStatus,
-		personalPhone, email, github, address, cep, city, cityState, initialDate, scope, amountCharged,
+		personalPhone, email, github, street, number, complement, neighborhood, cep, city, cityState, initialDate, scope, amountCharged,
 		paymentModel, height, weight, emergencyName, kinship, emergencyContact, pass } = state
 	const nome = name ? name.trim() : ''
 	const apelido = nickname ? nickname.trim() : ''
@@ -13,7 +13,7 @@ const sendToBackend = state => () => {
 	const telefone = personalPhone ? '+55 ' + personalPhone.trim() : ''
 	const emailTrim = email ? email.trim().toLowerCase() : ''
 	const githubTrim = github ? github.trim() : ''
-	const endereco = address ? address.trim() : ''
+	const endereco = street.trim() + ', ' + number + (complement ? ', ' + complement.trim() : '') + ', ' + neighborhood
 	const cidade = city ? city.trim() : ''
 	const estado = cityState ? cityState.trim() : ''
 	const valorCobrado = amountCharged ? amountCharged.trim() : ''
