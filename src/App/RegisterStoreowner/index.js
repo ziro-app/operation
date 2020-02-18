@@ -9,6 +9,7 @@ import { containerWithPadding } from '@ziro/theme'
 const RegisterStoreowner = () => {
     const [isLoading, setIsLoading] = useState(false)
     const { name, cpf } = useContext(userContext)
+    console.log(process.env)
 
     return (
         <div style={containerWithPadding}>
