@@ -32,7 +32,11 @@ module.exports = (env, { mode }) => {
 			sheet_url,
 			sheet_token,
 			sheet_id,
-			continue_url
+			continue_url,
+			sheet_id_store_owners,
+			sheet_id_refer_legacy,
+			cnpj_url,
+			cnpj_token
 		} = require('./credentials')
 		config.devtool = 'cheap-module-eval-source-map'
 		config.devServer = { historyApiFallback: true }
@@ -42,7 +46,11 @@ module.exports = (env, { mode }) => {
 					SHEET_URL: JSON.stringify(sheet_url),
 					SHEET_TOKEN: JSON.stringify(sheet_token),
 					SHEET_ID: JSON.stringify(sheet_id),
-					CONTINUE_URL: JSON.stringify(continue_url)
+					CONTINUE_URL: JSON.stringify(continue_url),
+					SHEET_STOREOWNERS_ID: JSON.stringify(sheet_id_store_owners),
+					SHEET_ID_REFER_LEGACY: JSON.stringify(sheet_id_refer_legacy),
+					CNPJ_URL: JSON.stringify(cnpj_url),
+					CNPJ_TOKEN: JSON.stringify(cnpj_token)
 				}
 			})
 		)
@@ -76,3 +84,5 @@ module.exports = (env, { mode }) => {
 	}
 	return config
 }
+
+// tentar dar os bit remove e tals, dps o bit import

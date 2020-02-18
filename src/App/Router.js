@@ -12,6 +12,7 @@ import MyAccount from '@bit/vitorbarbosa19.ziro.my-account'
 import UpdateEmail from './UpdateEmail/index'
 import UpdatePass from './UpdatePass/index'
 import DeleteAccount from './DeleteAccount/index'
+import RegisterStoreowner from './RegisterStoreowner/index'
 import NotFound from '@bit/vitorbarbosa19.ziro.not-found'
 
 const Router = ({ isLogged }) => {
@@ -27,7 +28,8 @@ const Router = ({ isLogged }) => {
 		'/conta': <Menu title='Minha Conta'><MyAccount /></Menu>,
 		'/trocar-email': <UpdateEmail />,
 		'/trocar-senha': <UpdatePass />,
-		'/deletar-conta': <DeleteAccount />
+		'/deletar-conta': <DeleteAccount />,
+		'/storeseller': <Menu title='Adicionar lojista'><RegisterStoreowner /></Menu>
 	}
 	const homeRoute = '/conta'
 	return routeMatcher(isLogged, publicRoutes, privateRoutes, homeRoute, <NotFound fallback='/' />)
