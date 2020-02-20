@@ -9,11 +9,10 @@ import { containerWithPadding } from '@ziro/theme'
 const RegisterStoreowner = () => {
     const [isLoading, setIsLoading] = useState(false)
     const { name, cpf } = useContext(userContext)
-    console.log(process.env)
 
     return (
         <div style={containerWithPadding}>
-            <FormRegisterStoreowner isLoading={isLoading} setIsLoading={setIsLoading} sendToBackend={sendToBackend} affiliateName={name} affiliateCpf={cpf} searchCnpj={searchCnpj} fetch={fetch} />
+            <FormRegisterStoreowner isLoading={isLoading} setIsLoading={setIsLoading} sendToBackend={sendToBackend} affiliateName={name} affiliateCpf={cpf} searchCnpj={searchCnpj} fetch={fetch} hasAdvisor={true} hasAffiliated={true} />
         </div>
     )
 }

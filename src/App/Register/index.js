@@ -275,7 +275,7 @@ const Register = () => {
 					<FormInput name='rg' label='RG' input={
 						<InputText
 							value={rg}
-							onChange={({ target: { value } }) => setRg(value)}
+							onChange={({ target: { value } }) => setRg(maskInput(value, '##############', false))}
 							placeholder='000.111.222'
 						/>
 					} />,
@@ -358,7 +358,7 @@ const Register = () => {
 					<FormInput name='city' label='Cidade' input={
 						<InputText
 							value={city}
-							onChange={({ target: { value } }) => setCity(capitalize(value))}
+							onChange={({ target: { value } }) => setCity(value.toUpperCase())}
 							placeholder='SÃO PAULO'
 						/>
 					} />,
@@ -393,7 +393,7 @@ const Register = () => {
 							onChange={({ target: { value } }) => {
 								setAmountCharged(value)
 								value = value.replace(/[R*$*\,*\.*]/g, '')
-								setAmountCharged(currencyFormat(parseInt(value)))
+								setAmountCharged(maskInput(currencyFormat(parseInt(value)), '##########', false))
 							}}
 							placeholder='Valor cobrado pelo trabalho'
 						/>

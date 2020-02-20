@@ -77,7 +77,11 @@ module.exports = (env, { mode }) => {
 					SHEET_URL: JSON.stringify(process.env.SHEET_URL),
 					SHEET_TOKEN: JSON.stringify(process.env.SHEET_TOKEN),
 					SHEET_ID: JSON.stringify(process.env.SHEET_ID),
-					CONTINUE_URL: JSON.stringify(process.env.CONTINUE_URL)
+					CONTINUE_URL: JSON.stringify(process.env.CONTINUE_URL),
+					SHEET_STOREOWNERS_ID: JSON.stringify(process.env.SHEET_STOREOWNERS_ID),
+					SHEET_ID_REFER_LEGACY: JSON.stringify(process.env.SHEET_ID_REFER_LEGACY),
+					CNPJ_URL: JSON.stringify(process.env.CNPJ_URL),
+					CNPJ_TOKEN: JSON.stringify(process.env.CNPJ_TOKEN)
 				}
 			})
 		)
