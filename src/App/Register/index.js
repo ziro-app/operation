@@ -50,8 +50,8 @@ const Register = () => {
 	const [confirmPass, setConfirmPass] = useState('')
 	const [searchingCep, isSearchingCep] = useState(false)
 	const maritalStatusList = ['Casado(a)', 'Divorciado(a)', 'Separado(a)', 'Solteiro(a)', 'Viúvo(a)']
-	const scopeList = ['Assessoria', 'Logística', 'Vendas', 'Dev', 'Dados', 'Processos']
-	const paymentModelList = ['assessoria2019', 'assessoria2020', 'cobranca2019', 'logistica2019', 'nenhum', 'vendas2019', 'vendas2020']
+	const scopeList = ['Assessoria', 'Dados', 'Dev', 'Logística', 'Processos', 'Vendas']
+	const paymentModelList = ['nenhum', 'assessoria2019', 'assessoria2020', 'cobranca2019', 'logistica2019', 'vendas2019', 'vendas2020']
 	const statesList = ['AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA', 'MT', 'MS', 'MG', 'PA', 'PB', 'PR', 'PE', 'PI', 'RJ', 'RN', 'RS', 'RO', 'RR', 'SC', 'SP', 'SE', 'TO']
 
 	const state = {
@@ -118,11 +118,6 @@ const Register = () => {
 			value: street,
 			message: 'Campo obrigatório'
 		}, {
-			name: 'number',
-			validation: value => !!value,
-			value: number,
-			message: 'Campo obrigatório'
-		}, {
 			name: 'neighborhood',
 			validation: value => !!value,
 			value: neighborhood,
@@ -164,7 +159,7 @@ const Register = () => {
 			message: 'Altura inválida'
 		}, {
 			name: 'weight',
-			validation: value => (/((^\d{3}\.\d{2}$))/.test(value) | /((^\d{2}\.\d{2}$))/.test(value) | /((^\d{2}\.\d{1}$))/.test(value)) && parseFloat(value) <= 200.0,
+			validation: value => !!value && value >= 30 && value <= 300,
 			value: weight,
 			message: 'Peso inválido'
 		}, {
@@ -393,7 +388,7 @@ const Register = () => {
 							onChange={({ target: { value } }) => {
 								setAmountCharged(value)
 								value = value.replace(/[R*$*\,*\.*]/g, '')
-								setAmountCharged(maskInput(currencyFormat(parseInt(value)), '##########', false))
+								setAmountCharged(maskInput(value, '#####', true))
 							}}
 							placeholder='Valor cobrado pelo trabalho'
 						/>
@@ -419,7 +414,7 @@ const Register = () => {
 					<FormInput name='weight' label='Peso em quilogramas' input={
 						<InputText
 							value={weight}
-							onChange={({ target: { value } }) => setWeight(maskForKg(value))}
+							onChange={({ target: { value } }) => setWeight(maskInput(value, '###', true))}
 							placeholder='Para contrato de seguro'
 						/>
 					} />,
