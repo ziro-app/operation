@@ -394,7 +394,7 @@ const Register = () => {
 							value={paymentModel}
 							onChange={({ target: { value } }) => setPaymentModel(value)}
 							onChangeKeyboard={element =>
-								element ? setScope(element.value) : null
+								element ? setPaymentModel(element.value) : null
 							}
 							list={paymentModelList}
 							placeholder="'nenhum' caso não haja"
