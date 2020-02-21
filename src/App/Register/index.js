@@ -144,7 +144,7 @@ const Register = () => {
 			message: 'Campo obrigatório'
 		}, {
 			name: 'amountCharged',
-			validation: value => /[a-zA-Z]+/g.test(value),
+			validation: value => !!value,
 			value: amountCharged,
 			message: 'Campo obrigatório'
 		}, {
@@ -385,11 +385,7 @@ const Register = () => {
 					<FormInput name='amountCharged' label='Valor Cobrado' input={
 						<InputText
 							value={amountCharged}
-							onChange={({ target: { value } }) => {
-								setAmountCharged(value)
-								value = value.replace(/[R*$*\,*\.*]/g, '')
-								setAmountCharged(maskInput(value, '#####', true))
-							}}
+							onChange={({ target: { value } }) => setAmountCharged(maskInput(value, '#####', true))}
 							placeholder='Valor cobrado pelo trabalho'
 						/>
 					} />,
