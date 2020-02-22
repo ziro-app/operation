@@ -13,6 +13,7 @@ import UpdateEmail from './UpdateEmail/index'
 import UpdatePass from './UpdatePass/index'
 import DeleteAccount from './DeleteAccount/index'
 import RegisterStoreowner from './RegisterStoreowner/index'
+import ImageUpload from './ImageUpload/index'
 import NotFound from '@bit/vitorbarbosa19.ziro.not-found'
 
 const Router = ({ isLogged }) => {
@@ -29,6 +30,7 @@ const Router = ({ isLogged }) => {
 		'/trocar-email': <UpdateEmail />,
 		'/trocar-senha': <UpdatePass />,
 		'/deletar-conta': <DeleteAccount />,
+		'/upload-imagem': <ImageUpload />,
 		'/storeseller': <Menu title='Adicionar lojista'><RegisterStoreowner /></Menu>
 	}
 	const homeRoute = '/conta'
