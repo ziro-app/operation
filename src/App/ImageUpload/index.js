@@ -5,5 +5,5 @@ import { containerWithPadding } from '@ziro/theme'
 
 export default () => 
 	<div style={containerWithPadding}>
-		<ImageUpload />
+		<ImageUpload sendToBackend={sendToBackend} />
 	</div>
