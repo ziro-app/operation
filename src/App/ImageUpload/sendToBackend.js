@@ -4,18 +4,21 @@ import { storage } from '../../Firebase/index'
 const sendToBackend = files => new Promise(async (resolve, reject) => {
 	try {
 		console.log(files)
-		const [file] = files
-		console.log(file)
-		const { name } = file
-		const [brand,index] = name.split('-')
-		const compressed = await readAndCompressImage(file, { quality: 0.65 })
-		console.log(compressed)
-		const imgRef = storage.child(`${brand}/${brand}-${index}`)
-		const result = await imgRef.put(compressed)
-		console.log(result)
+		const result = await Promise.all(Array.from(files).map(file =>
+			new Promise(async (resolve, reject) => {
+				try {
+					if (file.size === 0) throw 'Empty sized image'
+					const [brand,index] = file.name.split('-')
+					const compressed = await readAndCompressImage(file, { quality: 0.65 })
+					const image = storage.child(`${brand}/${brand}-${Date.now()}-${index}`)
+					await image.put(compressed)
+					resolve('Done')
+				} catch (error) { reject(error) }
+			})
+		))
+		console.log(`${result.length} images uploaded`)
 		resolve('ok')
 	} catch (error) {
-		console.log(error)
 		if (error.response) console.log(error.response)
 		reject(error)
 	}
