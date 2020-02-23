@@ -64,6 +64,7 @@
     "@ziro/router": "^1.0.2",
     "@ziro/theme": "^1.0.3",
     "axios": "^0.19.0",
+    "browser-image-resizer": "^2.1.0",
     "firebase": "^7.6.1",
     "md5": "^2.2.1",
     "prop-types": "^15.7.2",
