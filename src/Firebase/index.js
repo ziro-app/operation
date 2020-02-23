@@ -9,4 +9,5 @@ export const
 db = init.firestore(),
 auth = init.auth(),
 fs = firebase.firestore,
-fbauth = firebase.auth
+fbauth = firebase.auth,
+storage = init.storage().ref()

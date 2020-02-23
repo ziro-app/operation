@@ -3,7 +3,7 @@ export const firebaseConfig = {
   authDomain: "ziro-app-data.firebaseapp.com",
   databaseURL: "https://ziro-app-data.firebaseio.com",
   projectId: "ziro-app-data",
-  storageBucket: "",
+  storageBucket: "gs://ziro-app-data.appspot.com",
   messagingSenderId: "128486864666",
   appId: "1:128486864666:web:dcb315a4d5aca2e2"
 }
