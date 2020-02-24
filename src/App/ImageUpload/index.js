@@ -11,6 +11,7 @@ import { container, block, title } from './styles'
 export default () => {
 	const [isLoading, setIsLoading] = useState(true)
 	const [isError, setIsError] = useState(false)
+	const [isSubmitting, setIsSubmitting] = useState(false)
 	const [brands, setBrands] = useState('')
 	const [brand, setBrand] = useState('')
 	useEffect(() => fetch(setIsLoading, setIsError, setBrands), [])
@@ -36,8 +37,8 @@ export default () => {
 			<div style={block}>
 				<label style={title}>Etapa 2</label>
 				<ImageUpload
-					sendToBackend={sendToBackend}
-					isDisabled={!isValidBrand(brands,brand)}
+					sendToBackend={sendToBackend(setIsSubmitting)}
+					isDisabled={!isValidBrand(brands,brand) || isSubmitting}
 				/>
 			</div>
 		</div>

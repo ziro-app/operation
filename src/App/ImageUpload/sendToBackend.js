@@ -1,9 +1,10 @@
 import { readAndCompressImage } from 'browser-image-resizer'
 import { storage } from '../../Firebase/index'
 
-const sendToBackend = files => new Promise(async (resolve, reject) => {
+const sendToBackend = setIsSubmitting => files => new Promise(async (resolve, reject) => {
 	try {
 		console.log(files)
+		setIsSubmitting(true)
 		const result = await Promise.all(files.map(file =>
 			new Promise(async (resolve, reject) => {
 				try {
@@ -21,6 +22,8 @@ const sendToBackend = files => new Promise(async (resolve, reject) => {
 	} catch (error) {
 		if (error.response) console.log(error.response)
 		reject(error)
+	} finally {
+		setIsSubmitting(false)
 	}
 })
 
