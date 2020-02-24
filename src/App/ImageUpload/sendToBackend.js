@@ -4,7 +4,7 @@ import { storage } from '../../Firebase/index'
 const sendToBackend = files => new Promise(async (resolve, reject) => {
 	try {
 		console.log(files)
-		const result = await Promise.all(Array.from(files).map(file =>
+		const result = await Promise.all(files.map(file =>
 			new Promise(async (resolve, reject) => {
 				try {
 					if (file.size === 0) throw 'Empty sized image'

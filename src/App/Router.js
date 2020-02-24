@@ -30,7 +30,7 @@ const Router = ({ isLogged }) => {
 		'/trocar-email': <UpdateEmail />,
 		'/trocar-senha': <UpdatePass />,
 		'/deletar-conta': <DeleteAccount />,
-		'/upload-imagem': <ImageUpload />,
+		'/upload-imagem': <Menu title='Upload de imagens'><ImageUpload /></Menu>,
 		'/storeseller': <Menu title='Adicionar lojista'><RegisterStoreowner /></Menu>
 	}
 	const homeRoute = '/conta'
