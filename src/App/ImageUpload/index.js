@@ -5,6 +5,7 @@ import Dropdown from '@bit/vitorbarbosa19.ziro.dropdown'
 import ImageUpload from '@bit/vitorbarbosa19.ziro.image-upload'
 import fetch from './fetch'
 import sendToBackend from './sendToBackend'
+import isValidBrand from './isValidBrand'
 import { container, block, title } from './styles'
 
 export default () => {
@@ -34,7 +35,10 @@ export default () => {
 			</div>
 			<div style={block}>
 				<label style={title}>Etapa 2</label>
-				<ImageUpload sendToBackend={sendToBackend} />
+				<ImageUpload
+					sendToBackend={sendToBackend}
+					isDisabled={!isValidBrand(brands,brand)}
+				/>
 			</div>
 		</div>
 	)
