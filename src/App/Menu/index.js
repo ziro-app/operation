@@ -20,10 +20,10 @@ export const Menu = ({ title, children }) => {
 					userdata={cpf ? `CPF: ${cpf}` : ''}
 					options={[
 						{
-							path: '/storeseller',
+							path: '/assessoria',
 							onClick: () => setIsOpen(false),
 							icon: <Icon type='shopping' size={15} strokeWidth={2} />,
-							text: 'Adicionar lojista'
+							text: 'Assessoria'
 						},
 						{
 							path: '/conta',
