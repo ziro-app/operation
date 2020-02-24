@@ -35,6 +35,7 @@ module.exports = (env, { mode }) => {
 			continue_url,
 			sheet_id_store_owners,
 			sheet_id_refer_legacy,
+			sheet_id_brands,
 			cnpj_url,
 			cnpj_token
 		} = require('./credentials')
@@ -49,6 +50,7 @@ module.exports = (env, { mode }) => {
 					CONTINUE_URL: JSON.stringify(continue_url),
 					SHEET_STOREOWNERS_ID: JSON.stringify(sheet_id_store_owners),
 					SHEET_ID_REFER_LEGACY: JSON.stringify(sheet_id_refer_legacy),
+					SHEET_ID_BRANDS: JSON.stringify(sheet_id_brands),
 					CNPJ_URL: JSON.stringify(cnpj_url),
 					CNPJ_TOKEN: JSON.stringify(cnpj_token)
 				}
@@ -80,6 +82,7 @@ module.exports = (env, { mode }) => {
 					CONTINUE_URL: JSON.stringify(process.env.CONTINUE_URL),
 					SHEET_STOREOWNERS_ID: JSON.stringify(process.env.SHEET_STOREOWNERS_ID),
 					SHEET_ID_REFER_LEGACY: JSON.stringify(process.env.SHEET_ID_REFER_LEGACY),
+					SHEET_ID_BRANDS: JSON.stringify(process.env.SHEET_ID_BRANDS),
 					CNPJ_URL: JSON.stringify(process.env.CNPJ_URL),
 					CNPJ_TOKEN: JSON.stringify(process.env.CNPJ_TOKEN)
 				}
