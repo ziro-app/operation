@@ -37,9 +37,10 @@ export default () => {
 			<div style={block}>
 				<label style={title}>Etapa 2</label>
 				<ImageUpload
-					sendToBackend={sendToBackend(setIsSubmitting)}
+					sendToBackend={sendToBackend(setIsSubmitting, setBrand)}
 					isDisabled={!isValidBrand(brands,brand) || isSubmitting}
 				/>
+				{isSubmitting ? <div style={{ display: 'grid' }}><Spinner size={'5rem'} /></div> : null}
 			</div>
 		</div>
 	)
