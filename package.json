@@ -57,6 +57,7 @@
     "@bit/vitorbarbosa19.ziro.resend-email": "0.0.8",
     "@bit/vitorbarbosa19.ziro.reset-pass": "0.0.5",
     "@bit/vitorbarbosa19.ziro.spinner": "0.0.12",
+    "@bit/vitorbarbosa19.ziro.spinner-with-div": "0.0.1",
     "@bit/vitorbarbosa19.ziro.submenu": "0.0.1",
     "@bit/vitorbarbosa19.ziro.update-email": "0.0.6",
     "@bit/vitorbarbosa19.ziro.update-pass": "0.0.6",

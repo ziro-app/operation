@@ -3,6 +3,8 @@ import Spinner from '@bit/vitorbarbosa19.ziro.spinner'
 import Error from '@bit/vitorbarbosa19.ziro.error'
 import Dropdown from '@bit/vitorbarbosa19.ziro.dropdown'
 import ImageUpload from '@bit/vitorbarbosa19.ziro.image-upload'
+import SpinnerWithDiv from '@bit/vitorbarbosa19.ziro.spinner-with-div'
+import SubmitBlock from './SubmitBlock'
 import fetch from './fetch'
 import sendToBackend from './sendToBackend'
 import isValidBrand from './isValidBrand'
@@ -12,10 +14,14 @@ export default () => {
 	const [isLoading, setIsLoading] = useState(true)
 	const [isError, setIsError] = useState(false)
 	const [isSubmitting, setIsSubmitting] = useState(false)
+	const [isSubmitted, setIsSubmitted] = useState(false)
 	const [brands, setBrands] = useState('')
 	const [brand, setBrand] = useState('')
 	useEffect(() => fetch(setIsLoading, setIsError, setBrands), [])
-	if (isLoading) return <div style={{ display: 'grid' }}><Spinner size={'6rem'} /></div>
+	useEffect(() => {
+		// if (!brand) setIsSubmitted(false)
+	}, [brand])
+	if (isLoading) return <SpinnerWithDiv size={'6rem'} />
 	if (isError) return <Error />
 	return (
 		<div style={container}>
@@ -37,10 +43,10 @@ export default () => {
 			<div style={block}>
 				<label style={title}>Etapa 2</label>
 				<ImageUpload
-					sendToBackend={sendToBackend(setIsSubmitting, setBrand)}
+					sendToBackend={sendToBackend(setIsSubmitting, setIsSubmitted, setBrand)}
 					isDisabled={!isValidBrand(brands,brand) || isSubmitting}
 				/>
-				{isSubmitting ? <div style={{ display: 'grid' }}><Spinner size={'5rem'} /></div> : null}
+				<SubmitBlock isSubmitting={isSubmitting} isSubmitted={isSubmitted} />
 			</div>
 		</div>
 	)

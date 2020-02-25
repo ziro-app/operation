@@ -1,7 +1,7 @@
 import { readAndCompressImage } from 'browser-image-resizer'
 import { storage } from '../../Firebase/index'
 
-const sendToBackend = (setIsSubmitting, setBrand) => async files => {
+const sendToBackend = (setIsSubmitting, setIsSubmitted, setBrand) => async files => {
 	setIsSubmitting(true)
 	const result = await Promise.all(files.map(async file => {
 		try {
@@ -17,6 +17,7 @@ const sendToBackend = (setIsSubmitting, setBrand) => async files => {
 	}))
 	console.log(result)
 	setIsSubmitting(false)
+	setIsSubmitted(true)
 	setBrand('')
 }
 
