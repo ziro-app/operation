@@ -43,7 +43,7 @@ export default () => {
 			<div style={block}>
 				<label style={title}>Etapa 2</label>
 				<ImageUpload
-					sendToBackend={sendToBackend(setIsSubmitting, setIsSubmitted, setBrand)}
+					sendToBackend={sendToBackend(setIsSubmitting, setIsSubmitted, setBrand, brand)}
 					isDisabled={!isValidBrand(brands,brand) || isSubmitting}
 				/>
 				<SubmitBlock isSubmitting={isSubmitting} isSubmitted={isSubmitted} />
