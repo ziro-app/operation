@@ -19,7 +19,7 @@ export default () => {
 	const [brand, setBrand] = useState('')
 	useEffect(() => fetch(setIsLoading, setIsError, setBrands), [])
 	useEffect(() => {
-		// if (!brand) setIsSubmitted(false)
+		if (brand !== '' && setIsSubmitted) setIsSubmitted(false)
 	}, [brand])
 	if (isLoading) return <SpinnerWithDiv size={'6rem'} />
 	if (isError) return <Error />
