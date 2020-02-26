@@ -53,7 +53,7 @@ const sendToBackend = state => () => {
 				try {
 					await auth.currentUser.sendEmailVerification({ url: `${process.env.CONTINUE_URL}` })
 					try {
-						await db.collection('team').add({
+						await db.collection('team').doc(user.uid).set({
 							cadastro: new Date(),
 							uid: user.uid,
 							nome,

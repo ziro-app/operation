@@ -29,7 +29,13 @@ export const Menu = ({ title, children }) => {
 							path: '/conta',
 							onClick: () => setIsOpen(false),
 							icon: <Icon type='gear' size={15} strokeWidth={2} />,
-							text: 'Minha Conta'
+							text: 'Minha conta'
+						},
+						{
+							path: '/update',
+							onClick: () => setIsOpen(false),
+							icon: <Icon type='gear' size={15} strokeWidth={2} />,
+							text: 'Atualizar dados'
 						},
 						{
 							path: '#',

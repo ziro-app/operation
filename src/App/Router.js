@@ -15,6 +15,7 @@ import DeleteAccount from './DeleteAccount/index'
 import RegisterStoreowner from './RegisterStoreowner/index'
 import ImageUpload from './ImageUpload/index'
 import Submenu from '@bit/vitorbarbosa19.ziro.submenu'
+import UpdateUserInfo from './UpdateUserInfo/index'
 import NotFound from '@bit/vitorbarbosa19.ziro.not-found'
 
 const Router = ({ isLogged }) => {
@@ -35,7 +36,8 @@ const Router = ({ isLogged }) => {
 			['Cadastrar lojista', '/cadastrar-lojista'],
 			['Upload de imagens', 'upload-imagem']]} /></Menu>,
 		'/cadastrar-lojista': <Menu title='Cadastrar lojista'><RegisterStoreowner /></Menu>,
-		'/upload-imagem': <Menu title='Upload de imagens'><ImageUpload /></Menu>
+		'/upload-imagem': <Menu title='Upload de imagens'><ImageUpload /></Menu>,
+		'/update': <Menu title='Atualizar informações'><UpdateUserInfo /></Menu>
 	}
 	const homeRoute = '/conta'
 	return routeMatcher(isLogged, publicRoutes, privateRoutes, homeRoute, <NotFound fallback='/' />)
