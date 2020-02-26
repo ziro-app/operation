@@ -34,7 +34,7 @@ export const Menu = ({ title, children }) => {
 						{
 							path: '/update',
 							onClick: () => setIsOpen(false),
-							icon: <Icon type='gear' size={15} strokeWidth={2} />,
+							icon: <Icon type='pen' size={15} strokeWidth={2} />,
 							text: 'Atualizar dados'
 						},
 						{

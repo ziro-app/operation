@@ -45,7 +45,7 @@ export const App = () => {
 	const body = {
 		"apiResource": "values",
 		"apiMethod": "get",
-		"range": "Team",
+		"range": "Base",
 		"spreadsheetId": process.env.SHEET_ID
 	}
 
