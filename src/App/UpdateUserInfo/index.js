@@ -1,4 +1,5 @@
 import React, { useState, useContext } from 'react'
+import { get } from 'axios'
 import { userContext } from '../appContext'
 import InputEdit from '@bit/vitorbarbosa19.ziro.input-edit'
 import DropdownEdit from '@bit/vitorbarbosa19.ziro.dropdown-edit'
@@ -8,7 +9,7 @@ import capitalize from '@ziro/capitalize'
 import sendToBackend from './sendToBackend'
 
 const UpdateUserInfo = () => {
-    const { uid, userPos, name, nickname, cpf, height, emergencyContact, initialDate, scope, maritalStatus, github, paymentModel, birthDate, emergencyName, issuingBody, kinship, weight, rg, shippingDate, personalPhone, amountCharged } = useContext(userContext)
+    const { uid, userPos, name, nickname, cpf, height, emergencyContact, initialDate, scope, maritalStatus, github, paymentModel, birthDate, emergencyName, issuingBody, kinship, weight, rg, shippingDate, personalPhone, amountCharged, cep, city, cityState, address } = useContext(userContext)
     const [newName, setNewName] = useState(name)
     const [errorName, setErrorName] = useState('')
     const [loadingName, setLoadingName] = useState(false)
@@ -45,9 +46,32 @@ const UpdateUserInfo = () => {
     const [newEmergencyContact, setNewEmergencyContact] = useState(emergencyContact.split('+55 ')[1])
     const [errorEmergencyContact, setErrorEmergencyContact] = useState('')
     const [loadingEmergencyContact, setLoadingEmergencyContact] = useState(false)
+    const [newCep, setNewCep] = useState(cep)
+    const [errorCep, setErrorCep] = useState('')
+    const [loadingCep, setLoadingCep] = useState(false)
+    const [newCity, setNewCity] = useState(city)
+    const [errorCity, setErrorCity] = useState('')
+    const [loadingCity, setLoadingCity] = useState(false)
+    const [newCityState, setNewCityState] = useState(cityState)
+    const [errorCityState, setErrorCityState] = useState('')
+    const [loadingCityState, setLoadingCityState] = useState(false)
+    const [street, setStreet] = useState(address.split(', ')[0])
+    const [errorStreet, setErrorStreet] = useState('')
+    const [loadingStreet, setLoadingStreet] = useState(false)
+    const [number, setNumber] = useState(address.split(', ')[1])
+    const [errorNumber, setErrorNumber] = useState('')
+    const [loadingNumber, setLoadingNumber] = useState(false)
+    const [complement, setComplement] = useState(address.split(', ')[2])
+    const [errorComplement, setErrorComplement] = useState('')
+    const [loadingComplement, setLoadingComplement] = useState(false)
+    const [neighborhood, setNeighborhood] = useState(address.split(', ')[3])
+    const [errorNeighborhood, setErrorNeighborhood] = useState('')
+    const [loadingNeighborhood, setLoadingNeighborhood] = useState(false)
+    const [searchingCep, isSearchingCep] = useState(false)
     const maritalStatusList = ['Casado(a)', 'Divorciado(a)', 'Separado(a)', 'Solteiro(a)', 'Viúvo(a)']
     const scopeList = ['Assessoria', 'Logística', 'Vendas', 'Dev', 'Dados', 'Processos']
     const paymentModelList = ['assessoria2019', 'assessoria2020', 'cobranca2019', 'logistica2019', 'nenhum', 'vendas2019', 'vendas2020']
+    const statesList = ['AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA', 'MT', 'MS', 'MG', 'PA', 'PB', 'PR', 'PE', 'PI', 'RJ', 'RN', 'RS', 'RO', 'RR', 'SC', 'SP', 'SE', 'TO']
 
     const validateName = () => {
         if (newName !== '') {
@@ -146,6 +170,79 @@ const UpdateUserInfo = () => {
         } else {
             setErrorEmergencyContact('Telefone inválido')
             return false
+        }
+    }
+    const validateCep = () => {
+        if (/(^\d{5}\-\d{3}$)/.test(newCep)) {
+            setErrorCep('')
+            return true
+        } else {
+            setErrorCep('Cep inválido')
+            return false
+        }
+    }
+    const validateStreet = () => {
+        if (street !== '') {
+            setErrorStreet('')
+            return true
+        } else {
+            setErrorStreet('Valor inválido')
+            return false
+        }
+    }
+    const validateNumber = () => {
+        if (number !== '') {
+            setErrorNumber('')
+            return true
+        } else {
+            setErrorNumber('Valor inválido')
+            return false
+        }
+    }
+    const validateNeighborhood = () => {
+        if (neighborhood !== '') {
+            setErrorNeighborhood('')
+            return true
+        } else {
+            setErrorNeighborhood('Valor inválido')
+            return false
+        }
+    }
+    const validateCity = () => {
+        if (newCity !== '') {
+            setErrorCity('')
+            return true
+        } else {
+            setErrorCity('Valor inválido')
+            return false
+        }
+    }
+    const validateCityState = () => {
+        if (/(^\D{2}$)/.test(cityState) & statesList.includes(cityState)) {
+            setErrorCityState('')
+            return true
+        } else {
+            setErrorCityState('Estado inválido')
+            return false
+        }
+    }
+
+
+    const cepHandleChange = async (e) => {
+        const cep = maskInput(e.target.value, '#####-###', true)
+        setNewCep(cep)
+        if (cep.length === 9) {
+            isSearchingCep(true)
+            try {
+                const { data } = await get(`https://viacep.com.br/ws/${cep}/json/`)
+                setStreet(data.logradouro.toUpperCase())
+                setNeighborhood(data.bairro.toUpperCase())
+                setComplement(data.complemento.toUpperCase())
+                setNewCity(data.localidade.toUpperCase())
+                setNewCityState(data.uf.toUpperCase())
+            } finally {
+                isSearchingCep(false)
+            }
         }
     }
 
@@ -264,6 +361,90 @@ const UpdateUserInfo = () => {
                 placeholder="digite aqui..."
                 editable={true}
                 isLoading={loadingGithub}
+            />
+            <InputEdit
+                name="Cep"
+                value={newCep}
+                onChange={(e) => cepHandleChange(e)}
+                validateInput={validateCep}
+                submit={sendToBackend(uid, 'O', userPos, { 'cep': newCep }, newCep, setLoadingCep, setErrorCep)}
+                setError={() => { }}
+                error={errorCep}
+                placeholder="digite aqui..."
+                editable={!searchingCep}
+                isLoading={loadingCep}
+            />
+            <InputEdit
+                name="Rua"
+                value={street}
+                onChange={({ target: { value } }) => setStreet(value.toUpperCase())}
+                validateInput={validateStreet}
+                submit={sendToBackend(uid, 'N', userPos, { 'endereco': `${street}, ${number}, ${complement}, ${neighborhood}` }, `${street}, ${number}, ${complement}, ${neighborhood}`, setLoadingStreet, setErrorStreet)}
+                setError={() => { }}
+                error={errorStreet}
+                placeholder="digite aqui..."
+                editable={true}
+                isLoading={loadingStreet}
+            />
+            <InputEdit
+                name="Número"
+                value={number}
+                onChange={({ target: { value } }) => setNumber(value)}
+                validateInput={validateNumber}
+                submit={sendToBackend(uid, 'N', userPos, { 'endereco': `${street}, ${number}, ${complement}, ${neighborhood}` }, `${street}, ${number}, ${complement}, ${neighborhood}`, setLoadingNumber, setErrorNumber)}
+                setError={() => { }}
+                error={errorNumber}
+                placeholder="digite aqui..."
+                editable={true}
+                isLoading={loadingNumber}
+            />
+            <InputEdit
+                name="Complemento"
+                value={complement}
+                onChange={({ target: { value } }) => setComplement(value.toUpperCase())}
+                validateInput={() => true}
+                submit={sendToBackend(uid, 'N', userPos, { 'endereco': `${street}, ${number}, ${complement}, ${neighborhood}` }, `${street}, ${number}, ${complement}, ${neighborhood}`, setLoadingComplement, setErrorComplement)}
+                setError={() => { }}
+                error={errorComplement}
+                placeholder="digite aqui..."
+                editable={true}
+                isLoading={loadingComplement}
+            />
+            <InputEdit
+                name="Bairro"
+                value={neighborhood}
+                onChange={({ target: { value } }) => setNeighborhood(value.toUpperCase())}
+                validateInput={validateNeighborhood}
+                submit={sendToBackend(uid, 'N', userPos, { 'endereco': `${street}, ${number}, ${complement}, ${neighborhood}` }, `${street}, ${number}, ${complement}, ${neighborhood}`, setLoadingNeighborhood, setErrorNeighborhood)}
+                setError={() => { }}
+                error={errorNeighborhood}
+                placeholder="digite aqui..."
+                editable={true}
+                isLoading={loadingNeighborhood}
+            />
+            <InputEdit
+                name="Cidade"
+                value={newCity}
+                onChange={({ target: { value } }) => setNewCity(value.toUpperCase())}
+                validateInput={validateCity}
+                submit={sendToBackend(uid, 'P', userPos, { 'cidade': newCity }, newCity, setLoadingCity, setErrorCity)}
+                setError={() => { }}
+                error={errorCity}
+                placeholder="digite aqui..."
+                editable={true}
+                isLoading={loadingCity}
+            />
+            <InputEdit
+                name="Estado"
+                value={newCityState}
+                onChange={({ target: { value } }) => setNewCityState(maskInput(value.toUpperCase(), '##', false))}
+                validateInput={validateCityState}
+                submit={sendToBackend(uid, 'Q', userPos, { 'estado': newCityState }, newCityState, setLoadingCityState, setErrorCityState)}
+                setError={() => { }}
+                error={errorCityState}
+                placeholder="digite aqui..."
+                editable={true}
+                isLoading={loadingCityState}
             />
             <InputEdit
                 name="Data de início"
