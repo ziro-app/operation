@@ -2,7 +2,6 @@ import React, { useState, useContext } from 'react'
 import { get } from 'axios'
 import { userContext } from '../appContext'
 import InputEdit from '@bit/vitorbarbosa19.ziro.input-edit'
-import DropdownEdit from '@bit/vitorbarbosa19.ziro.dropdown-edit'
 import { containerWithPadding } from '@ziro/theme'
 import maskInput from '@ziro/mask-input'
 import capitalize from '@ziro/capitalize'
@@ -19,18 +18,15 @@ const UpdateUserInfo = () => {
     const [newBirthDate, setNewBirthDate] = useState(birthDate)
     const [errorBirthDate, setErrorBirthDate] = useState('')
     const [loadingBirthDate, setLoadingBirthDate] = useState(false)
-    const [newMaritalStatus, setNewMaritalStatus] = useState(maritalStatus)
     const [newPersonalPhone, setNewPersonalPhone] = useState(personalPhone.split('+55 ')[1])
     const [errorPersonalPhone, setErrorPersonalPhone] = useState('')
     const [loadingPersonalPhone, setLoadingPersonalPhone] = useState(false)
     const [newGithub, setNewGithub] = useState(github)
     const [errorGithub, setErrorGithub] = useState('')
     const [loadingGithub, setLoadingGithub] = useState(false)
-    const [newScope, setNewScope] = useState(scope)
     const [newAmountCharged, setNewAmountCharged] = useState(amountCharged)
     const [errorAmountCharged, setErrorAmountCharged] = useState('')
     const [loadingAmountCharged, setLoadingAmountCharged] = useState(false)
-    const [newPaymentModel, setNewPaymentModel] = useState(paymentModel)
     const [newHeight, setNewHeight] = useState(height)
     const [errorHeight, setErrorHeight] = useState('')
     const [loadingHeight, setLoadingHeight] = useState(false)
@@ -68,9 +64,6 @@ const UpdateUserInfo = () => {
     const [errorNeighborhood, setErrorNeighborhood] = useState('')
     const [loadingNeighborhood, setLoadingNeighborhood] = useState(false)
     const [searchingCep, isSearchingCep] = useState(false)
-    const maritalStatusList = ['Casado(a)', 'Divorciado(a)', 'Separado(a)', 'Solteiro(a)', 'Viúvo(a)']
-    const scopeList = ['Assessoria', 'Logística', 'Vendas', 'Dev', 'Dados', 'Processos']
-    const paymentModelList = ['assessoria2019', 'assessoria2020', 'cobranca2019', 'logistica2019', 'nenhum', 'vendas2019', 'vendas2020']
     const statesList = ['AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA', 'MT', 'MS', 'MG', 'PA', 'PB', 'PR', 'PE', 'PI', 'RJ', 'RN', 'RS', 'RO', 'RR', 'SC', 'SP', 'SE', 'TO']
 
     const validateName = () => {
@@ -328,16 +321,6 @@ const UpdateUserInfo = () => {
                 editable={false}
                 isLoading={false}
             />
-            <DropdownEdit
-                name="Estado civil"
-                value={newMaritalStatus}
-                onChange={({ target: { value } }) => setNewMaritalStatus(value)}
-                onChangeKeyboard={element =>
-                    element ? setNewMaritalStatus(element.value) : null
-                }
-                list={maritalStatusList}
-                placeholder="Solteiro(a)"
-            />
             <InputEdit
                 name="Telefone pessoal"
                 value={newPersonalPhone}
@@ -458,16 +441,6 @@ const UpdateUserInfo = () => {
                 editable={false}
                 isLoading={false}
             />
-            <DropdownEdit
-                name="Escopo"
-                value={newScope}
-                onChange={({ target: { value } }) => setNewScope(value)}
-                onChangeKeyboard={element =>
-                    element ? setNewScope(element.value) : null
-                }
-                list={scopeList}
-                placeholder="digite aqui..."
-            />
             <InputEdit
                 name="Valor cobrado"
                 value={newAmountCharged}
@@ -479,16 +452,6 @@ const UpdateUserInfo = () => {
                 placeholder="digite aqui..."
                 editable={true}
                 isLoading={loadingAmountCharged}
-            />
-            <DropdownEdit
-                name="Modelo de pagamento"
-                value={newPaymentModel}
-                onChange={({ target: { value } }) => setNewPaymentModel(value)}
-                onChangeKeyboard={element =>
-                    element ? setNewPaymentModel(element.value) : null
-                }
-                list={paymentModelList}
-                placeholder="digite aqui..."
             />
             <InputEdit
                 name="Altura em metros"
