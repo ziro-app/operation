@@ -9,6 +9,7 @@ import sendToBackend from './sendToBackend'
 
 const UpdateUserInfo = () => {
     const { uid, userPos, name, nickname, cpf, height, emergencyContact, initialDate, scope, maritalStatus, github, paymentModel, birthDate, emergencyName, issuingBody, kinship, weight, rg, shippingDate, personalPhone, amountCharged, cep, city, cityState, address } = useContext(userContext)
+    const partAddress = address.split(', ')
     const [newName, setNewName] = useState(name)
     const [errorName, setErrorName] = useState('')
     const [loadingName, setLoadingName] = useState(false)
@@ -51,16 +52,16 @@ const UpdateUserInfo = () => {
     const [newCityState, setNewCityState] = useState(cityState)
     const [errorCityState, setErrorCityState] = useState('')
     const [loadingCityState, setLoadingCityState] = useState(false)
-    const [street, setStreet] = useState(address.split(', ')[0])
+    const [street, setStreet] = useState(partAddress[0])
     const [errorStreet, setErrorStreet] = useState('')
     const [loadingStreet, setLoadingStreet] = useState(false)
-    const [number, setNumber] = useState(address.split(', ')[1])
+    const [number, setNumber] = useState(partAddress[1])
     const [errorNumber, setErrorNumber] = useState('')
     const [loadingNumber, setLoadingNumber] = useState(false)
-    const [complement, setComplement] = useState(address.split(', ')[2])
+    const [complement, setComplement] = useState(partAddress.length === 4 ? address.split(', ')[2] : '')
     const [errorComplement, setErrorComplement] = useState('')
     const [loadingComplement, setLoadingComplement] = useState(false)
-    const [neighborhood, setNeighborhood] = useState(address.split(', ')[3])
+    const [neighborhood, setNeighborhood] = useState(partAddress.length === 4 ? address.split(', ')[3] : address.split(', ')[2])
     const [errorNeighborhood, setErrorNeighborhood] = useState('')
     const [loadingNeighborhood, setLoadingNeighborhood] = useState(false)
     const [searchingCep, isSearchingCep] = useState(false)
@@ -362,7 +363,7 @@ const UpdateUserInfo = () => {
                 value={street}
                 onChange={({ target: { value } }) => setStreet(value.toUpperCase())}
                 validateInput={validateStreet}
-                submit={sendToBackend(uid, 'N', userPos, { 'endereco': `${street}, ${number}, ${complement}, ${neighborhood}` }, `${street}, ${number}, ${complement}, ${neighborhood}`, setLoadingStreet, setErrorStreet)}
+                submit={sendToBackend(uid, 'N', userPos, { 'endereco': street + ', ' + number + ', ' + (complement ? complement + ', ' : '') + neighborhood }, street + ', ' + number + ', ' + (complement ? complement + ', ' : '') + neighborhood, setLoadingStreet, setErrorStreet)}
                 setError={() => { }}
                 error={errorStreet}
                 placeholder="digite aqui..."
@@ -374,7 +375,7 @@ const UpdateUserInfo = () => {
                 value={number}
                 onChange={({ target: { value } }) => setNumber(value)}
                 validateInput={validateNumber}
-                submit={sendToBackend(uid, 'N', userPos, { 'endereco': `${street}, ${number}, ${complement}, ${neighborhood}` }, `${street}, ${number}, ${complement}, ${neighborhood}`, setLoadingNumber, setErrorNumber)}
+                submit={sendToBackend(uid, 'N', userPos, { 'endereco': street + ', ' + number + ', ' + (complement ? complement + ', ' : '') + neighborhood }, street + ', ' + number + ', ' + (complement ? complement + ', ' : '') + neighborhood, setLoadingNumber, setErrorNumber)}
                 setError={() => { }}
                 error={errorNumber}
                 placeholder="digite aqui..."
@@ -386,7 +387,7 @@ const UpdateUserInfo = () => {
                 value={complement}
                 onChange={({ target: { value } }) => setComplement(value.toUpperCase())}
                 validateInput={() => true}
-                submit={sendToBackend(uid, 'N', userPos, { 'endereco': `${street}, ${number}, ${complement}, ${neighborhood}` }, `${street}, ${number}, ${complement}, ${neighborhood}`, setLoadingComplement, setErrorComplement)}
+                submit={sendToBackend(uid, 'N', userPos, { 'endereco': street + ', ' + number + ', ' + (complement ? complement + ', ' : '') + neighborhood }, street + ', ' + number + ', ' + (complement ? complement + ', ' : '') + neighborhood, setLoadingComplement, setErrorComplement)}
                 setError={() => { }}
                 error={errorComplement}
                 placeholder="digite aqui..."
@@ -398,7 +399,7 @@ const UpdateUserInfo = () => {
                 value={neighborhood}
                 onChange={({ target: { value } }) => setNeighborhood(value.toUpperCase())}
                 validateInput={validateNeighborhood}
-                submit={sendToBackend(uid, 'N', userPos, { 'endereco': `${street}, ${number}, ${complement}, ${neighborhood}` }, `${street}, ${number}, ${complement}, ${neighborhood}`, setLoadingNeighborhood, setErrorNeighborhood)}
+                submit={sendToBackend(uid, 'N', userPos, { 'endereco': street + ', ' + number + ', ' + (complement ? complement + ', ' : '') + neighborhood }, street + ', ' + number + ', ' + (complement ? complement + ', ' : '') + neighborhood, setLoadingNeighborhood, setErrorNeighborhood)}
                 setError={() => { }}
                 error={errorNeighborhood}
                 placeholder="digite aqui..."
