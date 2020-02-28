@@ -1,5 +1,4 @@
 import React, { useState, useContext } from 'react'
-import { get } from 'axios'
 import { userContext } from '../appContext'
 import InputEdit from '@bit/vitorbarbosa19.ziro.input-edit'
 import { containerWithPadding } from '@ziro/theme'
@@ -8,7 +7,7 @@ import capitalize from '@ziro/capitalize'
 import sendToBackend from './sendToBackend'
 
 const UpdateUserInfo = () => {
-    const { uid, userPos, name, nickname, cpf, height, emergencyContact, initialDate, scope, maritalStatus, github, paymentModel, birthDate, emergencyName, issuingBody, kinship, weight, rg, shippingDate, personalPhone, amountCharged, cep, city, cityState, address } = useContext(userContext)
+    const { uid, userPos, name, nickname, cpf, height, emergencyContact, initialDate, maritalStatus, github, birthDate, emergencyName, issuingBody, kinship, weight, rg, shippingDate, personalPhone, amountCharged, cep, city, cityState, address } = useContext(userContext)
     const partAddress = address.split(', ')
     const [newName, setNewName] = useState(name)
     const [errorName, setErrorName] = useState('')
@@ -25,9 +24,6 @@ const UpdateUserInfo = () => {
     const [newGithub, setNewGithub] = useState(github)
     const [errorGithub, setErrorGithub] = useState('')
     const [loadingGithub, setLoadingGithub] = useState(false)
-    const [newAmountCharged, setNewAmountCharged] = useState(amountCharged)
-    const [errorAmountCharged, setErrorAmountCharged] = useState('')
-    const [loadingAmountCharged, setLoadingAmountCharged] = useState(false)
     const [newHeight, setNewHeight] = useState(height)
     const [errorHeight, setErrorHeight] = useState('')
     const [loadingHeight, setLoadingHeight] = useState(false)
@@ -64,7 +60,10 @@ const UpdateUserInfo = () => {
     const [neighborhood, setNeighborhood] = useState(partAddress.length === 4 ? address.split(', ')[3] : address.split(', ')[2])
     const [errorNeighborhood, setErrorNeighborhood] = useState('')
     const [loadingNeighborhood, setLoadingNeighborhood] = useState(false)
-    const [searchingCep, isSearchingCep] = useState(false)
+    const [newMaritalStatus, setNewMaritalStatus] = useState(maritalStatus)
+    const [errorMaritalStatus, setErrorMaritalStatus] = useState('')
+    const [loadingMaritalStatus, setLoadingMaritalStatus] = useState(false)
+    const maritalStatusList = ['Casado(a)', 'Divorciado(a)', 'Separado(a)', 'Solteiro(a)', 'Viúvo(a)']
     const statesList = ['AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA', 'MT', 'MS', 'MG', 'PA', 'PB', 'PR', 'PE', 'PI', 'RJ', 'RN', 'RS', 'RO', 'RR', 'SC', 'SP', 'SE', 'TO']
 
     const validateName = () => {
@@ -109,15 +108,6 @@ const UpdateUserInfo = () => {
             return true
         } else {
             setErrorGithub('Valor inválido')
-            return false
-        }
-    }
-    const validateAmountCharged = () => {
-        if (newAmountCharged !== '') {
-            setErrorAmountCharged('')
-            return true
-        } else {
-            setErrorAmountCharged('Valor inválido')
             return false
         }
     }
@@ -220,23 +210,13 @@ const UpdateUserInfo = () => {
             return false
         }
     }
-
-
-    const cepHandleChange = async (e) => {
-        const cep = maskInput(e.target.value, '#####-###', true)
-        setNewCep(cep)
-        if (cep.length === 9) {
-            isSearchingCep(true)
-            try {
-                const { data } = await get(`https://viacep.com.br/ws/${cep}/json/`)
-                setStreet(data.logradouro.toUpperCase())
-                setNeighborhood(data.bairro.toUpperCase())
-                setComplement(data.complemento.toUpperCase())
-                setNewCity(data.localidade.toUpperCase())
-                setNewCityState(data.uf.toUpperCase())
-            } finally {
-                isSearchingCep(false)
-            }
+    const validateMaritalStatus = () => {
+        if (maritalStatusList.includes(newMaritalStatus)) {
+            setErrorMaritalStatus('')
+            return true
+        } else {
+            setErrorMaritalStatus('Valor inválido')
+            return false
         }
     }
 
@@ -323,6 +303,18 @@ const UpdateUserInfo = () => {
                 isLoading={false}
             />
             <InputEdit
+                name="Estado Civil"
+                value={newMaritalStatus}
+                onChange={({ target: { value } }) => setNewMaritalStatus(capitalize(value))}
+                validateInput={validateMaritalStatus}
+                submit={sendToBackend(uid, 'J', userPos, { 'estadoCivil': newMaritalStatus }, newMaritalStatus, setLoadingMaritalStatus, setErrorMaritalStatus)}
+                setError={() => { }}
+                error={errorMaritalStatus}
+                placeholder="Solteiro(a)"
+                editable={true}
+                isLoading={loadingMaritalStatus}
+            />
+            <InputEdit
                 name="Telefone pessoal"
                 value={newPersonalPhone}
                 onChange={({ target: { value } }) => setNewPersonalPhone(maskInput(value, '(##) #####-####', true))}
@@ -349,13 +341,13 @@ const UpdateUserInfo = () => {
             <InputEdit
                 name="Cep"
                 value={newCep}
-                onChange={(e) => cepHandleChange(e)}
+                onChange={({ target: { value } }) => setNewCep(maskInput(value, '#####-###', true))}
                 validateInput={validateCep}
                 submit={sendToBackend(uid, 'O', userPos, { 'cep': newCep }, newCep, setLoadingCep, setErrorCep)}
                 setError={() => { }}
                 error={errorCep}
                 placeholder="digite aqui..."
-                editable={!searchingCep}
+                editable={true}
                 isLoading={loadingCep}
             />
             <InputEdit
@@ -444,15 +436,15 @@ const UpdateUserInfo = () => {
             />
             <InputEdit
                 name="Valor cobrado"
-                value={newAmountCharged}
-                onChange={({ target: { value } }) => setNewAmountCharged(maskInput(value, '#####', true))}
-                validateInput={validateAmountCharged}
-                submit={sendToBackend(uid, 'U', userPos, { 'valorCobrado': newAmountCharged }, newAmountCharged, setLoadingAmountCharged, setErrorAmountCharged)}
+                value={amountCharged}
+                onChange={() => { }}
+                validateInput={() => { }}
+                submit={() => { }}
                 setError={() => { }}
-                error={errorAmountCharged}
+                error={''}
                 placeholder="digite aqui..."
-                editable={true}
-                isLoading={loadingAmountCharged}
+                editable={false}
+                isLoading={false}
             />
             <InputEdit
                 name="Altura em metros"
