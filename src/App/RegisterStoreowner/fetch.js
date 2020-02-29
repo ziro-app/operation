@@ -1,9 +1,10 @@
 import axios from 'axios'
 
-const fetch = (setIsLoading, setIsError, setStoreowners, setAdvisors, setAffiliates) => {
+const fetch = (setIsLoading, setIsError, setStoreowners, setAdvisors, setAffiliates, setSellers) => {
     const source = axios.CancelToken.source()
     const affiliates = []
     const advisors = []
+    const sellers = []
     const run = async () => {
         const config = {
             method: 'POST',
@@ -26,7 +27,7 @@ const fetch = (setIsLoading, setIsError, setStoreowners, setAdvisors, setAffilia
             data: {
                 apiResource: 'values',
                 apiMethod: 'get',
-                spreadsheetId: '1badoOxsYITqtwq4l_GR9D5o8mWvfLi48HQcqv-7kzpo',
+                spreadsheetId: process.env.SHEET_ID_AFFILIATES,
                 range: 'Afiliados!B:D'
             },
             headers: {
@@ -35,13 +36,13 @@ const fetch = (setIsLoading, setIsError, setStoreowners, setAdvisors, setAffilia
             },
             cancelToken: source.token
         }
-        const configAdvisor = {
+        const configPeople = {
             method: 'POST',
             url: process.env.SHEET_URL,
             data: {
                 apiResource: 'values',
                 apiMethod: 'get',
-                spreadsheetId: '1msOk_Q_0RJXR4iDUuHEFPUELXcZgm02SmpHKsvbe7tc',
+                spreadsheetId: process.env.SHEET_ID_PEOPLE,
                 range: 'Base!D:T'
             },
             headers: {
@@ -60,12 +61,14 @@ const fetch = (setIsLoading, setIsError, setStoreowners, setAdvisors, setAffilia
             listAffiliates.map(affiliate => affiliates.push(Object.assign({}, [affiliate[0], affiliate[1] + ' ' + affiliate[2]])))
             setAffiliates(affiliates)
 
-            const dataAdvisors = await axios(configAdvisor)
-            const [, ...listAdvisors] = dataAdvisors.data.values
-            listAdvisors.map(advisor => {
-                if (advisor[16] === 'Assessoria') advisors.push(advisor[0])
+            const dataPeople = await axios(configPeople)
+            const [, ...listPeople] = dataPeople.data.values
+            listPeople.map(person => {
+                if (person[16] === 'Assessoria') advisors.push(person[0])
+                if (person[16] === 'Vendas') sellers.push(person[0])
             })
             setAdvisors(advisors)
+            setSellers(sellers)
 
         } catch (error) {
             if (error.response) console.log(error.response)

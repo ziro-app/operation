@@ -32,12 +32,6 @@ export const Menu = ({ title, children }) => {
 							text: 'Minha conta'
 						},
 						{
-							path: '/update',
-							onClick: () => setIsOpen(false),
-							icon: <Icon type='pen' size={15} strokeWidth={2} />,
-							text: 'Atualizar dados'
-						},
-						{
 							path: '#',
 							onClick: () => auth.signOut(),
 							icon: <Icon type='logout' size={15} strokeWidth={3} />,

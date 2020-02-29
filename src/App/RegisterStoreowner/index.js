@@ -12,7 +12,7 @@ const RegisterStoreowner = () => {
 
     return (
         <div style={containerWithPadding}>
-            <FormRegisterStoreowner isLoading={isLoading} setIsLoading={setIsLoading} sendToBackend={sendToBackend} affiliateName={name} affiliateCpf={cpf} searchCnpj={searchCnpj} fetch={fetch} hasAdvisor={true} hasAffiliated={true} />
+            <FormRegisterStoreowner isLoading={isLoading} setIsLoading={setIsLoading} sendToBackend={sendToBackend} affiliateName={name} affiliateCpf={cpf} searchCnpj={searchCnpj} fetch={fetch} hasAdvisor={true} hasAffiliated={true} haveSalesman={true} />
         </div>
     )
 }
