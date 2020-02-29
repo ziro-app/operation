@@ -29,7 +29,8 @@ const sendToBackend = state => () => {
     const config = {
         headers: {
             'Content-type': 'application/json',
-            'Authorization': process.env.SHEET_TOKEN
+            'Authorization': process.env.SHEET_TOKEN,
+            'Origin': 'https://ziro.app'
         }
     }
     return new Promise(async (resolve, reject) => {
