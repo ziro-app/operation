@@ -90,7 +90,7 @@ const sendToBackend = state => () => {
                 setAdvisor('')
                 setSalesman('')
                 // resolve Promise with message to user
-                resolve('Lojista adicionado com sucesso!')
+                resolve('Lojista adicionado com sucesso !')
             } else throw { msg: 'Cnpj não validado', customError: true }
         } catch (error) {
             if (error.customError) reject(error)
