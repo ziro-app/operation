@@ -14,7 +14,7 @@ const sendToBackend = state => () => {
     const body = {
         apiResource: 'values',
         apiMethod: 'append',
-        spreadsheetId: '1x6T_309HUNijByr1B_2Ofi0oFG3USyTAWH66QV-6L-0',
+        spreadsheetId: process.env.SHEET_STOREOWNERS_ID,
         range: 'Base!A1',
         resource: {
             values: [
@@ -29,8 +29,7 @@ const sendToBackend = state => () => {
     const config = {
         headers: {
             'Content-type': 'application/json',
-            'Authorization': process.env.SHEET_TOKEN,
-            'Origin': 'https://ziro.app'
+            'Authorization': process.env.SHEET_TOKEN
         }
     }
     return new Promise(async (resolve, reject) => {
