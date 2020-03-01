@@ -13,6 +13,7 @@ import UpdateEmail from './UpdateEmail/index'
 import UpdatePass from './UpdatePass/index'
 import DeleteAccount from './DeleteAccount/index'
 import RegisterStoreowner from './RegisterStoreowner/index'
+import UpdateStoreowner from './UpdateStoreowner/index'
 import ImageUpload from './ImageUpload/index'
 import Submenu from '@bit/vitorbarbosa19.ziro.submenu'
 import UpdateUserInfo from './UpdateUserInfo/index'
@@ -34,8 +35,10 @@ const Router = ({ isLogged }) => {
 		'/deletar-conta': <DeleteAccount />,
 		'/assessoria': <Menu title='Assessoria'><Submenu options={[
 			['Cadastrar lojista', '/cadastrar-lojista'],
+			['Visualizar/Editar lojista', '/visualizar-lojista'],
 			['Upload de imagens', 'upload-imagem']]} /></Menu>,
 		'/cadastrar-lojista': <Menu title='Cadastrar lojista'><RegisterStoreowner /></Menu>,
+		'/visualizar-lojista': <Menu title='Visualizar lojista'><UpdateStoreowner /></Menu>,
 		'/upload-imagem': <Menu title='Upload de imagens'><ImageUpload /></Menu>,
 		'/update': <Menu title='Atualizar informações'><UpdateUserInfo /></Menu>
 	}
