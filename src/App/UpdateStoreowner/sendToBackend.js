@@ -8,7 +8,7 @@ export const inputEditUpdate = (cnpj, column, row, obj, newProp, setIsLoading, s
         apiMethod: 'update',
         range: `Base!${column}${row}`,
         valueInputOption: 'raw',
-        spreadsheetId: '1x6T_309HUNijByr1B_2Ofi0oFG3USyTAWH66QV-6L-0',
+        spreadsheetId: process.env.SHEET_STOREOWNERS_ID,
         resource: {
             values: [[newProp]]
         }
@@ -57,9 +57,8 @@ export const dropdownUpdate = (state, cnpj, row) => () => {
     const bodyAffiliate = {
         apiResource: 'values',
         apiMethod: 'update',
-        range: `Base!B${row}:C${row}`,
         valueInputOption: 'raw',
-        spreadsheetId: '1x6T_309HUNijByr1B_2Ofi0oFG3USyTAWH66QV-6L-0',
+        spreadsheetId: process.env.SHEET_STOREOWNERS_ID,
         resource: {
             values: [[affiliateName, affiliateCpf]]
         }
@@ -67,9 +66,8 @@ export const dropdownUpdate = (state, cnpj, row) => () => {
     const bodyAdvisorSalesman = {
         apiResource: 'values',
         apiMethod: 'update',
-        range: `Base!T${row}:U${row}`,
         valueInputOption: 'raw',
-        spreadsheetId: '1x6T_309HUNijByr1B_2Ofi0oFG3USyTAWH66QV-6L-0',
+        spreadsheetId: process.env.SHEET_STOREOWNERS_ID,
         resource: {
             values: [[advisor, salesman]]
         }
@@ -83,9 +81,9 @@ export const dropdownUpdate = (state, cnpj, row) => () => {
     }
     return new Promise(async (resolve, reject) => {
         try {
-
-            await post(url, bodyAffiliate, config)
-            await post(url, bodyAdvisorSalesman, config)
+            const row = await findStoreownerRow(cnpj)
+            await post(url, { range: `Base!B${row}:C${row}`, ...bodyAffiliate }, config)
+            await post(url, { range: `Base!T${row}:U${row}`, ...bodyAdvisorSalesman }, config)
             try {
                 const snapCollection = await db.collection('storeowners').where('cnpj', '==', cnpj).get()
                 let docId
@@ -114,7 +112,26 @@ export const dropdownUpdate = (state, cnpj, row) => () => {
     })
 }
 
-// Começar daqui, buscando a linha do storeowner
-const findStoreownerRow = cnpj => {
-
+const findStoreownerRow = async cnpj => {
+    const url = process.env.SHEET_URL
+    let pos
+    const config = {
+        headers: {
+            'Content-type': 'application/json',
+            'Authorization': process.env.SHEET_TOKEN
+        }
+    }
+    const body = {
+        "apiResource": "values",
+        "apiMethod": "get",
+        "range": "Base",
+        "spreadsheetId": '1x6T_309HUNijByr1B_2Ofi0oFG3USyTAWH66QV-6L-0'
+    }
+    const { data: { values } } = await post(url, body, config)
+    values.map((user, index) => {
+        if (user[8] === cnpj) {
+            pos = index
+        }
+    })
+    return pos + 1
 }
