@@ -42,7 +42,7 @@ const fetch = (setIsLoading, setIsError, setStoreowners, setAdvisors, setAffilia
             data: {
                 apiResource: 'values',
                 apiMethod: 'get',
-                spreadsheetId: process.env.SHEET_ID_PEOPLE,
+                spreadsheetId: process.env.SHEET_ID,
                 range: 'Base!D:T'
             },
             headers: {
