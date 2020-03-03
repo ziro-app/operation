@@ -5,7 +5,7 @@ import md5 from 'md5';
 const sendToBackend = state => () => {
 	const { name, nickname, birthDate, cpf, rg, issuingBody, shippingDate, maritalStatus,
 		personalPhone, email, github, street, number, complement, neighborhood, cep, city, cityState, initialDate, scope, amountCharged,
-		paymentModel, height, weight, emergencyName, kinship, emergencyContact, pass } = state
+		paymentModel, height, weight, emergencyName, kinship, emergencyContact, bankNumber, accountNumber, agency, pass } = state
 	const nome = name ? name.trim() : ''
 	const apelido = nickname ? nickname.trim() : ''
 	const rgTrim = rg ? rg.trim() : ''
@@ -20,6 +20,9 @@ const sendToBackend = state => () => {
 	const nomeEmergencia = emergencyName ? emergencyName.trim() : ''
 	const parentesco = kinship ? kinship.trim() : ''
 	const contatoEmergencia = emergencyContact ? '+55 ' + emergencyContact.trim() : ''
+	const banco = bankNumber ? bankNumber.trim() : ''
+	const conta = accountNumber ? accountNumber.trim() : ''
+	const agencia = agency ? agency.trim() : ''
 
 	const url = process.env.SHEET_URL
 
@@ -34,7 +37,7 @@ const sendToBackend = state => () => {
 					orgExp, shippingDate, maritalStatus, telefone, emailTrim, githubTrim,
 					endereco, cep, cidade, estado, initialDate, '-', scope,
 					valorCobrado, paymentModel, height, weight, nomeEmergencia,
-					parentesco, contatoEmergencia]
+					parentesco, contatoEmergencia, banco, conta, agencia]
 			]
 		},
 		valueInputOption: 'raw'
@@ -80,7 +83,10 @@ const sendToBackend = state => () => {
 							peso: weight,
 							nomeEmergencia,
 							parentesco,
-							contatoEmergencia
+							contatoEmergencia,
+							banco,
+							conta,
+							agencia
 						})
 						await db.collection('users').add({ email, app: 'operation' })
 						try {

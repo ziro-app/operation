@@ -20,7 +20,6 @@ const UpdateStoreowner = () => {
     const [searchedName, setSearchedName] = useState('')
     const [storeowner, setStoreowner] = useState({ 'cadastro': '', 'afiliado': '', 'afiliado_cpf': '', 'lojista': '', 'rg': '', 'cpf': '', 'nascimento': '', 'insta': '', 'cnpj': '', 'ie': '', 'razao': '', 'fantasia': '', 'endereco': '', 'bairro': '', 'cep': '', 'cidade': '', 'estado': '', 'fone': '', 'email': '', 'assessor': '', 'vendedor': '' })
     const [storeowners, setStoreowners] = useState([])
-
     const [newName, setNewName] = useState('')
     const [errorName, setErrorName] = useState('')
     const [loadingName, setLoadingName] = useState(false)
@@ -36,7 +35,6 @@ const UpdateStoreowner = () => {
     const [newIe, setNewIe] = useState('')
     const [errorIe, setErrorIe] = useState('')
     const [loadingIe, setLoadingIe] = useState(false)
-
     const [affiliateName, setAffiliateName] = useState('')
     const [affiliateCpf, setAffiliateCpf] = useState('')
     const [affiliates, setAffiliates] = useState([])
@@ -44,10 +42,8 @@ const UpdateStoreowner = () => {
     const [advisors, setAdvisors] = useState([])
     const [salesman, setSalesman] = useState('')
     const [sellers, setSellers] = useState([])
-
     const setState = { setAffiliateName, setAffiliateCpf, setAdvisor, setSalesman }
     const state = { affiliateName, affiliateCpf, advisor, salesman, ...setState }
-
     const validations = [
         {
             name: 'affiliate',
@@ -66,7 +62,33 @@ const UpdateStoreowner = () => {
             message: 'Vendedor(a) inválido(a)'
         }
     ]
-
+    const storeownerHandleSuccess = person => {
+        setFoundStoreowner(true)
+        setNewName(person[3].split(' ')[0])
+        setNewSurname(person[3].split(' ').slice(1).join(' '))
+        setNewBirthDate(person[6])
+        setNewInsta(person[7])
+        setNewIe(person[9])
+        setAffiliateName(person[1])
+        setAffiliateCpf(person[2])
+        setAdvisor(person[19])
+        setSalesman(person[20])
+        setStoreowner(Object.assign({ 'cadastro': person[0], 'afiliado': person[1], 'afiliado_cpf': person[2], 'lojista': person[3], 'rg': person[4], 'cpf': person[5], 'nascimento': person[6], 'insta': person[7], 'cnpj': person[8], 'ie': person[9], 'razao': person[10], 'fantasia': person[11], 'endereco': person[12], 'bairro': person[13], 'cep': person[14], 'cidade': person[15], 'estado': person[16], 'fone': person[17], 'email': person[18], 'assessor': person[19], 'vendedor': person[20] }))
+    }
+    const storeownerHandleError = () => {
+        setFoundStoreowner(false)
+        setSearchedName('')
+        setNewName('')
+        setNewSurname('')
+        setNewBirthDate('')
+        setNewInsta('')
+        setNewIe('')
+        setAffiliateName('')
+        setAffiliateCpf('')
+        setAdvisor('')
+        setSalesman('')
+        setStoreowner({ 'cadastro': '', 'afiliado': '', 'afiliado_cpf': '', 'lojista': '', 'rg': '', 'cpf': '', 'nascimento': '', 'insta': '', 'cnpj': '', 'ie': '', 'razao': '', 'fantasia': '', 'endereco': '', 'bairro': '', 'cep': '', 'cidade': '', 'estado': '', 'fone': '', 'email': '', 'assessor': '', 'vendedor': '' })
+    }
 
     useEffect(() => fetch(setIsLoading, setIsError, setStoreowners, setAdvisors, setAffiliates, setSellers), [])
 
@@ -127,64 +149,17 @@ const UpdateStoreowner = () => {
                     if (value !== '') {
                         setSearchedName(value)
                         let person = storeowners.find(element => element[3] === value)
-                        if (person) {
-                            setFoundStoreowner(true)
-                            setNewName(person[3].split(' ')[0])
-                            setNewSurname(person[3].split(' ').slice(1).join(' '))
-                            setNewBirthDate(person[6])
-                            setNewInsta(person[7])
-                            setNewIe(person[9])
-                            setAffiliateName(person[1])
-                            setAffiliateCpf(person[2])
-                            setAdvisor(person[19])
-                            setSalesman(person[20])
-                            setStoreowner(Object.assign({ 'cadastro': person[0], 'afiliado': person[1], 'afiliado_cpf': person[2], 'lojista': person[3], 'rg': person[4], 'cpf': person[5], 'nascimento': person[6], 'insta': person[7], 'cnpj': person[8], 'ie': person[9], 'razao': person[10], 'fantasia': person[11], 'endereco': person[12], 'bairro': person[13], 'cep': person[14], 'cidade': person[15], 'estado': person[16], 'fone': person[17], 'email': person[18], 'assessor': person[19], 'vendedor': person[20] }))
-                        } else setFoundStoreowner(false)
-                    } else {
-                        setFoundStoreowner(false)
-                        setSearchedName('')
-                        setNewName('')
-                        setNewSurname('')
-                        setNewBirthDate('')
-                        setNewInsta('')
-                        setNewIe('')
-                        setAffiliateName('')
-                        setAffiliateCpf('')
-                        setAdvisor('')
-                        setSalesman('')
-                        setStoreowner({ 'cadastro': '', 'afiliado': '', 'afiliado_cpf': '', 'lojista': '', 'rg': '', 'cpf': '', 'nascimento': '', 'insta': '', 'cnpj': '', 'ie': '', 'razao': '', 'fantasia': '', 'endereco': '', 'bairro': '', 'cep': '', 'cidade': '', 'estado': '', 'fone': '', 'email': '', 'assessor': '', 'vendedor': '' })
-                    }
+                        if (person) storeownerHandleSuccess(person)
+                        else setFoundStoreowner(false)
+                    } else storeownerHandleError()
                 }}
                 onChangeKeyboard={element => {
                     if (element) {
                         setSearchedName(element.value)
                         let person = storeowners.find(affiliate => affiliate[3] === element.value)
-                        if (person) {
-                            setNewName(person[3].split(' ')[0])
-                            setNewSurname(person[3].split(' ').slice(1).join(' '))
-                            setNewBirthDate(person[6])
-                            setNewInsta(person[7])
-                            setNewIe(person[9])
-                            setAffiliateName(person[1])
-                            setAffiliateCpf(person[2])
-                            setAdvisor(person[19])
-                            setSalesman(person[20])
-                            setStoreowner(Object.assign({ 'cadastro': person[0], 'afiliado': person[1], 'afiliado_cpf': person[2], 'lojista': person[3], 'rg': person[4], 'cpf': person[5], 'nascimento': person[6], 'insta': person[7], 'cnpj': person[8], 'ie': person[9], 'razao': person[10], 'fantasia': person[11], 'endereco': person[12], 'bairro': person[13], 'cep': person[14], 'cidade': person[15], 'estado': person[16], 'fone': person[17], 'email': person[18], 'assessor': person[19], 'vendedor': person[20] }))
-                        } else setFoundStoreowner(false)
-                    } else {
-                        setFoundStoreowner(false)
-                        setSearchedName('')
-                        setNewName('')
-                        setNewSurname('')
-                        setNewBirthDate('')
-                        setNewInsta('')
-                        setNewIe('')
-                        setAffiliateName('')
-                        setAffiliateCpf('')
-                        setAdvisor('')
-                        setSalesman('')
-                        setStoreowner({ 'cadastro': '', 'afiliado': '', 'afiliado_cpf': '', 'lojista': '', 'rg': '', 'cpf': '', 'nascimento': '', 'insta': '', 'cnpj': '', 'ie': '', 'razao': '', 'fantasia': '', 'endereco': '', 'bairro': '', 'cep': '', 'cidade': '', 'estado': '', 'fone': '', 'email': '', 'assessor': '', 'vendedor': '' })
-                    }
+                        if (person) storeownerHandleSuccess(person)
+                        else setFoundStoreowner(false)
+                    } else storeownerHandleError()
                 }}
                 list={storeowners.map(storeowner => Object.values(storeowner)[3])}
                 placeholder="Pesquise o lojista"
@@ -412,8 +387,10 @@ const UpdateStoreowner = () => {
                                 onChange={({ target: { value } }) => {
                                     if (value !== '') {
                                         let person = affiliates.find(element => element[1] === value)
-                                        setAffiliateCpf(person[0])
-                                        setAffiliateName(person[1])
+                                        if (person) {
+                                            setAffiliateCpf(person[0])
+                                            setAffiliateName(person[1])
+                                        }
                                     } else {
                                         setAffiliateCpf('')
                                         setAffiliateName('')
@@ -422,8 +399,10 @@ const UpdateStoreowner = () => {
                                 onChangeKeyboard={element => {
                                     if (element) {
                                         let person = affiliates.find(affiliate => affiliate[1] === element.value)
-                                        setAffiliateCpf(person[0])
-                                        setAffiliateName(person[1])
+                                        if (person) {
+                                            setAffiliateCpf(person[0])
+                                            setAffiliateName(person[1])
+                                        }
                                     } else {
                                         setAffiliateCpf('')
                                         setAffiliateName('')

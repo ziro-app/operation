@@ -46,6 +46,9 @@ const Register = () => {
 	const [emergencyName, setEmergencyName] = useState('')
 	const [kinship, setKinship] = useState('')
 	const [emergencyContact, setEmergencyContact] = useState('')
+	const [bankNumber, setBankNumber] = useState('')
+	const [accountNumber, setAccountNumber] = useState('')
+	const [agency, setAgency] = useState('')
 	const [pass, setPass] = useState('')
 	const [confirmPass, setConfirmPass] = useState('')
 	const [searchingCep, isSearchingCep] = useState(false)
@@ -58,7 +61,7 @@ const Register = () => {
 		name, nickname, birthDate, cpf, rg, issuingBody, shippingDate,
 		maritalStatus, personalPhone, email, github, street, number, complement, neighborhood, cep, city, cityState, initialDate,
 		scope, amountCharged, paymentModel, height, weight, emergencyName, kinship,
-		emergencyContact, pass
+		emergencyContact, bankNumber, accountNumber, agency, pass
 	}
 	const validations = [
 		{
@@ -177,6 +180,21 @@ const Register = () => {
 			validation: value => /(^\(\d{2}\) \d{5}\-\d{4}$)/.test(value),
 			value: emergencyContact,
 			message: 'Número de telefone inválido'
+		}, {
+			name: 'bankNumber',
+			validation: value => !!value,
+			value: bankNumber,
+			message: 'Campo obrigatório'
+		}, {
+			name: 'accountNumber',
+			validation: value => !!value,
+			value: accountNumber,
+			message: 'Campo obrigatório'
+		}, {
+			name: 'agency',
+			validation: value => !!value,
+			value: agency,
+			message: 'Campo obrigatório'
 		}, {
 			name: 'email',
 			validation: value => /^\S+@\S+\.\S+$/g.test(value), // tests for pattern a@b.c
@@ -433,6 +451,27 @@ const Register = () => {
 							value={emergencyContact}
 							onChange={({ target: { value } }) => setEmergencyContact(maskInput(value, '(##) #####-####', true))}
 							placeholder='Número para contato'
+						/>
+					} />,
+					<FormInput name='bankNumber' label='Número do Banco' input={
+						<InputText
+							value={bankNumber}
+							onChange={({ target: { value } }) => setBankNumber(maskInput(value, '###', false))}
+							placeholder='Ex.: 260'
+						/>
+					} />,
+					<FormInput name='accountNumber' label='Número da Conta' input={
+						<InputText
+							value={accountNumber}
+							onChange={({ target: { value } }) => setAccountNumber(value)}
+							placeholder='Ex.: 9472156-8'
+						/>
+					} />,
+					<FormInput name='agency' label='Agência' input={
+						<InputText
+							value={agency}
+							onChange={({ target: { value } }) => setAgency(value)}
+							placeholder='Ex.: 0001'
 						/>
 					} />,
 					<FormInput name='email' label='Email' input={

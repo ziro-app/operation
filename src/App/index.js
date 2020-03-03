@@ -35,6 +35,9 @@ export const App = () => {
 	const [personalPhone, setPersonalPhone] = useState(null)
 	const [amountCharged, setAmountCharged] = useState(null)
 	const [userPos, setUserPos] = useState(null)
+	const [bankNumber, setBankNumber] = useState(null)
+	const [accountNumber, setAccountNumber] = useState(null)
+	const [agency, setAgency] = useState(null)
 	const url = process.env.SHEET_URL
 	const config = {
 		headers: {
@@ -76,6 +79,9 @@ export const App = () => {
 				setShippingDate(user.shippingDate)
 				setPersonalPhone(user.telefone)
 				setAmountCharged(user.valorCobrado)
+				setBankNumber(user.banco)
+				setAccountNumber(user.conta)
+				setAgency(user.agencia)
 			} else {
 				setUid('')
 				setName('')
@@ -100,6 +106,9 @@ export const App = () => {
 				setShippingDate('')
 				setPersonalPhone('')
 				setAmountCharged('')
+				setBankNumber('')
+				setAccountNumber('')
+				setAgency('')
 			}
 		})
 	}, [])
@@ -134,6 +143,9 @@ export const App = () => {
 							setShippingDate(data.shippingDate)
 							setPersonalPhone(data.telefone)
 							setAmountCharged(data.valorCobrado)
+							setBankNumber(data.banco)
+							setAccountNumber(data.conta)
+							setAgency(data.agencia)
 							if (userPos === null || userPos === '') {
 								const { data: { values } } = await post(url, body, config)
 								values.map((user, index) => {
@@ -154,7 +166,7 @@ export const App = () => {
 		}
 		getUserData()
 	}, [uid])
-	const userData = { uid, userPos, name, nickname, cpf, height, cep, city, emergencyContact, initialDate, address, cityState, scope, maritalStatus, github, paymentModel, birthDate, emergencyName, issuingBody, kinship, weight, rg, shippingDate, personalPhone, amountCharged }
+	const userData = { uid, userPos, name, nickname, cpf, height, cep, city, emergencyContact, initialDate, address, cityState, scope, maritalStatus, github, paymentModel, birthDate, emergencyName, issuingBody, kinship, weight, rg, shippingDate, personalPhone, amountCharged, bankNumber, accountNumber, agency }
 	if (loading) return <InitialLoader />
 	if (errorLoading) return <Error />
 	return (

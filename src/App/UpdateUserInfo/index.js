@@ -7,7 +7,7 @@ import capitalize from '@ziro/capitalize'
 import sendToBackend from './sendToBackend'
 
 const UpdateUserInfo = () => {
-    const { uid, userPos, name, nickname, cpf, height, emergencyContact, initialDate, maritalStatus, github, birthDate, emergencyName, issuingBody, kinship, weight, rg, shippingDate, personalPhone, amountCharged, cep, city, cityState, address } = useContext(userContext)
+    const { uid, userPos, name, nickname, cpf, height, emergencyContact, initialDate, maritalStatus, github, birthDate, emergencyName, issuingBody, kinship, weight, rg, shippingDate, personalPhone, amountCharged, cep, city, cityState, address, bankNumber, accountNumber, agency } = useContext(userContext)
     const partAddress = address.split(', ')
     const [newName, setNewName] = useState(name)
     const [errorName, setErrorName] = useState('')
@@ -60,6 +60,15 @@ const UpdateUserInfo = () => {
     const [neighborhood, setNeighborhood] = useState(partAddress.length === 4 ? address.split(', ')[3] : address.split(', ')[2])
     const [errorNeighborhood, setErrorNeighborhood] = useState('')
     const [loadingNeighborhood, setLoadingNeighborhood] = useState(false)
+    const [newBankNumber, setNewBankNumber] = useState(bankNumber ? bankNumber : '')
+    const [errorBankNumber, setErrorBankNumber] = useState('')
+    const [loadingBankNumber, setLoadingBankNumber] = useState(false)
+    const [newAccountNumber, setNewAccountNumber] = useState(accountNumber ? accountNumber : '')
+    const [errorAccountNumber, setErrorAccountNumber] = useState('')
+    const [loadingAccountNumber, setLoadingAccountNumber] = useState(false)
+    const [newAgency, setNewAgency] = useState(agency ? agency : '')
+    const [errorAgency, setErrorAgency] = useState('')
+    const [loadingAgency, setLoadingAgency] = useState(false)
     const [newMaritalStatus, setNewMaritalStatus] = useState(maritalStatus)
     const [errorMaritalStatus, setErrorMaritalStatus] = useState('')
     const [loadingMaritalStatus, setLoadingMaritalStatus] = useState(false)
@@ -216,6 +225,33 @@ const UpdateUserInfo = () => {
             return true
         } else {
             setErrorMaritalStatus('Valor inválido')
+            return false
+        }
+    }
+    const validateBank = () => {
+        if (newBankNumber !== '') {
+            setErrorBankNumber('')
+            return true
+        } else {
+            setErrorBankNumber('Valor inválido')
+            return false
+        }
+    }
+    const validateAccount = () => {
+        if (newAccountNumber !== '') {
+            setErrorAccountNumber('')
+            return true
+        } else {
+            setErrorAccountNumber('Valor inválido')
+            return false
+        }
+    }
+    const validateAgency = () => {
+        if (newAgency !== '') {
+            setErrorAgency('')
+            return true
+        } else {
+            setErrorAgency('Valor inválido')
             return false
         }
     }
@@ -505,6 +541,42 @@ const UpdateUserInfo = () => {
                 placeholder="digite aqui..."
                 editable={true}
                 isLoading={loadingEmergencyContact}
+            />
+            <InputEdit
+                name="Número do Banco"
+                value={newBankNumber}
+                onChange={({ target: { value } }) => setNewBankNumber(maskInput(value, '###', false))}
+                validateInput={validateBank}
+                submit={sendToBackend(uid, 'AB', userPos, { 'banco': newBankNumber }, newBankNumber, setLoadingBankNumber, setErrorBankNumber)}
+                setError={() => { }}
+                error={errorBankNumber}
+                placeholder="digite aqui..."
+                editable={true}
+                isLoading={loadingBankNumber}
+            />
+            <InputEdit
+                name="Número da Conta"
+                value={newAccountNumber}
+                onChange={({ target: { value } }) => setNewAccountNumber(value)}
+                validateInput={validateAccount}
+                submit={sendToBackend(uid, 'AC', userPos, { 'conta': newAccountNumber }, newAccountNumber, setLoadingAccountNumber, setErrorAccountNumber)}
+                setError={() => { }}
+                error={errorAccountNumber}
+                placeholder="digite aqui..."
+                editable={true}
+                isLoading={loadingAccountNumber}
+            />
+            <InputEdit
+                name="Agência"
+                value={newAgency}
+                onChange={({ target: { value } }) => setNewAgency(value)}
+                validateInput={validateAgency}
+                submit={sendToBackend(uid, 'AD', userPos, { 'agencia': newAgency }, newAgency, setLoadingAgency, setErrorAgency)}
+                setError={() => { }}
+                error={errorAgency}
+                placeholder="digite aqui..."
+                editable={true}
+                isLoading={loadingAgency}
             />
         </div>
     )
