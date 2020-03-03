@@ -53,36 +53,46 @@ export const App = () => {
 	}
 
 	useEffect(() => {
+		let unsubscribe = () => null
 		return auth.onAuthStateChanged(async user => {
 			if (user && user.emailVerified) {
 				setUid(user.uid)
-				setName(user.nome)
-				setNickname(user.apelido)
-				setCpf(user.cpf)
-				setHeight(user.altura)
-				setCep(user.cep)
-				setCity(user.cidade)
-				setEmergencyContact(user.contatoEmergencia)
-				setInitialDate(user.dataInicio)
-				setAddress(user.endereco)
-				setCityState(user.estado)
-				setScope(user.escopo)
-				setMaritalStatus(user.estadoCivil)
-				setGithub(user.github)
-				setPaymentModel(user.modeloPagamento)
-				setBirthDate(user.nascimento)
-				setEmergencyName(user.nomeEmergencia)
-				setIssuingBody(user.orgExp)
-				setKinship(user.parentesco)
-				setWeight(user.peso)
-				setRg(user.rg)
-				setShippingDate(user.shippingDate)
-				setPersonalPhone(user.telefone)
-				setAmountCharged(user.valorCobrado)
-				setBankNumber(user.banco)
-				setAccountNumber(user.conta)
-				setAgency(user.agencia)
+				// Adding event listener
+				unsubscribe = db.collection('team').where('uid', '==', user.uid).onSnapshot(snapshot => {
+					if (!snapshot.empty) {
+						const { nome, apelido, cpf, altura, cep, cidade, contatoEmergencia, dataInicio,
+							endereco, estado, escopo, estadoCivil, github, modeloPagamento, nascimento, nomeEmergencia,
+							orgExp, parentesco, peso, rg, shippingDate, telefone, valorCobrado, banco, conta, agencia } = snapshot.docs[0].data()
+						setName(nome)
+						setNickname(apelido)
+						setCpf(cpf)
+						setHeight(altura)
+						setCep(cep)
+						setCity(cidade)
+						setEmergencyContact(contatoEmergencia)
+						setInitialDate(dataInicio)
+						setAddress(endereco)
+						setCityState(estado)
+						setScope(escopo)
+						setMaritalStatus(estadoCivil)
+						setGithub(github)
+						setPaymentModel(modeloPagamento)
+						setBirthDate(nascimento)
+						setEmergencyName(nomeEmergencia)
+						setIssuingBody(orgExp)
+						setKinship(parentesco)
+						setWeight(peso)
+						setRg(rg)
+						setShippingDate(shippingDate)
+						setPersonalPhone(telefone)
+						setAmountCharged(valorCobrado)
+						setBankNumber(banco)
+						setAccountNumber(conta)
+						setAgency(agencia)
+					}
+				})
 			} else {
+				unsubscribe()
 				setUid('')
 				setName('')
 				setNickname('')
