@@ -20,7 +20,7 @@ const sendToBackend = state => () => {
             values: [
                 [today, affiliateName, affiliateCpf, `${fnameTrim} ${lnameTrim}`, rg, cpf, birth, instaTrim,
                     cnpj, ie, razao, fantasia, `${rua}, ${numero}, ${complemento}`, bairro, cep, cidade,
-                    estado, fone, email, advisor, salesman]
+                    estado, fone, email.toLowerCase(), advisor, salesman]
             ]
         },
         valueInputOption: 'raw'
@@ -56,7 +56,7 @@ const sendToBackend = state => () => {
                         cidade,
                         estado,
                         fone,
-                        email,
+                        email: email.toLowerCase(),
                         assessor: advisor,
                         vendedor: salesman
                     })

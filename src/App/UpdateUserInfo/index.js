@@ -1,7 +1,6 @@
 import React, { useState, useContext } from 'react'
 import { userContext } from '../appContext'
 import InputEdit from '@bit/vitorbarbosa19.ziro.input-edit'
-import { containerWithPadding } from '@ziro/theme'
 import maskInput from '@ziro/mask-input'
 import capitalize from '@ziro/capitalize'
 import sendToBackend from './sendToBackend'
@@ -12,9 +11,6 @@ const UpdateUserInfo = () => {
     const [newName, setNewName] = useState(name)
     const [errorName, setErrorName] = useState('')
     const [loadingName, setLoadingName] = useState(false)
-    const [newNickname, setNewNickname] = useState(nickname)
-    const [errorNickname, setErrorNickname] = useState('')
-    const [loadingNickname, setLoadingNickname] = useState(false)
     const [newBirthDate, setNewBirthDate] = useState(birthDate)
     const [errorBirthDate, setErrorBirthDate] = useState('')
     const [loadingBirthDate, setLoadingBirthDate] = useState(false)
@@ -81,15 +77,6 @@ const UpdateUserInfo = () => {
             return true
         } else {
             setErrorName('Valor inválido')
-            return false
-        }
-    }
-    const validateNick = () => {
-        if (newNickname !== '') {
-            setErrorNickname('')
-            return true
-        } else {
-            setErrorNickname('Valor inválido')
             return false
         }
     }
@@ -257,7 +244,7 @@ const UpdateUserInfo = () => {
     }
 
     return (
-        <div style={containerWithPadding}>
+        <>
             <InputEdit
                 name="Nome Completo"
                 value={newName}
@@ -272,15 +259,15 @@ const UpdateUserInfo = () => {
             />
             <InputEdit
                 name="Apelido"
-                value={newNickname}
-                onChange={({ target: { value } }) => setNewNickname(capitalize(value))}
-                validateInput={validateNick}
-                submit={sendToBackend(uid, 'D', userPos, { 'apelido': newNickname }, newNickname, setLoadingNickname, setErrorNickname)}
+                value={nickname}
+                onChange={() => { }}
+                validateInput={() => { }}
+                submit={() => { }}
                 setError={() => { }}
-                error={errorNickname}
-                placeholder="digite aqui..."
-                editable={true}
-                isLoading={loadingNickname}
+                error={''}
+                placeholder=""
+                editable={false}
+                isLoading={false}
             />
             <InputEdit
                 name="Nascimento"
@@ -578,7 +565,7 @@ const UpdateUserInfo = () => {
                 editable={true}
                 isLoading={loadingAgency}
             />
-        </div>
+        </>
     )
 }
 

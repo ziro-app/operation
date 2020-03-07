@@ -28,7 +28,7 @@ const fetch = (setIsLoading, setIsError, setStoreowners, setAdvisors, setAffilia
                 apiResource: 'values',
                 apiMethod: 'get',
                 spreadsheetId: process.env.SHEET_ID_AFFILIATES,
-                range: 'Afiliados!B:D'
+                range: 'Afiliados!B:G'
             },
             headers: {
                 'Authorization': process.env.SHEET_TOKEN,
@@ -58,14 +58,15 @@ const fetch = (setIsLoading, setIsError, setStoreowners, setAdvisors, setAffilia
 
             const dataAffiliates = await axios(configAffiliate)
             const [, ...listAffiliates] = dataAffiliates.data.values
-            listAffiliates.map(affiliate => affiliates.push(Object.assign({}, [affiliate[0], affiliate[1] + ' ' + affiliate[2]])))
+            listAffiliates.map(affiliate => affiliates.push(Object.assign({}, [affiliate[0], affiliate[5] + ' - ' + affiliate[1] + ' ' + affiliate[2]])))
             setAffiliates(affiliates)
 
             const dataPeople = await axios(configPeople)
             const [, ...listPeople] = dataPeople.data.values
             listPeople.map(person => {
-                if (person[16] === 'Assessoria') advisors.push(person[0])
-                if (person[16] === 'Vendas') sellers.push(person[0])
+                let endDate = person[15].split('/')
+                if (person[16] === 'Assessoria' && (person[15] !== '-' && new Date() < new Date(endDate[1] + '/' + endDate[0] + '/' + endDate[2]))) advisors.push(person[0])
+                if (person[16] === 'Vendas' && (person[15] !== '-' && new Date() < new Date(endDate[1] + '/' + endDate[0] + '/' + endDate[2]))) sellers.push(person[0])
             })
             setAdvisors(advisors)
             setSellers(sellers)

@@ -6,7 +6,6 @@ import Error from '@bit/vitorbarbosa19.ziro.error'
 import Dropdown from '@bit/vitorbarbosa19.ziro.dropdown'
 import Form from '@bit/vitorbarbosa19.ziro.form'
 import FormInput from '@bit/vitorbarbosa19.ziro.form-input'
-import { containerWithPadding } from '@ziro/theme'
 import maskInput from '@ziro/mask-input'
 import capitalize from '@ziro/capitalize'
 import fetch from './fetch'
@@ -47,17 +46,17 @@ const UpdateStoreowner = () => {
     const validations = [
         {
             name: 'affiliate',
-            validation: value => affiliates.find(affiliate => affiliate[1] === value),
+            validation: value => value === '' || affiliates.find(affiliate => affiliate[1] === value),
             value: affiliateName,
             message: 'Afiliado(a) inválido(a)'
         }, {
             name: 'advisor',
-            validation: value => advisors.includes(value),
+            validation: value => value === '' || advisors.includes(value),
             value: advisor,
             message: 'Assessor(a) inválido(a)'
         }, {
             name: 'salesman',
-            validation: value => sellers.includes(value),
+            validation: value => value === '' || sellers.includes(value),
             value: salesman,
             message: 'Vendedor(a) inválido(a)'
         }
@@ -142,7 +141,7 @@ const UpdateStoreowner = () => {
     if (isError) return <Error />
 
     return (
-        <div style={containerWithPadding}>
+        <>
             <Dropdown
                 value={searchedName}
                 onChange={({ target: { value } }) => {
@@ -165,6 +164,17 @@ const UpdateStoreowner = () => {
                 placeholder="Pesquise o lojista"
             />
             {foundStoreowner ? <>
+                <InputEdit
+                    name="Assessor(a)"
+                    value={storeowner.assessor}
+                    onChange={() => { }}
+                    validateInput={() => { }}
+                    submit={() => { }}
+                    setError={() => { }}
+                    error={''}
+                    editable={false}
+                    isLoading={false}
+                />
                 <InputEdit
                     name="CNPJ"
                     value={storeowner.cnpj}
@@ -367,7 +377,7 @@ const UpdateStoreowner = () => {
                 <InputEdit
                     name="Email"
                     value={storeowner.email}
-                    onChange={({ target: { value } }) => setNewName(capitalize(value))}
+                    onChange={() => { }}
                     validateInput={() => { }}
                     submit={() => { }}
                     setError={() => { }}
@@ -376,7 +386,6 @@ const UpdateStoreowner = () => {
                     isLoading={false}
                 />
                 <br />
-                <hr />
                 <Form
                     validations={validations}
                     sendToBackend={dropdownUpdate ? dropdownUpdate(state, storeowner.cnpj, userPos) : null}
@@ -441,7 +450,7 @@ const UpdateStoreowner = () => {
                     ]}
                 />
             </> : <></>}
-        </div>
+        </>
     )
 }
 

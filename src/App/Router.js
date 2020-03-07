@@ -20,34 +20,34 @@ import UpdateUserInfo from './UpdateUserInfo/index'
 import NotFound from '@bit/vitorbarbosa19.ziro.not-found'
 
 const Router = ({ isLogged }) => {
-	const publicRoutes = {
-		'/login': <Login />,
-		'/cadastrar': <Register />,
-		'/problemas-acesso': <LoginTrouble />,
-		'/reenviar-email': <ResendEmail />,
-		'/resetar-senha': <ResetPass />,
-		'/confirmar-email': <ConfirmEmail />
-	}
-	const privateRoutes = { // Menu can't be put inside the components because then it'll unmount on transition
-		'/conta': <Menu title='Minha Conta'><MyAccount /></Menu>,
-		'/trocar-email': <UpdateEmail />,
-		'/trocar-senha': <UpdatePass />,
-		'/deletar-conta': <DeleteAccount />,
-		'/assessoria': <Menu title='Assessoria'><Submenu options={[
-			['Cadastrar lojista', '/cadastrar-lojista'],
-			['Visualizar/Editar lojista', '/visualizar-lojista'],
-			['Upload de imagens', 'upload-imagem']]} /></Menu>,
-		'/cadastrar-lojista': <Menu title='Cadastrar lojista'><RegisterStoreowner /></Menu>,
-		'/visualizar-lojista': <Menu title='Visualizar lojista'><UpdateStoreowner /></Menu>,
-		'/upload-imagem': <Menu title='Upload de imagens'><ImageUpload /></Menu>,
-		'/update': <Menu title='Atualizar informações'><UpdateUserInfo /></Menu>
-	}
-	const homeRoute = '/conta'
-	return routeMatcher(isLogged, publicRoutes, privateRoutes, homeRoute, <NotFound fallback='/' />)
+    const publicRoutes = {
+        '/login': <Login />,
+        '/cadastrar': <Register />,
+        '/problemas-acesso': <LoginTrouble />,
+        '/reenviar-email': <ResendEmail />,
+        '/resetar-senha': <ResetPass />,
+        '/confirmar-email': <ConfirmEmail />
+    }
+    const privateRoutes = { // Menu can't be put inside the components because then it'll unmount on transition
+        '/conta': <Menu title='Minha Conta'><MyAccount /></Menu>,
+        '/trocar-email': <UpdateEmail />,
+        '/trocar-senha': <UpdatePass />,
+        '/deletar-conta': <DeleteAccount />,
+        '/assessoria': <Menu title='Assessoria'><Submenu options={[
+            ['Upload de imagens', 'upload-imagem'],
+            ['Lojista: Cadastrar', '/cadastrar-lojista'],
+            ['Lojista: Ver/Editar', '/visualizar-lojista']]} /></Menu>,
+        '/cadastrar-lojista': <Menu title='Cadastrar lojista'><RegisterStoreowner /></Menu>,
+        '/visualizar-lojista': <Menu title='Visualizar lojista'><UpdateStoreowner /></Menu>,
+        '/upload-imagem': <Menu title='Upload de imagens'><ImageUpload /></Menu>,
+        '/update': <Menu title='Atualizar informações'><UpdateUserInfo /></Menu>
+    }
+    const homeRoute = '/conta'
+    return routeMatcher(isLogged, publicRoutes, privateRoutes, homeRoute, <NotFound fallback='/' />)
 }
 
 Router.propTypes = {
-	isLogged: PropTypes.bool.isRequired
+    isLogged: PropTypes.bool.isRequired
 }
 
 export default Router
