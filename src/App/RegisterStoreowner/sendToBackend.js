@@ -18,9 +18,9 @@ const sendToBackend = state => () => {
         range: 'Base!A1',
         resource: {
             values: [
-                [today, affiliateName, affiliateCpf, `${fnameTrim} ${lnameTrim}`, rg, cpf, birth, instaTrim,
+                [today, `${fnameTrim} ${lnameTrim}`, rg, cpf, birth, instaTrim,
                     cnpj, ie, razao, fantasia, `${rua}, ${numero}, ${complemento}`, bairro, cep, cidade,
-                    estado, fone, email.toLowerCase(), advisor, salesman]
+                    estado, fone, email.toLowerCase(), affiliateName, affiliateCpf, advisor, salesman]
             ]
         },
         valueInputOption: 'raw'
