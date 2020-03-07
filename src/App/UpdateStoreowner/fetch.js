@@ -65,8 +65,14 @@ const fetch = (setIsLoading, setIsError, setStoreowners, setAdvisors, setAffilia
             const [, ...listPeople] = dataPeople.data.values
             listPeople.map(person => {
                 let endDate = person[15].split('/')
-                if (person[16] === 'Assessoria' && (person[15] !== '-' && new Date() < new Date(endDate[1] + '/' + endDate[0] + '/' + endDate[2]))) advisors.push(person[0])
-                if (person[16] === 'Vendas' && (person[15] !== '-' && new Date() < new Date(endDate[1] + '/' + endDate[0] + '/' + endDate[2]))) sellers.push(person[0])
+                if (person[16] === 'Assessoria') {
+                    if (person[15] === '-') advisors.push(person[0])
+                    else if (new Date() < new Date(endDate[1] + '/' + endDate[0] + '/' + endDate[2])) advisors.push(person[0])
+                }
+                if (person[16] === 'Vendas') {
+                    if (person[15] === '-') sellers.push(person[0])
+                    else if (new Date() < new Date(endDate[1] + '/' + endDate[0] + '/' + endDate[2])) sellers.push(person[0])
+                }
             })
             setAdvisors(advisors)
             setSellers(sellers)
