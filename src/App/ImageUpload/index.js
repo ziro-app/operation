@@ -16,8 +16,9 @@ export default () => {
 	const [isSubmitting, setIsSubmitting] = useState(false)
 	const [isSubmitted, setIsSubmitted] = useState(false)
 	const [brands, setBrands] = useState('')
+	const [brandsAndTags, setBrandsAndTags] = useState('')
 	const [brand, setBrand] = useState('')
-	useEffect(() => fetch(setIsLoading, setIsError, setBrands), [])
+	useEffect(() => fetch(setIsLoading, setIsError, setBrands, setBrandsAndTags), [])
 	useEffect(() => {
 		if (brand !== '' && setIsSubmitted) setIsSubmitted(false)
 	}, [brand])

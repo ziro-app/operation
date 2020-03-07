@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const fetch = (setIsLoading, setIsError, setBrands) => {
+const fetch = (setIsLoading, setIsError, setBrands, setBrandsAndTags) => {
 	const source = axios.CancelToken.source()
 	const run = async () => {
 		const config = {
@@ -10,7 +10,7 @@ const fetch = (setIsLoading, setIsError, setBrands) => {
 				apiResource: 'values',
 				apiMethod: 'get',
 				spreadsheetId: process.env.SHEET_ID_BRANDS,
-				range: 'Fornecedores!A2:A'
+				range: 'Trends!A2:E'
 			},
 			headers: {
 				'Authorization': process.env.SHEET_TOKEN,
@@ -20,8 +20,13 @@ const fetch = (setIsLoading, setIsError, setBrands) => {
 		}
 		try {
 			const { data: { values } } = await axios(config)
-			const brands = values.map(([value]) => value)
+			console.log(values)
+			const brands = values.map(([name]) => name)
+			const brandsAndTags = values.map(([name,insta,...trends]) => [name,trends])
+			console.log(brands)
+			console.log(brandsAndTags)
 			setBrands(['Bot', ...brands])
+			setBrandsAndTags(brandsAndTags)
 		} catch (error) {
 			if (error.response) console.log(error.response)
 			else console.log(error)
