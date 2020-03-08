@@ -15,7 +15,7 @@ const sendToBackend = (setIsSubmitting, setIsSubmitted, setBrand, brand, brandsA
 				const uploadTask = await image.put(compressed)
 				const url = await uploadTask.ref.getDownloadURL()
 				await db.collection('catalog-images').add({
-					brandName,
+					brand: brandName,
 					url,
 					timestamp
 				})
