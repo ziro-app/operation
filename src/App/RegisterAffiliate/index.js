@@ -3,15 +3,12 @@ import fetch from './fetch'
 import sendToBackend from './sendToBackend'
 import maskInput from '@ziro/mask-input'
 import capitalize from '@ziro/capitalize'
-import InitialLoader from '@bit/vitorbarbosa19.ziro.initial-loader'
+import Spinner from '@bit/vitorbarbosa19.ziro.spinner'
 import Error from '@bit/vitorbarbosa19.ziro.error'
-import HeaderHome from '@bit/vitorbarbosa19.ziro.header-home'
 import Form from '@bit/vitorbarbosa19.ziro.form'
 import FormInput from '@bit/vitorbarbosa19.ziro.form-input'
 import Dropdown from '@bit/vitorbarbosa19.ziro.dropdown'
 import InputText from '@bit/vitorbarbosa19.ziro.input-text'
-import { containerWithPadding } from '@ziro/theme'
-import { welcome, marker } from './styles'
 
 const RegisterAffiliate = () => {
     const [isLoading, setIsLoading] = useState(true)
@@ -69,7 +66,7 @@ const RegisterAffiliate = () => {
             message: 'Formato inválido'
         }
     ]
-    if (isLoading) return <InitialLoader />
+    if (isLoading) return <div style={{ display: 'grid' }}><Spinner size='5rem' /></div>
     if (isError) return <Error />
     return (
         <>

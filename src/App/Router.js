@@ -15,6 +15,7 @@ import DeleteAccount from './DeleteAccount/index'
 import RegisterStoreowner from './RegisterStoreowner/index'
 import UpdateStoreowner from './UpdateStoreowner/index'
 import RegisterAffiliate from './RegisterAffiliate/index'
+import UpdateAffiliate from './UpdateAffiliate/index'
 import ImageUpload from './ImageUpload/index'
 import Submenu from '@bit/vitorbarbosa19.ziro.submenu'
 import UpdateUserInfo from './UpdateUserInfo/index'
@@ -43,6 +44,7 @@ const Router = ({ isLogged }) => {
         '/visualizar-lojista': <Menu title='Visualizar lojista'><UpdateStoreowner /></Menu>,
         '/cadastrar-lojista': <Menu title='Cadastrar lojista'><RegisterStoreowner /></Menu>,
         '/cadastrar-afiliado': <Menu title='Cadastrar afiliado'><RegisterAffiliate /></Menu>,
+        '/visualizar-afiliado': <Menu title='Visualizar afiliado'><UpdateAffiliate /></Menu>,
         '/upload-imagem': <Menu title='Upload de imagens'><ImageUpload /></Menu>,
         '/update': <Menu title='Atualizar informações'><UpdateUserInfo /></Menu>
     }
