@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const fetch = (setIsLoading, setIsError, setBrands, setBrandsAndTags) => {
+const fetch = (setIsLoading, setIsError, setBrands, setBrandsAndTrends) => {
 	const source = axios.CancelToken.source()
 	const run = async () => {
 		const config = {
@@ -20,13 +20,10 @@ const fetch = (setIsLoading, setIsError, setBrands, setBrandsAndTags) => {
 		}
 		try {
 			const { data: { values } } = await axios(config)
-			console.log(values)
 			const brands = values.map(([name]) => name)
-			const brandsAndTags = values.map(([name,insta,...trends]) => [name,trends])
-			console.log(brands)
-			console.log(brandsAndTags)
+			const brandsAndTrends = values.map(([name,insta,...trends]) => [name,trends])
 			setBrands(['Bot', ...brands])
-			setBrandsAndTags(brandsAndTags)
+			setBrandsAndTrends(brandsAndTrends)
 		} catch (error) {
 			if (error.response) console.log(error.response)
 			else console.log(error)
