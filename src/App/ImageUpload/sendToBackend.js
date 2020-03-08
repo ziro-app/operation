@@ -35,7 +35,6 @@ const sendToBackend = (setIsSubmitting, setIsSubmitted, setBrand, brand, brandsA
 			return error
 		}
 	}))
-	console.log(uploadImages)
 	try {
 		if (brand === 'Bot') {
 			let slicedByBrand = []
@@ -52,18 +51,18 @@ const sendToBackend = (setIsSubmitting, setIsSubmitted, setBrand, brand, brandsA
 			}
 			const uploadBrands = await Promise.all(slicedByBrand.map(async ({ brand, images }) => {
 				const [url,timestamp] = getMostRecentImage(images)
+				const [,trends] = brandsAndTrends.filter(([brandName]) => brandName === brand).flat()
 				await db.collection('catalog-brands').doc(brand).set({
 					brand,
 					updatedThumb: url,
 					updatedAt: timestamp,
+					trends
 				})
 				return 'ok'
 			}))
-			console.log(uploadBrands)
 		} else {
 			const [url,timestamp] = getMostRecentImage(uploadImages)
 			const [,trends] = brandsAndTrends.filter(([brandName]) => brandName === brand).flat()
-			console.log(trends)
 			await db.collection('catalog-brands').doc(brand).set({
 				brand,
 				updatedThumb: url,
