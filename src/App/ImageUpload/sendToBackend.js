@@ -4,7 +4,7 @@ import getMostRecentImage from './getMostRecentImage'
 
 const sendToBackend = (setIsSubmitting, setIsSubmitted, setBrand, brand) => async files => {
 	setIsSubmitting(true)
-	const result = await Promise.all(files.map(async file => {
+	const uploadImages = await Promise.all(files.map(async file => {
 		try {
 			if (file.size === 0) throw 'Empty sized image'
 			const timestamp = Date.now()
@@ -35,12 +35,12 @@ const sendToBackend = (setIsSubmitting, setIsSubmitted, setBrand, brand) => asyn
 			return error
 		}
 	}))
-	console.log(result)
+	console.log(uploadImages)
 	try {
 		if (brand === 'Bot') {
 			let slicedByBrand = []
-			for (let i = 0; i < result.length; i++) {
-				const [url,timestamp,brandName] = result[i]
+			for (let i = 0; i < uploadImages.length; i++) {
+				const [url,timestamp,brandName] = uploadImages[i]
 				if (slicedByBrand.filter(object => object.brand === brandName).length === 0) {
 					slicedByBrand.push({
 						brand: brandName,
@@ -50,17 +50,18 @@ const sendToBackend = (setIsSubmitting, setIsSubmitted, setBrand, brand) => asyn
 					slicedByBrand.filter(object => object.brand === brandName).pop().images.push([url,timestamp])
 				}
 			}
-			console.log(slicedByBrand)
-			// await Promise.all(result.map(async info => {
-			// 	const [url,timestamp] = getMostRecentImage(result)
-			// 	await db.collection('catalog-brands').doc(brand).set({
-			// 		brand,
-			// 		updatedThumb: url,
-			// 		updatedAt: timestamp,
-			// 	})
-			// }))
+			const uploadBrands = await Promise.all(slicedByBrand.map(async ({ brand, images }) => {
+				const [url,timestamp] = getMostRecentImage(images)
+				await db.collection('catalog-brands').doc(brand).set({
+					brand,
+					updatedThumb: url,
+					updatedAt: timestamp,
+				})
+				return 'ok'
+			}))
+			console.log(uploadBrands)
 		} else {
-			const [url,timestamp] = getMostRecentImage(result)
+			const [url,timestamp] = getMostRecentImage(uploadImages)
 			await db.collection('catalog-brands').doc(brand).set({
 				brand,
 				updatedThumb: url,
