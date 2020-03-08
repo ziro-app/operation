@@ -16,8 +16,9 @@ export default () => {
 	const [isSubmitting, setIsSubmitting] = useState(false)
 	const [isSubmitted, setIsSubmitted] = useState(false)
 	const [brands, setBrands] = useState('')
+	const [brandsAndTrends, setBrandsAndTrends] = useState('')
 	const [brand, setBrand] = useState('')
-	useEffect(() => fetch(setIsLoading, setIsError, setBrands), [])
+	useEffect(() => fetch(setIsLoading, setIsError, setBrands, setBrandsAndTrends), [])
 	useEffect(() => {
 		if (brand !== '' && setIsSubmitted) setIsSubmitted(false)
 	}, [brand])
@@ -43,7 +44,7 @@ export default () => {
 			<div style={block}>
 				<label style={title}>Etapa 2</label>
 				<ImageUpload
-					sendToBackend={sendToBackend(setIsSubmitting, setIsSubmitted, setBrand, brand)}
+					sendToBackend={sendToBackend(setIsSubmitting, setIsSubmitted, setBrand, brand, brandsAndTrends)}
 					isDisabled={!isValidBrand(brands,brand) || isSubmitting}
 				/>
 				<SubmitBlock isSubmitting={isSubmitting} isSubmitted={isSubmitted} />
