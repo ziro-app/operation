@@ -2,7 +2,7 @@ import { readAndCompressImage } from 'browser-image-resizer'
 import { storage, db } from '../../Firebase/index'
 import getMostRecentImage from './getMostRecentImage'
 
-const sendToBackend = (setIsSubmitting, setIsSubmitted, setBrand, brand) => async files => {
+const sendToBackend = (setIsSubmitting, setIsSubmitted, setBrand, brand, brandsAndTrends) => async files => {
 	setIsSubmitting(true)
 	const uploadImages = await Promise.all(files.map(async file => {
 		try {
@@ -62,10 +62,13 @@ const sendToBackend = (setIsSubmitting, setIsSubmitted, setBrand, brand) => asyn
 			console.log(uploadBrands)
 		} else {
 			const [url,timestamp] = getMostRecentImage(uploadImages)
+			const [,trends] = brandsAndTrends.filter(([brandName]) => brandName === brand).flat()
+			console.log(trends)
 			await db.collection('catalog-brands').doc(brand).set({
 				brand,
 				updatedThumb: url,
 				updatedAt: timestamp,
+				trends
 			})
 		}
 	} catch (error) {
