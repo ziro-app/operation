@@ -1,5 +1,6 @@
 import { readAndCompressImage } from 'browser-image-resizer'
 import { storage, db } from '../../Firebase/index'
+import getMostRecentImage from './getMostRecentImage'
 
 const sendToBackend = (setIsSubmitting, setIsSubmitted, setBrand, brand) => async files => {
 	setIsSubmitting(true)
@@ -18,7 +19,7 @@ const sendToBackend = (setIsSubmitting, setIsSubmitted, setBrand, brand) => asyn
 					url,
 					timestamp
 				})
-				return [brandName,url,timestamp]
+				return [url,timestamp,brandName]
 			} else {
 				const image = storage.child(`${brand}/${brand}-${timestamp}-${file.name}`)
 				const uploadTask = await image.put(compressed)
@@ -35,14 +36,37 @@ const sendToBackend = (setIsSubmitting, setIsSubmitted, setBrand, brand) => asyn
 		}
 	}))
 	console.log(result)
-	const [url] = result.reduce(([prevUrl,prevTime], [currentUrl,currentTime]) => prevTime > currentTime ? [prevUrl,prevTime] : [currentUrl,currentTime])
-	console.log(url)
 	try {
-		await db.collection('catalog-brands').doc(brand).set({
-			brand,
-			updatedAt: Date.now(),
-			updatedThumb: url
-		})
+		if (brand === 'Bot') {
+			let slicedByBrand = []
+			for (let i = 0; i < result.length; i++) {
+				const [url,timestamp,brandName] = result[i]
+				if (slicedByBrand.filter(object => object.brand === brandName).length === 0) {
+					slicedByBrand.push({
+						brand: brandName,
+						images: [[url,timestamp]]
+					})
+				} else {
+					slicedByBrand.filter(object => object.brand === brandName).pop().images.push([url,timestamp])
+				}
+			}
+			console.log(slicedByBrand)
+			// await Promise.all(result.map(async info => {
+			// 	const [url,timestamp] = getMostRecentImage(result)
+			// 	await db.collection('catalog-brands').doc(brand).set({
+			// 		brand,
+			// 		updatedThumb: url,
+			// 		updatedAt: timestamp,
+			// 	})
+			// }))
+		} else {
+			const [url,timestamp] = getMostRecentImage(result)
+			await db.collection('catalog-brands').doc(brand).set({
+				brand,
+				updatedThumb: url,
+				updatedAt: timestamp,
+			})
+		}
 	} catch (error) {
 		console.log(error)
 	}
