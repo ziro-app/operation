@@ -35,9 +35,13 @@ const sendToBackend = (setIsSubmitting, setIsSubmitted, setBrand, brand) => asyn
 		}
 	}))
 	console.log(result)
+	const [url] = result.reduce(([prevUrl,prevTime], [currentUrl,currentTime]) => prevTime > currentTime ? [prevUrl,prevTime] : [currentUrl,currentTime])
+	console.log(url)
 	try {
 		await db.collection('catalog-brands').doc(brand).set({
-			updatedAt: Date.now()
+			brand,
+			updatedAt: Date.now(),
+			updatedThumb: url
 		})
 	} catch (error) {
 		console.log(error)
