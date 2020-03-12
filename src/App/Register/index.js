@@ -18,6 +18,7 @@ import maskInput from '@ziro/mask-input'
 const Register = () => {
     const [isLoading, setIsLoading] = useState(false)
     const [isError, setIsError] = useState(false)
+    const [token, setToken] = useState('')
     const [name, setName] = useState('')
     const [nickname, setNickname] = useState('')
     const [birthDate, setBirthDate] = useState('')
@@ -57,13 +58,18 @@ const Register = () => {
     const statesList = ['AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA', 'MT', 'MS', 'MG', 'PA', 'PB', 'PR', 'PE', 'PI', 'RJ', 'RN', 'RS', 'RO', 'RR', 'SC', 'SP', 'SE', 'TO']
 
     const state = {
-        name, nickname, birthDate, cpf, rg, issuingBody, shippingDate,
+        token, name, nickname, birthDate, cpf, rg, issuingBody, shippingDate,
         maritalStatus, personalPhone, email, github, street, number, complement, neighborhood, cep, city, cityState, initialDate,
         scope, amountCharged, paymentModel, height, weight, emergencyName, kinship,
         emergencyContact, bankNumber, accountNumber, agency, pass
     }
     const validations = [
         {
+            name: 'token',
+            validation: value => value.length === 10,
+            value: token,
+            message: 'Token inválido'
+        }, {
             name: 'name',
             validation: value => !/^.{0,2}$/g.test(value), // tests for min length of 3 char
             value: name,
@@ -256,6 +262,13 @@ const Register = () => {
                 validations={validations}
                 sendToBackend={sendToBackend ? sendToBackend(state) : () => null}
                 inputs={[
+                    <FormInput name='token' label='Token' input={
+                        <InputText
+                            value={token}
+                            onChange={({ target: { value } }) => setToken(maskInput(value, '##########', false))}
+                            placeholder='Para validação cadastral'
+                        />
+                    } />,
                     <FormInput name='name' label='Nome Completo' input={
                         <InputText
                             value={name}
