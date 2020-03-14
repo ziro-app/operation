@@ -19,6 +19,7 @@ import UpdateAffiliate from './UpdateAffiliate/index'
 import ImageUpload from './ImageUpload/index'
 import Submenu from '@bit/vitorbarbosa19.ziro.submenu'
 import UpdateUserInfo from './UpdateUserInfo/index'
+import MaterialRequest from './MaterialRequest/index'
 import NotFound from '@bit/vitorbarbosa19.ziro.not-found'
 
 const Router = ({ isLogged }) => {
@@ -35,12 +36,15 @@ const Router = ({ isLogged }) => {
         '/trocar-email': <UpdateEmail />,
         '/trocar-senha': <UpdatePass />,
         '/deletar-conta': <DeleteAccount />,
+        '/administrativo': <Menu title='Administrativo'><Submenu options={[
+            ['Requisição de Material', 'requerir-material']]} /></Menu>,
         '/assessoria': <Menu title='Assessoria'><Submenu options={[
             ['Upload de imagens', 'upload-imagem'],
             ['Lojista: Cadastrar', '/cadastrar-lojista'],
             ['Lojista: Ver/Editar', '/visualizar-lojista'],
             ['Afiliado: Cadastrar', '/cadastrar-afiliado'],
             ['Afiliado: Ver/Editar', '/visualizar-afiliado']]} /></Menu>,
+        '/requerir-material': <Menu title='Requerir material'><MaterialRequest /></Menu>,
         '/visualizar-lojista': <Menu title='Visualizar lojista'><UpdateStoreowner /></Menu>,
         '/cadastrar-lojista': <Menu title='Cadastrar lojista'><RegisterStoreowner /></Menu>,
         '/cadastrar-afiliado': <Menu title='Cadastrar afiliado'><RegisterAffiliate /></Menu>,

@@ -20,6 +20,11 @@ export const Menu = ({ title, children }) => {
 					userdata={cpf ? `CPF: ${cpf}` : ''}
 					options={[
 						{
+							path: '/administrativo',
+							onClick: () => setIsOpen(false),
+							icon: <Icon type='user' size={15} strokeWidth={2} />,
+							text: 'Administrativo'
+						},{
 							path: '/assessoria',
 							onClick: () => setIsOpen(false),
 							icon: <Icon type='shopping' size={15} strokeWidth={2} />,
