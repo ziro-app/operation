@@ -32,7 +32,7 @@
     },
     "dependencies": {
         "@babel/runtime": "^7.7.7",
-        "@bit/vitorbarbosa19.ziro.about": "0.1.2",
+        "@bit/vitorbarbosa19.ziro.about": "0.0.3",
         "@bit/vitorbarbosa19.ziro.confirm-email": "0.1.3",
         "@bit/vitorbarbosa19.ziro.delete-account": "0.1.10",
         "@bit/vitorbarbosa19.ziro.drawer": "0.1.0",
@@ -63,6 +63,7 @@
         "@bit/vitorbarbosa19.ziro.update-email": "0.1.11",
         "@bit/vitorbarbosa19.ziro.update-pass": "0.1.10",
         "@bit/vitorbarbosa19.ziro.input-edit": "0.1.3",
+        "@bit/vitorbarbosa19.ziro.calendar": "0.0.6",
         "@ziro/capitalize": "^1.0.0",
         "@ziro/mask-input": "^1.0.0",
         "@ziro/router": "^1.0.2",

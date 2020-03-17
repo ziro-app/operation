@@ -11,6 +11,7 @@ import Form from '@bit/vitorbarbosa19.ziro.form'
 import FormInput from '@bit/vitorbarbosa19.ziro.form-input'
 import InputText from '@bit/vitorbarbosa19.ziro.input-text'
 import Dropdown from '@bit/vitorbarbosa19.ziro.dropdown'
+import Calendar from '@bit/vitorbarbosa19.ziro.calendar'
 import { containerWithPadding } from '@ziro/theme'
 import capitalize from '@ziro/capitalize'
 import maskInput from '@ziro/mask-input'
@@ -38,6 +39,7 @@ const Register = () => {
     const [city, setCity] = useState('')
     const [cityState, setCityState] = useState('')
     const [initialDate, setInitialDate] = useState('')
+    const [focused, setFocused] = useState(false)
     const [scope, setScope] = useState('')
     const [amountCharged, setAmountCharged] = useState('')
     const [paymentModel, setPaymentModel] = useState('')
@@ -395,11 +397,7 @@ const Register = () => {
                         />
                     } />,
                     <FormInput name='initialDate' label='Data de Início' input={
-                        <InputText
-                            value={initialDate}
-                            onChange={({ target: { value } }) => setInitialDate(maskInput(value, '##/##/####', true))}
-                            placeholder='01/10/1990'
-                        />
+                        <Calendar inputDate={initialDate} setInputDate={setInitialDate} focused={focused} setFocused={setFocused} placeholder={'01/10/1990'} readOnly={true} />
                     } />,
                     <FormInput name='scope' label='Escopo' input={
                         <Dropdown
