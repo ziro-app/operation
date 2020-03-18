@@ -22,6 +22,7 @@ import Submenu from '@bit/vitorbarbosa19.ziro.submenu'
 import UpdateUserInfo from './UpdateUserInfo/index'
 import MaterialRequest from './MaterialRequest/index'
 import NotFound from '@bit/vitorbarbosa19.ziro.not-found'
+import UpdateBrandsAndTrends from './UpdateBrandsAndTrends'
 
 const Router = ({ isLogged }) => {
     const publicRoutes = {
@@ -42,6 +43,7 @@ const Router = ({ isLogged }) => {
         '/assessoria': <Menu title='Assessoria'><Submenu options={[
             //['Cadastrar boleto', 'cadastrar-boleto'],
             ['Upload de imagens', 'upload-imagem'],
+            ['Atualizar Tendências', '/atualizar-tendencias'],
             ['Lojista: Cadastrar', '/cadastrar-lojista'],
             ['Lojista: Ver/Editar', '/visualizar-lojista'],
             ['Afiliado: Cadastrar', '/cadastrar-afiliado'],
@@ -53,7 +55,8 @@ const Router = ({ isLogged }) => {
         '/cadastrar-afiliado': <Menu title='Cadastrar afiliado'><RegisterAffiliate /></Menu>,
         '/visualizar-afiliado': <Menu title='Visualizar afiliado'><UpdateAffiliate /></Menu>,
         '/upload-imagem': <Menu title='Upload de imagens'><ImageUpload /></Menu>,
-        '/update': <Menu title='Atualizar informações'><UpdateUserInfo /></Menu>
+        '/update': <Menu title='Atualizar informações'><UpdateUserInfo /></Menu>,
+        '/atualizar-tendencias': <Menu title='Atualizar tendências' ><UpdateBrandsAndTrends /></Menu>,
     }
     const homeRoute = '/conta'
     return routeMatcher(isLogged, publicRoutes, privateRoutes, homeRoute, <NotFound fallback='/' />)
