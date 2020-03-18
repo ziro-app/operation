@@ -9,7 +9,8 @@ container = {
 },
 
 block = {
-	display: 'grid'
+	display: 'grid',
+	marginTop: '10px'
 },
 
 title = {

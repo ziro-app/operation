@@ -5,10 +5,9 @@ export default () => {
 
     const [brandsAndTrends, setBrandsAndTrends] = useState()
     const [fetchError, setError] = useState()
-    const [isLoading, setIsLoading] = useState(false)
+    const [isLoading, setIsLoading] = useState(true)
 
     useEffect(() => {
-        setIsLoading(true)
         const source = axios.CancelToken.source()
 		const config = {
 			method: 'POST',
