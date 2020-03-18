@@ -46,17 +46,17 @@ const UpdateStoreowner = () => {
     const validations = [
         {
             name: 'affiliate',
-            validation: value => value === '' || affiliates.find(affiliate => affiliate[1] === value),
+            validation: value => affiliates.find(affiliate => affiliate[1] === value),
             value: affiliateName,
             message: 'Afiliado(a) inválido(a)'
         }, {
             name: 'advisor',
-            validation: value => value === '' || advisors.includes(value),
+            validation: value => advisors.includes(value),
             value: advisor,
             message: 'Assessor(a) inválido(a)'
         }, {
             name: 'salesman',
-            validation: value => value === '' || sellers.includes(value),
+            validation: value => sellers.includes(value),
             value: salesman,
             message: 'Vendedor(a) inválido(a)'
         }

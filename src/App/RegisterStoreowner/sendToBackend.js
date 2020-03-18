@@ -3,9 +3,9 @@ import { post } from 'axios'
 
 const sendToBackend = state => () => {
     const { affiliateName, affiliateCpf, advisor, salesman, fname, lname, rg, cpf, birth, insta, cnpj, ie, razao, fantasia,
-        rua, numero, complemento, bairro, cep, cidade, estado, fone, email, setAffiliateName, setAffiliateCpf, setFname, setLname, setRg, setCpf,
+        rua, numero, complemento, bairro, cep, cidade, estado, fone, whats, email, setAffiliateName, setAffiliateCpf, setFname, setLname, setRg, setCpf,
         setAdvisor, setSalesman, setBirth, setInsta, setCnpj, setIe, setRazao, setFantasia, setRua, setNumero, setComplemento, setBairro,
-        setCep, setCidade, setEstado, setFone, setEmail, cnpjValid } = state
+        setCep, setCidade, setEstado, setFone, setWhats, setEmail, cnpjValid } = state
     const instaTrim = insta ? insta.replace('@', '').trim().toLowerCase() : ''
     const fnameTrim = fname ? fname.trim() : ''
     const lnameTrim = lname ? lname.trim() : ''
@@ -20,7 +20,7 @@ const sendToBackend = state => () => {
             values: [
                 [today, `${fnameTrim} ${lnameTrim}`, rg, cpf, birth, instaTrim,
                     cnpj, ie, razao, fantasia, `${rua}, ${numero}, ${complemento}`, bairro, cep, cidade,
-                    estado, fone, email.toLowerCase(), affiliateName, affiliateCpf, advisor, salesman]
+                    estado, fone, email.toLowerCase(), affiliateName, affiliateCpf, advisor, salesman, whats]
             ]
         },
         valueInputOption: 'raw'
@@ -56,6 +56,7 @@ const sendToBackend = state => () => {
                         cidade,
                         estado,
                         fone,
+                        whats,
                         email: email.toLowerCase(),
                         assessor: advisor,
                         vendedor: salesman
@@ -84,6 +85,7 @@ const sendToBackend = state => () => {
                 setCidade('')
                 setEstado('')
                 setFone('')
+                setWhats('')
                 setEmail('')
                 setAffiliateName('')
                 setAffiliateCpf('')

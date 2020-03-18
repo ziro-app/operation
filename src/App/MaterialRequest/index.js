@@ -9,7 +9,7 @@ import Dropdown from '@bit/vitorbarbosa19.ziro.dropdown'
 const MaterialRequest = () => {
     const { nickname } = useContext(userContext)
     const [category, setCategory] = useState('')
-    const categoryList = ['Agua', 'Limpeza/Higiene', 'Escritório', 'Logistica', 'Informática', 'Copa']
+    const categoryList = ['Limpeza/Higiene', 'Escritório', 'Logistica', 'Informática', 'Copa']
     const [requiredItems, setRequiredItems] = useState('')
     const [itemIsOver, setItemIsOver] = useState('')
     const itemIsOverList = ['Sim', 'Não']
