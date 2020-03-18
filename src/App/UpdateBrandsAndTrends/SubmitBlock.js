@@ -7,7 +7,7 @@ const SubmitBlock = ({ isSubmitting, isSubmitted }) => {
 	if (isSubmitting) return <SpinnerWithDiv size={'5rem'} />
 	if (isSubmitted) return (
 		<label style={{
-			marginTop: '10px',
+			marginTop: '20px',
 			fontFamily: fontTitle,
 			fontSize: '1.5rem',
 			textAlign: 'center'
