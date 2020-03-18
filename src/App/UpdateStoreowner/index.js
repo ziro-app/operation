@@ -16,7 +16,7 @@ const UpdateStoreowner = () => {
     const [isError, setIsError] = useState(false)
     const [foundStoreowner, setFoundStoreowner] = useState(false)
     const [searchedName, setSearchedName] = useState('')
-    const [storeowner, setStoreowner] = useState({ 'cadastro': '', 'afiliado': '', 'afiliado_cpf': '', 'lojista': '', 'rg': '', 'cpf': '', 'nascimento': '', 'insta': '', 'cnpj': '', 'ie': '', 'razao': '', 'fantasia': '', 'endereco': '', 'bairro': '', 'cep': '', 'cidade': '', 'estado': '', 'fone': '', 'email': '', 'assessor': '', 'vendedor': '' })
+    const [storeowner, setStoreowner] = useState({ 'cadastro': '', 'afiliado': '', 'afiliado_cpf': '', 'lojista': '', 'rg': '', 'cpf': '', 'nascimento': '', 'insta': '', 'cnpj': '', 'ie': '', 'razao': '', 'fantasia': '', 'endereco': '', 'bairro': '', 'cep': '', 'cidade': '', 'estado': '', 'fone': '', 'email': '', 'assessor': '', 'vendedor': '', 'whats': '', 'entrega': '', 'cepEntrega': '', 'cidadeEntrega': '', 'estadoEntrega': '' })
     const [storeowners, setStoreowners] = useState([])
     const [newName, setNewName] = useState('')
     const [errorName, setErrorName] = useState('')
@@ -33,6 +33,42 @@ const UpdateStoreowner = () => {
     const [newIe, setNewIe] = useState('')
     const [errorIe, setErrorIe] = useState('')
     const [loadingIe, setLoadingIe] = useState(false)
+    const [newRg, setNewRg] = useState('')
+    const [errorRg, setErrorRg] = useState('')
+    const [loadingRg, setLoadingRg] = useState(false)
+    const [newCpf, setNewCpf] = useState('')
+    const [errorCpf, setErrorCpf] = useState('')
+    const [loadingCpf, setLoadingCpf] = useState(false)
+    const [newEmail, setNewEmail] = useState('')
+    const [errorEmail, setErrorEmail] = useState('')
+    const [loadingEmail, setLoadingEmail] = useState(false)
+    const [newFone, setNewFone] = useState('')
+    const [errorFone, setErrorFone] = useState('')
+    const [loadingFone, setLoadingFone] = useState(false)
+    const [newWhats, setNewWhats] = useState('')
+    const [errorWhats, setErrorWhats] = useState('')
+    const [loadingWhats, setLoadingWhats] = useState(false)
+    const [newStreet, setNewStreet] = useState('')
+    const [errorStreet, setErrorStreet] = useState('')
+    const [loadingStreet, setLoadingStreet] = useState(false)
+    const [newNumber, setNewNumber] = useState('')
+    const [errorNumber, setErrorNumber] = useState('')
+    const [loadingNumber, setLoadingNumber] = useState(false)
+    const [newComplement, setNewComplement] = useState('')
+    const [errorComplement, setErrorComplement] = useState('')
+    const [loadingComplement, setLoadingComplement] = useState(false)
+    const [newNeighborhood, setNewNeighborhood] = useState('')
+    const [errorNeighborhood, setErrorNeighborhood] = useState('')
+    const [loadingNeighborhood, setLoadingNeighborhood] = useState(false)
+    const [newCep, setNewCep] = useState('')
+    const [errorCep, setErrorCep] = useState('')
+    const [loadingCep, setLoadingCep] = useState(false)
+    const [newCity, setNewCity] = useState('')
+    const [errorCity, setErrorCity] = useState('')
+    const [loadingCity, setLoadingCity] = useState(false)
+    const [newState, setNewState] = useState('')
+    const [errorState, setErrorState] = useState('')
+    const [loadingState, setLoadingState] = useState(false)
     const [affiliateName, setAffiliateName] = useState('')
     const [affiliateCpf, setAffiliateCpf] = useState('')
     const [affiliates, setAffiliates] = useState([])
@@ -43,6 +79,7 @@ const UpdateStoreowner = () => {
     const [storeownerRow, setStoreownerRow] = useState('')
     const setState = { setAffiliateName, setAffiliateCpf, setAdvisor, setSalesman }
     const state = { affiliateName, affiliateCpf, advisor, salesman, ...setState }
+    const statesList = ['AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA', 'MT', 'MS', 'MG', 'PA', 'PB', 'PR', 'PE', 'PI', 'RJ', 'RN', 'RS', 'RO', 'RR', 'SC', 'SP', 'SE', 'TO']
     const validations = [
         {
             name: 'affiliate',
@@ -86,6 +123,7 @@ const UpdateStoreowner = () => {
     }
     const storeownerHandleSuccess = async person => {
         setFoundStoreowner(true)
+        const partAddress = person[22]? person[22].split(', ') : ''
         setNewName(person[1] ? person[1].split(' ')[0] : '')
         setNewSurname(person[1] ? person[1].split(' ').slice(1).join(' ') : '')
         setNewBirthDate(person[4] ? person[4] : '')
@@ -95,7 +133,19 @@ const UpdateStoreowner = () => {
         setAffiliateCpf(person[18] ? person[18] : '')
         setAdvisor(person[19] ? person[19] : '')
         setSalesman(person[20] ? person[20] : '')
-        setStoreowner(Object.assign({ 'cadastro': person[0] ? person[0] : '', 'afiliado': person[17] ? person[17] : '', 'afiliado_cpf': person[18] ? person[18] : '', 'lojista': person[1] ? person[1] : '', 'rg': person[2] ? person[2] : '', 'cpf': person[3] ? person[3] : '', 'nascimento': person[4] ? person[4] : '', 'insta': person[5] ? person[5] : '', 'cnpj': person[6] ? person[6] : '', 'ie': person[7] ? person[7] : '', 'razao': person[8] ? person[8] : '', 'fantasia': person[9] ? person[9] : '', 'endereco': person[10] ? person[10] : '', 'bairro': person[11] ? person[11] : '', 'cep': person[12] ? person[12] : '', 'cidade': person[13] ? person[13] : '', 'estado': person[14] ? person[14] : '', 'fone': person[15] ? person[15] : '', 'email': person[16] ? person[16] : '', 'assessor': person[19] ? person[19] : '', 'vendedor': person[20] ? person[20] : '' }))
+        setNewRg(person[2] ? person[2] : '')
+        setNewCpf(person[3] ? person[3] : '')
+        setNewFone(person[15] ? person[15] : '')
+        setNewEmail(person[16] ? person[16] : '')
+        setNewWhats(person[21]? person[21] : '')
+        setNewStreet(partAddress[0]? partAddress[0] : '')
+        setNewNumber(partAddress[1]? partAddress[1] : '')
+        setNewComplement(partAddress.length === 4 ? partAddress[2] : '')
+        setNewNeighborhood(partAddress.length === 4 ? partAddress[3] : partAddress[2])
+        setNewCep(person[23]? person[23] : '')
+        setNewCity(person[24]? person[24] : '')
+        setNewState(person[25]? person[25] : '')
+        setStoreowner(Object.assign({ 'cadastro': person[0] ? person[0] : '', 'afiliado': person[17] ? person[17] : '', 'afiliado_cpf': person[18] ? person[18] : '', 'lojista': person[1] ? person[1] : '', 'rg': person[2] ? person[2] : '', 'cpf': person[3] ? person[3] : '', 'nascimento': person[4] ? person[4] : '', 'insta': person[5] ? person[5] : '', 'cnpj': person[6] ? person[6] : '', 'ie': person[7] ? person[7] : '', 'razao': person[8] ? person[8] : '', 'fantasia': person[9] ? person[9] : '', 'endereco': person[10] ? person[10] : '', 'bairro': person[11] ? person[11] : '', 'cep': person[12] ? person[12] : '', 'cidade': person[13] ? person[13] : '', 'estado': person[14] ? person[14] : '', 'fone': person[15] ? person[15] : '', 'email': person[16] ? person[16] : '', 'assessor': person[19] ? person[19] : '', 'vendedor': person[20] ? person[20] : '', 'whats': person[21]? person[21] : '', 'entrega': person[22]? person[22] : '', 'cepEntrega': person[23]? person[23] : '', 'cidadeEntrega': person[24]? person[24] : '', 'estadoEntrega': person[25]? person[25] : '' }))
         if (person[6]) {
             let row = await findStoreownerRow(person[6])
             setStoreownerRow(row)
@@ -113,7 +163,19 @@ const UpdateStoreowner = () => {
         setAffiliateCpf('')
         setAdvisor('')
         setSalesman('')
-        setStoreowner({ 'cadastro': '', 'afiliado': '', 'afiliado_cpf': '', 'lojista': '', 'rg': '', 'cpf': '', 'nascimento': '', 'insta': '', 'cnpj': '', 'ie': '', 'razao': '', 'fantasia': '', 'endereco': '', 'bairro': '', 'cep': '', 'cidade': '', 'estado': '', 'fone': '', 'email': '', 'assessor': '', 'vendedor': '' })
+        setNewRg('')
+        setNewCpf('')
+        setNewFone('')
+        setNewEmail('')
+        setNewWhats('')
+        setNewStreet('')
+        setNewNumber('')
+        setNewComplement('')
+        setNewNeighborhood('')
+        setNewCep('')
+        setNewCity('')
+        setNewState('')
+        setStoreowner({ 'cadastro': '', 'afiliado': '', 'afiliado_cpf': '', 'lojista': '', 'rg': '', 'cpf': '', 'nascimento': '', 'insta': '', 'cnpj': '', 'ie': '', 'razao': '', 'fantasia': '', 'endereco': '', 'bairro': '', 'cep': '', 'cidade': '', 'estado': '', 'fone': '', 'email': '', 'assessor': '', 'vendedor': '', 'whats': '', 'entrega': '', 'cepEntrega': '', 'cidadeEntrega': '', 'estadoEntrega': '' })
         setStoreownerRow('')
     }
 
@@ -161,6 +223,105 @@ const UpdateStoreowner = () => {
             return true
         } else {
             setErrorBirthDate('Data inválida')
+            return false
+        }
+    }
+    const validateRg = () => {
+        if (newRg !== '') {
+            setErrorRg('')
+            return true
+        } else {
+            setErrorRg('Documento inválido')
+            return false
+        }
+    }
+    const validateCpf = () => {
+        if (/(^\d{3}\.\d{3}\.\d{3}\-\d{2}$)|(^\d{2}\.\d{3}\.\d{3}\/\d{4}\-\d{2}$)/.test(newCpf)) {
+            setErrorCpf('')
+            return true
+        } else {
+            setErrorCpf('CPF inválido')
+            return false
+        }
+    }
+    const validateEmail = () => {
+        if (/^\S+@\S+\.\S+$/g.test(newEmail)) {
+            setErrorEmail('')
+            return true
+        } else {
+            setErrorEmail('Email inválido')
+            return false
+        }
+    }
+    const validateFone = () => {
+        if (/(^\(\d{2}\) \d{5}\-\d{4}$)/.test(newFone)) {
+            setErrorFone('')
+            return true
+        } else {
+            setErrorFone('Telefone inválido')
+            return false
+        }
+    }
+    const validateWhats = () => {
+        if (/(^\(\d{2}\) \d{5}\-\d{4}$)/.test(newWhats)) {
+            setErrorWhats('')
+            return true
+        } else {
+            setErrorWhats('Whatsapp inválido')
+            return false
+        }
+    }
+    const validateStreet = () => {
+        if (newStreet !== '') {
+            setErrorStreet('')
+            return true
+        } else {
+            setErrorStreet('Valor inválido')
+            return false
+        }
+    }
+    const validateNumber = () => {
+        if (newNumber !== '') {
+            setErrorNumber('')
+            return true
+        } else {
+            setErrorNumber('Número inválido')
+            return false
+        }
+    }
+    const validateNeighborhood = () => {
+        if (newNeighborhood !== '') {
+            setErrorNeighborhood('')
+            return true
+        } else {
+            setErrorNeighborhood('Valor inválido')
+            return false
+        }
+    }
+    const validateCep = () => {
+        if (/(^\d{5}\-\d{3}$)/.test(newCep)) {
+            setErrorCep('')
+            return true
+        } else {
+            setErrorCep('CEP inválido')
+            return false
+        }
+    }
+    const validateCity = () => {
+        if (newCity !== '') {
+            setErrorCity('')
+            return true
+        } else {
+            setErrorCity('Valor inválido')
+            return false
+        }
+    }
+    const validateState = () => {
+        if (/(^\D{2}$)/.test(newState) & statesList.includes(newState)) {
+            setErrorState('')
+            return true
+        } else {
+            setErrorState('Valor inválido')
             return false
         }
     }
@@ -238,25 +399,25 @@ const UpdateStoreowner = () => {
                 />
                 <InputEdit
                     name="RG"
-                    value={storeowner.rg}
-                    onChange={() => { }}
-                    validateInput={() => { }}
-                    submit={() => { }}
+                    value={newRg}
+                    onChange={({ target: { value } }) => setNewRg(value)}
+                    validateInput={validateRg}
+                    submit={inputEditUpdate(storeowner.cnpj, 'C', storeownerRow, { 'rg': newRg }, newRg, setLoadingRg, setErrorRg)}
                     setError={() => { }}
-                    error={''}
-                    editable={false}
-                    isLoading={false}
+                    error={errorRg}
+                    editable={true}
+                    isLoading={loadingRg}
                 />
                 <InputEdit
                     name="CPF"
-                    value={storeowner.cpf}
-                    onChange={() => { }}
-                    validateInput={() => { }}
-                    submit={() => { }}
+                    value={newCpf}
+                    onChange={({ target: { value } }) => setNewCpf(maskInput(value, '###.###.###-##', true))}
+                    validateInput={validateCpf}
+                    submit={inputEditUpdate(storeowner.cnpj, 'D', storeownerRow, { 'cpf': newCpf }, newCpf, setLoadingCpf, setErrorCpf)}
                     setError={() => { }}
-                    error={''}
-                    editable={false}
-                    isLoading={false}
+                    error={errorCpf}
+                    editable={true}
+                    isLoading={loadingCpf}
                 />
                 <InputEdit
                     name="Nascimento"
@@ -392,26 +553,114 @@ const UpdateStoreowner = () => {
                     isLoading={false}
                 />
                 <InputEdit
-                    name="Telefone"
-                    value={storeowner.fone}
-                    onChange={() => { }}
-                    validateInput={() => { }}
-                    submit={() => { }}
+                    name="Rua (entrega)"
+                    value={newStreet}
+                    onChange={({ target: { value } }) => setNewStreet(value.toUpperCase())}
+                    validateInput={validateStreet}
+                    submit={inputEditUpdate(storeowner.cnpj, 'W', storeownerRow, { 'entrega': newStreet + ', ' + newNumber + ', ' + (newComplement ? newComplement + ', ' : '') + newNeighborhood }, newStreet + ', ' + newNumber + ', ' + (newComplement ? newComplement + ', ' : '') + newNeighborhood, setLoadingStreet, setErrorStreet)}
                     setError={() => { }}
-                    error={''}
-                    editable={false}
-                    isLoading={false}
+                    error={errorStreet}
+                    editable={true}
+                    isLoading={loadingStreet}
+                />
+                <InputEdit
+                    name="Número (entrega)"
+                    value={newNumber}
+                    onChange={({ target: { value } }) => setNewNumber(value)}
+                    validateInput={validateNumber}
+                    submit={inputEditUpdate(storeowner.cnpj, 'W', storeownerRow, { 'entrega': newStreet + ', ' + newNumber + ', ' + (newComplement ? newComplement + ', ' : '') + newNeighborhood }, newStreet + ', ' + newNumber + ', ' + (newComplement ? newComplement + ', ' : '') + newNeighborhood, setLoadingNumber, setErrorNumber)}
+                    setError={() => { }}
+                    error={errorNumber}
+                    editable={true}
+                    isLoading={loadingNumber}
+                />
+                <InputEdit
+                    name="Complemento (entrega)"
+                    value={newComplement}
+                    onChange={({ target: { value } }) => setNewComplement(value.toUpperCase())}
+                    validateInput={() => true}
+                    submit={inputEditUpdate(storeowner.cnpj, 'W', storeownerRow, { 'entrega': newStreet + ', ' + newNumber + ', ' + (newComplement ? newComplement + ', ' : '') + newNeighborhood }, newStreet + ', ' + newNumber + ', ' + (newComplement ? newComplement + ', ' : '') + newNeighborhood, setLoadingComplement, setErrorComplement)}
+                    setError={() => { }}
+                    error={errorComplement}
+                    editable={true}
+                    isLoading={loadingComplement}
+                />
+                <InputEdit
+                    name="Bairro (entrega)"
+                    value={newNeighborhood? newNeighborhood : ''}
+                    onChange={({ target: { value } }) => setNewNeighborhood(value.toUpperCase())}
+                    validateInput={validateNeighborhood}
+                    submit={inputEditUpdate(storeowner.cnpj, 'W', storeownerRow, { 'entrega': newStreet + ', ' + newNumber + ', ' + (newComplement ? newComplement + ', ' : '') + newNeighborhood }, newStreet + ', ' + newNumber + ', ' + (newComplement ? newComplement + ', ' : '') + newNeighborhood, setLoadingNeighborhood, setErrorNeighborhood)}
+                    setError={() => { }}
+                    error={errorNeighborhood}
+                    editable={true}
+                    isLoading={loadingNeighborhood}
+                />
+                <InputEdit
+                    name="Cep (entrega)"
+                    value={newCep}
+                    onChange={({ target: { value } }) => setNewCep(maskInput(value, '#####-###', true))}
+                    validateInput={validateCep}
+                    submit={inputEditUpdate(storeowner.cnpj, 'X', storeownerRow, { 'cepEntrega': newCep }, newCep, setLoadingCep, setErrorCep)}
+                    setError={() => { }}
+                    error={errorCep}
+                    editable={true}
+                    isLoading={loadingCep}
+                />
+                <InputEdit
+                    name="Cidade (entrega)"
+                    value={newCity}
+                    onChange={({ target: { value } }) => setNewCity(value.toUpperCase())}
+                    validateInput={validateCity}
+                    submit={inputEditUpdate(storeowner.cnpj, 'Y', storeownerRow, { 'cidadeEntrega': newCity }, newCity, setLoadingCity, setErrorCity)}
+                    setError={() => { }}
+                    error={errorCity}
+                    editable={true}
+                    isLoading={loadingCity}
+                />
+                <InputEdit
+                    name="Estado (entrega)"
+                    value={newState}
+                    onChange={({ target: { value } }) => setNewState(maskInput(value.toUpperCase(), '##', false))}
+                    validateInput={validateState}
+                    submit={inputEditUpdate(storeowner.cnpj, 'Z', storeownerRow, { 'estadoEntrega': newState }, newState, setLoadingState, setErrorState)}
+                    setError={() => { }}
+                    error={errorState}
+                    editable={true}
+                    isLoading={loadingState}
+                />
+                <InputEdit
+                    name="Telefone"
+                    value={newFone}
+                    onChange={({ target: { value } }) => setNewFone(maskInput(value, '(##) #####-####', true))}
+                    validateInput={validateFone}
+                    submit={inputEditUpdate(storeowner.cnpj, 'P', storeownerRow, { 'fone': newFone }, newFone, setLoadingFone, setErrorFone)}
+                    setError={() => { }}
+                    error={errorFone}
+                    editable={true}
+                    isLoading={loadingFone}
+                />
+                <InputEdit
+                    name="Whatsapp"
+                    value={newWhats}
+                    onChange={({ target: { value } }) => setNewWhats(maskInput(value, '(##) #####-####', true))}
+                    validateInput={validateWhats}
+                    submit={inputEditUpdate(storeowner.cnpj, 'V', storeownerRow, { 'whats': newWhats }, newWhats, setLoadingWhats, setErrorWhats)}
+                    setError={() => { }}
+                    error={errorWhats}
+                    editable={true}
+                    isLoading={loadingWhats}
                 />
                 <InputEdit
                     name="Email"
-                    value={storeowner.email}
-                    onChange={() => { }}
-                    validateInput={() => { }}
-                    submit={() => { }}
+                    value={newEmail}
+                    onChange={({ target: { value } }) => setNewEmail(value.toLowerCase())}
+                    validateInput={validateEmail}
+                    submit={inputEditUpdate(storeowner.cnpj, 'Q', storeownerRow, { 'email': newEmail }, newEmail, setLoadingEmail, setErrorEmail)}
                     setError={() => { }}
-                    error={''}
-                    editable={false}
-                    isLoading={false}
+                    error={errorEmail}
+                    editable={true}
+                    isLoading={loadingEmail}
                 />
                 <br />
                 <Form
@@ -422,7 +671,7 @@ const UpdateStoreowner = () => {
                             <Dropdown
                                 value={affiliateName}
                                 onChange={({ target: { value } }) => {
-                                    if (value !== '') {
+                                    if (value !== '' && value !== 'Nenhum') {
                                         let person = affiliates.find(element => element[1] === value)
                                         if (person) {
                                             setAffiliateCpf(person[0])
@@ -430,11 +679,11 @@ const UpdateStoreowner = () => {
                                         }
                                     } else {
                                         setAffiliateCpf('')
-                                        setAffiliateName('')
+                                        setAffiliateName(value === 'Nenhum'? 'Nenhum' : '')
                                     }
                                 }}
                                 onChangeKeyboard={element => {
-                                    if (element) {
+                                    if (element && element.value !== 'Nenhum') {
                                         let person = affiliates.find(affiliate => affiliate[1] === element.value)
                                         if (person) {
                                             setAffiliateCpf(person[0])
@@ -442,11 +691,11 @@ const UpdateStoreowner = () => {
                                         }
                                     } else {
                                         setAffiliateCpf('')
-                                        setAffiliateName('')
+                                        setAffiliateName(element.value === 'Nenhum'? 'Nenhum' : '')
                                     }
                                 }
                                 }
-                                list={affiliates.map(affiliate => Object.values(affiliate)[1])}
+                                list={affiliates.map(affiliate => affiliate === 'Nenhum'? 'Nenhum' : Object.values(affiliate)[1])}
                                 placeholder="Nome do(a) afiliado(a)"
                                 readOnly={true}
                             />

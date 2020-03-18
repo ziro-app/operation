@@ -56,7 +56,7 @@ const RegisterAffiliate = () => {
             message: 'Campo obrigatório'
         }, {
             name: 'cpf',
-            validation: value => value.length >= 14,
+            validation: value => value === '' || /(^\d{3}\.\d{3}\.\d{3}\-\d{2}$)|(^\d{2}\.\d{3}\.\d{3}\/\d{4}\-\d{2}$)/.test(value),
             value: cpf,
             message: 'Formato inválido'
         }, {

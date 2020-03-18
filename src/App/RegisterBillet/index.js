@@ -36,14 +36,13 @@ const RegisterBillet = () => {
     const [percentage, setPercentage] = useState('')
     const [revenue, setRevenue] = useState('')
 
-    const [quantity, setQuantity] = useState('')
     const [advisor, setAdvisor] = useState('')
     const [advisors, setAdvisors] = useState([])
     const [type, setType] = useState('')
     const typeList = ['Online', 'Offline']
 
-    const setState = { setBillet, setSaleDate, setProvider, setAddress, setAddresses, setStoreowner, setStoreowners, setValue, setPaymentMethod, setRomaneio, setDueDate, setPercentage, setRevenue, setQuantity, setAdvisor, setType }
-    const state = { billet, saleDate, provider, address, storeowner, value, paymentMethod, romaneio, dueDate, percentage, revenue, quantity, advisor, type, ...setState }
+    const setState = { setBillet, setSaleDate, setProvider, setAddress, setAddresses, setStoreowner, setStoreowners, setValue, setPaymentMethod, setRomaneio, setDueDate, setPercentage, setRevenue, setAdvisor, setType }
+    const state = { billet, saleDate, provider, address, storeowner, value, paymentMethod, romaneio, dueDate, percentage, revenue, advisor, type, ...setState }
     const validations = [
         {
             name: 'billet',
@@ -213,13 +212,6 @@ const RegisterBillet = () => {
                             onChange={() => {}}
                             readOnly={true}
                             placeholder='R$ 0.00'
-                        />
-                    } />,
-                    <FormInput name='quantity' label='Quantidade' input={
-                        <InputText
-                            value={quantity}
-                            onChange={({ target: { value } }) => setQuantity(value)}
-                            placeholder='Quantidade de peças'
                         />
                     } />,
                     <FormInput name='advisor' label='Assessor(a)' input={

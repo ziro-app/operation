@@ -22,6 +22,9 @@ const UpdateAffiliate = () => {
     const [newSurname, setNewSurname] = useState('')
     const [errorSurname, setErrorSurname] = useState('')
     const [loadingSurname, setLoadingSurname] = useState(false)
+    const [newCpf, setNewCpf] = useState('')
+    const [errorCpf, setErrorCpf] = useState('')
+    const [loadingCpf, setLoadingCpf] = useState(false)
     const [newWhatsapp, setNewWhatsapp] = useState('')
     const [errorWhatsapp, setErrorWhatsapp] = useState('')
     const [loadingWhatsapp, setLoadingWhatsapp] = useState(false)
@@ -54,6 +57,7 @@ const UpdateAffiliate = () => {
         setFoundAffiliate(true)
         setNewName(affiliate[1] ? affiliate[1] : '')
         setNewSurname(affiliate[2] ? affiliate[2] : '')
+        setNewCpf(affiliate[0] ? affiliate[0] : '')
         setNewWhatsapp(affiliate[3] ? affiliate[3] : '')
         setAffiliate(Object.assign({ 'cpf': affiliate[0] ? affiliate[0] : '', 'nome': affiliate[1] ? affiliate[1] : '', 'sobrenome': affiliate[2] ? affiliate[2] : '', 'whatsapp': affiliate[3] ? affiliate[3] : '', 'email': affiliate[4] ? affiliate[4] : '', 'marca': affiliate[5] ? affiliate[5] : '', 'unidade': affiliate[6] ? affiliate[6] : '', 'instagram': affiliate[7] ? affiliate[7] : '' }))
         let row = await findAffiliateRow(affiliate[0])
@@ -64,6 +68,7 @@ const UpdateAffiliate = () => {
         setSearchedName('')
         setNewName('')
         setNewSurname('')
+        setNewCpf('')
         setNewWhatsapp('')
         setAffiliate({ 'cpf': '', 'nome': '', 'sobrenome': '', 'whatsapp': '', 'email': '', 'marca': '', 'unidade': '', 'instagram': '' })
         setAffiliateRow('')
@@ -86,6 +91,15 @@ const UpdateAffiliate = () => {
             return true
         } else {
             setErrorSurname('Valor inválido')
+            return false
+        }
+    }
+    const validateCpf = () => {
+        if (/(^\d{3}\.\d{3}\.\d{3}\-\d{2}$)|(^\d{2}\.\d{3}\.\d{3}\/\d{4}\-\d{2}$)/.test(newCpf)) {
+            setErrorCpf('')
+            return true
+        } else {
+            setErrorCpf('CPF inválido')
             return false
         }
     }
@@ -184,14 +198,14 @@ const UpdateAffiliate = () => {
                 />
                 <InputEdit
                     name="CPF"
-                    value={affiliate.cpf}
-                    onChange={() => { }}
-                    validateInput={() => { }}
-                    submit={() => { }}
+                    value={newCpf}
+                    onChange={({ target: { value } }) => setNewCpf(maskInput(value, '###.###.###-##', true))}
+                    validateInput={validateCpf}
+                    submit={sendToBackend('B', affiliateRow, newCpf, setLoadingCpf, setErrorCpf)}
                     setError={() => { }}
-                    error={''}
-                    editable={false}
-                    isLoading={false}
+                    error={errorCpf}
+                    editable={true}
+                    isLoading={loadingCpf}
                 />
                 <InputEdit
                     name="Whatsapp"
