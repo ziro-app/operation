@@ -17,6 +17,7 @@ import UpdateStoreowner from './UpdateStoreowner/index'
 import RegisterAffiliate from './RegisterAffiliate/index'
 import UpdateAffiliate from './UpdateAffiliate/index'
 //import RegisterBillet from './RegisterBillet/index'
+import ShowInfo from './ShowInfo/index'
 import ImageUpload from './ImageUpload/index'
 import Submenu from '@bit/vitorbarbosa19.ziro.submenu'
 import UpdateUserInfo from './UpdateUserInfo/index'
@@ -31,7 +32,8 @@ const Router = ({ isLogged }) => {
         '/problemas-acesso': <LoginTrouble />,
         '/reenviar-email': <ResendEmail />,
         '/resetar-senha': <ResetPass />,
-        '/confirmar-email': <ConfirmEmail />
+        '/confirmar-email': <ConfirmEmail />,
+        '/show-info': <ShowInfo />
     }
     const privateRoutes = { // Menu can't be put inside the components because then it'll unmount on transition
         '/conta': <Menu title='Minha Conta'><MyAccount /></Menu>,

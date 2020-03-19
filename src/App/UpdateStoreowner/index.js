@@ -6,6 +6,7 @@ import Error from '@bit/vitorbarbosa19.ziro.error'
 import Dropdown from '@bit/vitorbarbosa19.ziro.dropdown'
 import Form from '@bit/vitorbarbosa19.ziro.form'
 import FormInput from '@bit/vitorbarbosa19.ziro.form-input'
+import Button from '@bit/vitorbarbosa19.ziro.button'
 import maskInput from '@ziro/mask-input'
 import capitalize from '@ziro/capitalize'
 import fetch from './fetch'
@@ -353,6 +354,14 @@ const UpdateStoreowner = () => {
                 placeholder="Pesquise o lojista"
             />
             {foundStoreowner ? <>
+                <div style={{padding: '10px 0'}} >
+                    <Button
+                        type="button"
+                        cta="Compartilhar"
+                        template="regular"
+                        click={() => null}
+                    />
+                </div>
                 <InputEdit
                     name="Assessor(a)"
                     value={storeowner.assessor}
