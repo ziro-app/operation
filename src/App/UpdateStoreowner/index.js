@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { post } from 'axios'
 import InputEdit from '@bit/vitorbarbosa19.ziro.input-edit'
 import Spinner from '@bit/vitorbarbosa19.ziro.spinner'
@@ -11,6 +11,8 @@ import maskInput from '@ziro/mask-input'
 import capitalize from '@ziro/capitalize'
 import fetch from './fetch'
 import { inputEditUpdate, dropdownUpdate } from './sendToBackend'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const UpdateStoreowner = () => {
     const [isLoading, setIsLoading] = useState(true)
@@ -78,6 +80,8 @@ const UpdateStoreowner = () => {
     const [salesman, setSalesman] = useState('')
     const [sellers, setSellers] = useState([])
     const [storeownerRow, setStoreownerRow] = useState('')
+    const [textArea, setTextArea] = useState('')
+    const textAreaRef = useRef(null)
     const setState = { setAffiliateName, setAffiliateCpf, setAdvisor, setSalesman }
     const state = { affiliateName, affiliateCpf, advisor, salesman, ...setState }
     const statesList = ['AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA', 'MT', 'MS', 'MG', 'PA', 'PB', 'PR', 'PE', 'PI', 'RJ', 'RN', 'RS', 'RO', 'RR', 'SC', 'SP', 'SE', 'TO']
@@ -146,6 +150,7 @@ const UpdateStoreowner = () => {
         setNewCep(person[23]? person[23] : '')
         setNewCity(person[24]? person[24] : '')
         setNewState(person[25]? person[25] : '')
+        setTextArea(person[6] ? `https://interno.ziro.app/show-info?doc=${person[6]}` : '')
         setStoreowner(Object.assign({ 'cadastro': person[0] ? person[0] : '', 'afiliado': person[17] ? person[17] : '', 'afiliado_cpf': person[18] ? person[18] : '', 'lojista': person[1] ? person[1] : '', 'rg': person[2] ? person[2] : '', 'cpf': person[3] ? person[3] : '', 'nascimento': person[4] ? person[4] : '', 'insta': person[5] ? person[5] : '', 'cnpj': person[6] ? person[6] : '', 'ie': person[7] ? person[7] : '', 'razao': person[8] ? person[8] : '', 'fantasia': person[9] ? person[9] : '', 'endereco': person[10] ? person[10] : '', 'bairro': person[11] ? person[11] : '', 'cep': person[12] ? person[12] : '', 'cidade': person[13] ? person[13] : '', 'estado': person[14] ? person[14] : '', 'fone': person[15] ? person[15] : '', 'email': person[16] ? person[16] : '', 'assessor': person[19] ? person[19] : '', 'vendedor': person[20] ? person[20] : '', 'whats': person[21]? person[21] : '', 'entrega': person[22]? person[22] : '', 'cepEntrega': person[23]? person[23] : '', 'cidadeEntrega': person[24]? person[24] : '', 'estadoEntrega': person[25]? person[25] : '' }))
         if (person[6]) {
             let row = await findStoreownerRow(person[6])
@@ -176,6 +181,7 @@ const UpdateStoreowner = () => {
         setNewCep('')
         setNewCity('')
         setNewState('')
+        setTextArea('')
         setStoreowner({ 'cadastro': '', 'afiliado': '', 'afiliado_cpf': '', 'lojista': '', 'rg': '', 'cpf': '', 'nascimento': '', 'insta': '', 'cnpj': '', 'ie': '', 'razao': '', 'fantasia': '', 'endereco': '', 'bairro': '', 'cep': '', 'cidade': '', 'estado': '', 'fone': '', 'email': '', 'assessor': '', 'vendedor': '', 'whats': '', 'entrega': '', 'cepEntrega': '', 'cidadeEntrega': '', 'estadoEntrega': '' })
         setStoreownerRow('')
     }
@@ -326,6 +332,42 @@ const UpdateStoreowner = () => {
             return false
         }
     }
+    const copyToClipboard = () => {
+        if(document.queryCommandSupported('copy')) {
+            try {
+                textAreaRef.current.select()
+                document.execCommand('copy')
+                toast.success('Link copiado com sucesso!', {
+                    position: "bottom-center",
+                    autoClose: 2800,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true
+                });
+            } catch (error) {
+                console.log(error)
+                toast.warn('Ocorreu algum erro, tente novamente.', {
+                    position: "bottom-center",
+                    autoClose: 2800,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true
+                });
+            }
+        } else {
+            toast.error('Seu navegador não suporta o recurso de cópia.', {
+                position: "bottom-center",
+                autoClose: 2800,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true
+            });
+        }
+
+    }
 
     if (isLoading) return <div style={{ display: 'grid' }}><Spinner size='5rem' /></div>
     if (isError) return <Error />
@@ -353,13 +395,25 @@ const UpdateStoreowner = () => {
                 list={storeowners.map(storeowner => Object.values(storeowner)[1])}
                 placeholder="Pesquise o lojista"
             />
+            <input type="text" style={{ position: 'absolute', left: '-9999px' }} value={textArea} ref={textAreaRef} />
             {foundStoreowner ? <>
+                <ToastContainer
+                    position="bottom-center"
+                    autoClose={2500}
+                    hideProgressBar={false}
+                    newestOnTop={false}
+                    closeOnClick
+                    rtl={false}
+                    pauseOnVisibilityChange
+                    draggable
+                    pauseOnHover
+                />
                 <div style={{padding: '10px 0'}} >
                     <Button
                         type="button"
                         cta="Compartilhar"
                         template="regular"
-                        click={() => null}
+                        click={copyToClipboard}
                     />
                 </div>
                 <InputEdit
