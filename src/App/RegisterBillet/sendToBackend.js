@@ -25,7 +25,7 @@ const sendToBackend = state => () => {
         dueDate, revenue, advisor, type, setSearchedName, setBillet, setSaleDate, setProvider, setStoreowner,
         setBilletValue, setPaymentMethod, setRomaneio, setDueDate, setRevenue, setAdvisor,
         setType } = state
-    const value = billetValue? parseFloat(billetValue).toLocaleString('en-USA', { minimumFractionDigits: 2, style: 'currency', currency: 'BRL',  }).replace(/\s/g, '') : ''
+    const value = billetValue? parseFloat(billetValue.replace(/\,/g, '.')).toLocaleString('en-USA', { minimumFractionDigits: 2, style: 'currency', currency: 'BRL' }).replace(/\s/g, '') : ''
     const comissao = provider.comissao? provider.comissao.replace(',', '.') : ''
     const venda = saleDate? dateFormat(saleDate) : ''
     const vencimento = dueDate? dateFormat(dueDate) : ''

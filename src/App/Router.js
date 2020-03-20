@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import PropTypes from 'prop-types'
 import routeMatcher from '@ziro/router'
 import Login from './Login/index'
@@ -8,6 +8,7 @@ import ResendEmail from './ResendEmail/index'
 import ResetPass from './ResetPass/index'
 import ConfirmEmail from '@bit/vitorbarbosa19.ziro.confirm-email'
 import { Menu } from './Menu/index'
+import { userContext } from './appContext'
 import MyAccount from '@bit/vitorbarbosa19.ziro.my-account'
 import UpdateEmail from './UpdateEmail/index'
 import UpdatePass from './UpdatePass/index'
@@ -22,10 +23,13 @@ import ImageUpload from './ImageUpload/index'
 import Submenu from '@bit/vitorbarbosa19.ziro.submenu'
 import UpdateUserInfo from './UpdateUserInfo/index'
 import MaterialRequest from './MaterialRequest/index'
+import RegisterInputOutput from './RegisterInputOutput/index'
 import NotFound from '@bit/vitorbarbosa19.ziro.not-found'
 import UpdateBrandsAndTrends from './UpdateBrandsAndTrends'
 
+
 const Router = ({ isLogged }) => {
+    const { nickname } = useContext(userContext)
     const publicRoutes = {
         '/login': <Login />,
         '/cadastrar': <Register />,
@@ -41,7 +45,8 @@ const Router = ({ isLogged }) => {
         '/trocar-senha': <UpdatePass />,
         '/deletar-conta': <DeleteAccount />,
         '/administrativo': <Menu title='Administrativo'><Submenu options={[
-            ['Requisição de Material', 'requerir-material']]} /></Menu>,
+            ['Requisição de Material', 'requerir-material'],
+            nickname === 'Claudia'? ['Entrada/Saída do Caixa', 'entrada-saida'] : []]} /></Menu>,
         '/assessoria': <Menu title='Assessoria'><Submenu options={[
             ['Cadastrar boleto', 'cadastrar-boleto'],
             ['Upload de imagens', 'upload-imagem'],
@@ -59,6 +64,7 @@ const Router = ({ isLogged }) => {
         '/upload-imagem': <Menu title='Upload de imagens'><ImageUpload /></Menu>,
         '/update': <Menu title='Atualizar informações'><UpdateUserInfo /></Menu>,
         '/atualizar-tendencias': <Menu title='Atualizar tendências' ><UpdateBrandsAndTrends /></Menu>,
+        '/entrada-saida': <Menu title='Entrada/Saída do Caixa' ><RegisterInputOutput /></Menu>
     }
     const homeRoute = '/conta'
     return routeMatcher(isLogged, publicRoutes, privateRoutes, homeRoute, <NotFound fallback='/' />)
