@@ -112,7 +112,7 @@ const RegisterBillet = () => {
         if(value && comissao){
             let percent = parseFloat(comissao.replace('%', ''))/100
             let val = round((parseFloat(value) * percent), 2)
-            setRevenue((val).toLocaleString('pt-BR', { minimumFractionDigits: 2, style: 'currency', currency: 'BRL' }))
+            setRevenue((val).toLocaleString('en-USA', { minimumFractionDigits: 2, style: 'currency', currency: 'BRL' }).replace(/\s/g, ''))
         }
     }
 
