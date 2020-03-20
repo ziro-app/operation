@@ -16,7 +16,7 @@ import RegisterStoreowner from './RegisterStoreowner/index'
 import UpdateStoreowner from './UpdateStoreowner/index'
 import RegisterAffiliate from './RegisterAffiliate/index'
 import UpdateAffiliate from './UpdateAffiliate/index'
-//import RegisterBillet from './RegisterBillet/index'
+import RegisterBillet from './RegisterBillet/index'
 import ShowInfo from './ShowInfo/index'
 import ImageUpload from './ImageUpload/index'
 import Submenu from '@bit/vitorbarbosa19.ziro.submenu'
@@ -43,14 +43,14 @@ const Router = ({ isLogged }) => {
         '/administrativo': <Menu title='Administrativo'><Submenu options={[
             ['Requisição de Material', 'requerir-material']]} /></Menu>,
         '/assessoria': <Menu title='Assessoria'><Submenu options={[
-            //['Cadastrar boleto', 'cadastrar-boleto'],
+            ['Cadastrar boleto', 'cadastrar-boleto'],
             ['Upload de imagens', 'upload-imagem'],
             ['Atualizar Tendências', '/atualizar-tendencias'],
             ['Lojista: Cadastrar', '/cadastrar-lojista'],
             ['Lojista: Ver/Editar', '/visualizar-lojista'],
             ['Afiliado: Cadastrar', '/cadastrar-afiliado'],
             ['Afiliado: Ver/Editar', '/visualizar-afiliado']]} /></Menu>,
-        //'/cadastrar-boleto': <Menu title='Cadastrar boleto'><RegisterBillet /></Menu>,
+        '/cadastrar-boleto': <Menu title='Cadastrar boleto'><RegisterBillet /></Menu>,
         '/requerir-material': <Menu title='Requerir material'><MaterialRequest /></Menu>,
         '/visualizar-lojista': <Menu title='Visualizar lojista'><UpdateStoreowner /></Menu>,
         '/cadastrar-lojista': <Menu title='Cadastrar lojista'><RegisterStoreowner /></Menu>,

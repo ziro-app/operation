@@ -42,6 +42,7 @@ const MaterialRequest = () => {
                     <FormInput name='category' label='Categoria' input={
                         <Dropdown
                             value={category}
+                            readOnly={true}
                             onChange={({ target: { value } }) => setCategory(value)}
                             onChangeKeyboard={element =>
                                 element ? setCategory(element.value) : null
@@ -60,6 +61,7 @@ const MaterialRequest = () => {
                     <FormInput name='itemIsOver' label='O item já acabou ?' input={
                         <Dropdown
                             value={itemIsOver}
+                            readOnly={true}
                             onChange={({ target: { value } }) => setItemIsOver(value)}
                             onChangeKeyboard={element =>
                                 element ? setItemIsOver(element.value) : null
