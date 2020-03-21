@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import routeMatcher from '@ziro/router'
 import Login from './Login/index'
@@ -8,7 +8,6 @@ import ResendEmail from './ResendEmail/index'
 import ResetPass from './ResetPass/index'
 import ConfirmEmail from '@bit/vitorbarbosa19.ziro.confirm-email'
 import { Menu } from './Menu/index'
-import { userContext } from './appContext'
 import MyAccount from '@bit/vitorbarbosa19.ziro.my-account'
 import UpdateEmail from './UpdateEmail/index'
 import UpdatePass from './UpdatePass/index'
@@ -29,7 +28,6 @@ import UpdateBrandsAndTrends from './UpdateBrandsAndTrends'
 
 
 const Router = ({ isLogged }) => {
-    const { nickname } = useContext(userContext)
     const publicRoutes = {
         '/login': <Login />,
         '/cadastrar': <Register />,
@@ -46,7 +44,7 @@ const Router = ({ isLogged }) => {
         '/deletar-conta': <DeleteAccount />,
         '/administrativo': <Menu title='Administrativo'><Submenu options={[
             ['Requisição de Material', 'requerir-material'],
-            nickname === 'Claudia'? ['Entrada/Saída do Caixa', 'entrada-saida'] : []]} /></Menu>,
+            ['Entrada/Saída do Caixa', 'entrada-saida']]} /></Menu>,
         '/assessoria': <Menu title='Assessoria'><Submenu options={[
             ['Cadastrar boleto', 'cadastrar-boleto'],
             ['Upload de imagens', 'upload-imagem'],
@@ -64,7 +62,8 @@ const Router = ({ isLogged }) => {
         '/upload-imagem': <Menu title='Upload de imagens'><ImageUpload /></Menu>,
         '/update': <Menu title='Atualizar informações'><UpdateUserInfo /></Menu>,
         '/atualizar-tendencias': <Menu title='Atualizar tendências' ><UpdateBrandsAndTrends /></Menu>,
-        '/entrada-saida': <Menu title='Entrada/Saída do Caixa' ><RegisterInputOutput /></Menu>
+        '/entrada-saida': <Menu title='Entrada/Saída do Caixa' ><RegisterInputOutput /></Menu>,
+        '/show-info': <Menu title='Entrada/Saída do Caixa' ><ShowInfo /></Menu>
     }
     const homeRoute = '/conta'
     return routeMatcher(isLogged, publicRoutes, privateRoutes, homeRoute, <NotFound fallback='/' />)

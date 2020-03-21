@@ -110,9 +110,9 @@ const RegisterBillet = () => {
 
     const calculateRevenue = (value, comissao) => {
         if(value && comissao){
-            let percent = parseFloat(comissao.replace('%', ''))/100
+            let percent = parseFloat(comissao)/100
             let val = round((parseFloat(value) * percent), 2)
-            setRevenue((val).toLocaleString('en-USA', { minimumFractionDigits: 2, style: 'currency', currency: 'BRL' }).replace(/\s/g, ''))
+            setRevenue(val)
         }
     }
 
@@ -250,7 +250,7 @@ const RegisterBillet = () => {
                     } />,
                     <FormInput name='percentage' label='Porcentagem' input={
                         <InputText
-                            value={provider.comissao}
+                            value={provider.comissao? `${provider.comissao} %` : ''}
                             onChange={() => {}}
                             readOnly={true}
                             placeholder='0.00 %'
@@ -258,7 +258,7 @@ const RegisterBillet = () => {
                     } />,
                     <FormInput name='revenue' label='Receita' input={
                         <InputText
-                            value={revenue}
+                            value={revenue? `R$ ${revenue}` : ''}
                             onChange={() => {}}
                             readOnly={true}
                             placeholder='R$ 0.00'

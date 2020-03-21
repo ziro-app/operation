@@ -75,7 +75,7 @@ const fetch = (setIsLoading, setIsError, setProviders, setStoreowners, setAdviso
             const dataProviders = await axios(configProvider)
             const [, ...listProviders] = dataProviders.data.values
             listProviders.map(provider => {
-                providers.push(Object.assign({'nome': provider[0]? provider[0] : '', 'comissao': provider[1]? provider[1] : '', 'endereco': '' }))
+                providers.push(Object.assign({'nome': provider[0]? provider[0] : '', 'comissao': provider[1]? provider[1].replace(/\s/g, '').replace('%', '') : '', 'endereco': '' }))
             })
             setProviders(providers)
             const addresses = listProviders.map( (supplierInfo) => Object.assign({}, {

@@ -1,47 +1,24 @@
 import { post } from 'axios'
-
-const months = {
-    '01': 'Jan',
-    '02': 'Fev',
-    '03': 'Mar',
-    '04': 'Apr',
-    '05': 'May',
-    '06': 'Jun',
-    '07': 'Jul',
-    '08': 'Aug',
-    '09': 'Sep',
-    '10': 'Oct',
-    '11': 'Nov',
-    '12': 'Dec'
-}
-
-const dateFormat = (date) => {
-    let parts = date.split('/')
-    return `${parts[0]}/${months[parts[1]]}/${parts[2]}`
-}
+import { dateHourFormatter, intFormatter, numberFormatter, singleDateFormatter } from './utils'
 
 const sendToBackend = state => () => {
     const { billet, saleDate, provider, storeowner, billetValue, paymentMethod, romaneio,
         dueDate, revenue, advisor, type, setSearchedName, setBillet, setSaleDate, setProvider, setStoreowner,
         setBilletValue, setPaymentMethod, setRomaneio, setDueDate, setRevenue, setAdvisor,
         setType } = state
-    const value = billetValue? parseFloat(billetValue.replace(/\,/g, '.')).toLocaleString('en-USA', { minimumFractionDigits: 2, style: 'currency', currency: 'BRL' }).replace(/\s/g, '') : ''
-    const comissao = provider.comissao? provider.comissao.replace(',', '.') : ''
-    const venda = saleDate? dateFormat(saleDate) : ''
-    const vencimento = dueDate? dateFormat(dueDate) : ''
+    const comissao = numberFormatter(provider.comissao)? numberFormatter(provider.comissao)/100 : ''
     const today = new Date()
-    const data = `${today.getDate()}/${months[today.getMonth()+1 >= 10? today.getMonth()+1 : `0${today.getMonth()+1}`]}/${today.getFullYear()}`
     const url = process.env.SHEET_URL
     const body = {
         apiResource: 'values',
         apiMethod: 'append',
-        spreadsheetId: process.env.SHEET_ID_BILLETS,
+        spreadsheetId: process.env.SHEET_ID_BILLETS, //'1x6T_309HUNijByr1B_2Ofi0oFG3USyTAWH66QV-6L-0',
         range: 'Boletos!A1',
         resource: {
             values: [
-                [data, romaneio, billet, today.getMonth()+1, today.getFullYear(), venda,
-                    storeowner, value, comissao, revenue, provider.nome, paymentMethod,
-                    type, advisor, vencimento, '-', provider.endereco.split(' — ')[0],
+                [dateHourFormatter(today), intFormatter(romaneio), intFormatter(billet), today.getMonth()+1, today.getFullYear(), singleDateFormatter(saleDate),
+                    storeowner, numberFormatter(billetValue), comissao, revenue, provider.nome, paymentMethod,
+                    type, advisor, singleDateFormatter(dueDate), '-', provider.endereco.split(' — ')[0],
                     provider.endereco.split(' — ')[1], '', '', '', '', '']
             ]
         },
