@@ -10,8 +10,15 @@ container = {
 name = {
 	fontFamily: 'Rubik'
 },
-containerBody = {
+
+containerOneColumn = {
     display: 'grid',
-    gridTemplateColumns: '1fr 1fr', // fr -> Define a largura da coluna como 'flex'
+    gridTemplateColumns: '1fr',
+    gridColumnGap: '8px'
+},
+
+containerTwoColumn = {
+    display: 'grid',
+    gridTemplateColumns: '1fr 1fr',
     gridColumnGap: '8px'
 }

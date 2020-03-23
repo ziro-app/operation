@@ -36,7 +36,7 @@ const Router = ({ isLogged }) => {
         '/reenviar-email': <ResendEmail />,
         '/resetar-senha': <ResetPass />,
         '/confirmar-email': <ConfirmEmail />,
-        '/show-info': <ShowInfo needContainer={true} />
+        '/show-info': <ShowInfo />
     }
     const privateRoutes = { // Menu can't be put inside the components because then it'll unmount on transition
         '/': <Menu title='Minha Conta'><MyAccount /></Menu>,
@@ -65,7 +65,7 @@ const Router = ({ isLogged }) => {
         '/update': <Menu title='Atualizar informações'><UpdateUserInfo /></Menu>,
         '/atualizar-tendencias': <Menu title='Atualizar tendências' ><UpdateBrandsAndTrends /></Menu>,
         '/entrada-saida': <Menu title='Entrada/Saída do Caixa' ><RegisterInputOutput /></Menu>,
-        '/show-info': <Menu title='Lojista' ><ShowInfo /></Menu>
+        '/show-info': <ShowInfo internal={true} />
     }
     return routeMatcher(isLogged, publicRoutes, privateRoutes, <Login />, <NotFound fallback='/' />)
 }
