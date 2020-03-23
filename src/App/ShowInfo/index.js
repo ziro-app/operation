@@ -8,7 +8,7 @@ import { containerWithPadding } from '@ziro/theme'
 import fetch from './fetch'
 import { container, name, containerBody } from './styles'
 
-const ShowInfo = () => {
+const ShowInfo = ({ needContainer = false }) => {
     const [isLoading, setIsLoading] = useState(true)
     const [isError, setIsError] = useState(false)
     const [partAddress, setPartAddress] = useState([])
@@ -20,15 +20,15 @@ const ShowInfo = () => {
     if (isError) return <Error />
 
     return (
-        <div style={containerWithPadding}>
-            <div style={container}>
+        <div style={needContainer? containerWithPadding : {}}>
+            {needContainer && <div style={container}>
                 <Logo />
                 <label style={name}>Ziro Negócios Digitais Ltda</label>
                 <label>28.026.371/0001-61</label>
                 <label>R. Lubavitch, 71, Bom Retiro</label>
                 <label>01123-110, São Paulo - SP</label>
                 <SocialMedia />
-            </div>
+            </div>}
             <div style={containerBody}>
                 <InputEdit
                         name="Nome"

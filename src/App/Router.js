@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import routeMatcher from '@ziro/router'
+import { Router2 as routeMatcher} from '@ziro/router'
 import Login from './Login/index'
 import Register from './Register/index'
 import LoginTrouble from '@bit/vitorbarbosa19.ziro.login-trouble'
@@ -29,15 +29,17 @@ import UpdateBrandsAndTrends from './UpdateBrandsAndTrends'
 
 const Router = ({ isLogged }) => {
     const publicRoutes = {
+        '/': <Login />,
         '/login': <Login />,
         '/cadastrar': <Register />,
         '/problemas-acesso': <LoginTrouble />,
         '/reenviar-email': <ResendEmail />,
         '/resetar-senha': <ResetPass />,
         '/confirmar-email': <ConfirmEmail />,
-        '/show-info': <ShowInfo />
+        '/show-info': <ShowInfo needContainer={true} />
     }
     const privateRoutes = { // Menu can't be put inside the components because then it'll unmount on transition
+        '/': <Menu title='Minha Conta'><MyAccount /></Menu>,
         '/conta': <Menu title='Minha Conta'><MyAccount /></Menu>,
         '/trocar-email': <UpdateEmail />,
         '/trocar-senha': <UpdatePass />,
@@ -63,10 +65,9 @@ const Router = ({ isLogged }) => {
         '/update': <Menu title='Atualizar informações'><UpdateUserInfo /></Menu>,
         '/atualizar-tendencias': <Menu title='Atualizar tendências' ><UpdateBrandsAndTrends /></Menu>,
         '/entrada-saida': <Menu title='Entrada/Saída do Caixa' ><RegisterInputOutput /></Menu>,
-        '/show-info': <Menu title='Entrada/Saída do Caixa' ><ShowInfo /></Menu>
+        '/show-info': <Menu title='Lojista' ><ShowInfo /></Menu>
     }
-    const homeRoute = '/conta'
-    return routeMatcher(isLogged, publicRoutes, privateRoutes, homeRoute, <NotFound fallback='/' />)
+    return routeMatcher(isLogged, publicRoutes, privateRoutes, <Login />, <NotFound fallback='/' />)
 }
 
 Router.propTypes = {
