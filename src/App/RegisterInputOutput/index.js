@@ -9,7 +9,7 @@ import Dropdown from '@bit/vitorbarbosa19.ziro.dropdown'
 const InputOutput = () => {
     const { nickname } = useContext(userContext)
     const [category, setCategory] = useState('')
-    const categoryList = ['Entrada', 'Saída']
+    const categoryList = ['Entradas', 'Saída']
     const [value, setValue] = useState('')
     const [description, setDescription] = useState('')
     const state = { nickname, category, value, description, setCategory, setValue, setDescription }
