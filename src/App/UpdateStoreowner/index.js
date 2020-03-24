@@ -11,8 +11,6 @@ import maskInput from '@ziro/mask-input'
 import capitalize from '@ziro/capitalize'
 import fetch from './fetch'
 import { inputEditUpdate, dropdownUpdate } from './sendToBackend'
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
 const UpdateStoreowner = () => {
     const [isLoading, setIsLoading] = useState(true)
@@ -82,6 +80,8 @@ const UpdateStoreowner = () => {
     const [storeownerRow, setStoreownerRow] = useState('')
     const [textArea, setTextArea] = useState('')
     const textAreaRef = useRef(null)
+    const [copyResultText, setCopyResultText] = useState('')
+    const [copyResultStatus, setCopyResultStatus] = useState(true)
     const setState = { setAffiliateName, setAffiliateCpf, setAdvisor, setSalesman }
     const state = { affiliateName, affiliateCpf, advisor, salesman, ...setState }
     const statesList = ['AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA', 'MT', 'MS', 'MG', 'PA', 'PB', 'PR', 'PE', 'PI', 'RJ', 'RN', 'RS', 'RO', 'RR', 'SC', 'SP', 'SE', 'TO']
@@ -338,34 +338,25 @@ const UpdateStoreowner = () => {
                 e.preventDefault()
                 textAreaRef.current.select()
                 document.execCommand('copy')
-                toast.success('Link copiado com sucesso!', {
-                    position: "bottom-center",
-                    autoClose: 2800,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true
-                });
+                setCopyResultStatus(true)
+                setCopyResultText('Link copiado com sucesso!')
+                setTimeout(() => {
+                    setCopyResultText('')
+                }, 2500)
             } catch (error) {
                 console.log(error)
-                toast.warn('Ocorreu algum erro, tente novamente.', {
-                    position: "bottom-center",
-                    autoClose: 2800,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true
-                });
+                setCopyResultStatus(false)
+                setCopyResultText('Ocorreu um erro, tente novamente.')
+                setTimeout(() => {
+                    setCopyResultText('')
+                }, 2500)
             }
         } else {
-            toast.error('Seu navegador não suporta o recurso de cópia.', {
-                position: "bottom-center",
-                autoClose: 2800,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true
-            });
+            setCopyResultStatus(false)
+            setCopyResultText('Seu navegador não suporta o recurso de cópia.')
+            setTimeout(() => {
+                setCopyResultText('')
+            }, 2500)
         }
 
     }
@@ -398,17 +389,6 @@ const UpdateStoreowner = () => {
             />
             <input type="text" style={{ position: 'absolute', left: '-9999px' }} value={textArea} ref={textAreaRef} />
             {foundStoreowner ? <>
-                <ToastContainer
-                    position="bottom-center"
-                    autoClose={2500}
-                    hideProgressBar={false}
-                    newestOnTop={false}
-                    closeOnClick
-                    rtl={false}
-                    pauseOnVisibilityChange
-                    draggable
-                    pauseOnHover
-                />
                 <div style={{padding: '10px 0'}} >
                     <Button
                         type="button"
@@ -417,6 +397,11 @@ const UpdateStoreowner = () => {
                         click={copyToClipboard}
                     />
                 </div>
+                {copyResultText &&
+                    <div style={{padding: '10px 0', fontSize: '15px', color: copyResultStatus? 'green' : 'red', textAlign: 'center'}} >
+                        <span>{copyResultText}</span>
+                    </div>
+                }
                 <InputEdit
                     name="Assessor(a)"
                     value={storeowner.assessor}
