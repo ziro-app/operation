@@ -36,4 +36,10 @@ containerTwoColumn = {
     display: 'grid',
     gridTemplateColumns: '1fr 1fr',
     gridColumnGap: '8px'
+},
+
+containerTwoColumnButton = {
+    display: 'grid',
+    gridTemplateColumns: '2fr 1fr',
+    gridColumnGap: '8px'
 }

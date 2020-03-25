@@ -1,17 +1,51 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import InputEdit from '@bit/vitorbarbosa19.ziro.input-edit'
 import Spinner from '@bit/vitorbarbosa19.ziro.spinner'
 import Error from '@bit/vitorbarbosa19.ziro.error'
 import Logo from '@bit/vitorbarbosa19.ziro.logo'
 import SocialMedia from '@bit/vitorbarbosa19.ziro.social-media'
+import Button from '@bit/vitorbarbosa19.ziro.button'
 import { containerWithPadding } from '@ziro/theme'
 import fetch from './fetch'
-import { container, name, block, blockTitle, containerOneColumn, containerTwoColumn } from './styles'
+import { container, name, block, blockTitle, containerOneColumn, containerTwoColumn, containerTwoColumnButton } from './styles'
+import { alertColor, successColor } from '@ziro/theme'
 
 const ShowInfo = () => {
     const [isLoading, setIsLoading] = useState(true)
     const [isError, setIsError] = useState(false)
+    const [copyResultText, setCopyResultText] = useState('')
+    const [copyResultStatus, setCopyResultStatus] = useState(true)
+    const textAreaRef = useRef(null)
     const [storeowner, setStoreowner] = useState({ 'cadastro': '', 'afiliado': '', 'afiliado_cpf': '', 'lojista': '', 'rg': '', 'cpf': '', 'nascimento': '', 'insta': '', 'cnpj': '', 'ie': '', 'razao': '', 'fantasia': '', 'endereco': '', 'bairro': '', 'cep': '', 'cidade': '', 'estado': '', 'fone': '', 'email': '', 'assessor': '', 'vendedor': '', 'whats': '', 'entrega': '', 'bairroEntrega': '', 'cepEntrega': '', 'cidadeEntrega': '', 'estadoEntrega': '' })
+
+    const copyToClipboard = (e) => {
+        e.preventDefault()
+        if(document.queryCommandSupported('copy')) {
+            try {
+                textAreaRef.current.select()
+                document.execCommand('copy')
+                setCopyResultStatus(true)
+                setCopyResultText('Copiado !')
+                setTimeout(() => {
+                    setCopyResultText('')
+                }, 2500)
+            } catch (error) {
+                console.log(error)
+                setCopyResultStatus(false)
+                setCopyResultText('Erro ao copiar.')
+                setTimeout(() => {
+                    setCopyResultText('')
+                }, 2500)
+            }
+        } else {
+            setCopyResultStatus(false)
+            setCopyResultText('Sem suporte para cópia.')
+            setTimeout(() => {
+                setCopyResultText('')
+            }, 2500)
+        }
+
+    }
 
     useEffect(() => fetch(setIsLoading, setIsError, setStoreowner, new URLSearchParams(window.location.search).get('doc')), [])
 
@@ -20,6 +54,7 @@ const ShowInfo = () => {
 
     return (
         <div style={containerWithPadding}>
+            <input type="text" style={{ position: 'absolute', left: '-9999px' }} value={storeowner.cnpj} ref={textAreaRef} />
             <div style={container}>
                 <Logo />
                 <label style={name}>Ziro Negócios Digitais Ltda</label>
@@ -28,9 +63,9 @@ const ShowInfo = () => {
                 <label>01123-110, São Paulo - SP</label>
                 <SocialMedia />
             </div>
-            <div style={block}>   
+            <div style={block}>
                 <label style={blockTitle}>Informações do CNPJ</label>
-                <div style={containerOneColumn} >
+                <div style={containerTwoColumnButton} >
                     <InputEdit
                         name="CNPJ"
                         value={storeowner.cnpj? storeowner.cnpj : ''}
@@ -42,6 +77,22 @@ const ShowInfo = () => {
                         editable={false}
                         isLoading={false}
                     />
+                    <div >
+                        <Button
+                            type="button"
+                            cta="Copiar"
+                            template="regular"
+                            click={copyToClipboard}
+                        />
+                        {copyResultText ?
+                            <div style={{padding: '5px 0 0', fontSize: '15px', color: copyResultStatus? successColor : alertColor, textAlign: 'center'}} >
+                                <span>{copyResultText}</span>
+                            </div>
+                            : <div style={{height: '26px'}}>&nbsp;</div>
+                        }
+                    </div>
+                </div>
+                <div style={containerOneColumn} >
                     <InputEdit
                         name="IE"
                         value={storeowner.ie? storeowner.ie : ''}
