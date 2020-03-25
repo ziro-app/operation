@@ -29,94 +29,24 @@ const ShowInfo = () => {
                 <SocialMedia />
             </div>
             <div style={block}>   
-                <label style={name}>Informações do lojista</label>
+                <label style={name}>Informações do CNPJ</label>
                 <div style={containerOneColumn} >
-                    <InputEdit
-                        name="Nome"
-                        value={storeowner.lojista? storeowner.lojista : ''}
-                        onChange={() => {}}
-                        validateInput={() => {}}
-                        submit={() => { }}
-                        setError={() => { }}
-                        error={''}
-                        editable={false}
-                        isLoading={false}
-                    />
-                </div>
-                <div style={containerTwoColumn} >
-                    <InputEdit
-                        name="RG"
-                        value={storeowner.rg? storeowner.rg : ''}
-                        onChange={() => {}}
-                        validateInput={() => {}}
-                        submit={() => { }}
-                        setError={() => { }}
-                        error={''}
-                        editable={false}
-                        isLoading={false}
-                    />
-                    <InputEdit
-                        name="CPF"
-                        value={storeowner.cpf ? storeowner.cpf : ''}
-                        onChange={() => {}}
-                        validateInput={() => {}}
-                        submit={() => { }}
-                        setError={() => { }}
-                        error={''}
-                        editable={false}
-                        isLoading={false}
-                    />
-                    <InputEdit
-                        name="Nascimento"
-                        value={storeowner.nascimento? storeowner.nascimento : ''}
-                        onChange={() => {}}
-                        validateInput={() => {}}
-                        submit={() => { }}
-                        setError={() => { }}
-                        error={''}
-                        editable={false}
-                        isLoading={false}
-                    />
-                    <InputEdit
-                        name="Whatsapp"
-                        value={storeowner.whats? storeowner.whats : ''}
-                        onChange={() => {}}
-                        validateInput={() => {}}
-                        submit={() => { }}
-                        setError={() => { }}
-                        error={''}
-                        editable={false}
-                        isLoading={false}
-                    />
-                </div>
-                <div style={containerOneColumn} >
-                    <InputEdit
-                        name="Instagram da loja"
-                        value={storeowner.insta? storeowner.insta : ''}
-                        onChange={() => {}}
-                        validateInput={() => {}}
-                        submit={() => {}}
-                        setError={() => { }}
-                        error={''}
-                        editable={false}
-                        isLoading={false}
-                    />
-                    <InputEdit
-                        name="Email"
-                        value={storeowner.email? storeowner.email.toLowerCase() : ''}
-                        onChange={() => { }}
-                        validateInput={() => { }}
-                        submit={() => { }}
-                        setError={() => { }}
-                        error={''}
-                        editable={false}
-                        isLoading={false}
-                    />
                     <InputEdit
                         name="CNPJ"
                         value={storeowner.cnpj? storeowner.cnpj : ''}
                         onChange={() => { }}
                         validateInput={() => { }}
+                        submit={() => { }}
+                        setError={() => { }}
+                        error={''}
+                        editable={false}
+                        isLoading={false}
+                    />
+                    <InputEdit
+                        name="IE"
+                        value={storeowner.ie? storeowner.ie : ''}
+                        onChange={() => {}}
+                        validateInput={() => {}}
                         submit={() => { }}
                         setError={() => { }}
                         error={''}
@@ -145,8 +75,6 @@ const ShowInfo = () => {
                         editable={false}
                         isLoading={false}
                     />
-                </div>
-                <div style={containerTwoColumn} >
                     <InputEdit
                         name="Telefone"
                         value={storeowner.fone? storeowner.fone : ''}
@@ -159,17 +87,29 @@ const ShowInfo = () => {
                         isLoading={false}
                     />
                     <InputEdit
-                        name="IE"
-                        value={storeowner.ie? storeowner.ie : ''}
-                        onChange={() => {}}
-                        validateInput={() => {}}
+                        name="Email"
+                        value={storeowner.email? storeowner.email.toLowerCase() : ''}
+                        onChange={() => { }}
+                        validateInput={() => { }}
                         submit={() => { }}
                         setError={() => { }}
                         error={''}
                         editable={false}
                         isLoading={false}
                     />
+                    <InputEdit
+                        name="Instagram da loja"
+                        value={storeowner.insta? storeowner.insta : ''}
+                        onChange={() => {}}
+                        validateInput={() => {}}
+                        submit={() => {}}
+                        setError={() => { }}
+                        error={''}
+                        editable={false}
+                        isLoading={false}
+                    />
                 </div>
+                <label style={{display: 'grid',marginTop: '50px',...name}}>Endereço do CNPJ</label>
                 <div style={containerOneColumn} >
                     <InputEdit
                         name="Endereço"
@@ -229,9 +169,70 @@ const ShowInfo = () => {
                         isLoading={false}
                     />
                 </div>
+                <label style={{display: 'grid',marginTop: '50px',...name}}>Informações do lojista</label>
                 <div style={containerOneColumn} >
                     <InputEdit
-                        name="Endereço (entrega)"
+                        name="Nome"
+                        value={storeowner.lojista? storeowner.lojista : ''}
+                        onChange={() => {}}
+                        validateInput={() => {}}
+                        submit={() => { }}
+                        setError={() => { }}
+                        error={''}
+                        editable={false}
+                        isLoading={false}
+                    />
+                </div>
+                <div style={containerTwoColumn} >
+                    <InputEdit
+                        name="RG"
+                        value={storeowner.rg? storeowner.rg : ''}
+                        onChange={() => {}}
+                        validateInput={() => {}}
+                        submit={() => { }}
+                        setError={() => { }}
+                        error={''}
+                        editable={false}
+                        isLoading={false}
+                    />
+                    <InputEdit
+                        name="CPF"
+                        value={storeowner.cpf ? storeowner.cpf : ''}
+                        onChange={() => {}}
+                        validateInput={() => {}}
+                        submit={() => { }}
+                        setError={() => { }}
+                        error={''}
+                        editable={false}
+                        isLoading={false}
+                    />
+                    <InputEdit
+                        name="Nascimento"
+                        value={storeowner.nascimento? storeowner.nascimento : ''}
+                        onChange={() => {}}
+                        validateInput={() => {}}
+                        submit={() => { }}
+                        setError={() => { }}
+                        error={''}
+                        editable={false}
+                        isLoading={false}
+                    />
+                    <InputEdit
+                        name="Whatsapp"
+                        value={storeowner.whats? storeowner.whats : ''}
+                        onChange={() => {}}
+                        validateInput={() => {}}
+                        submit={() => { }}
+                        setError={() => { }}
+                        error={''}
+                        editable={false}
+                        isLoading={false}
+                    />
+                </div>
+                <label style={{display: 'grid',marginTop: '50px',...name}}>Endereço de entrega</label>
+                <div style={containerOneColumn} >
+                    <InputEdit
+                        name="Endereço"
                         value={storeowner.entrega? storeowner.entrega : ''}
                         onChange={() => {}}
                         validateInput={() => {}}
@@ -244,7 +245,7 @@ const ShowInfo = () => {
                 </div>
                 <div style={containerTwoColumn}>
                     <InputEdit
-                        name="Bairro (entrega)"
+                        name="Bairro"
                         value={storeowner.bairroEntrega? storeowner.bairroEntrega : ''}
                         onChange={() => {}}
                         validateInput={() => {}}
@@ -255,7 +256,7 @@ const ShowInfo = () => {
                         isLoading={false}
                     />
                     <InputEdit
-                        name="Cep (entrega)"
+                        name="Cep"
                         value={storeowner.cepEntrega? storeowner.cepEntrega : ''}
                         onChange={() => {}}
                         validateInput={() => {}}
@@ -266,7 +267,7 @@ const ShowInfo = () => {
                         isLoading={false}
                     />
                     <InputEdit
-                        name="Cidade (entrega)"
+                        name="Cidade"
                         value={storeowner.cidadeEntrega? storeowner.cidadeEntrega : ''}
                         onChange={() => {}}
                         validateInput={() => {}}
@@ -277,7 +278,7 @@ const ShowInfo = () => {
                         isLoading={false}
                     />
                     <InputEdit
-                        name="Estado (entrega)"
+                        name="Estado"
                         value={storeowner.estadoEntrega? storeowner.estadoEntrega : ''}
                         onChange={() => {}}
                         validateInput={() => {}}
