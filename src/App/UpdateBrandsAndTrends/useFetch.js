@@ -26,7 +26,7 @@ export default () => {
         }
         axios(config)
             .then(({ data: { values } }) => {
-                const _brandsAndTrends = values.map(([name,insta,trend1,trend2,trend3,price]) => [name,[trend1,trend2,trend3],price])
+                const _brandsAndTrends = values.map(([name,insta,trend1,trend2,trend3,price]) => [name,[trend1,trend2,trend3].filter(trend => !!trend),price||''])
                 setBrandsAndTrends(_brandsAndTrends)
             })
             .catch(setError)
