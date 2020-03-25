@@ -7,8 +7,15 @@ container = {
 	borderRadius: '4px'
 },
 
+block = {
+    marginTop: '50px',
+    textAlign: 'center'
+},
+
 name = {
-	fontFamily: 'Rubik'
+	fontFamily: 'Rubik',
+    fontSize: '1.4rem',
+    textTransform: 'uppercase'
 },
 
 containerOneColumn = {
