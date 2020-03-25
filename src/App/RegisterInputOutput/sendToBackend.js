@@ -2,7 +2,7 @@ import { post } from 'axios'
 
 const dateHourFormatter = (date) => {
     let dateString = date.toString()
-    return `${date.getMonth()+1}/${dateString.substr(8,2)}/${dateString.substr(11,13)}`
+    return `${dateString.substr(8,2)}/${date.getMonth()+1 >= 10? date.getMonth()+1 : `0${date.getMonth()+1}`}/${dateString.substr(11,13)}`
 }
 
 const sendToBackend = state => () => {
