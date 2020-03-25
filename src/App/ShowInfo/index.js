@@ -169,7 +169,7 @@ const ShowInfo = () => {
                         isLoading={false}
                     />
                 </div>
-                <label style={blockTitle}>Informações do lojista</label>
+                <label style={blockTitle}>Informações do comprador</label>
                 <div style={containerOneColumn} >
                     <InputEdit
                         name="Nome"
