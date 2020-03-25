@@ -1,3 +1,5 @@
+import { fontTitle, fontSizeInput, gradient, shadow } from '@ziro/theme'
+
 export const
 
 container = {
@@ -40,6 +42,25 @@ containerTwoColumn = {
 
 containerTwoColumnButton = {
     display: 'grid',
-    gridTemplateColumns: '2fr 1fr',
-    gridColumnGap: '8px'
+    gridTemplateColumns: '60% 40%'
+},
+
+button = {
+    marginTop: '10px',
+    display: 'block', // necessary for link version
+    WebkitAppearance: 'none',
+    WebkitTapHighlightColor: 'rgba(0,0,0,0)',
+    MozAppearance: 'none',
+    outline: 'none',
+    cursor: 'pointer',
+    width: '100%',
+    padding: '8px 0px',
+    border: 'none',
+    borderRadius: '20px',
+    fontFamily: fontTitle,
+    fontSize: '1.2rem',
+    color: '#FFF',
+    textAlign: 'center',
+    background: gradient,
+    boxShadow: `0px 3px 12px -3px rgba(34,34,34,0.65)`
 }

@@ -7,7 +7,7 @@ import SocialMedia from '@bit/vitorbarbosa19.ziro.social-media'
 import Button from '@bit/vitorbarbosa19.ziro.button'
 import { containerWithPadding } from '@ziro/theme'
 import fetch from './fetch'
-import { container, name, block, blockTitle, containerOneColumn, containerTwoColumn, containerTwoColumnButton } from './styles'
+import { container, name, block, blockTitle, containerOneColumn, containerTwoColumn, containerTwoColumnButton, button } from './styles'
 import { alertColor, successColor } from '@ziro/theme'
 
 const ShowInfo = () => {
@@ -80,15 +80,16 @@ const ShowInfo = () => {
                     <div >
                         <Button
                             type="button"
-                            cta="Copiar"
+                            cta="copiar cnpj"
                             template="regular"
                             click={copyToClipboard}
+                            style={button}
                         />
                         {copyResultText ?
-                            <div style={{padding: '5px 0 0', fontSize: '15px', color: copyResultStatus? successColor : alertColor, textAlign: 'center'}} >
+                            <div style={{padding: '6px 0 0', fontSize: '1.3rem', color: copyResultStatus? successColor : alertColor, textAlign: 'center'}} >
                                 <span>{copyResultText}</span>
                             </div>
-                            : <div style={{height: '26px'}}>&nbsp;</div>
+                            : <div style={{height: '24px'}}>&nbsp;</div>
                         }
                     </div>
                 </div>
