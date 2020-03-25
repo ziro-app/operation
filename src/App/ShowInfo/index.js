@@ -6,7 +6,7 @@ import Logo from '@bit/vitorbarbosa19.ziro.logo'
 import SocialMedia from '@bit/vitorbarbosa19.ziro.social-media'
 import { containerWithPadding } from '@ziro/theme'
 import fetch from './fetch'
-import { container, block, name, containerOneColumn, containerTwoColumn } from './styles'
+import { container, name, block, blockTitle, containerOneColumn, containerTwoColumn } from './styles'
 
 const ShowInfo = () => {
     const [isLoading, setIsLoading] = useState(true)
@@ -29,7 +29,7 @@ const ShowInfo = () => {
                 <SocialMedia />
             </div>
             <div style={block}>   
-                <label style={name}>Informações do CNPJ</label>
+                <label style={blockTitle}>Informações do CNPJ</label>
                 <div style={containerOneColumn} >
                     <InputEdit
                         name="CNPJ"
@@ -109,7 +109,7 @@ const ShowInfo = () => {
                         isLoading={false}
                     />
                 </div>
-                <label style={{display: 'grid',marginTop: '50px',...name}}>Endereço do CNPJ</label>
+                <label style={blockTitle}>Endereço do CNPJ</label>
                 <div style={containerOneColumn} >
                     <InputEdit
                         name="Endereço"
@@ -169,7 +169,7 @@ const ShowInfo = () => {
                         isLoading={false}
                     />
                 </div>
-                <label style={{display: 'grid',marginTop: '50px',...name}}>Informações do lojista</label>
+                <label style={blockTitle}>Informações do lojista</label>
                 <div style={containerOneColumn} >
                     <InputEdit
                         name="Nome"
@@ -229,7 +229,7 @@ const ShowInfo = () => {
                         isLoading={false}
                     />
                 </div>
-                <label style={{display: 'grid',marginTop: '50px',...name}}>Endereço de entrega</label>
+                <label style={blockTitle}>Endereço de entrega</label>
                 <div style={containerOneColumn} >
                     <InputEdit
                         name="Endereço"

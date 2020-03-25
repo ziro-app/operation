@@ -7,15 +7,23 @@ container = {
 	borderRadius: '4px'
 },
 
+name = {
+	fontFamily: 'Rubik',
+    fontSize: '1.4rem',
+    textTransform: 'uppercase'
+},
+
 block = {
     marginTop: '50px',
     textAlign: 'center'
 },
 
-name = {
-	fontFamily: 'Rubik',
-    fontSize: '1.4rem',
-    textTransform: 'uppercase'
+blockTitle = {
+    ...name,
+    fontSize: '1.5rem',
+    display: 'grid',
+    marginTop: '50px',
+    textAlign: 'left',
 },
 
 containerOneColumn = {
