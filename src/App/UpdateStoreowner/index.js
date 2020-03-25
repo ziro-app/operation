@@ -388,7 +388,7 @@ const UpdateStoreowner = () => {
                 list={storeowners.map(storeowner => Object.values(storeowner)[1])}
                 placeholder="Pesquise o lojista"
             />
-            <input type="text" style={{ position: 'absolute', left: '-9999px' }} value={textArea} ref={textAreaRef} />
+            <input type="text" style={{ position: 'absolute', left: '-9999px' }} value={textArea} ref={textAreaRef} readOnly />
             {foundStoreowner ? <>
                 <div style={{padding: '20px 0 10px'}} >
                     <Button
@@ -398,7 +398,7 @@ const UpdateStoreowner = () => {
                         click={copyToClipboard}
                     />
                 </div>
-                {copyResultText ? 
+                {copyResultText ?
                     <div style={{padding: '5px 0 0', fontSize: '15px', color: copyResultStatus? successColor : alertColor, textAlign: 'center'}} >
                         <span>{copyResultText}</span>
                     </div>
