@@ -16,7 +16,7 @@ export default () => {
 				apiResource: 'values',
 				apiMethod: 'get',
 				spreadsheetId: process.env.SHEET_ID_BRANDS,
-				range: 'Trends!A2:E'
+				range: 'Trends!A2:F'
 			},
 			headers: {
 				'Authorization': process.env.SHEET_TOKEN,
@@ -26,7 +26,7 @@ export default () => {
         }
         axios(config)
             .then(({ data: { values } }) => {
-                const _brandsAndTrends = values.map(([name,insta,...trends]) => [name,trends])
+                const _brandsAndTrends = values.map(([name,insta,trend1,trend2,trend3,price]) => [name,[trend1,trend2,trend3],price])
                 setBrandsAndTrends(_brandsAndTrends)
             })
             .catch(setError)
