@@ -24,7 +24,7 @@ import UpdateUserInfo from './UpdateUserInfo/index'
 import MaterialRequest from './MaterialRequest/index'
 import RegisterInputOutput from './RegisterInputOutput/index'
 import NotFound from '@bit/vitorbarbosa19.ziro.not-found'
-import UpdateBrandsAndTrends from './UpdateBrandsAndTrends'
+import UpdateBrandsInfos from './UpdateBrandsInfos'
 
 
 const Router = ({ isLogged }) => {
@@ -50,7 +50,7 @@ const Router = ({ isLogged }) => {
         '/assessoria': <Menu title='Assessoria'><Submenu options={[
             ['Cadastrar boleto', 'cadastrar-boleto'],
             ['Upload de imagens', 'upload-imagem'],
-            ['Atualizar Tendências', '/atualizar-tendencias'],
+            ['Atualizar Fabricantes', '/atualizar-fabricantes'],
             ['Lojista: Cadastrar', '/cadastrar-lojista'],
             ['Lojista: Ver/Editar', '/visualizar-lojista'],
             ['Afiliado: Cadastrar', '/cadastrar-afiliado'],
@@ -63,7 +63,7 @@ const Router = ({ isLogged }) => {
         '/visualizar-afiliado': <Menu title='Visualizar afiliado'><UpdateAffiliate /></Menu>,
         '/upload-imagem': <Menu title='Upload de imagens'><ImageUpload /></Menu>,
         '/update': <Menu title='Atualizar informações'><UpdateUserInfo /></Menu>,
-        '/atualizar-tendencias': <Menu title='Atualizar tendências' ><UpdateBrandsAndTrends /></Menu>,
+        '/atualizar-fabricantes': <Menu title='Atualizar fabricantes' ><UpdateBrandsInfos /></Menu>,
         '/entrada-saida': <Menu title='Entrada/Saída do Caixa' ><RegisterInputOutput /></Menu>,
         '/show-info': <ShowInfo internal={true} />
     }
