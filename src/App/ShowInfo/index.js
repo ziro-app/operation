@@ -54,7 +54,7 @@ const ShowInfo = () => {
 
     return (
         <div style={containerWithPadding}>
-            <input type="text" style={{ position: 'absolute', left: '-9999px' }} value={storeowner.cnpj} ref={textAreaRef} />
+            <input type="text" style={{ position: 'absolute', left: '-9999px' }} value={storeowner.cnpj} ref={textAreaRef} readonly />
             <div style={container}>
                 <Logo />
                 <label style={name}>Ziro Negócios Digitais Ltda</label>
