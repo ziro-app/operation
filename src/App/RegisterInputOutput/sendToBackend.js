@@ -8,9 +8,7 @@ const dateHourFormatter = (date) => {
 const sendToBackend = state => () => {
 	const { nickname, category, value, description, setCategory, setValue, setDescription } = state
     const nome = nickname ? nickname.trim() : ''
-    console.log('Value -> '+value)
-    console.log('LocaleString -> '+parseFloat(value.replace(/\,/g, '.')).toLocaleString('en-USA', { maximumFractionDigits: 2 }))
-    const valor = value ? parseFloat(value.replace(/\,/g, '.')).toLocaleString('en-USA', { maximumFractionDigits: 2 }) : ''
+    const valor = value ? parseFloat(value.replace(/\,/g, '.')) : ''
     const descricao = description ? description.trim() : ''
     const url = process.env.SHEET_URL
     const data = dateHourFormatter(new Date())
