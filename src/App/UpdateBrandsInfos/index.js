@@ -10,9 +10,9 @@ import { container, block, title } from './styles'
 
 export default () => {
     
-    const { brandsAndTrends, fetchError, isLoading } = useFetch()
+    const { brandsInfos, fetchError, isLoading } = useFetch()
 
-	const { sendError, sendToBackend, success, isSending } = useSendToBackend(brandsAndTrends)
+	const { sendError, sendToBackend, success, isSending } = useSendToBackend(brandsInfos)
 	
 	if(sendError) console.log({ sendError })
 
@@ -22,7 +22,7 @@ export default () => {
         <div style={container}>
             <div style={block}>
                 <label style={title}>Como usar</label>
-                <label>Aperte o botão para atualizar o banco de dados com as últimas tendências da planilha</label>
+                <label>Aperte o botão para atualizar o banco de dados com as últimas informações da planilha de fabricantes (preços, tendências)</label>
             </div>
             <div style={block}>
                 <Button type='button' cta='Atualizar' click={sendToBackend} />

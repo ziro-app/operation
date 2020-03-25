@@ -1,7 +1,7 @@
 import { useCallback, useState } from "react"
 import { db } from '../../Firebase'
 
-export default (brandsAndTrends) => {
+export default (brandsInfos) => {
 
     const [isSending, setIsSending] = useState(false)
     const [sendError, setError] = useState(false)
@@ -10,7 +10,7 @@ export default (brandsAndTrends) => {
     const sendToBackend = useCallback(() => {
         setIsSending(true)
         const batch = db.batch()
-        brandsAndTrends.forEach(([brand, price, trends]) => 
+        brandsInfos.forEach(([brand, price, trends]) => 
             batch.set(db.collection('catalog-brands').doc(brand),{ trends, price },{ merge: true }))
         batch.commit()
             .then(() => {
@@ -18,7 +18,7 @@ export default (brandsAndTrends) => {
                 setSuccess(true)
             })
             .catch(setError)
-    },[brandsAndTrends])
+    },[brandsInfos])
 
     return { isSending, sendError, success, sendToBackend }
 }
