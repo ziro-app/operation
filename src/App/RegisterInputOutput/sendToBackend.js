@@ -33,7 +33,7 @@ const sendToBackend = state => () => {
 	}
 	return new Promise(async (resolve, reject) => {
         try {
-            if(nome === 'Claudia'){
+            if(true){
                 await post(url, body, config)
                 setCategory('')
                 setValue('')
