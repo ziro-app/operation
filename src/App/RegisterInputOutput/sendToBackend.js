@@ -1,17 +1,13 @@
 import { post } from 'axios'
-
-const dateHourFormatter = (date) => {
-    let dateString = date.toString()
-    return `${dateString.substr(8,2)}/${date.getMonth()+1 >= 10? date.getMonth()+1 : `0${date.getMonth()+1}`}/${dateString.substr(11,13)}`
-}
+import { dateHourFormatterUTC3, numberFormatter } from '../utils'
 
 const sendToBackend = state => () => {
-	const { nickname, category, value, description, setCategory, setValue, setDescription } = state
+    const { nickname, category, value, description, setCategory, setValue, setDescription } = state
     const nome = nickname ? nickname.trim() : ''
-    const valor = value ? parseFloat(value.replace(/\,/g, '.')) : ''
+    const valor = value ? numberFormatter(value) : ''
     const descricao = description ? description.trim() : ''
     const url = process.env.SHEET_URL
-    const data = dateHourFormatter(new Date())
+    const data = dateHourFormatterUTC3(new Date())
 
 	const body = {
 		apiResource: 'values',

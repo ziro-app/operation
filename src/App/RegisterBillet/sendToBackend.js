@@ -1,5 +1,5 @@
 import { post } from 'axios'
-import { dateHourFormatter, intFormatter, numberFormatter, singleDateFormatter } from './utils'
+import { dateHourFormatter, intFormatter, numberFormatter, singleDateFormatter } from '../utils'
 
 const sendToBackend = state => () => {
     const { billet, saleDate, provider, storeowner, billetValue, paymentMethod, romaneio,

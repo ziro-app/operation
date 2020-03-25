@@ -25,4 +25,10 @@ singleDateFormatter = (date) => {
         let parts = date.split('/')
         return `${parts[0]}/${months[parts[1]]}/${parts[2]}`
     } else return ''
+},
+dateHourFormatterUTC3 = (date) => {
+    let utc = date.toUTCString()
+	let parts = utc.substr(5).split(' ')
+	let partsHour = parts[3].split(':')
+	return `${parts[0]}/${date.getMonth()+1 >= 10? date.getMonth()+1 : `0${date.getMonth()+1}`}/${parts[2]} ${parseInt(partsHour[0])-3 >= 10? parseInt(partsHour[0])-3 : `0${parseInt(partsHour[0])-3}`}:${partsHour[1]}:${partsHour[2]}`
 }
