@@ -12,7 +12,7 @@ const sendToBackend = state => () => {
     const body = {
         apiResource: 'values',
         apiMethod: 'append',
-        spreadsheetId: process.env.SHEET_ID_BILLETS, //'1x6T_309HUNijByr1B_2Ofi0oFG3USyTAWH66QV-6L-0',
+        spreadsheetId: process.env.SHEET_ID_BILLETS,
         range: 'Boletos!A1',
         resource: {
             values: [
