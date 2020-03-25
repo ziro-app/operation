@@ -10,7 +10,7 @@ export default (brandsAndTrends) => {
     const sendToBackend = useCallback(() => {
         setIsSending(true)
         const batch = db.batch()
-        brandsAndTrends.forEach(([brand, trends, price]) => 
+        brandsAndTrends.forEach(([brand, price, trends]) => 
             batch.set(db.collection('catalog-brands').doc(brand),{ trends, price },{ merge: true }))
         batch.commit()
             .then(() => {
