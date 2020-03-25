@@ -11,6 +11,7 @@ import maskInput from '@ziro/mask-input'
 import capitalize from '@ziro/capitalize'
 import fetch from './fetch'
 import { inputEditUpdate, dropdownUpdate } from './sendToBackend'
+import { alertColor, successColor } from '@ziro/theme'
 
 const UpdateStoreowner = () => {
     const [isLoading, setIsLoading] = useState(true)
@@ -389,7 +390,7 @@ const UpdateStoreowner = () => {
             />
             <input type="text" style={{ position: 'absolute', left: '-9999px' }} value={textArea} ref={textAreaRef} />
             {foundStoreowner ? <>
-                <div style={{padding: '10px 0'}} >
+                <div style={{padding: '20px 0 10px'}} >
                     <Button
                         type="button"
                         cta="Compartilhar"
@@ -397,10 +398,11 @@ const UpdateStoreowner = () => {
                         click={copyToClipboard}
                     />
                 </div>
-                {copyResultText &&
-                    <div style={{padding: '10px 0', fontSize: '15px', color: copyResultStatus? 'green' : 'red', textAlign: 'center'}} >
+                {copyResultText ? 
+                    <div style={{padding: '5px 0 0', fontSize: '15px', color: copyResultStatus? successColor : alertColor, textAlign: 'center'}} >
                         <span>{copyResultText}</span>
                     </div>
+                    : <div style={{height: '26px'}}>&nbsp;</div>
                 }
                 <InputEdit
                     name="Assessor(a)"
