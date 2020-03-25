@@ -8,6 +8,7 @@ import ResendEmail from './ResendEmail/index'
 import ResetPass from './ResetPass/index'
 import ConfirmEmail from '@bit/vitorbarbosa19.ziro.confirm-email'
 import { Menu } from './Menu/index'
+import { HeaderBack } from './HeaderBack/index'
 import MyAccount from '@bit/vitorbarbosa19.ziro.my-account'
 import UpdateEmail from './UpdateEmail/index'
 import UpdatePass from './UpdatePass/index'
@@ -55,16 +56,16 @@ const Router = ({ isLogged }) => {
             ['Lojista: Ver/Editar', '/visualizar-lojista'],
             ['Afiliado: Cadastrar', '/cadastrar-afiliado'],
             ['Afiliado: Ver/Editar', '/visualizar-afiliado']]} /></Menu>,
-        '/cadastrar-boleto': <Menu title='Cadastrar boleto'><RegisterBillet /></Menu>,
-        '/requerir-material': <Menu title='Requerir material'><MaterialRequest /></Menu>,
-        '/visualizar-lojista': <Menu title='Visualizar lojista'><UpdateStoreowner /></Menu>,
-        '/cadastrar-lojista': <Menu title='Cadastrar lojista'><RegisterStoreowner /></Menu>,
-        '/cadastrar-afiliado': <Menu title='Cadastrar afiliado'><RegisterAffiliate /></Menu>,
-        '/visualizar-afiliado': <Menu title='Visualizar afiliado'><UpdateAffiliate /></Menu>,
-        '/upload-imagem': <Menu title='Upload de imagens'><ImageUpload /></Menu>,
-        '/update': <Menu title='Atualizar informações'><UpdateUserInfo /></Menu>,
-        '/atualizar-fabricantes': <Menu title='Atualizar fabricantes' ><UpdateBrandsInfos /></Menu>,
-        '/entrada-saida': <Menu title='Entrada/Saída do Caixa' ><RegisterInputOutput /></Menu>,
+        '/cadastrar-boleto': <HeaderBack title='Cadastrar boleto' navigateTo='/assessoria'><RegisterBillet /></HeaderBack>,
+        '/requerir-material': <HeaderBack title='Requerir material' navigateTo='/administrativo'><MaterialRequest /></HeaderBack>,
+        '/visualizar-lojista': <HeaderBack title='Visualizar lojista' navigateTo='/assessoria'><UpdateStoreowner /></HeaderBack>,
+        '/cadastrar-lojista': <HeaderBack title='Cadastrar lojista' navigateTo='/assessoria'><RegisterStoreowner /></HeaderBack>,
+        '/cadastrar-afiliado': <HeaderBack title='Cadastrar afiliado' navigateTo='/assessoria'><RegisterAffiliate /></HeaderBack>,
+        '/visualizar-afiliado': <HeaderBack title='Visualizar afiliado' navigateTo='/assessoria'><UpdateAffiliate /></HeaderBack>,
+        '/upload-imagem': <HeaderBack title='Upload de imagens' navigateTo='/assessoria'><ImageUpload /></HeaderBack>,
+        '/update': <HeaderBack title='Atualizar informações' navigateTo='/conta'><UpdateUserInfo /></HeaderBack>,
+        '/atualizar-fabricantes': <HeaderBack title='Atualizar fabricantes' navigateTo='/assessoria'><UpdateBrandsInfos /></HeaderBack>,
+        '/entrada-saida': <HeaderBack title='Entrada/Saída do Caixa' navigateTo='/administrativo'><RegisterInputOutput /></HeaderBack>,
         '/show-info': <ShowInfo internal={true} />
     }
     return routeMatcher(isLogged, publicRoutes, privateRoutes, <Login />, <NotFound fallback='/' />)
