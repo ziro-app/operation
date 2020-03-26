@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 
 export default () => {
 
-    const [brandsAndTrends, setBrandsAndTrends] = useState()
+    const [brandsInfos, setBrandsInfos] = useState()
     const [fetchError, setError] = useState()
     const [isLoading, setIsLoading] = useState(true)
 
@@ -26,13 +26,13 @@ export default () => {
         }
         axios(config)
             .then(({ data: { values } }) => {
-                const _brandsAndTrends = values.map(([name,insta,price,...trends]) => [name,price||'',trends])
-                setBrandsAndTrends(_brandsAndTrends)
+                const _brandsInfos = values.map(([name,insta,price,...trends]) => [name,price||'',trends])
+                setBrandsInfos(_brandsInfos)
             })
             .catch(setError)
             .finally(() => setIsLoading(false))
         return () => source.cancel('Canceled fetch request. Component unmounted')
     },[])
 
-    return { brandsAndTrends, fetchError, isLoading }
+    return { brandsInfos, fetchError, isLoading }
 }
