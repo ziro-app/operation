@@ -56,23 +56,41 @@ const sendToBackend = (setIsSubmitting, setIsSubmitted, setBrand, brand, brandsA
 			const uploadBrands = await Promise.all(slicedByBrand.map(async ({ brand, images }) => {
 				const [url,timestamp] = getMostRecentImage(images)
 				const [,trends] = brandsAndTrends.filter(([brandName]) => brandName === brand).flat()
-				await db.collection('catalog-brands').doc(brand).set({
-					brand,
-					updatedThumb: url,
-					updatedAt: timestamp,
-					trends
-				})
+				if(pricetag === 'Sim') {
+					await db.collection('catalog-brands').doc(brand).set({
+						brand,
+						updatedAt: timestamp,
+						trends
+					},{ merge: true })
+				}
+				else {
+					await db.collection('catalog-brands').doc(brand).set({
+						brand,
+						updatedThumb: url,
+						updatedAt: timestamp,
+						trends
+					},{ merge: true })
+				}
 				return 'ok'
 			}))
 		} else {
 			const [url,timestamp] = getMostRecentImage(uploadImages)
 			const [,trends] = brandsAndTrends.filter(([brandName]) => brandName === brand).flat()
-			await db.collection('catalog-brands').doc(brand).set({
-				brand,
-				updatedThumb: url,
-				updatedAt: timestamp,
-				trends
-			})
+			if(pricetag === 'Sim') {
+				await db.collection('catalog-brands').doc(brand).set({
+					brand,
+					updatedAt: timestamp,
+					trends
+				},{ merge: true })
+			}
+			else {
+				await db.collection('catalog-brands').doc(brand).set({
+					brand,
+					updatedThumb: url,
+					updatedAt: timestamp,
+					trends
+				},{ merge: true })
+			}
 		}
 	} catch (error) {
 		console.log(error)
