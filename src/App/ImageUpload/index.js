@@ -18,6 +18,7 @@ export default () => {
 	const [brands, setBrands] = useState('')
 	const [brandsAndTrends, setBrandsAndTrends] = useState('')
 	const [brand, setBrand] = useState('')
+	const [pricetag, setPricetag] = useState('')
 	useEffect(() => fetch(setIsLoading, setIsError, setBrands, setBrandsAndTrends), [])
 	useEffect(() => {
 		if (brand !== '' && setIsSubmitted) setIsSubmitted(false)
@@ -43,8 +44,19 @@ export default () => {
 			</div>
 			<div style={block}>
 				<label style={title}>Etapa 2</label>
+				<Dropdown
+					readOnly={false}
+					value={pricetag}
+					onChange={({ target: { value } }) => setPricetag(value)}
+					list={['Sim','Não']}
+					placeholder='Tem o preço na imagem?'
+					onChangeKeyboard={element => element ? setPricetag(element.value) : null }
+				/>
+			</div>
+			<div style={block}>
+				<label style={title}>Etapa 3</label>
 				<ImageUpload
-					sendToBackend={sendToBackend(setIsSubmitting, setIsSubmitted, setBrand, brand, brandsAndTrends)}
+					sendToBackend={sendToBackend(setIsSubmitting, setIsSubmitted, setBrand, brand, brandsAndTrends, pricetag)}
 					isDisabled={!isValidBrand(brands,brand) || isSubmitting}
 				/>
 				<SubmitBlock isSubmitting={isSubmitting} isSubmitted={isSubmitted} />
