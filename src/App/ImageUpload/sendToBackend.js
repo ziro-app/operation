@@ -59,6 +59,7 @@ const sendToBackend = (setIsSubmitting, setIsSubmitted, setBrand, brand, brandsA
 				if(pricetag === 'Sim') {
 					await db.collection('catalog-brands').doc(brand).set({
 						brand,
+						updatedLoggedThumb: url,
 						updatedAt: timestamp,
 						trends
 					},{ merge: true })
@@ -67,6 +68,7 @@ const sendToBackend = (setIsSubmitting, setIsSubmitted, setBrand, brand, brandsA
 					await db.collection('catalog-brands').doc(brand).set({
 						brand,
 						updatedThumb: url,
+						updatedLoggedThumb: url,
 						updatedAt: timestamp,
 						trends
 					},{ merge: true })
@@ -80,6 +82,7 @@ const sendToBackend = (setIsSubmitting, setIsSubmitted, setBrand, brand, brandsA
 				await db.collection('catalog-brands').doc(brand).set({
 					brand,
 					updatedAt: timestamp,
+					updatedLoggedThumb: url,
 					trends
 				},{ merge: true })
 			}
@@ -88,6 +91,7 @@ const sendToBackend = (setIsSubmitting, setIsSubmitted, setBrand, brand, brandsA
 					brand,
 					updatedThumb: url,
 					updatedAt: timestamp,
+					updatedLoggedThumb: url,
 					trends
 				},{ merge: true })
 			}
