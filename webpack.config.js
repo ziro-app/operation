@@ -43,6 +43,8 @@ module.exports = (env, { mode }) => {
             sheet_id_providers,
             sheet_id_billets,
             sheet_id_input_output,
+            sheet_id_expenses,
+            sheet_id_appointments,
             cnpj_url,
             cnpj_token
         } = require('./credentials')
@@ -65,6 +67,8 @@ module.exports = (env, { mode }) => {
                     SHEET_ID_PROVIDERS: JSON.stringify(sheet_id_providers),
                     SHEET_ID_BILLETS: JSON.stringify(sheet_id_billets),
                     SHEET_ID_INPUT_OUTPUT: JSON.stringify(sheet_id_input_output),
+                    SHEET_ID_EXPENSES: JSON.stringify(sheet_id_expenses),
+                    SHEET_ID_APPOINTMENTS: JSON.stringify(sheet_id_appointments),
                     CNPJ_URL: JSON.stringify(cnpj_url),
                     CNPJ_TOKEN: JSON.stringify(cnpj_token)
                 }
@@ -104,6 +108,8 @@ module.exports = (env, { mode }) => {
                     SHEET_ID_PROVIDERS: JSON.stringify(process.env.SHEET_ID_PROVIDERS),
                     SHEET_ID_BILLETS: JSON.stringify(process.env.SHEET_ID_BILLETS),
                     SHEET_ID_INPUT_OUTPUT: JSON.stringify(process.env.SHEET_ID_INPUT_OUTPUT),
+                    SHEET_ID_EXPENSES: JSON.stringify(process.env.SHEET_ID_EXPENSES),
+                    SHEET_ID_APPOINTMENTS: JSON.stringify(process.env.SHEET_ID_APPOINTMENTS),
                     CNPJ_URL: JSON.stringify(process.env.CNPJ_URL),
                     CNPJ_TOKEN: JSON.stringify(process.env.CNPJ_TOKEN)
                 }
