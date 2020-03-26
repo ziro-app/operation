@@ -2,7 +2,7 @@ import { readAndCompressImage } from 'browser-image-resizer'
 import { storage, db } from '../../Firebase/index'
 import getMostRecentImage from './getMostRecentImage'
 
-const sendToBackend = (setIsSubmitting, setIsSubmitted, setBrand, brand, brandsAndTrends, pricetag, photoPeriod) => async files => {
+const sendToBackend = (setIsSubmitting, setIsSubmitted, setBrand, brand, brandsAndTrends, pricetag, setPriceTag, photoPeriod, setPhotoPeriod) => async files => {
 	setIsSubmitting(true)
 	const uploadImages = await Promise.all(files.map(async file => {
 		try {
@@ -80,6 +80,8 @@ const sendToBackend = (setIsSubmitting, setIsSubmitted, setBrand, brand, brandsA
 	setIsSubmitting(false)
 	setIsSubmitted(true)
 	setBrand('')
+	setPriceTag('')
+	setPhotoPeriod('')
 }
 
 export default sendToBackend
