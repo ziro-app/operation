@@ -17,7 +17,11 @@ export default (brandsInfos) => {
                 setIsSending(false)
                 setSuccess(true)
             })
-            .catch(setError)
+            .catch((error) => {
+                setError(error)
+                console.log({ error })
+                throw error
+            })
     },[brandsInfos])
 
     return { isSending, sendError, success, sendToBackend }
