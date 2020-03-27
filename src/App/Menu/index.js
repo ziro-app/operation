@@ -22,7 +22,7 @@ export const Menu = ({ title, children }) => {
 						{
 							path: '/administrativo',
 							onClick: () => setIsOpen(false),
-							icon: <Icon type='user' size={15} strokeWidth={2} />,
+							icon: <Icon type='file' size={15} strokeWidth={2} />,
 							text: 'Administrativo'
 						},{
 							path: '/assessoria',
