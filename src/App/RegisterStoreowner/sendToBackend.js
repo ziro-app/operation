@@ -1,9 +1,10 @@
 import { db } from '../../Firebase/index'
 import { post } from 'axios'
+import { dateHourFormatterUTC3 } from '../utils'
 
 const sendToBackend = state => () => {
     const { affiliateName, affiliateCpf, advisor, salesman, fname, lname, rg, cpf, birth, insta, cnpj, ie, razao, fantasia,
-        rua, numero, complemento, bairro, cep, cidade, estado, fone, whats, email, setAffiliateName, setAffiliateCpf, setFname, setLname, setRg, setCpf,
+        rua, numero, complemento, bairro, cep, cidade, estado, fone, whats, email, setSearchedName, setAffiliateName, setAffiliateCpf, setFname, setLname, setRg, setCpf,
         setAdvisor, setSalesman, setBirth, setInsta, setCnpj, setIe, setRazao, setFantasia, setRua, setNumero, setComplemento, setBairro,
         setCep, setCidade, setEstado, setFone, setWhats, setEmail, cnpjValid } = state
     const instaTrim = insta ? insta.replace('@', '').trim().toLowerCase() : ''
@@ -18,7 +19,7 @@ const sendToBackend = state => () => {
         range: 'Base!A1',
         resource: {
             values: [
-                [today, `${fnameTrim} ${lnameTrim}`, rg, cpf, birth, instaTrim,
+                [dateHourFormatterUTC3(today), `${fnameTrim} ${lnameTrim}`, rg, cpf, birth, instaTrim,
                     cnpj, ie, razao, fantasia, `${rua}, ${numero}, ${complemento}`, bairro, cep, cidade,
                     estado, fone, email.toLowerCase(), affiliateName, affiliateCpf, advisor, salesman, whats]
             ]
@@ -67,6 +68,7 @@ const sendToBackend = state => () => {
                     throw 'Erro ao salvar na Firestore'
                 }
                 // clear all fields after submission
+                setSearchedName('')
                 setFname('')
                 setLname('')
                 setRg('')

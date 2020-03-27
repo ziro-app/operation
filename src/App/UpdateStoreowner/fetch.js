@@ -3,7 +3,7 @@ import axios from 'axios'
 const fetch = (setIsLoading, setIsError, setStoreowners, setAdvisors, setAffiliates, setSellers) => {
     const source = axios.CancelToken.source()
     const affiliates = ['Nenhum']
-    const advisors = []
+    const advisors = ['Nenhum']
     const sellers = ['Nenhum']
     const run = async () => {
         const config = {

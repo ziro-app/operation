@@ -151,7 +151,7 @@ const UpdateStoreowner = () => {
         setNewCep(person[24]? person[24] : '')
         setNewCity(person[25]? person[25] : '')
         setNewState(person[26]? person[26] : '')
-        setTextArea(person[6] ? `https://interno.ziro.app/show-info?doc=${person[6]}` : '')
+        setTextArea(person[6] ? `https://interno.ziro.app/show-info?doc=${person[6]}&razao=${person[8]}` : '')
         setStoreowner(Object.assign({ 'cadastro': person[0] ? person[0] : '', 'afiliado': person[17] ? person[17] : '', 'afiliado_cpf': person[18] ? person[18] : '', 'lojista': person[1] ? person[1] : '', 'rg': person[2] ? person[2] : '', 'cpf': person[3] ? person[3] : '', 'nascimento': person[4] ? person[4] : '', 'insta': person[5] ? person[5] : '', 'cnpj': person[6] ? person[6] : '', 'ie': person[7] ? person[7] : '', 'razao': person[8] ? person[8] : '', 'fantasia': person[9] ? person[9] : '', 'endereco': person[10] ? person[10] : '', 'bairro': person[11] ? person[11] : '', 'cep': person[12] ? person[12] : '', 'cidade': person[13] ? person[13] : '', 'estado': person[14] ? person[14] : '', 'fone': person[15] ? person[15] : '', 'email': person[16] ? person[16] : '', 'assessor': person[19] ? person[19] : '', 'vendedor': person[20] ? person[20] : '', 'whats': person[21]? person[21] : '', 'entrega': person[22]? person[22] : '', 'bairroEntrega': person[23]? person[23] : '', 'cepEntrega': person[24]? person[24] : '', 'cidadeEntrega': person[25]? person[25] : '', 'estadoEntrega': person[26]? person[26] : '' }))
         if (person[6]) {
             let row = await findStoreownerRow(person[6])

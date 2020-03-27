@@ -1,6 +1,7 @@
 import { auth, db } from '../../Firebase/index'
 import { post } from 'axios'
 import md5 from 'md5';
+import { dateHourFormatterUTC3 } from '../utils'
 
 const sendToBackend = state => () => {
 	const { token, name, nickname, birthDate, cpf, rg, issuingBody, shippingDate, maritalStatus,
@@ -33,7 +34,7 @@ const sendToBackend = state => () => {
 		range: 'Base!A1',
 		resource: {
 			values: [
-				[new Date(), md5(emailTrim), nome, apelido, birthDate, cpf, rgTrim,
+				[dateHourFormatterUTC3(new Date()), md5(emailTrim), nome, apelido, birthDate, cpf, rgTrim,
 					orgExp, shippingDate, maritalStatus, telefone, emailTrim, githubTrim,
 					endereco, cep, cidade, estado, initialDate, '-', scope,
 					valorCobrado, paymentModel, height, weight, nomeEmergencia,

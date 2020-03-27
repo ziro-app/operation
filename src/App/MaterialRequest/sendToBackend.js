@@ -1,4 +1,5 @@
 import { post } from 'axios'
+import { dateHourFormatterUTC3 } from '../utils'
 
 const sendToBackend = state => () => {
 	const { nickname, category, requiredItems, itemIsOver, setCategory, setRequiredItems, setItemIsOver } = state
@@ -14,7 +15,7 @@ const sendToBackend = state => () => {
 		range: 'Material!A1',
 		resource: {
 			values: [
-				[new Date(), nome, category, itens, itemIsOver]
+				[dateHourFormatterUTC3(new Date()), nome, category, itens, itemIsOver]
 			]
 		},
 		valueInputOption: 'raw'
