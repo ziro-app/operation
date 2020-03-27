@@ -29,6 +29,11 @@ export const Menu = ({ title, children }) => {
 							onClick: () => setIsOpen(false),
 							icon: <Icon type='shopping' size={15} strokeWidth={2} />,
 							text: 'Assessoria'
+						},{
+							path: '/logistica',
+							onClick: () => setIsOpen(false),
+							icon: <Icon type='truck' size={15} strokeWidth={2} />,
+							text: 'Logística'
 						},
 						{
 							path: '/conta',

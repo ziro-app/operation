@@ -51,14 +51,15 @@ const Router = ({ isLogged }) => {
             ['Entrada/Saída do Caixa', 'entrada-saida']]} /></Menu>,
         '/assessoria': <Menu title='Assessoria'><Submenu options={[
             ['Cadastrar boleto', 'cadastrar-boleto'],
-            ['Cadastrar despesa', 'cadastrar-despesa'],
             ['Upload de imagens', 'upload-imagem'],
             ['Atualizar Fabricantes', '/atualizar-fabricantes'],
             ['Lojista: Cadastrar', '/cadastrar-lojista'],
             ['Lojista: Ver/Editar', '/visualizar-lojista'],
             ['Afiliado: Cadastrar', '/cadastrar-afiliado'],
             ['Afiliado: Ver/Editar', '/visualizar-afiliado']]} /></Menu>,
-        '/cadastrar-despesa': <HeaderBack title='Cadastrar despesa' navigateTo='/assessoria'><RegisterExpenses /></HeaderBack>,
+        '/logistica': <Menu title='Logística'><Submenu options={[
+            ['Cadastrar despesa', 'cadastrar-despesa']]} /></Menu>,
+        '/cadastrar-despesa': <HeaderBack title='Cadastrar despesa' navigateTo='/logistica'><RegisterExpenses /></HeaderBack>,
         '/cadastrar-boleto': <HeaderBack title='Cadastrar boleto' navigateTo='/assessoria'><RegisterBillet /></HeaderBack>,
         '/requerir-material': <HeaderBack title='Requerir material' navigateTo='/administrativo'><MaterialRequest /></HeaderBack>,
         '/visualizar-lojista': <HeaderBack title='Visualizar lojista' navigateTo='/assessoria'><UpdateStoreowner /></HeaderBack>,
