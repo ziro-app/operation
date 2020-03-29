@@ -10,6 +10,7 @@ const sendToBackend = state => () => {
     const instaTrim = insta ? insta.replace('@', '').trim().toLowerCase() : ''
     const fnameTrim = fname ? fname.trim() : ''
     const lnameTrim = lname ? lname.trim() : ''
+    const nomeAfiliado = affiliateName.split(' - ')[1]? affiliateName.split(' - ')[1] : 'NENHUM'
     const today = new Date()
     const url = process.env.SHEET_URL
     const body = {
@@ -21,7 +22,7 @@ const sendToBackend = state => () => {
             values: [
                 [dateHourFormatterUTC3(today), `${fnameTrim} ${lnameTrim}`, rg, cpf, birth, instaTrim,
                     cnpj, ie, razao, fantasia, `${rua}, ${numero}, ${complemento}`, bairro, cep, cidade,
-                    estado, fone, whats, email.toLowerCase(), affiliateName, affiliateCpf, advisor, salesman]
+                    estado, fone, whats, email.toLowerCase(), nomeAfiliado, affiliateCpf, advisor, salesman]
             ]
         },
         valueInputOption: 'raw'
@@ -41,7 +42,7 @@ const sendToBackend = state => () => {
                 try {
                     await db.collection('storeowners').add({
                         cadastro: today,
-                        nomeAfiliado: affiliateName,
+                        nomeAfiliado,
                         cpfAfiliado: affiliateCpf,
                         lojista: `${fnameTrim} ${lnameTrim}`,
                         rg,

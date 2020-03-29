@@ -41,9 +41,6 @@ const UpdateStoreowner = () => {
     const [newCpf, setNewCpf] = useState('')
     const [errorCpf, setErrorCpf] = useState('')
     const [loadingCpf, setLoadingCpf] = useState(false)
-    const [newEmail, setNewEmail] = useState('')
-    const [errorEmail, setErrorEmail] = useState('')
-    const [loadingEmail, setLoadingEmail] = useState(false)
     const [newFone, setNewFone] = useState('')
     const [errorFone, setErrorFone] = useState('')
     const [loadingFone, setLoadingFone] = useState(false)
@@ -142,7 +139,6 @@ const UpdateStoreowner = () => {
         setNewRg(person[2] ? person[2] : '')
         setNewCpf(person[3] ? person[3] : '')
         setNewFone(person[15] ? person[15] : '')
-        setNewEmail(person[17] ? person[17] : '')
         setNewWhats(person[16]? person[16] : '')
         setNewStreet(partAddress[0]? partAddress[0] : '')
         setNewNumber(partAddress[1]? partAddress[1] : '')
@@ -173,7 +169,6 @@ const UpdateStoreowner = () => {
         setNewRg('')
         setNewCpf('')
         setNewFone('')
-        setNewEmail('')
         setNewWhats('')
         setNewStreet('')
         setNewNumber('')
@@ -207,26 +202,8 @@ const UpdateStoreowner = () => {
             return false
         }
     }
-    const validateInsta = () => {
-        if (newInsta !== '') {
-            setErrorInsta('')
-            return true
-        } else {
-            setErrorInsta('Valor inválido')
-            return false
-        }
-    }
-    const validateIe = () => {
-        if (newIe !== '') {
-            setErrorIe('')
-            return true
-        } else {
-            setErrorIe('Valor inválido')
-            return false
-        }
-    }
     const validateBirthDate = () => {
-        if (/^(?:(?:31(\/)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(\/)(?:0?[13-9]|1[0-2])\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$|^(?:29(\/)0?2\3(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\d|2[0-8])(\/)(?:(?:0?[1-9])|(?:1[0-2]))\4(?:(?:1[6-9]|[2-9]\d)?\d{2})$/.test(newBirthDate)) {
+        if (newBirthDate === '' || /^(?:(?:31(\/)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(\/)(?:0?[13-9]|1[0-2])\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$|^(?:29(\/)0?2\3(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\d|2[0-8])(\/)(?:(?:0?[1-9])|(?:1[0-2]))\4(?:(?:1[6-9]|[2-9]\d)?\d{2})$/.test(newBirthDate)) {
             setErrorBirthDate('')
             return true
         } else {
@@ -234,17 +211,8 @@ const UpdateStoreowner = () => {
             return false
         }
     }
-    const validateRg = () => {
-        if (newRg !== '') {
-            setErrorRg('')
-            return true
-        } else {
-            setErrorRg('Documento inválido')
-            return false
-        }
-    }
     const validateCpf = () => {
-        if (/(^\d{3}\.\d{3}\.\d{3}\-\d{2}$)|(^\d{2}\.\d{3}\.\d{3}\/\d{4}\-\d{2}$)/.test(newCpf)) {
+        if (newCpf === '' || /(^\d{3}\.\d{3}\.\d{3}\-\d{2}$)|(^\d{2}\.\d{3}\.\d{3}\/\d{4}\-\d{2}$)/.test(newCpf)) {
             setErrorCpf('')
             return true
         } else {
@@ -252,17 +220,8 @@ const UpdateStoreowner = () => {
             return false
         }
     }
-    const validateEmail = () => {
-        if (/^\S+@\S+\.\S+$/g.test(newEmail)) {
-            setErrorEmail('')
-            return true
-        } else {
-            setErrorEmail('Email inválido')
-            return false
-        }
-    }
     const validateFone = () => {
-        if (/(^\(\d{2}\) \d{5}\-\d{4}$)/.test(newFone)) {
+        if (newFone === '' || /(^\(\d{2}\) \d{5}\-\d{4}$)/.test(newFone)) {
             setErrorFone('')
             return true
         } else {
@@ -279,35 +238,8 @@ const UpdateStoreowner = () => {
             return false
         }
     }
-    const validateStreet = () => {
-        if (newStreet !== '') {
-            setErrorStreet('')
-            return true
-        } else {
-            setErrorStreet('Valor inválido')
-            return false
-        }
-    }
-    const validateNumber = () => {
-        if (newNumber !== '') {
-            setErrorNumber('')
-            return true
-        } else {
-            setErrorNumber('Número inválido')
-            return false
-        }
-    }
-    const validateNeighborhood = () => {
-        if (newNeighborhood !== '') {
-            setErrorNeighborhood('')
-            return true
-        } else {
-            setErrorNeighborhood('Valor inválido')
-            return false
-        }
-    }
     const validateCep = () => {
-        if (/(^\d{5}\-\d{3}$)/.test(newCep)) {
+        if (newCep === '' || /(^\d{5}\-\d{3}$)/.test(newCep)) {
             setErrorCep('')
             return true
         } else {
@@ -315,17 +247,8 @@ const UpdateStoreowner = () => {
             return false
         }
     }
-    const validateCity = () => {
-        if (newCity !== '') {
-            setErrorCity('')
-            return true
-        } else {
-            setErrorCity('Valor inválido')
-            return false
-        }
-    }
     const validateState = () => {
-        if (/(^\D{2}$)/.test(newState) & statesList.includes(newState)) {
+        if (newState === '' || /(^\D{2}$)/.test(newState) & statesList.includes(newState)) {
             setErrorState('')
             return true
         } else {
@@ -452,7 +375,7 @@ const UpdateStoreowner = () => {
                     name="RG"
                     value={newRg}
                     onChange={({ target: { value } }) => setNewRg(value)}
-                    validateInput={validateRg}
+                    validateInput={() => true}
                     submit={inputEditUpdate(storeowner.cnpj, 'C', storeownerRow, { 'rg': newRg }, newRg, setLoadingRg, setErrorRg)}
                     setError={() => { }}
                     error={errorRg}
@@ -485,7 +408,7 @@ const UpdateStoreowner = () => {
                     name="Instagram da loja"
                     value={newInsta}
                     onChange={({ target: { value } }) => setNewInsta(value)}
-                    validateInput={validateInsta}
+                    validateInput={() => true}
                     submit={inputEditUpdate(storeowner.cnpj, 'F', storeownerRow, { 'insta': newInsta.replace('@', '').trim().toLowerCase() }, newInsta.replace('@', '').trim().toLowerCase(), setLoadingInsta, setErrorInsta)}
                     placeholder={'Ex.: ateliederoupa. Não use .com'}
                     setError={() => { }}
@@ -497,7 +420,7 @@ const UpdateStoreowner = () => {
                     name="Inscrição Estadual"
                     value={newIe}
                     onChange={({ target: { value } }) => setNewIe(maskInput(value, '#############', true))}
-                    validateInput={validateIe}
+                    validateInput={() => true}
                     submit={inputEditUpdate(storeowner.cnpj, 'H', storeownerRow, { 'ie': newIe }, newIe, setLoadingIe, setErrorIe)}
                     setError={() => { }}
                     error={errorIe}
@@ -607,7 +530,7 @@ const UpdateStoreowner = () => {
                     name="Rua (entrega)"
                     value={newStreet}
                     onChange={({ target: { value } }) => setNewStreet(value.toUpperCase())}
-                    validateInput={validateStreet}
+                    validateInput={() => true}
                     submit={inputEditUpdate(storeowner.cnpj, 'W', storeownerRow, { 'entrega': newStreet + ', ' + newNumber + ', ' + (newComplement ? newComplement : '') }, newStreet + ', ' + newNumber + ', ' + (newComplement ? newComplement : ''), setLoadingStreet, setErrorStreet)}
                     setError={() => { }}
                     error={errorStreet}
@@ -618,7 +541,7 @@ const UpdateStoreowner = () => {
                     name="Número (entrega)"
                     value={newNumber}
                     onChange={({ target: { value } }) => setNewNumber(value)}
-                    validateInput={validateNumber}
+                    validateInput={() => true}
                     submit={inputEditUpdate(storeowner.cnpj, 'W', storeownerRow, { 'entrega': newStreet + ', ' + newNumber + ', ' + (newComplement ? newComplement : '') }, newStreet + ', ' + newNumber + ', ' + (newComplement ? newComplement : ''), setLoadingNumber, setErrorNumber)}
                     setError={() => { }}
                     error={errorNumber}
@@ -640,7 +563,7 @@ const UpdateStoreowner = () => {
                     name="Bairro (entrega)"
                     value={newNeighborhood? newNeighborhood : ''}
                     onChange={({ target: { value } }) => setNewNeighborhood(value.toUpperCase())}
-                    validateInput={validateNeighborhood}
+                    validateInput={() => true}
                     submit={inputEditUpdate(storeowner.cnpj, 'X', storeownerRow, { 'bairroEntrega': newNeighborhood }, newNeighborhood, setLoadingNeighborhood, setErrorNeighborhood)}
                     setError={() => { }}
                     error={errorNeighborhood}
@@ -662,7 +585,7 @@ const UpdateStoreowner = () => {
                     name="Cidade (entrega)"
                     value={newCity}
                     onChange={({ target: { value } }) => setNewCity(value.toUpperCase())}
-                    validateInput={validateCity}
+                    validateInput={() => true}
                     submit={inputEditUpdate(storeowner.cnpj, 'Z', storeownerRow, { 'cidadeEntrega': newCity }, newCity, setLoadingCity, setErrorCity)}
                     setError={() => { }}
                     error={errorCity}
@@ -704,14 +627,14 @@ const UpdateStoreowner = () => {
                 />
                 <InputEdit
                     name="Email"
-                    value={newEmail}
-                    onChange={({ target: { value } }) => setNewEmail(value.toLowerCase())}
-                    validateInput={validateEmail}
-                    submit={inputEditUpdate(storeowner.cnpj, 'R', storeownerRow, { 'email': newEmail }, newEmail, setLoadingEmail, setErrorEmail)}
+                    value={storeowner.email}
+                    onChange={() => {}}
+                    validateInput={() => {}}
+                    submit={() => {}}
                     setError={() => { }}
-                    error={errorEmail}
-                    editable={true}
-                    isLoading={loadingEmail}
+                    error={''}
+                    editable={false}
+                    isLoading={false}
                 />
                 <br />
                 <Form
