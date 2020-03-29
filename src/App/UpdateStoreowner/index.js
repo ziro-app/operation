@@ -385,7 +385,7 @@ const UpdateStoreowner = () => {
                         else setFoundStoreowner(false)
                     } else storeownerHandleError()
                 }}
-                list={storeowners.map(storeowner => Object.values(storeowner)[1])}
+                list={storeowners.map(storeowner => `${Object.values(storeowner)[8]}`)}
                 placeholder="Pesquise o lojista"
             />
             <input type="text" style={{ position: 'absolute', left: '-9999px' }} value={textArea} ref={textAreaRef} readOnly />

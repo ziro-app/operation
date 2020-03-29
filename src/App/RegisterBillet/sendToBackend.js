@@ -6,7 +6,7 @@ const sendToBackend = state => () => {
         dueDate, revenue, advisor, type, setSearchedName, setBillet, setSaleDate, setProvider, setStoreowner,
         setBilletValue, setPaymentMethod, setRomaneio, setDueDate, setRevenue, setAdvisor,
         setType } = state
-    const comissao = numberFormatter(provider.comissao)? numberFormatter(provider.comissao)/100 : ''
+    const comissao = numberFormatter(provider.comissao)? numberFormatter(provider.comissao)/100 : 0.00
     const today = new Date()
     const url = process.env.SHEET_URL
     const body = {

@@ -34,6 +34,7 @@ const RegisterBillet = () => {
     const [advisors, setAdvisors] = useState([])
     const [type, setType] = useState('')
     const typeList = ['Online', 'Offline'].sort()
+    const [percentage, setPercentage] = useState('')
 
     const setState = { setSearchedName, setBillet, setSaleDate, setProvider, setStoreowner, setBilletValue, setPaymentMethod, setRomaneio, setDueDate, setRevenue, setAdvisor, setType }
     const state = { billet, saleDate, provider, storeowner, billetValue, paymentMethod, romaneio, dueDate, revenue, advisor, type, ...setState }
@@ -93,6 +94,17 @@ const RegisterBillet = () => {
             validation: value => typeList.includes(value),
             value: type,
             message: 'Tipo inválido'
+        }, {
+            name: 'percentage',
+            validation: value => parseFloat(value) <= 100.00,
+            value: percentage,
+            message: 'Porcentagem inválida'
+        }
+        , {
+            name: 'revenue',
+            validation: value => value <= billetValue,
+            value: revenue,
+            message: 'Valor inválido'
         }
     ]
     const round = (num, places) => {
@@ -152,24 +164,32 @@ const RegisterBillet = () => {
                             onChange={({ target: { value } }) => {
                                 if (value !== '') {
                                     let person = providers.find(element => element.nome === value)
-                                    if (person) setProvider(person)
+                                    if (person) {
+                                        setProvider(person)
+                                        setPercentage(person.comissao)
+                                    }
                                     setSearchedName(value)
                                     calculateRevenue(billetValue, person? person.comissao : '' )
                                 } else {
                                     setSearchedName('')
                                     setProvider({'nome': '', 'comissao': '', 'endereco': '' })
+                                    setPercentage('')
                                     setRevenue('')
                                 }
                             }}
                             onChangeKeyboard={element =>{
                                 if (element.value !== '') {
                                     let person = providers.find(provider => provider.nome === element.value)
-                                    if (person) setProvider(person)
+                                    if (person) {
+                                        setProvider(person)
+                                        setPercentage(person.comissao)
+                                    }
                                     setSearchedName(element.value)
                                     calculateRevenue(billetValue, person? person.comissao : '')
                                 } else {
                                     setSearchedName('')
                                     setProvider({'nome': '', 'comissao': '', 'endereco': '' })
+                                    setPercentage('')
                                     setRevenue('')
                                 }
                             }
@@ -250,15 +270,19 @@ const RegisterBillet = () => {
                     } />,
                     <FormInput name='percentage' label='Porcentagem' input={
                         <InputText
-                            value={provider.comissao? `${provider.comissao} %` : ''}
-                            onChange={() => {}}
-                            readOnly={true}
+                            value={percentage? `${percentage} %` : ''}
+                            onChange={({ target: { value } }) => {
+                                let newPrctg = value.replace(/\s/g, '').replace('%', '')
+                                setPercentage(newPrctg)
+                                calculateRevenue(billetValue, newPrctg)
+                            }}
+                            readOnly={false}
                             placeholder='0.00 %'
                         />
                     } />,
                     <FormInput name='revenue' label='Receita' input={
                         <InputText
-                            value={revenue? `R$ ${revenue}` : ''}
+                            value={revenue? `R$ ${revenue}` : `R$ 0.00`}
                             onChange={() => {}}
                             readOnly={true}
                             placeholder='R$ 0.00'
