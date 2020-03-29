@@ -21,7 +21,7 @@ const sendToBackend = state => () => {
             values: [
                 [dateHourFormatterUTC3(today), `${fnameTrim} ${lnameTrim}`, rg, cpf, birth, instaTrim,
                     cnpj, ie, razao, fantasia, `${rua}, ${numero}, ${complemento}`, bairro, cep, cidade,
-                    estado, fone, email.toLowerCase(), affiliateName, affiliateCpf, advisor, salesman, whats]
+                    estado, fone, whats, email.toLowerCase(), affiliateName, affiliateCpf, advisor, salesman]
             ]
         },
         valueInputOption: 'raw'
@@ -37,6 +37,7 @@ const sendToBackend = state => () => {
         try {
             if (cnpjValid) {
                 await post(url, body, config)
+                // Criar conta no autentication antes
                 try {
                     await db.collection('storeowners').add({
                         cadastro: today,

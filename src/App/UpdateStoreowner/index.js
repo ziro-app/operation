@@ -83,13 +83,13 @@ const UpdateStoreowner = () => {
     const textAreaRef = useRef(null)
     const [copyResultText, setCopyResultText] = useState('')
     const [copyResultStatus, setCopyResultStatus] = useState(true)
-    const setState = { setAffiliateName, setAffiliateCpf, setAdvisor, setSalesman }
-    const state = { affiliateName, affiliateCpf, advisor, salesman, ...setState }
+    const setState = { setAffiliateName, setAffiliateCpf, setAdvisor, setSalesman, setStoreowner }
+    const state = { affiliateName, affiliateCpf, advisor, salesman, storeowner, ...setState }
     const statesList = ['AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA', 'MT', 'MS', 'MG', 'PA', 'PB', 'PR', 'PE', 'PI', 'RJ', 'RN', 'RS', 'RO', 'RR', 'SC', 'SP', 'SE', 'TO']
     const validations = [
         {
             name: 'affiliate',
-            validation: value => affiliates.find(affiliate => affiliate[1] === value),
+            validation: value => value === 'NENHUM' || affiliates.find(affiliate => affiliate[1] === value),
             value: affiliateName,
             message: 'Afiliado(a) inválido(a)'
         }, {
@@ -135,15 +135,15 @@ const UpdateStoreowner = () => {
         setNewBirthDate(person[4] ? person[4] : '')
         setNewInsta(person[5] ? person[5] : '')
         setNewIe(person[7] ? person[7] : '')
-        setAffiliateName(person[17] ? person[17] : '')
-        setAffiliateCpf(person[18] ? person[18] : '')
-        setAdvisor(person[19] ? person[19] : '')
-        setSalesman(person[20] ? person[20] : '')
+        setAffiliateName(person[18] ? person[18] : '')
+        setAffiliateCpf(person[19] ? person[19] : '')
+        setAdvisor(person[20] ? person[20] : '')
+        setSalesman(person[21] ? person[21] : '')
         setNewRg(person[2] ? person[2] : '')
         setNewCpf(person[3] ? person[3] : '')
         setNewFone(person[15] ? person[15] : '')
-        setNewEmail(person[16] ? person[16] : '')
-        setNewWhats(person[21]? person[21] : '')
+        setNewEmail(person[17] ? person[17] : '')
+        setNewWhats(person[16]? person[16] : '')
         setNewStreet(partAddress[0]? partAddress[0] : '')
         setNewNumber(partAddress[1]? partAddress[1] : '')
         setNewComplement(partAddress.length === 3 ? partAddress[2] : '')
@@ -152,7 +152,7 @@ const UpdateStoreowner = () => {
         setNewCity(person[25]? person[25] : '')
         setNewState(person[26]? person[26] : '')
         setTextArea(person[6] ? `https://interno.ziro.app/show-info?doc=${person[6]}&razao=${person[8]}` : '')
-        setStoreowner(Object.assign({ 'cadastro': person[0] ? person[0] : '', 'afiliado': person[17] ? person[17] : '', 'afiliado_cpf': person[18] ? person[18] : '', 'lojista': person[1] ? person[1] : '', 'rg': person[2] ? person[2] : '', 'cpf': person[3] ? person[3] : '', 'nascimento': person[4] ? person[4] : '', 'insta': person[5] ? person[5] : '', 'cnpj': person[6] ? person[6] : '', 'ie': person[7] ? person[7] : '', 'razao': person[8] ? person[8] : '', 'fantasia': person[9] ? person[9] : '', 'endereco': person[10] ? person[10] : '', 'bairro': person[11] ? person[11] : '', 'cep': person[12] ? person[12] : '', 'cidade': person[13] ? person[13] : '', 'estado': person[14] ? person[14] : '', 'fone': person[15] ? person[15] : '', 'email': person[16] ? person[16] : '', 'assessor': person[19] ? person[19] : '', 'vendedor': person[20] ? person[20] : '', 'whats': person[21]? person[21] : '', 'entrega': person[22]? person[22] : '', 'bairroEntrega': person[23]? person[23] : '', 'cepEntrega': person[24]? person[24] : '', 'cidadeEntrega': person[25]? person[25] : '', 'estadoEntrega': person[26]? person[26] : '' }))
+        setStoreowner(Object.assign({ 'cadastro': person[0] ? person[0] : '', 'afiliado': person[18] ? person[18] : '', 'afiliado_cpf': person[19] ? person[19] : '', 'lojista': person[1] ? person[1] : '', 'rg': person[2] ? person[2] : '', 'cpf': person[3] ? person[3] : '', 'nascimento': person[4] ? person[4] : '', 'insta': person[5] ? person[5] : '', 'cnpj': person[6] ? person[6] : '', 'ie': person[7] ? person[7] : '', 'razao': person[8] ? person[8] : '', 'fantasia': person[9] ? person[9] : '', 'endereco': person[10] ? person[10] : '', 'bairro': person[11] ? person[11] : '', 'cep': person[12] ? person[12] : '', 'cidade': person[13] ? person[13] : '', 'estado': person[14] ? person[14] : '', 'fone': person[15] ? person[15] : '', 'email': person[16] ? person[16] : '', 'assessor': person[20] ? person[20] : '', 'vendedor': person[21] ? person[21] : '', 'whats': person[16]? person[16] : '', 'entrega': person[22]? person[22] : '', 'bairroEntrega': person[23]? person[23] : '', 'cepEntrega': person[24]? person[24] : '', 'cidadeEntrega': person[25]? person[25] : '', 'estadoEntrega': person[26]? person[26] : '' }))
         if (person[6]) {
             let row = await findStoreownerRow(person[6])
             setStoreownerRow(row)
@@ -696,7 +696,7 @@ const UpdateStoreowner = () => {
                     value={newWhats}
                     onChange={({ target: { value } }) => setNewWhats(maskInput(value, '(##) #####-####', true))}
                     validateInput={validateWhats}
-                    submit={inputEditUpdate(storeowner.cnpj, 'V', storeownerRow, { 'whats': newWhats }, newWhats, setLoadingWhats, setErrorWhats)}
+                    submit={inputEditUpdate(storeowner.cnpj, 'Q', storeownerRow, { 'whats': newWhats }, newWhats, setLoadingWhats, setErrorWhats)}
                     setError={() => { }}
                     error={errorWhats}
                     editable={true}
@@ -707,7 +707,7 @@ const UpdateStoreowner = () => {
                     value={newEmail}
                     onChange={({ target: { value } }) => setNewEmail(value.toLowerCase())}
                     validateInput={validateEmail}
-                    submit={inputEditUpdate(storeowner.cnpj, 'Q', storeownerRow, { 'email': newEmail }, newEmail, setLoadingEmail, setErrorEmail)}
+                    submit={inputEditUpdate(storeowner.cnpj, 'R', storeownerRow, { 'email': newEmail }, newEmail, setLoadingEmail, setErrorEmail)}
                     setError={() => { }}
                     error={errorEmail}
                     editable={true}
