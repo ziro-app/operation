@@ -2,9 +2,9 @@ import axios from 'axios'
 
 const fetch = (setIsLoading, setIsError, setStoreowners, setAdvisors, setAffiliates, setSellers) => {
     const source = axios.CancelToken.source()
-    const affiliates = ['Nenhum']
+    const affiliates = ['NENHUM']
     const advisors = []
-    const sellers = ['Nenhum']
+    const sellers = ['NENHUM']
     const run = async () => {
         const config = {
             method: 'POST',

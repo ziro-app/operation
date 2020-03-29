@@ -372,7 +372,7 @@ const UpdateStoreowner = () => {
                 onChange={({ target: { value } }) => {
                     if (value !== '') {
                         setSearchedName(value)
-                        let person = storeowners.find(element => element[1] === value)
+                        let person = storeowners.find(element => element[8] === value)
                         if (person) storeownerHandleSuccess(person)
                         else setFoundStoreowner(false)
                     } else storeownerHandleError()
@@ -380,7 +380,7 @@ const UpdateStoreowner = () => {
                 onChangeKeyboard={element => {
                     if (element) {
                         setSearchedName(element.value)
-                        let person = storeowners.find(storeowner => storeowner[1] === element.value)
+                        let person = storeowners.find(storeowner => storeowner[8] === element.value)
                         if (person) storeownerHandleSuccess(person)
                         else setFoundStoreowner(false)
                     } else storeownerHandleError()
@@ -722,7 +722,7 @@ const UpdateStoreowner = () => {
                             <Dropdown
                                 value={affiliateName}
                                 onChange={({ target: { value } }) => {
-                                    if (value !== '' && value !== 'Nenhum') {
+                                    if (value !== '' && value !== 'NENHUM') {
                                         let person = affiliates.find(element => element[1] === value)
                                         if (person) {
                                             setAffiliateCpf(person[0])
@@ -730,11 +730,11 @@ const UpdateStoreowner = () => {
                                         }
                                     } else {
                                         setAffiliateCpf('')
-                                        setAffiliateName(value === 'Nenhum'? 'Nenhum' : '')
+                                        setAffiliateName(value === 'NENHUM'? 'NENHUM' : '')
                                     }
                                 }}
                                 onChangeKeyboard={element => {
-                                    if (element && element.value !== 'Nenhum') {
+                                    if (element && element.value !== 'NENHUM') {
                                         let person = affiliates.find(affiliate => affiliate[1] === element.value)
                                         if (person) {
                                             setAffiliateCpf(person[0])
@@ -742,11 +742,11 @@ const UpdateStoreowner = () => {
                                         }
                                     } else {
                                         setAffiliateCpf('')
-                                        setAffiliateName(element.value === 'Nenhum'? 'Nenhum' : '')
+                                        setAffiliateName(element.value === 'NENHUM'? 'NENHUM' : '')
                                     }
                                 }
                                 }
-                                list={affiliates.map(affiliate => affiliate === 'Nenhum'? 'Nenhum' : Object.values(affiliate)[1])}
+                                list={affiliates.map(affiliate => affiliate === 'NENHUM'? 'NENHUM' : Object.values(affiliate)[1])}
                                 placeholder="Nome do(a) afiliado(a)"
                                 readOnly={true}
                             />
