@@ -221,7 +221,7 @@ const UpdateStoreowner = () => {
         }
     }
     const validateFone = () => {
-        if (newFone === '' || /(^\(\d{2}\) \d{5}\-\d{4}$)/.test(newFone)) {
+        if (newFone === '' || /(^\(\d{2}\) \d{4}\-\d{4}$)/.test(newFone)) {
             setErrorFone('')
             return true
         } else {
@@ -606,7 +606,7 @@ const UpdateStoreowner = () => {
                 <InputEdit
                     name="Telefone"
                     value={newFone}
-                    onChange={({ target: { value } }) => setNewFone(maskInput(value, '(##) #####-####', true))}
+                    onChange={({ target: { value } }) => setNewFone(maskInput(value, '(##) ####-####', true))}
                     validateInput={validateFone}
                     submit={inputEditUpdate(storeowner.cnpj, 'P', storeownerRow, { 'fone': newFone }, newFone, setLoadingFone, setErrorFone)}
                     setError={() => { }}
