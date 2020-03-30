@@ -38,7 +38,6 @@ const sendToBackend = state => () => {
         try {
             if (cnpjValid) {
                 await post(url, body, config)
-                // Criar conta no autentication antes
                 try {
                     await db.collection('storeowners').add({
                         cadastro: today,
@@ -48,7 +47,7 @@ const sendToBackend = state => () => {
                         rg,
                         cpf,
                         nascimento: birth,
-                        insta: instaTrim,
+                        instagram: instaTrim,
                         cnpj,
                         ie,
                         razao,
@@ -59,44 +58,45 @@ const sendToBackend = state => () => {
                         cidade,
                         estado,
                         fone,
-                        whats,
+                        whatsapp: whats,
                         email: email.toLowerCase(),
                         assessor: advisor,
                         vendedor: salesman
                     })
+
+                    // clear all fields after submission
+                    setSearchedName('')
+                    setFname('')
+                    setLname('')
+                    setRg('')
+                    setCpf('')
+                    setBirth('')
+                    setInsta('')
+                    setCnpj('')
+                    setIe('')
+                    setRazao('')
+                    setFantasia('')
+                    setRua('')
+                    setNumero('')
+                    setComplemento('')
+                    setBairro('')
+                    setCep('')
+                    setCidade('')
+                    setEstado('')
+                    setFone('')
+                    setWhats('')
+                    setEmail('')
+                    setAffiliateName('')
+                    setAffiliateCpf('')
+                    setAdvisor('')
+                    setSalesman('')
+                    // resolve Promise with message to user
+                    resolve('Lojista adicionado com sucesso !')
                 } catch (error) {
                     console.log(error)
                     if (error.response) console.log(error.response)
                     throw 'Erro ao salvar na Firestore'
                 }
-                // clear all fields after submission
-                setSearchedName('')
-                setFname('')
-                setLname('')
-                setRg('')
-                setCpf('')
-                setBirth('')
-                setInsta('')
-                setCnpj('')
-                setIe('')
-                setRazao('')
-                setFantasia('')
-                setRua('')
-                setNumero('')
-                setComplemento('')
-                setBairro('')
-                setCep('')
-                setCidade('')
-                setEstado('')
-                setFone('')
-                setWhats('')
-                setEmail('')
-                setAffiliateName('')
-                setAffiliateCpf('')
-                setAdvisor('')
-                setSalesman('')
-                // resolve Promise with message to user
-                resolve('Lojista adicionado com sucesso !')
             } else throw { msg: 'Cnpj não validado', customError: true }
         } catch (error) {
             if (error.customError) reject(error)
