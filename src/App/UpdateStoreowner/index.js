@@ -18,7 +18,7 @@ const UpdateStoreowner = () => {
     const [isError, setIsError] = useState(false)
     const [foundStoreowner, setFoundStoreowner] = useState(false)
     const [searchedName, setSearchedName] = useState('')
-    const [storeowner, setStoreowner] = useState({ 'cadastro': '', 'afiliado': '', 'afiliado_cpf': '', 'lojista': '', 'rg': '', 'cpf': '', 'nascimento': '', 'insta': '', 'cnpj': '', 'ie': '', 'razao': '', 'fantasia': '', 'endereco': '', 'bairro': '', 'cep': '', 'cidade': '', 'estado': '', 'fone': '', 'email': '', 'assessor': '', 'vendedor': '', 'whats': '', 'entrega': '', 'bairroEntrega': '', 'cepEntrega': '', 'cidadeEntrega': '', 'estadoEntrega': '' })
+    const [storeowner, setStoreowner] = useState({ 'cadastro': '', 'afiliado': '', 'afiliado_cpf': '', 'lojista': '', 'rg': '', 'cpf': '', 'nascimento': '', 'instagram': '', 'cnpj': '', 'ie': '', 'razao': '', 'fantasia': '', 'endereco': '', 'bairro': '', 'cep': '', 'cidade': '', 'estado': '', 'fone': '', 'email': '', 'assessor': '', 'vendedor': '', 'whats': '', 'entrega': '', 'bairroEntrega': '', 'cepEntrega': '', 'cidadeEntrega': '', 'estadoEntrega': '' })
     const [storeowners, setStoreowners] = useState([])
     const [newName, setNewName] = useState('')
     const [errorName, setErrorName] = useState('')
@@ -148,7 +148,7 @@ const UpdateStoreowner = () => {
         setNewCity(person[25]? person[25] : '')
         setNewState(person[26]? person[26] : '')
         setTextArea(person[6] ? `https://interno.ziro.app/show-info?doc=${person[6]}&razao=${person[8]}` : '')
-        setStoreowner(Object.assign({ 'cadastro': person[0] ? person[0] : '', 'afiliado': person[18] ? person[18] : '', 'afiliado_cpf': person[19] ? person[19] : '', 'lojista': person[1] ? person[1] : '', 'rg': person[2] ? person[2] : '', 'cpf': person[3] ? person[3] : '', 'nascimento': person[4] ? person[4] : '', 'insta': person[5] ? person[5] : '', 'cnpj': person[6] ? person[6] : '', 'ie': person[7] ? person[7] : '', 'razao': person[8] ? person[8] : '', 'fantasia': person[9] ? person[9] : '', 'endereco': person[10] ? person[10] : '', 'bairro': person[11] ? person[11] : '', 'cep': person[12] ? person[12] : '', 'cidade': person[13] ? person[13] : '', 'estado': person[14] ? person[14] : '', 'fone': person[15] ? person[15] : '', 'email': person[17] ? person[17] : '', 'assessor': person[20] ? person[20] : '', 'vendedor': person[21] ? person[21] : '', 'whats': person[16]? person[16] : '', 'entrega': person[22]? person[22] : '', 'bairroEntrega': person[23]? person[23] : '', 'cepEntrega': person[24]? person[24] : '', 'cidadeEntrega': person[25]? person[25] : '', 'estadoEntrega': person[26]? person[26] : '' }))
+        setStoreowner(Object.assign({ 'cadastro': person[0] ? person[0] : '', 'afiliado': person[18] ? person[18] : '', 'afiliado_cpf': person[19] ? person[19] : '', 'lojista': person[1] ? person[1] : '', 'rg': person[2] ? person[2] : '', 'cpf': person[3] ? person[3] : '', 'nascimento': person[4] ? person[4] : '', 'instagram': person[5] ? person[5] : '', 'cnpj': person[6] ? person[6] : '', 'ie': person[7] ? person[7] : '', 'razao': person[8] ? person[8] : '', 'fantasia': person[9] ? person[9] : '', 'endereco': person[10] ? person[10] : '', 'bairro': person[11] ? person[11] : '', 'cep': person[12] ? person[12] : '', 'cidade': person[13] ? person[13] : '', 'estado': person[14] ? person[14] : '', 'fone': person[15] ? person[15] : '', 'email': person[17] ? person[17] : '', 'assessor': person[20] ? person[20] : '', 'vendedor': person[21] ? person[21] : '', 'whats': person[16]? person[16] : '', 'entrega': person[22]? person[22] : '', 'bairroEntrega': person[23]? person[23] : '', 'cepEntrega': person[24]? person[24] : '', 'cidadeEntrega': person[25]? person[25] : '', 'estadoEntrega': person[26]? person[26] : '' }))
         if (person[6]) {
             let row = await findStoreownerRow(person[6])
             setStoreownerRow(row)
@@ -178,7 +178,7 @@ const UpdateStoreowner = () => {
         setNewCity('')
         setNewState('')
         setTextArea('')
-        setStoreowner({ 'cadastro': '', 'afiliado': '', 'afiliado_cpf': '', 'lojista': '', 'rg': '', 'cpf': '', 'nascimento': '', 'insta': '', 'cnpj': '', 'ie': '', 'razao': '', 'fantasia': '', 'endereco': '', 'bairro': '', 'cep': '', 'cidade': '', 'estado': '', 'fone': '', 'email': '', 'assessor': '', 'vendedor': '', 'whats': '', 'entrega': '', 'bairroEntrega': '', 'cepEntrega': '', 'cidadeEntrega': '', 'estadoEntrega': '' })
+        setStoreowner({ 'cadastro': '', 'afiliado': '', 'afiliado_cpf': '', 'lojista': '', 'rg': '', 'cpf': '', 'nascimento': '', 'instagram': '', 'cnpj': '', 'ie': '', 'razao': '', 'fantasia': '', 'endereco': '', 'bairro': '', 'cep': '', 'cidade': '', 'estado': '', 'fone': '', 'email': '', 'assessor': '', 'vendedor': '', 'whats': '', 'entrega': '', 'bairroEntrega': '', 'cepEntrega': '', 'cidadeEntrega': '', 'estadoEntrega': '' })
         setStoreownerRow('')
     }
 
@@ -221,7 +221,8 @@ const UpdateStoreowner = () => {
         }
     }
     const validateFone = () => {
-        if (newFone === '' || /(^\(\d{2}\) \d{4}\-\d{4}$)/.test(newFone)) {
+        if (newFone === '' || newFone.length <= 14 && /(^\(\d{2}\) \d{4}\-\d{4}$)/.test(newFone)
+            || newFone.length === 15 && /(^\(\d{2}\) \d{5}\-\d{4}$)/.test(newFone)) {
             setErrorFone('')
             return true
         } else {
@@ -239,7 +240,7 @@ const UpdateStoreowner = () => {
         }
     }
     const validateCep = () => {
-        if (newCep === '' || /(^\d{5}\-\d{3}$)/.test(newCep)) {
+        if (newCep === '' || /(^\d{2}\.\d{3}\-\d{3}$)/.test(newCep)) {
             setErrorCep('')
             return true
         } else {
@@ -354,7 +355,7 @@ const UpdateStoreowner = () => {
                     value={newName}
                     onChange={({ target: { value } }) => setNewName(capitalize(value))}
                     validateInput={validateName}
-                    submit={inputEditUpdate(storeowner.cnpj, 'B', storeownerRow, { 'lojista': `${newName} ${newSurname}` }, `${newName} ${newSurname}`, setLoadingName, setErrorName)}
+                    submit={inputEditUpdate(storeowner.cnpj, 'B', storeownerRow, { 'fname': newName }, `${newName} ${newSurname}`, setLoadingName, setErrorName)}
                     setError={() => { }}
                     error={errorName}
                     editable={true}
@@ -365,7 +366,7 @@ const UpdateStoreowner = () => {
                     value={newSurname}
                     onChange={({ target: { value } }) => setNewSurname(capitalize(value))}
                     validateInput={validateSurname}
-                    submit={inputEditUpdate(storeowner.cnpj, 'B', storeownerRow, { 'lojista': `${newName} ${newSurname}` }, `${newName} ${newSurname}`, setLoadingSurname, setErrorSurname)}
+                    submit={inputEditUpdate(storeowner.cnpj, 'B', storeownerRow, { 'lname': newSurname }, `${newName} ${newSurname}`, setLoadingSurname, setErrorSurname)}
                     setError={() => { }}
                     error={errorSurname}
                     editable={true}
@@ -573,7 +574,7 @@ const UpdateStoreowner = () => {
                 <InputEdit
                     name="Cep (entrega)"
                     value={newCep}
-                    onChange={({ target: { value } }) => setNewCep(maskInput(value, '#####-###', true))}
+                    onChange={({ target: { value } }) => setNewCep(maskInput(value, '##.###-###', true))}
                     validateInput={validateCep}
                     submit={inputEditUpdate(storeowner.cnpj, 'Y', storeownerRow, { 'cepEntrega': newCep }, newCep, setLoadingCep, setErrorCep)}
                     setError={() => { }}
@@ -606,7 +607,10 @@ const UpdateStoreowner = () => {
                 <InputEdit
                     name="Telefone"
                     value={newFone}
-                    onChange={({ target: { value } }) => setNewFone(maskInput(value, '(##) ####-####', true))}
+                    onChange={({ target: { value } }) => {
+                        let mask = value.length <= 14? '(##) ####-####' : '(##) #####-####'
+                        setNewFone(maskInput(value, mask, true))
+                    }}
                     validateInput={validateFone}
                     submit={inputEditUpdate(storeowner.cnpj, 'P', storeownerRow, { 'fone': newFone }, newFone, setLoadingFone, setErrorFone)}
                     setError={() => { }}
