@@ -35,9 +35,10 @@ const RegisterBillet = () => {
     const [type, setType] = useState('')
     const typeList = ['Online', 'Offline'].sort()
     const [percentage, setPercentage] = useState('')
+    const [submitCount, setSubmitCount] = useState(0)
 
-    const setState = { setSearchedName, setBillet, setSaleDate, setProvider, setStoreowner, setBilletValue, setPaymentMethod, setRomaneio, setDueDate, setRevenue, setAdvisor, setType }
-    const state = { billet, saleDate, provider, storeowner, billetValue, paymentMethod, romaneio, dueDate, revenue, advisor, type, ...setState }
+    const setState = { setSearchedName, setBillet, setSaleDate, setProvider, setStoreowner, setBilletValue, setPaymentMethod, setRomaneio, setDueDate, setRevenue, setAdvisor, setType, setSubmitCount, setPercentage }
+    const state = { billet, saleDate, provider, storeowner, billetValue, paymentMethod, romaneio, dueDate, revenue, advisor, type, submitCount, percentage, ...setState }
     const validations = [
         {
             name: 'billet',
@@ -128,7 +129,7 @@ const RegisterBillet = () => {
         }
     }
 
-    useEffect(() => fetch(setIsLoading, setIsError, setProviders, setStoreowners, setAdvisors, setAddresses, setBillets), [])
+    useEffect(() => fetch(setIsLoading, setIsError, setProviders, setStoreowners, setAdvisors, setAddresses, setBillets), [submitCount])
 
     if (isLoading) return <div style={{ display: 'grid' }}><Spinner size='5rem' /></div>
     if (isError) return <Error />
