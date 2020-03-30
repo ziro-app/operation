@@ -16,13 +16,13 @@ const sendToBackend = state => () => {
         range: 'Boletos!A1',
         resource: {
             values: [
-                [dateHourFormatter(today), intFormatter(romaneio), intFormatter(billet), today.getMonth()+1, today.getFullYear(), singleDateFormatter(saleDate),
-                    storeowner, numberFormatter(billetValue), comissao, revenue, provider.nome, paymentMethod,
+                [dateHourFormatter(today), intFormatter(romaneio), intFormatter(billet), today.getMonth()+1, today.getFullYear(),
+                    singleDateFormatter(saleDate), storeowner, numberFormatter(billetValue), comissao, revenue, provider.nome, paymentMethod,
                     type, advisor, singleDateFormatter(dueDate), '-', provider.endereco.split(' — ')[0],
                     provider.endereco.split(' — ')[1]]
             ]
         },
-        valueInputOption: 'raw'
+        valueInputOption: 'user_entered'
     }
 
     const config = {

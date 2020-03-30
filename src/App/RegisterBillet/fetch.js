@@ -69,7 +69,7 @@ const fetch = (setIsLoading, setIsError, setProviders, setStoreowners, setAdviso
         try {
             const dataStoreowners = await axios(config)
             const [, ...listStoreowners] = dataStoreowners.data.values
-            listStoreowners.map(storeowner => storeowner[1] !== ''? storeowners.push(storeowner[1]): '')
+            listStoreowners.map(storeowner => storeowner[8] !== ''? storeowners.push(storeowner[8]) : '')
             setStoreowners(storeowners)
 
             const dataProviders = await axios(configProvider)

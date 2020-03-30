@@ -9,6 +9,7 @@ import InputText from '@bit/vitorbarbosa19.ziro.input-text'
 import maskInput from '@ziro/mask-input'
 import fetch from './fetch'
 import sendToBackend from './sendToBackend'
+import { numberFormatter } from '../utils'
 
 const RegisterBillet = () => {
     const [isLoading, setIsLoading] = useState(true)
@@ -123,7 +124,7 @@ const RegisterBillet = () => {
 
     const calculateRevenue = (value, comissao) => {
         if(value && comissao){
-            let percent = parseFloat(comissao)/100
+            let percent = numberFormatter(comissao)? numberFormatter(comissao)/100 : 0.00
             let val = round((parseFloat(value) * percent), 2)
             setRevenue(val)
         }

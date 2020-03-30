@@ -17,8 +17,12 @@ export const intFormatter = (num) => num ? parseInt(num) : '',
 floatFormatter = (num) => num ? parseFloat(num) : '',
 numberFormatter = (num) => num? (floatFormatter(num.replace(/\,/g, '.'))) : '',
 dateHourFormatter = (date) => {
-    let dateString = date.toString()
-    return `${date.getMonth()+1}/${dateString.substr(8,2)}/${dateString.substr(11,13)}`
+    const cadastro = date.toLocaleString("en-GB")
+    const mes = cadastro.substring(3,5)
+    const dia = parseInt(cadastro.substring(0,2)) >= 10? cadastro.substring(0,2).split('')[1] : cadastro.substring(0,2)
+    const ano = cadastro.substring(6,10)
+    const hora = cadastro.substring(12)
+    return `${mes}/${dia}/${ano} ${hora}`
 },
 singleDateFormatter = (date) => {
     if(date){
