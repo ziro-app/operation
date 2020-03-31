@@ -239,7 +239,7 @@ const RegisterBillet = () => {
                                 setBilletValue(maskInput(toInteger, '######', true))
                                 calculateRevenue(toInteger, provider.comissao)
                             }}
-                            placeholder='Use . para os centavos'
+                            placeholder='R$ 100,00'
                         />
                     } />,
                     <FormInput name='paymentMethod' label='Forma de Pagamento' input={

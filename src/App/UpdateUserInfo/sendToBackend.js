@@ -7,7 +7,7 @@ const sendToBackend = (uid, column, row, obj, newProp, setIsLoading, setError) =
         apiResource: 'values',
         apiMethod: 'update',
         range: `Base!${column}${row}`,
-        valueInputOption: 'raw',
+        valueInputOption: 'user_entered',
         spreadsheetId: process.env.SHEET_ID,
         resource: {
             values: [[newProp]]
