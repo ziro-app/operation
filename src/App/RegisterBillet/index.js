@@ -198,7 +198,7 @@ const RegisterBillet = () => {
                             }
                             }
                             list={providers.map(provider => provider.nome)}
-                            placeholder="Nome do(a) fornecedor(a)"
+                            placeholder="Nome do fabricante"
                         />
                     } />,
                     <FormInput name='address' label='Endereço' input={
@@ -236,13 +236,13 @@ const RegisterBillet = () => {
                             value={currencyFormat(billetValue)}
                             onChange={({ target: { value } }) => {
                                 const toInteger = parseInt(value.replace(/[R$\.,]/g, ''), 10)
-                                setBilletValue(maskInput(toInteger, '######', true))
+                                setBilletValue(maskInput(toInteger, '#######', true))
                                 calculateRevenue(toInteger, provider.comissao)
                             }}
                             placeholder='R$ 100,00'
                         />
                     } />,
-                    <FormInput name='paymentMethod' label='Forma de Pagamento' input={
+                    <FormInput name='paymentMethod' label='Meio de Pagamento' input={
                         <Dropdown
                             value={paymentMethod}
                             onChange={({ target: { value } }) => setPaymentMethod(value)}
