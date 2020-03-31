@@ -17,7 +17,7 @@ const sendToBackend = state => () => {
         resource: {
             values: [
                 [dateHourFormatter(today), intFormatter(romaneio), intFormatter(billet), today.getMonth()+1, today.getFullYear(),
-                    singleDateFormatter(saleDate), storeowner, numberFormatter(billetValue), comissao, revenue, provider.nome, paymentMethod,
+                    singleDateFormatter(saleDate), storeowner, numberFormatter(billetValue)? numberFormatter(billetValue)/100 : 0.00 , comissao, revenue, provider.nome, paymentMethod,
                     type, advisor, singleDateFormatter(dueDate), '-', provider.endereco.split(' — ')[0],
                     provider.endereco.split(' — ')[1]]
             ]
