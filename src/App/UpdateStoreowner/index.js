@@ -623,7 +623,7 @@ const UpdateStoreowner = () => {
                     value={newWhats}
                     onChange={({ target: { value } }) => setNewWhats(maskInput(value, '(##) #####-####', true))}
                     validateInput={validateWhats}
-                    submit={inputEditUpdate(storeowner.cnpj, 'Q', storeownerRow, { 'whats': newWhats }, newWhats, setLoadingWhats, setErrorWhats)}
+                    submit={inputEditUpdate(storeowner.cnpj, 'Q', storeownerRow, { 'whatsapp': newWhats }, newWhats, setLoadingWhats, setErrorWhats)}
                     setError={() => { }}
                     error={errorWhats}
                     editable={true}
