@@ -19,7 +19,7 @@ numberFormatter = (num) => num? (floatFormatter(num.replace(/\,/g, '.'))) : '',
 dateHourFormatter = (date) => {
     const cadastro = date.toLocaleString("en-GB")
     const mes = cadastro.substring(3,5)
-    const dia = parseInt(cadastro.substring(0,2)) >= 10? cadastro.substring(0,2).split('')[1] : cadastro.substring(0,2)
+    const dia = cadastro.substring(0,2)
     const ano = cadastro.substring(6,10)
     const hora = cadastro.substring(12)
     return `${mes}/${dia}/${ano} ${hora}`
