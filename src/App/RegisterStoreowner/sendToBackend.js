@@ -10,7 +10,7 @@ const sendToBackend = state => () => {
     const instaTrim = insta ? insta.replace('@', '').trim().toLowerCase() : ''
     const fnameTrim = fname ? fname.trim() : ''
     const lnameTrim = lname ? lname.trim() : ''
-    const nomeAfiliado = affiliateName.split(' - ')[1]? affiliateName.split(' - ')[1] : 'NENHUM'
+    const nomeAfiliado = affiliateName.split(' - ')[1] ? affiliateName.split(' - ')[1] : 'NENHUM'
     const today = new Date()
     const url = process.env.SHEET_URL
     const body = {
@@ -25,7 +25,7 @@ const sendToBackend = state => () => {
                     estado, fone, whats, email.toLowerCase(), nomeAfiliado, affiliateCpf, advisor, salesman]
             ]
         },
-        valueInputOption: 'raw'
+        valueInputOption: 'user_entered'
     }
 
     const config = {
