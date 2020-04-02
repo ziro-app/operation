@@ -13,7 +13,7 @@ const fetch = (setIsLoading, setIsError, setStoreowners, setAdvisors, setAffilia
                 apiResource: 'values',
                 apiMethod: 'get',
                 spreadsheetId: process.env.SHEET_STOREOWNERS_ID,
-                range: 'Base!G:G'
+                range: 'Base!I:I'
             },
             headers: {
                 'Authorization': process.env.SHEET_TOKEN,

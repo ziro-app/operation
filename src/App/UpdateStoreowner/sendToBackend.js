@@ -51,7 +51,7 @@ export const inputEditUpdate = (cnpj, column, row, obj, newProp, setIsLoading, s
     })
 }
 
-export const dropdownUpdate = (state, cnpj, row) => async () => {
+export const formUpdate = (state, cnpj, row) => async () => {
     const { affiliateName, affiliateCpf, advisor, salesman, storeowner, setAffiliateName, setAffiliateCpf, setAdvisor, setSalesman, setStoreowner } = state
     const nomeAfiliado = affiliateName ? affiliateName.trim() : ''
     const cpfAfiliado = affiliateCpf ? affiliateCpf.trim() : ''
@@ -65,7 +65,7 @@ export const dropdownUpdate = (state, cnpj, row) => async () => {
         valueInputOption: 'raw',
         spreadsheetId: process.env.SHEET_STOREOWNERS_ID,
         resource: {
-            values: [[nomeAfiliado.split(' - ')[1]? nomeAfiliado.split(' - ')[1] : 'NENHUM', cpfAfiliado, assessor, vendedor]]
+            values: [[nomeAfiliado.split(' - ')[1] ? nomeAfiliado.split(' - ')[1] : 'NENHUM', cpfAfiliado, assessor, vendedor]]
         }
     }
     const config = {
@@ -81,7 +81,7 @@ export const dropdownUpdate = (state, cnpj, row) => async () => {
                 const snapCollection = await db.collection('storeowners').where('cnpj', '==', cnpj).get()
                 let docId
                 snapCollection.forEach(doc => docId = doc.id)
-                await db.collection('storeowners').doc(docId).update({ nomeAfiliado: nomeAfiliado.split(' - ')[1]? nomeAfiliado.split(' - ')[1] : 'NENHUM', cpfAfiliado, assessor, vendedor })
+                await db.collection('storeowners').doc(docId).update({ nomeAfiliado: nomeAfiliado.split(' - ')[1] ? nomeAfiliado.split(' - ')[1] : 'NENHUM', cpfAfiliado, assessor, vendedor })
             } catch (error) {
                 console.log(error)
                 if (error.response) console.log(error.response)

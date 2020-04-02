@@ -10,7 +10,7 @@ import Button from '@bit/vitorbarbosa19.ziro.button'
 import maskInput from '@ziro/mask-input'
 import capitalize from '@ziro/capitalize'
 import fetch from './fetch'
-import { inputEditUpdate, dropdownUpdate } from './sendToBackend'
+import { inputEditUpdate, formUpdate } from './sendToBackend'
 import { alertColor, successColor } from '@ziro/theme'
 
 const UpdateStoreowner = () => {
@@ -118,7 +118,7 @@ const UpdateStoreowner = () => {
         }
         const { data: { values } } = await post(url, body, config)
         values.map((user, index) => {
-            if (user[6] === cnpj) {
+            if (user[8] === cnpj) {
                 pos = index
             }
         })
@@ -126,31 +126,31 @@ const UpdateStoreowner = () => {
     }
     const storeownerHandleSuccess = async person => {
         setFoundStoreowner(true)
-        const partAddress = person[22]? person[22].split(', ') : ''
+        const partAddress = person[22] ? person[22].split(', ') : []
         setNewName(person[1] ? person[1].split(' ')[0] : '')
         setNewSurname(person[1] ? person[1].split(' ').slice(1).join(' ') : '')
-        setNewBirthDate(person[4] ? person[4] : '')
-        setNewInsta(person[5] ? person[5] : '')
-        setNewIe(person[7] ? person[7] : '')
+        setNewBirthDate(person[6] ? person[6] : '')
+        setNewInsta(person[7] ? person[7] : '')
+        setNewIe(person[9] ? person[9] : '')
         setAffiliateName(person[18] ? person[18] : '')
         setAffiliateCpf(person[19] ? person[19] : '')
         setAdvisor(person[20] ? person[20] : '')
         setSalesman(person[21] ? person[21] : '')
-        setNewRg(person[2] ? person[2] : '')
-        setNewCpf(person[3] ? person[3] : '')
-        setNewFone(person[15] ? person[15] : '')
-        setNewWhats(person[16]? person[16] : '')
-        setNewStreet(partAddress[0]? partAddress[0] : '')
-        setNewNumber(partAddress[1]? partAddress[1] : '')
+        setNewRg(person[4] ? person[4] : '')
+        setNewCpf(person[5] ? person[5] : '')
+        setNewFone(person[17] ? person[17] : '')
+        setNewWhats(person[2] ? person[2] : '')
+        setNewStreet(partAddress[0] ? partAddress[0] : '')
+        setNewNumber(partAddress[1] ? partAddress[1] : '')
         setNewComplement(partAddress.length === 3 ? partAddress[2] : '')
-        setNewNeighborhood(person[23]? person[23] : '')
-        setNewCep(person[24]? person[24] : '')
-        setNewCity(person[25]? person[25] : '')
-        setNewState(person[26]? person[26] : '')
-        setTextArea(person[6] ? `https://interno.ziro.app/show-info?doc=${person[6]}&razao=${person[8]}` : '')
-        setStoreowner(Object.assign({ 'cadastro': person[0] ? person[0] : '', 'afiliado': person[18] ? person[18] : '', 'afiliado_cpf': person[19] ? person[19] : '', 'lojista': person[1] ? person[1] : '', 'rg': person[2] ? person[2] : '', 'cpf': person[3] ? person[3] : '', 'nascimento': person[4] ? person[4] : '', 'instagram': person[5] ? person[5] : '', 'cnpj': person[6] ? person[6] : '', 'ie': person[7] ? person[7] : '', 'razao': person[8] ? person[8] : '', 'fantasia': person[9] ? person[9] : '', 'endereco': person[10] ? person[10] : '', 'bairro': person[11] ? person[11] : '', 'cep': person[12] ? person[12] : '', 'cidade': person[13] ? person[13] : '', 'estado': person[14] ? person[14] : '', 'fone': person[15] ? person[15] : '', 'email': person[17] ? person[17] : '', 'assessor': person[20] ? person[20] : '', 'vendedor': person[21] ? person[21] : '', 'whats': person[16]? person[16] : '', 'entrega': person[22]? person[22] : '', 'bairroEntrega': person[23]? person[23] : '', 'cepEntrega': person[24]? person[24] : '', 'cidadeEntrega': person[25]? person[25] : '', 'estadoEntrega': person[26]? person[26] : '' }))
-        if (person[6]) {
-            let row = await findStoreownerRow(person[6])
+        setNewNeighborhood(person[23] ? person[23] : '')
+        setNewCep(person[24] ? person[24] : '')
+        setNewCity(person[25] ? person[25] : '')
+        setNewState(person[26] ? person[26] : '')
+        setTextArea(person[8] ? `https://interno.ziro.app/show-info?doc=${person[8]}&razao=${person[10]}` : '')
+        setStoreowner(Object.assign({ 'cadastro': person[0] ? person[0] : '', 'afiliado': person[18] ? person[18] : '', 'afiliado_cpf': person[19] ? person[19] : '', 'lojista': person[1] ? person[1] : '', 'rg': person[4] ? person[4] : '', 'cpf': person[5] ? person[5] : '', 'nascimento': person[6] ? person[6] : '', 'instagram': person[7] ? person[7] : '', 'cnpj': person[8] ? person[8] : '', 'ie': person[9] ? person[9] : '', 'razao': person[10] ? person[10] : '', 'fantasia': person[11] ? person[11] : '', 'endereco': person[12] ? person[12] : '', 'bairro': person[13] ? person[13] : '', 'cep': person[14] ? person[14] : '', 'cidade': person[15] ? person[15] : '', 'estado': person[16] ? person[16] : '', 'fone': person[17] ? person[17] : '', 'email': person[3] ? person[3] : '', 'assessor': person[20] ? person[20] : '', 'vendedor': person[21] ? person[21] : '', 'whats': person[2] ? person[2] : '', 'entrega': person[22] ? person[22] : '', 'bairroEntrega': person[23] ? person[23] : '', 'cepEntrega': person[24] ? person[24] : '', 'cidadeEntrega': person[25] ? person[25] : '', 'estadoEntrega': person[26] ? person[26] : '' }))
+        if (person[8]) {
+            let row = await findStoreownerRow(person[8])
             setStoreownerRow(row)
         }
     }
@@ -258,7 +258,7 @@ const UpdateStoreowner = () => {
         }
     }
     const copyToClipboard = (e) => {
-        if(document.queryCommandSupported('copy')) {
+        if (document.queryCommandSupported('copy')) {
             try {
                 e.preventDefault()
                 textAreaRef.current.select()
@@ -296,7 +296,7 @@ const UpdateStoreowner = () => {
                 onChange={({ target: { value } }) => {
                     if (value !== '') {
                         setSearchedName(value)
-                        let person = storeowners.find(element => element[8] === value)
+                        let person = storeowners.find(element => element[10] === value)
                         if (person) storeownerHandleSuccess(person)
                         else setFoundStoreowner(false)
                     } else storeownerHandleError()
@@ -304,17 +304,17 @@ const UpdateStoreowner = () => {
                 onChangeKeyboard={element => {
                     if (element) {
                         setSearchedName(element.value)
-                        let person = storeowners.find(storeowner => storeowner[8] === element.value)
+                        let person = storeowners.find(storeowner => storeowner[10] === element.value)
                         if (person) storeownerHandleSuccess(person)
                         else setFoundStoreowner(false)
                     } else storeownerHandleError()
                 }}
-                list={storeowners.map(storeowner => `${Object.values(storeowner)[8]}`)}
+                list={storeowners.map(storeowner => `${Object.values(storeowner)[10]}`)}
                 placeholder="Pesquise o lojista"
             />
             <input type="text" style={{ position: 'absolute', left: '-9999px' }} value={textArea} ref={textAreaRef} readOnly />
             {foundStoreowner ? <>
-                <div style={{padding: '20px 0 10px'}} >
+                <div style={{ padding: '20px 0 10px' }} >
                     <Button
                         type="button"
                         cta="Compartilhar"
@@ -323,10 +323,10 @@ const UpdateStoreowner = () => {
                     />
                 </div>
                 {copyResultText ?
-                    <div style={{padding: '5px 0 0', fontSize: '15px', color: copyResultStatus? successColor : alertColor, textAlign: 'center'}} >
+                    <div style={{ padding: '5px 0 0', fontSize: '15px', color: copyResultStatus ? successColor : alertColor, textAlign: 'center' }} >
                         <span>{copyResultText}</span>
                     </div>
-                    : <div style={{height: '26px'}}>&nbsp;</div>
+                    : <div style={{ height: '26px' }}>&nbsp;</div>
                 }
                 <InputEdit
                     name="Assessor(a)"
@@ -377,7 +377,7 @@ const UpdateStoreowner = () => {
                     value={newRg}
                     onChange={({ target: { value } }) => setNewRg(value)}
                     validateInput={() => true}
-                    submit={inputEditUpdate(storeowner.cnpj, 'C', storeownerRow, { 'rg': newRg }, newRg, setLoadingRg, setErrorRg)}
+                    submit={inputEditUpdate(storeowner.cnpj, 'E', storeownerRow, { 'rg': newRg }, newRg, setLoadingRg, setErrorRg)}
                     setError={() => { }}
                     error={errorRg}
                     editable={true}
@@ -388,7 +388,7 @@ const UpdateStoreowner = () => {
                     value={newCpf}
                     onChange={({ target: { value } }) => setNewCpf(maskInput(value, '###.###.###-##', true))}
                     validateInput={validateCpf}
-                    submit={inputEditUpdate(storeowner.cnpj, 'D', storeownerRow, { 'cpf': newCpf }, newCpf, setLoadingCpf, setErrorCpf)}
+                    submit={inputEditUpdate(storeowner.cnpj, 'F', storeownerRow, { 'cpf': newCpf }, newCpf, setLoadingCpf, setErrorCpf)}
                     setError={() => { }}
                     error={errorCpf}
                     editable={true}
@@ -399,7 +399,7 @@ const UpdateStoreowner = () => {
                     value={newBirthDate}
                     onChange={({ target: { value } }) => setNewBirthDate(maskInput(value, '##/##/####', true))}
                     validateInput={validateBirthDate}
-                    submit={inputEditUpdate(storeowner.cnpj, 'E', storeownerRow, { 'nascimento': newBirthDate }, newBirthDate, setLoadingBirthDate, setErrorBirthDate)}
+                    submit={inputEditUpdate(storeowner.cnpj, 'G', storeownerRow, { 'nascimento': newBirthDate }, newBirthDate, setLoadingBirthDate, setErrorBirthDate)}
                     setError={() => { }}
                     error={errorBirthDate}
                     editable={true}
@@ -410,7 +410,7 @@ const UpdateStoreowner = () => {
                     value={newInsta}
                     onChange={({ target: { value } }) => setNewInsta(value)}
                     validateInput={() => true}
-                    submit={inputEditUpdate(storeowner.cnpj, 'F', storeownerRow, { 'instagram': newInsta.replace('@', '').trim().toLowerCase() }, newInsta.replace('@', '').trim().toLowerCase(), setLoadingInsta, setErrorInsta)}
+                    submit={inputEditUpdate(storeowner.cnpj, 'H', storeownerRow, { 'instagram': newInsta.replace('@', '').trim().toLowerCase() }, newInsta.replace('@', '').trim().toLowerCase(), setLoadingInsta, setErrorInsta)}
                     placeholder={'Ex.: ateliederoupa. Não use .com'}
                     setError={() => { }}
                     error={errorInsta}
@@ -422,7 +422,7 @@ const UpdateStoreowner = () => {
                     value={newIe}
                     onChange={({ target: { value } }) => setNewIe(maskInput(value, '#############', true))}
                     validateInput={() => true}
-                    submit={inputEditUpdate(storeowner.cnpj, 'H', storeownerRow, { 'ie': newIe }, newIe, setLoadingIe, setErrorIe)}
+                    submit={inputEditUpdate(storeowner.cnpj, 'J', storeownerRow, { 'ie': newIe }, newIe, setLoadingIe, setErrorIe)}
                     setError={() => { }}
                     error={errorIe}
                     editable={true}
@@ -474,7 +474,7 @@ const UpdateStoreowner = () => {
                 />
                 <InputEdit
                     name="Complemento"
-                    value={storeowner.endereco ? storeowner.endereco.split(', ')[2] : ''}
+                    value={storeowner.endereco.split(', ')[2] ? storeowner.endereco.split(', ')[2] : ''}
                     onChange={() => { }}
                     validateInput={() => { }}
                     submit={() => { }}
@@ -532,7 +532,7 @@ const UpdateStoreowner = () => {
                     value={newStreet}
                     onChange={({ target: { value } }) => setNewStreet(value.toUpperCase())}
                     validateInput={() => true}
-                    submit={inputEditUpdate(storeowner.cnpj, 'W', storeownerRow, { 'entrega': (newStreet? `${newStreet}, ` : '') + (newNumber? `${newNumber}, ` : '') + (newComplement ? newComplement : '') }, (newStreet? `${newStreet}, ` : '') + (newNumber? `${newNumber}, ` : '') + (newComplement ? newComplement : ''), setLoadingStreet, setErrorStreet)}
+                    submit={inputEditUpdate(storeowner.cnpj, 'W', storeownerRow, { 'entrega': newComplement ? (newStreet ? `${newStreet}, ` : '') + (newNumber ? `${newNumber}, ` : '') + newComplement : (newStreet ? `${newStreet}, ` : '') + (newNumber ? `${newNumber}` : '') }, newComplement ? (newStreet ? `${newStreet}, ` : '') + (newNumber ? `${newNumber}, ` : '') + newComplement : (newStreet ? `${newStreet}, ` : '') + (newNumber ? `${newNumber}` : ''), setLoadingStreet, setErrorStreet)}
                     setError={() => { }}
                     error={errorStreet}
                     editable={true}
@@ -543,7 +543,7 @@ const UpdateStoreowner = () => {
                     value={newNumber}
                     onChange={({ target: { value } }) => setNewNumber(value)}
                     validateInput={() => true}
-                    submit={inputEditUpdate(storeowner.cnpj, 'W', storeownerRow, { 'entrega': (newStreet? `${newStreet}, ` : '') + (newNumber? `${newNumber}, ` : '') + (newComplement ? newComplement : '') }, (newStreet? `${newStreet}, ` : '') + (newNumber? `${newNumber}, ` : '') + (newComplement ? newComplement : ''), setLoadingNumber, setErrorNumber)}
+                    submit={inputEditUpdate(storeowner.cnpj, 'W', storeownerRow, { 'entrega': newComplement ? (newStreet ? `${newStreet}, ` : '') + (newNumber ? `${newNumber}, ` : '') + newComplement : (newStreet ? `${newStreet}, ` : '') + (newNumber ? `${newNumber}` : '') }, newComplement ? (newStreet ? `${newStreet}, ` : '') + (newNumber ? `${newNumber}, ` : '') + newComplement : (newStreet ? `${newStreet}, ` : '') + (newNumber ? `${newNumber}` : ''), setLoadingNumber, setErrorNumber)}
                     setError={() => { }}
                     error={errorNumber}
                     editable={true}
@@ -554,7 +554,7 @@ const UpdateStoreowner = () => {
                     value={newComplement}
                     onChange={({ target: { value } }) => setNewComplement(value.toUpperCase())}
                     validateInput={() => true}
-                    submit={inputEditUpdate(storeowner.cnpj, 'W', storeownerRow, { 'entrega': (newStreet? `${newStreet}, ` : '') + (newNumber? `${newNumber}, ` : '') + (newComplement ? newComplement : '') }, (newStreet? `${newStreet}, ` : '') + (newNumber? `${newNumber}, ` : '') + (newComplement ? newComplement : ''), setLoadingComplement, setErrorComplement)}
+                    submit={inputEditUpdate(storeowner.cnpj, 'W', storeownerRow, { 'entrega': newComplement ? (newStreet ? `${newStreet}, ` : '') + (newNumber ? `${newNumber}, ` : '') + newComplement : (newStreet ? `${newStreet}, ` : '') + (newNumber ? `${newNumber}` : '') }, newComplement ? (newStreet ? `${newStreet}, ` : '') + (newNumber ? `${newNumber}, ` : '') + newComplement : (newStreet ? `${newStreet}, ` : '') + (newNumber ? `${newNumber}` : ''), setLoadingComplement, setErrorComplement)}
                     setError={() => { }}
                     error={errorComplement}
                     editable={true}
@@ -562,7 +562,7 @@ const UpdateStoreowner = () => {
                 />
                 <InputEdit
                     name="Bairro (entrega)"
-                    value={newNeighborhood? newNeighborhood : ''}
+                    value={newNeighborhood ? newNeighborhood : ''}
                     onChange={({ target: { value } }) => setNewNeighborhood(value.toUpperCase())}
                     validateInput={() => true}
                     submit={inputEditUpdate(storeowner.cnpj, 'X', storeownerRow, { 'bairroEntrega': newNeighborhood }, newNeighborhood, setLoadingNeighborhood, setErrorNeighborhood)}
@@ -608,11 +608,11 @@ const UpdateStoreowner = () => {
                     name="Telefone"
                     value={newFone}
                     onChange={({ target: { value } }) => {
-                        let mask = value.length <= 14? '(##) ####-####' : '(##) #####-####'
+                        let mask = value.length <= 14 ? '(##) ####-####' : '(##) #####-####'
                         setNewFone(maskInput(value, mask, true))
                     }}
                     validateInput={validateFone}
-                    submit={inputEditUpdate(storeowner.cnpj, 'P', storeownerRow, { 'fone': newFone }, newFone, setLoadingFone, setErrorFone)}
+                    submit={inputEditUpdate(storeowner.cnpj, 'R', storeownerRow, { 'fone': newFone }, newFone, setLoadingFone, setErrorFone)}
                     setError={() => { }}
                     error={errorFone}
                     editable={true}
@@ -623,7 +623,7 @@ const UpdateStoreowner = () => {
                     value={newWhats}
                     onChange={({ target: { value } }) => setNewWhats(maskInput(value, '(##) #####-####', true))}
                     validateInput={validateWhats}
-                    submit={inputEditUpdate(storeowner.cnpj, 'Q', storeownerRow, { 'whatsapp': newWhats }, newWhats, setLoadingWhats, setErrorWhats)}
+                    submit={inputEditUpdate(storeowner.cnpj, 'C', storeownerRow, { 'whatsapp': newWhats }, newWhats, setLoadingWhats, setErrorWhats)}
                     setError={() => { }}
                     error={errorWhats}
                     editable={true}
@@ -632,9 +632,9 @@ const UpdateStoreowner = () => {
                 <InputEdit
                     name="Email"
                     value={storeowner.email}
-                    onChange={() => {}}
-                    validateInput={() => {}}
-                    submit={() => {}}
+                    onChange={() => { }}
+                    validateInput={() => { }}
+                    submit={() => { }}
                     setError={() => { }}
                     error={''}
                     editable={false}
@@ -643,7 +643,7 @@ const UpdateStoreowner = () => {
                 <br />
                 <Form
                     validations={validations}
-                    sendToBackend={dropdownUpdate ? dropdownUpdate(state, storeowner.cnpj, storeownerRow) : null}
+                    sendToBackend={formUpdate ? formUpdate(state, storeowner.cnpj, storeownerRow) : null}
                     inputs={[
                         <FormInput name='affiliate' label='Afiliado(a)' input={
                             <Dropdown
@@ -657,7 +657,7 @@ const UpdateStoreowner = () => {
                                         }
                                     } else {
                                         setAffiliateCpf('')
-                                        setAffiliateName(value === 'NENHUM'? 'NENHUM' : '')
+                                        setAffiliateName(value === 'NENHUM' ? 'NENHUM' : '')
                                     }
                                 }}
                                 onChangeKeyboard={element => {
@@ -669,11 +669,11 @@ const UpdateStoreowner = () => {
                                         }
                                     } else {
                                         setAffiliateCpf('')
-                                        setAffiliateName(element.value === 'NENHUM'? 'NENHUM' : '')
+                                        setAffiliateName(element.value === 'NENHUM' ? 'NENHUM' : '')
                                     }
                                 }
                                 }
-                                list={affiliates.map(affiliate => affiliate === 'NENHUM'? 'NENHUM' : Object.values(affiliate)[1])}
+                                list={affiliates.map(affiliate => affiliate === 'NENHUM' ? 'NENHUM' : Object.values(affiliate)[1])}
                                 placeholder="Nome do(a) afiliado(a)"
                                 readOnly={true}
                             />

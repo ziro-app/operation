@@ -20,9 +20,9 @@ const sendToBackend = state => () => {
         range: 'Base!A1',
         resource: {
             values: [
-                [dateHourFormatterUTC3(today), `${fnameTrim} ${lnameTrim}`, rg, cpf, birth, instaTrim,
-                    cnpj, ie, razao, fantasia, `${rua}, ${numero}, ${complemento}`, bairro, cep, cidade,
-                    estado, fone, whats, email.toLowerCase(), nomeAfiliado, affiliateCpf, advisor, salesman]
+                [dateHourFormatterUTC3(today), `${fnameTrim} ${lnameTrim}`, whats, email.toLowerCase(), rg, cpf, birth, instaTrim,
+                    cnpj, ie, razao, fantasia, complemento ? `${rua}, ${numero}, ${complemento}` : `${rua}, ${numero}`, bairro, cep, cidade,
+                    estado, fone, nomeAfiliado, affiliateCpf, advisor, salesman]
             ]
         },
         valueInputOption: 'user_entered'
@@ -53,7 +53,7 @@ const sendToBackend = state => () => {
                         ie,
                         razao,
                         fantasia,
-                        endereco: `${rua}, ${numero}, ${complemento}`,
+                        endereco: complemento ? `${rua}, ${numero}, ${complemento}` : `${rua}, ${numero}`,
                         bairro,
                         cep,
                         cidade,
