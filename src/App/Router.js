@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Router2 as routeMatcher} from '@ziro/router'
+import { Router2 as routeMatcher } from '@ziro/router'
 import Login from './Login/index'
 import Register from './Register/index'
 import LoginTrouble from '@bit/vitorbarbosa19.ziro.login-trouble'
@@ -20,6 +20,8 @@ import UpdateAffiliate from './UpdateAffiliate/index'
 import RegisterBillet from './RegisterBillet/index'
 import ShowInfo from './ShowInfo/index'
 import RegisterExpenses from './RegisterExpenses/index'
+import ConsultShipping from './ConsultShipping/index'
+// import FirebaseMigration from './FirebaseMigration/index' -> Inacabado
 import ImageUpload from './ImageUpload/index'
 import Submenu from '@bit/vitorbarbosa19.ziro.submenu'
 import UpdateUserInfo from './UpdateUserInfo/index'
@@ -58,7 +60,9 @@ const Router = ({ isLogged }) => {
             ['Afiliado: Cadastrar', '/cadastrar-afiliado'],
             ['Afiliado: Ver/Editar', '/visualizar-afiliado']]} /></Menu>,
         '/logistica': <Menu title='Logística'><Submenu options={[
-            ['Cadastrar despesa', 'cadastrar-despesa']]} /></Menu>,
+            ['Cadastrar despesa', 'cadastrar-despesa'],
+            ['Consulta de frete', 'consultar-frete']]} /></Menu>,
+        '/consultar-frete': <HeaderBack title='Consulta de frete' navigateTo='/logistica'><ConsultShipping /></HeaderBack>,
         '/cadastrar-despesa': <HeaderBack title='Cadastrar despesa' navigateTo='/logistica'><RegisterExpenses /></HeaderBack>,
         '/cadastrar-boleto': <HeaderBack title='Cadastrar boleto' navigateTo='/assessoria'><RegisterBillet /></HeaderBack>,
         '/requerir-material': <HeaderBack title='Requerir material' navigateTo='/administrativo'><MaterialRequest /></HeaderBack>,
@@ -71,6 +75,7 @@ const Router = ({ isLogged }) => {
         '/atualizar-fabricantes': <HeaderBack title='Atualizar fabricantes' navigateTo='/assessoria'><UpdateBrandsInfos /></HeaderBack>,
         '/entrada-saida': <HeaderBack title='Entrada/Saída do Caixa' navigateTo='/administrativo'><RegisterInputOutput /></HeaderBack>,
         '/show-info': <ShowInfo internal={true} />
+        // '/migration': <FirebaseMigration /> -> Inacabado
     }
     return routeMatcher(isLogged, publicRoutes, privateRoutes, <Login />, <NotFound fallback='/' />)
 }

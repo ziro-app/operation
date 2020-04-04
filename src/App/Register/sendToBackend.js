@@ -1,7 +1,7 @@
 import { auth, db } from '../../Firebase/index'
 import { post } from 'axios'
 import md5 from 'md5';
-import { dateHourFormatterUTC3 } from '../utils'
+import { dateHourFormatterUTC3, numberFormatter } from '../utils'
 
 const sendToBackend = state => () => {
     const { token, name, nickname, birthDate, cpf, rg, issuingBody, shippingDate, maritalStatus,
@@ -17,7 +17,7 @@ const sendToBackend = state => () => {
     const endereco = street.trim() + ', ' + number + (complement ? ', ' + complement.trim() : '') + ', ' + neighborhood
     const cidade = city ? city.trim() : ''
     const estado = cityState ? cityState.trim() : ''
-    const valorCobrado = amountCharged ? amountCharged.trim() : ''
+    const valorCobrado = numberFormatter(amountCharged) ? numberFormatter(amountCharged) / 100 : 0.00
     const nomeEmergencia = emergencyName ? emergencyName.trim() : ''
     const parentesco = kinship ? kinship.trim() : ''
     const contatoEmergencia = emergencyContact ? '+55 ' + emergencyContact.trim() : ''

@@ -67,6 +67,7 @@
         "@bit/vitorbarbosa19.ziro.submenu": "0.0.1",
         "@bit/vitorbarbosa19.ziro.update-email": "0.1.11",
         "@bit/vitorbarbosa19.ziro.update-pass": "0.1.10",
+        "@bit/vitorbarbosa19.ziro.modal": "0.1.1",
         "@ziro/capitalize": "^1.0.0",
         "@ziro/mask-input": "^1.0.0",
         "@ziro/router": "^3.0.0",
