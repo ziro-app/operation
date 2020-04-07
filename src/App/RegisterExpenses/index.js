@@ -2,48 +2,51 @@ import React, { useState, useEffect, useContext } from 'react'
 import Spinner from '@bit/vitorbarbosa19.ziro.spinner'
 import Error from '@bit/vitorbarbosa19.ziro.error'
 import Dropdown from '@bit/vitorbarbosa19.ziro.dropdown'
-import Calendar from '@bit/vitorbarbosa19.ziro.calendar'
 import Form from '@bit/vitorbarbosa19.ziro.form'
 import FormInput from '@bit/vitorbarbosa19.ziro.form-input'
 import InputText from '@bit/vitorbarbosa19.ziro.input-text'
+import maskInput from '@ziro/mask-input'
+import currencyFormat from '@ziro/currency-format'
 import fetch from './fetch'
 import sendToBackend from './sendToBackend'
 import { userContext } from '../appContext'
+import matchForm from './matchForm'
 
 const RegisterExpenses = () => {
     const { nickname } = useContext(userContext)
     const [isLoading, setIsLoading] = useState(true)
     const [isError, setIsError] = useState(false)
-
     // APLICADO NOS DOIS
     const [expenseAmount, setExpenseAmount] = useState('')
     const [type, setType] = useState('')
     const typeList = ['Operacional', 'Comum'].sort()
     const [bankTransfer, setBankTransfer] = useState('')
     const bankTransferList = ['Sim', 'Não']
+    const [beneficiary, setBeneficiary] = useState('')
+    const [beneficiaryDocument, setBeneficiaryDocument] = useState('')
     const [bankName, setBankName] = useState('')
     const [accountNumber, setAccountNumber] = useState('')
     const [agency, setAgency] = useState('')
     const [date, setDate] = useState('')
     const [focusDate, setFocusDate] = useState(false)
-
     // DADOS DO OPERACIONAL
     const [operationalDescription, setOperacionalDescription] = useState('')
-    const ODList = ['MARCOS MOTOBOY', 'CORREIOS SEDEX', 'CORREIOS PAC', '99TAXI', 'AZUL CARGO', 'LOGGI', 'GOLLOG', 'TAXI', 'UBER', 'OUTROS'].sort()
+    const ODList = ['MARCOS MOTOBOY', 'CORREIOS SEDEX', 'CORREIOS PAC', '99TAXI', 'AZUL CARGO', 'LOGGI', 'GOLLOG', 'TAXI', 'UBER', 'CLIENTES'].sort()
     const [attendance, setAttendance] = useState('')
     const [attendanceList, setAttendanceList] = useState([])
-    const [haveRefund, setHaveRefund] = useState('')
+    const [haveRefound, setHaveRefound] = useState('')
     const refoundList = ['Sim', 'Não']
     const [note, setNote] = useState('')
-
     // DADOS DO COMUM
     const [commonDescription, setCommonDescription] = useState('')
     const [paymentMethod, setPaymentMethod] = useState('')
-    const paymentMethodList = ['Cartão de Crédito', 'Dinheiro', 'Cartão de Débito', 'Boleto'].sort()
+    const paymentMethodList = ['Cartão de Crédito', 'Dinheiro', 'Cartão de Débito', 'Boleto', 'Transferência Bancária'].sort()
     const [numberOfInstallments, setNumberOfInstallments] = useState('')
+    const setState = { setExpenseAmount, setType, setOperacionalDescription, setDate, setFocusDate, setAttendance, setHaveRefound, setNote, setCommonDescription, setPaymentMethod, setNumberOfInstallments, setBankTransfer, setBankName, setAccountNumber, setAgency, setBeneficiary, setBeneficiaryDocument }
+    const state = { nickname, paymentMethodList, expenseAmount, type, operationalDescription, ODList, date, focusDate, attendance, attendanceList, haveRefound, refoundList, note, commonDescription, paymentMethod, numberOfInstallments, bankTransfer, bankTransferList, bankName, accountNumber, agency, refoundList, beneficiary, beneficiaryDocument, ...setState }
 
-    const setState = { setExpenseAmount, setType, setOperacionalDescription, setDate, setAttendance, setHaveRefund, setNote, setCommonDescription, setPaymentMethod, setNumberOfInstallments, setBankTransfer, setBankName, setAccountNumber, setAgency }
-    const state = { nickname, expenseAmount, type, operationalDescription, date, attendance, haveRefund, note, commonDescription, paymentMethod, numberOfInstallments, bankTransfer, bankName, accountNumber, agency, ...setState }
+    const validateCpfOrCnpj = (value) => /(^\d{3}\.\d{3}\.\d{3}\-\d{2}$)|(^\d{2}\.\d{3}\.\d{3}\/\d{4}\-\d{2}$)/.test(value)
+
     const validations = [
         {
             name: 'expenseAmount',
@@ -64,7 +67,7 @@ const RegisterExpenses = () => {
             name: 'operationalDescription',
             validation: value => type === 'Operacional'? ODList.includes(value) : true,
             value: operationalDescription,
-            message: 'Descrição inválida'
+            message: 'Favorecido inválido'
         }, {
             name: 'attendance',
             validation: value => type === 'Operacional'? attendanceList.includes(value) : true,
@@ -81,9 +84,9 @@ const RegisterExpenses = () => {
             value: paymentMethod,
             message: 'Meio de pagamento inválido'
         }, {
-            name: 'haveRefund',
+            name: 'haveRefound',
             validation: value => type === 'Operacional'? refoundList.includes(value) : true,
-            value: haveRefund,
+            value: haveRefound,
             message: 'Valor inválido'
         }, {
             name: 'commonDescription',
@@ -92,209 +95,52 @@ const RegisterExpenses = () => {
             message: 'Descrição inválida'
         }, {
             name: 'bankTransfer',
-            validation: value => bankTransferList.includes(value),
+            validation: value => type === 'Operacional'? bankTransferList.includes(value) : true,
             value: bankTransfer,
             message: 'Opção inválida'
         }, {
             name: 'bankName',
-            validation: value => bankTransfer === 'Sim'? !!value : true,
+            validation: value => (paymentMethod === 'Transferência Bancária' || bankTransfer === 'Sim')? !!value : true,
             value: bankName,
             message: 'Campo inválido'
         }, {
             name: 'accountNumber',
-            validation: value => bankTransfer === 'Sim'? !!value : true,
+            validation: value => (paymentMethod === 'Transferência Bancária' || bankTransfer === 'Sim')? !!value : true,
             value: accountNumber,
-            message: 'Campo inválida'
+            message: 'Conta inválida'
         }, {
             name: 'agency',
-            validation: value => bankTransfer === 'Sim'? !!value : true,
+            validation: value => (paymentMethod === 'Transferência Bancária' || bankTransfer === 'Sim')? !!value : true,
             value: agency,
-            message: 'Campo inválida'
+            message: 'Agência inválida'
+        }, {
+            name: 'note',
+            validation: value => operationalDescription === 'CLIENTES'? !!value : true,
+            value: note,
+            message: 'Campo obrigatório'
+        }, {
+            name: 'beneficiary',
+            validation: value => (paymentMethod === 'Transferência Bancária' || bankTransfer === 'Sim')? !!value : true,
+            value: beneficiary,
+            message: 'Campo obrigatório'
+        }, {
+            name: 'beneficiaryDocument',
+            validation: value => (paymentMethod === 'Transferência Bancária' || bankTransfer === 'Sim')? validateCpfOrCnpj(value) : true,
+            value: beneficiaryDocument,
+            message: 'Documento inválido'
+        }, {
+            name: 'numberOfInstallments',
+            validation: value => paymentMethod === 'Cartão de Crédito'? (/(^\d{1}$)/.test(value)) || (/(^\d{2}$)/.test(value) || value === '') : true,
+            value: numberOfInstallments,
+            message: 'Valor inválido'
         }
     ]
-
-    const operationalForm = () => {
-        return(
-        <Form
-        validations={validations}
-        sendToBackend={sendToBackend? sendToBackend(state) : () => null}
-        inputs={[
-            <FormInput name='attendance' label='Atendimento' input={
-                <Dropdown
-                    value={attendance}
-                    onChange={({ target: { value } }) => setAttendance(value)}
-                    onChangeKeyboard={element =>
-                        element ? setAttendance(element.value) : null
-                    }
-                    list={attendanceList}
-                    placeholder="Atendimento referido"
-                />
-            } />,
-            <FormInput name='date' label={'Data do despacho'} input={
-                <Calendar
-                    inputDate={date}
-                    setInputDate={setDate}
-                    focused={focusDate}
-                    setFocused={setFocusDate}
-                    placeholder={'01/01/2020'}
-                    outsideRange={true}
-                    before={true}
-                />
-            } />,
-            <FormInput name='operationalDescription' label='Descrição' input={
-                <Dropdown
-                    value={operationalDescription}
-                    onChange={({ target: { value } }) => setOperacionalDescription(value)}
-                    onChangeKeyboard={element =>
-                        element ? setOperacionalDescription(element.value) : null
-                    }
-                    list={ODList}
-                    placeholder="Se 'Outros', detalhar nas observações"
-                />
-            } />,
-            <FormInput name='haveRefund' label='Haverá reembolso?' input={
-                <Dropdown
-                    value={haveRefund}
-                    readOnly={true}
-                    onChange={({ target: { value } }) => setHaveRefund(value)}
-                    onChangeKeyboard={element =>
-                        element ? setHaveRefund(element.value) : null
-                    }
-                    list={refoundList}
-                    placeholder="Sim ou não"
-                />
-            } />,
-            <FormInput name='note' label='Observação' input={
-                <InputText
-                    value={note}
-                    onChange={({ target: { value } }) => setNote(value)}
-                    placeholder='Observações a respeito'
-                />
-            } />,
-            <FormInput name='bankTransfer' label='Transferência bancária' input={
-                <Dropdown
-                    value={bankTransfer}
-                    readOnly={true}
-                    onChange={({ target: { value } }) => setBankTransfer(value)}
-                    onChangeKeyboard={element =>
-                        element ? setBankTransfer(element.value) : null
-                    }
-                    list={bankTransferList}
-                    placeholder="Sim ou não"
-                />
-            } />,
-            bankTransfer === 'Sim' ? <FormInput name='bankName' label='Nome do Banco' input={
-                <InputText
-                    value={bankName}
-                    onChange={({ target: { value } }) => setBankName(value.toUpperCase())}
-                    placeholder='Ex.: BANCO DO BRASIL'
-                />
-            } /> : <FormInput name='' label='' input={<></>}/>,
-            bankTransfer === 'Sim' ? <FormInput name='accountNumber' label='Número da Conta' input={
-                <InputText
-                    value={accountNumber}
-                    onChange={({ target: { value } }) => setAccountNumber(value)}
-                    placeholder='Ex.: 14637-8'
-                />
-            } /> : <FormInput name='' label='' input={<></>}/>,
-            bankTransfer === 'Sim' ? <FormInput name='agency' label='Número da Agência' input={
-                <InputText
-                    value={agency}
-                    onChange={({ target: { value } }) => setAgency(value)}
-                    placeholder='Ex.: 1463-8'
-                />
-            } /> : <FormInput name='' label='' input={<></>}/>
-        ]}
-        />
-        )
-    }
-
-    const commonForm = () => {
-        return(
-            <Form
-            validations={validations}
-            sendToBackend={sendToBackend? sendToBackend(state) : () => null}
-            inputs={[
-                <FormInput name='commonDescription' label='Descrição' input={
-                    <InputText
-                        value={commonDescription}
-                        onChange={({ target: { value } }) => setCommonDescription(value)}
-                        placeholder='Preencha todos os detalhes necessários'
-                    />
-                } />,
-                <FormInput name='paymentMethod' label='Pagamento' input={
-                    <Dropdown
-                        value={paymentMethod}
-                        onChange={({ target: { value } }) => setPaymentMethod(value)}
-                        onChangeKeyboard={element =>
-                            element ? setPaymentMethod(element.value) : null
-                        }
-                        list={paymentMethodList}
-                        placeholder="Forma de pagamento"
-                    />
-                } />,
-                <FormInput name='numberOfInstallments' label='Quantidade de parcelas' input={
-                    <InputText
-                        value={numberOfInstallments}
-                        onChange={({ target: {value} }) => setNumberOfInstallments(value)}
-                        readOnly={false}
-                        placeholder='Apenas se maior que 1'
-                    />
-                } />,
-                <FormInput name='date' label={'Data de vencimento do boleto'} input={
-                    <Calendar
-                        inputDate={date}
-                        setInputDate={setDate}
-                        focused={focusDate}
-                        setFocused={setFocusDate}
-                        placeholder={'01/01/2020'}
-                        outsideRange={true}
-                        before={true}
-                    />
-                } />,
-                <FormInput name='bankTransfer' label='Transferência bancária' input={
-                    <Dropdown
-                        value={bankTransfer}
-                        readOnly={true}
-                        onChange={({ target: { value } }) => setBankTransfer(value)}
-                        onChangeKeyboard={element =>
-                            element ? setBankTransfer(element.value) : null
-                        }
-                        list={bankTransferList}
-                        placeholder="Sim ou não"
-                    />
-                } />,
-                bankTransfer === 'Sim' ? <FormInput name='bankName' label='Nome do Banco' input={
-                    <InputText
-                        value={bankName}
-                        onChange={({ target: { value } }) => setBankName(value.toUpperCase())}
-                        placeholder='Ex.: BANCO DO BRASIL'
-                    />
-                } /> : <FormInput name='' label='' input={<></>}/>,
-                bankTransfer === 'Sim' ? <FormInput name='accountNumber' label='Número da Conta' input={
-                    <InputText
-                        value={accountNumber}
-                        onChange={({ target: { value } }) => setAccountNumber(value)}
-                        placeholder='Ex.: 14637-8'
-                    />
-                } /> : <FormInput name='' label='' input={<></>}/>,
-                bankTransfer === 'Sim' ? <FormInput name='agency' label='Número da Agência' input={
-                    <InputText
-                        value={agency}
-                        onChange={({ target: { value } }) => setAgency(value)}
-                        placeholder='Ex.: 1463-8'
-                    />
-                } /> : <FormInput name='' label='' input={<></>}/>
-            ]}
-            />
-        )
-    }
 
     const clearFields = () => {
         setBankTransfer('')
         setOperacionalDescription('')
         setAttendance('')
-        setHaveRefund('')
+        setHaveRefound('')
         setNote('')
         setCommonDescription('')
         setDate('')
@@ -309,38 +155,42 @@ const RegisterExpenses = () => {
     if (isError) return <Error />
 
     return (
-        <>
-            <div style={{display: 'grid',gridRowGap: '2px'}}>
-                <FormInput name='expenseAmount' label='Valor' input={
-                    <InputText
-                        value={expenseAmount}
-                        onChange={({ target: { value } }) => setExpenseAmount(value)}
-                        placeholder='Separe os centavos com vírgula'
-                    />
-                } />
-                <FormInput name='type' label='Tipo' input={
-                    <Dropdown
-                        value={type}
-                        onChange={({ target: { value } }) => {
-                            setType(value)
+        <Form
+        validations={validations}
+        sendToBackend={sendToBackend? sendToBackend(state) : () => null}
+        inputs={[
+            <FormInput name='expenseAmount' label='Valor' input={
+                <InputText
+                    value={currencyFormat(expenseAmount)}
+                    onChange={({ target: { value } }) => {
+                        const toInteger = parseInt(value.replace(/[R$\.,]/g, ''), 10)
+                        setExpenseAmount(maskInput(toInteger, '#######', true))
+                    }}
+                    placeholder='R$ 100,00'
+                />
+            } />,
+            <FormInput name='type' label='Tipo' input={
+                <Dropdown
+                    value={type}
+                    onChange={({ target: { value } }) => {
+                        setType(value)
+                        clearFields()
+                    }}
+                    onChangeKeyboard={element => {
+                        if(element){
+                            setType(element.value)
                             clearFields()
-                        }}
-                        onChangeKeyboard={element => {
-                            if(element){
-                                setType(element.value)
-                                clearFields()
-                            } else null
-                        }
-                        }
-                        readOnly={true}
-                        list={typeList}
-                        placeholder="Tipo da despesa"
-                    />
-                } />
-            </div>
-            {type === 'Operacional' && operationalForm()}
-            {type === 'Comum' && commonForm()}
-        </>
+                        } else null
+                    }
+                    }
+                    readOnly={true}
+                    list={typeList}
+                    placeholder="Tipo da despesa"
+                />}
+            />,
+            ...matchForm(state)
+            ]}
+        />
     )
 }
 

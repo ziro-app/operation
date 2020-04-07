@@ -1,14 +1,17 @@
 import { db } from '../../Firebase/index'
 import { post } from 'axios'
+import { dateHourFormatterUTC3 } from '../utils'
 
 const sendToBackend = state => () => {
+    const cnpjInCollection = []
     const { affiliateName, affiliateCpf, advisor, salesman, fname, lname, rg, cpf, birth, insta, cnpj, ie, razao, fantasia,
-        rua, numero, complemento, bairro, cep, cidade, estado, fone, whats, email, setAffiliateName, setAffiliateCpf, setFname, setLname, setRg, setCpf,
+        rua, numero, complemento, bairro, cep, cidade, estado, fone, whats, email, setSearchedName, setAffiliateName, setAffiliateCpf, setFname, setLname, setRg, setCpf,
         setAdvisor, setSalesman, setBirth, setInsta, setCnpj, setIe, setRazao, setFantasia, setRua, setNumero, setComplemento, setBairro,
         setCep, setCidade, setEstado, setFone, setWhats, setEmail, cnpjValid } = state
     const instaTrim = insta ? insta.replace('@', '').trim().toLowerCase() : ''
     const fnameTrim = fname ? fname.trim() : ''
     const lnameTrim = lname ? lname.trim() : ''
+    const nomeAfiliado = affiliateName.split(' - ')[1] ? affiliateName.split(' - ')[1] : 'NENHUM'
     const today = new Date()
     const url = process.env.SHEET_URL
     const body = {
@@ -18,12 +21,12 @@ const sendToBackend = state => () => {
         range: 'Base!A1',
         resource: {
             values: [
-                [today, `${fnameTrim} ${lnameTrim}`, rg, cpf, birth, instaTrim,
-                    cnpj, ie, razao, fantasia, `${rua}, ${numero}, ${complemento}`, bairro, cep, cidade,
-                    estado, fone, email.toLowerCase(), affiliateName, affiliateCpf, advisor, salesman, whats]
+                [dateHourFormatterUTC3(today), `${fnameTrim} ${lnameTrim}`, whats, email.toLowerCase(), rg, cpf, birth, instaTrim,
+                    cnpj, ie, razao, fantasia, complemento ? `${rua}, ${numero}, ${complemento}` : `${rua}, ${numero}`, bairro, cep, cidade,
+                    estado, fone, nomeAfiliado, affiliateCpf, advisor, salesman]
             ]
         },
-        valueInputOption: 'raw'
+        valueInputOption: 'user_entered'
     }
 
     const config = {
@@ -35,64 +38,100 @@ const sendToBackend = state => () => {
     return new Promise(async (resolve, reject) => {
         try {
             if (cnpjValid) {
+                const documents = await db.collection('storeowners').get()
+                documents.forEach(document => {
+                    if (document.data().cnpj !== '')
+                        cnpjInCollection.push({ [document.data().cnpj]: document.id })
+                });
                 await post(url, body, config)
                 try {
-                    await db.collection('storeowners').add({
-                        cadastro: today,
-                        nomeAfiliado: affiliateName,
-                        cpfAfiliado: affiliateCpf,
-                        lojista: `${fnameTrim} ${lnameTrim}`,
-                        rg,
-                        cpf,
-                        nascimento: birth,
-                        insta: instaTrim,
-                        cnpj,
-                        ie,
-                        razao,
-                        fantasia,
-                        endereco: `${rua}, ${numero}, ${complemento}`,
-                        bairro,
-                        cep,
-                        cidade,
-                        estado,
-                        fone,
-                        whats,
-                        email: email.toLowerCase(),
-                        assessor: advisor,
-                        vendedor: salesman
-                    })
+                    const exists = cnpjInCollection.find(data => Object.keys(data).includes(cnpj))
+                    if (exists) {
+                        await db.collection('storeowners').doc(exists[cnpj]).update({
+                            nomeAfiliado,
+                            cpfAfiliado: affiliateCpf,
+                            fname: fnameTrim,
+                            lname: lnameTrim,
+                            rg,
+                            cpf,
+                            nascimento: birth,
+                            instagram: instaTrim,
+                            cnpj,
+                            ie,
+                            razao,
+                            fantasia,
+                            endereco: complemento ? `${rua}, ${numero}, ${complemento}` : `${rua}, ${numero}`,
+                            bairro,
+                            cep,
+                            cidade,
+                            estado,
+                            fone,
+                            whatsapp: whats,
+                            email: email.toLowerCase(),
+                            assessor: advisor,
+                            vendedor: salesman
+                        })
+                    } else {
+                        await db.collection('storeowners').add({
+                            cadastro: today,
+                            nomeAfiliado,
+                            cpfAfiliado: affiliateCpf,
+                            fname: fnameTrim,
+                            lname: lnameTrim,
+                            rg,
+                            cpf,
+                            nascimento: birth,
+                            instagram: instaTrim,
+                            cnpj,
+                            ie,
+                            razao,
+                            fantasia,
+                            endereco: complemento ? `${rua}, ${numero}, ${complemento}` : `${rua}, ${numero}`,
+                            bairro,
+                            cep,
+                            cidade,
+                            estado,
+                            fone,
+                            whatsapp: whats,
+                            email: email.toLowerCase(),
+                            assessor: advisor,
+                            vendedor: salesman
+                        })
+                    }
+
+                    // clear all fields after submission
+                    setSearchedName('')
+                    setFname('')
+                    setLname('')
+                    setRg('')
+                    setCpf('')
+                    setBirth('')
+                    setInsta('')
+                    setCnpj('')
+                    setIe('')
+                    setRazao('')
+                    setFantasia('')
+                    setRua('')
+                    setNumero('')
+                    setComplemento('')
+                    setBairro('')
+                    setCep('')
+                    setCidade('')
+                    setEstado('')
+                    setFone('')
+                    setWhats('')
+                    setEmail('')
+                    setAffiliateName('')
+                    setAffiliateCpf('')
+                    setAdvisor('')
+                    setSalesman('')
+                    // resolve Promise with message to user
+                    resolve('Lojista adicionado com sucesso !')
                 } catch (error) {
                     console.log(error)
                     if (error.response) console.log(error.response)
                     throw 'Erro ao salvar na Firestore'
                 }
-                // clear all fields after submission
-                setFname('')
-                setLname('')
-                setRg('')
-                setCpf('')
-                setBirth('')
-                setInsta('')
-                setCnpj('')
-                setIe('')
-                setRazao('')
-                setFantasia('')
-                setRua('')
-                setNumero('')
-                setComplemento('')
-                setBairro('')
-                setCep('')
-                setCidade('')
-                setEstado('')
-                setFone('')
-                setWhats('')
-                setEmail('')
-                setAffiliateName('')
-                setAffiliateCpf('')
-                setAdvisor('')
-                setSalesman('')
-                // resolve Promise with message to user
-                resolve('Lojista adicionado com sucesso !')
             } else throw { msg: 'Cnpj não validado', customError: true }
         } catch (error) {
             if (error.customError) reject(error)

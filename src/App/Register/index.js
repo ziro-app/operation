@@ -15,6 +15,7 @@ import Calendar from '@bit/vitorbarbosa19.ziro.calendar'
 import { containerWithPadding } from '@ziro/theme'
 import capitalize from '@ziro/capitalize'
 import maskInput from '@ziro/mask-input'
+import currencyFormat from '@ziro/currency-format'
 
 const Register = () => {
     const [isLoading, setIsLoading] = useState(false)
@@ -412,8 +413,11 @@ const Register = () => {
                     } />,
                     <FormInput name='amountCharged' label='Valor Cobrado' input={
                         <InputText
-                            value={amountCharged}
-                            onChange={({ target: { value } }) => setAmountCharged(maskInput(value, '#####', true))}
+                            value={currencyFormat(amountCharged)}
+                            onChange={({ target: { value } }) => {
+                                const toInteger = parseInt(value.replace(/[R$\.,]/g, ''), 10)
+                                setAmountCharged(maskInput(toInteger, '#######', true))
+                            }}
                             placeholder='Valor cobrado pelo trabalho'
                         />
                     } />,

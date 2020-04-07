@@ -1,29 +1,35 @@
 import { post } from 'axios'
 import { dateHourFormatterUTC3, numberFormatter } from '../utils'
 
+const mountBankTransfer = ({ paymentMethod, bankTransfer, beneficiary, beneficiaryDocument, bankName, agency, accountNumber }) => {
+    if(paymentMethod === 'Transferência Bancária' || bankTransfer === 'Sim')
+        return `Sim, Beneficiário: ${beneficiary} - Documento: ${beneficiaryDocument} - Banco: ${bankName} - Agência: ${agency} - Conta: ${accountNumber}`
+    else return 'Não'
+}
+
 const sendToBackend = state => () => {
     const { nickname, expenseAmount, type, operationalDescription, date, attendance,
-        haveRefund, note, commonDescription, paymentMethod, numberOfInstallments,
-        bankTransfer, bankName, accountNumber, agency, setExpenseAmount, setType, setOperacionalDescription, setDate,
-        setAttendance, setHaveRefund, setNote, setCommonDescription, setPaymentMethod,
-        setNumberOfInstallments, setBankTransfer, setBankName, setAccountNumber, setAgency } = state
-    const value = expenseAmount? numberFormatter(expenseAmount) : ''
+        haveRefound, note, commonDescription, paymentMethod, numberOfInstallments,
+        setExpenseAmount, setOperacionalDescription, setDate, setAttendance, setHaveRefound,
+        setNote, setCommonDescription, setPaymentMethod, setNumberOfInstallments, setBankTransfer,
+        setBankName, setAccountNumber, setAgency } = state
+    const transfer = mountBankTransfer(state)
+    const value = expenseAmount? numberFormatter(expenseAmount)/100 : ''
     const atendimento = attendance? attendance.split(' - ')[0] : ''
     const url = process.env.SHEET_URL
     const body = {
         apiResource: 'values',
         apiMethod: 'append',
         spreadsheetId: process.env.SHEET_ID_EXPENSES,
-        range: 'Novas Despesas!A1',
+        range: 'Despesas!A1',
         resource: {
             values: [
                 [dateHourFormatterUTC3(new Date()), nickname, value, type, operationalDescription,
-                    atendimento, haveRefund, '', note, commonDescription, paymentMethod, numberOfInstallments,
-                    bankTransfer === 'Sim'? `Sim, ${bankName} - Agência ${agency} - Conta ${accountNumber}` : 'Não',
-                    '', type === 'Operacional'? date : '', type==='Comum'? date : '', '']
+                    atendimento, haveRefound, note, commonDescription, paymentMethod, numberOfInstallments,
+                    transfer, type === 'Operacional'? date : '', type==='Comum'? date : '']
             ]
         },
-        valueInputOption: 'raw'
+        valueInputOption: 'user_entered'
     }
     const config = {
         headers: {
@@ -38,7 +44,7 @@ const sendToBackend = state => () => {
             setBankTransfer('')
             setOperacionalDescription('')
             setAttendance('')
-            setHaveRefund('')
+            setHaveRefound('')
             setNote('')
             setCommonDescription('')
             setDate('')

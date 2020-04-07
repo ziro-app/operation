@@ -1,4 +1,5 @@
 import { post } from 'axios'
+import { dateHourFormatterUTC3 } from '../utils'
 
 const sendToBackend = state => () => {
     const { brand, branch, insta, fname, lname, cpf, whats } = state
@@ -14,7 +15,7 @@ const sendToBackend = state => () => {
         range: 'Afiliados!A1',
         resource: {
             values: [
-                [new Date(), cpf, fnameTrim, lnameTrim, whats, '', brand, branchTrim, instaTrim]
+                [dateHourFormatterUTC3(new Date()), cpf, fnameTrim, lnameTrim, whats, '', brand, branchTrim, instaTrim]
             ]
         },
         valueInputOption: 'raw'

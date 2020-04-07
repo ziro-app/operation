@@ -7,8 +7,10 @@ import Form from '@bit/vitorbarbosa19.ziro.form'
 import FormInput from '@bit/vitorbarbosa19.ziro.form-input'
 import InputText from '@bit/vitorbarbosa19.ziro.input-text'
 import maskInput from '@ziro/mask-input'
+import currencyFormat from '@ziro/currency-format'
 import fetch from './fetch'
 import sendToBackend from './sendToBackend'
+import { numberFormatter } from '../utils'
 
 const RegisterBillet = () => {
     const [isLoading, setIsLoading] = useState(true)
@@ -34,9 +36,11 @@ const RegisterBillet = () => {
     const [advisors, setAdvisors] = useState([])
     const [type, setType] = useState('')
     const typeList = ['Online', 'Offline'].sort()
+    const [percentage, setPercentage] = useState('')
+    const [submitCount, setSubmitCount] = useState(0)
 
-    const setState = { setSearchedName, setBillet, setSaleDate, setProvider, setStoreowner, setBilletValue, setPaymentMethod, setRomaneio, setDueDate, setRevenue, setAdvisor, setType }
-    const state = { billet, saleDate, provider, storeowner, billetValue, paymentMethod, romaneio, dueDate, revenue, advisor, type, ...setState }
+    const setState = { setSearchedName, setBillet, setSaleDate, setProvider, setStoreowner, setBilletValue, setPaymentMethod, setRomaneio, setDueDate, setRevenue, setAdvisor, setType, setSubmitCount, setPercentage }
+    const state = { billet, saleDate, provider, storeowner, billetValue, paymentMethod, romaneio, dueDate, revenue, advisor, type, submitCount, percentage, ...setState }
     const validations = [
         {
             name: 'billet',
@@ -52,7 +56,7 @@ const RegisterBillet = () => {
             name: 'provider',
             validation: value => providers.find(provider => provider.nome === value),
             value: provider.nome,
-            message: 'Fornecedor(a) inválido(a)'
+            message: 'Fabricante inválido'
         }, {
             name: 'address',
             validation: value => provider.nome? Object.values(addresses.find(address => Object.keys(address)[0] === provider.nome))[0].includes(value) : false,
@@ -93,6 +97,17 @@ const RegisterBillet = () => {
             validation: value => typeList.includes(value),
             value: type,
             message: 'Tipo inválido'
+        }, {
+            name: 'percentage',
+            validation: value => parseFloat(value) <= 100.00,
+            value: percentage,
+            message: 'Porcentagem inválida'
+        }
+        , {
+            name: 'revenue',
+            validation: value => value <= billetValue,
+            value: revenue,
+            message: 'Valor inválido'
         }
     ]
     const round = (num, places) => {
@@ -110,13 +125,13 @@ const RegisterBillet = () => {
 
     const calculateRevenue = (value, comissao) => {
         if(value && comissao){
-            let percent = parseFloat(comissao)/100
-            let val = round((parseFloat(value) * percent), 2)
+            let percent = numberFormatter(comissao)? numberFormatter(comissao)/100 : 0.00
+            let val = round((parseFloat(value/100) * percent), 2)
             setRevenue(val)
         }
     }
 
-    useEffect(() => fetch(setIsLoading, setIsError, setProviders, setStoreowners, setAdvisors, setAddresses, setBillets), [])
+    useEffect(() => fetch(setIsLoading, setIsError, setProviders, setStoreowners, setAdvisors, setAddresses, setBillets), [submitCount])
 
     if (isLoading) return <div style={{ display: 'grid' }}><Spinner size='5rem' /></div>
     if (isError) return <Error />
@@ -146,36 +161,44 @@ const RegisterBillet = () => {
                             callback={() => setDueDate('')}
                         />
                     } />,
-                    <FormInput name='provider' label='Fornecedor(a)' input={
+                    <FormInput name='provider' label='Fabricante' input={
                         <Dropdown
                             value={searchedName}
                             onChange={({ target: { value } }) => {
                                 if (value !== '') {
                                     let person = providers.find(element => element.nome === value)
-                                    if (person) setProvider(person)
+                                    if (person) {
+                                        setProvider(person)
+                                        setPercentage(person.comissao)
+                                    }
                                     setSearchedName(value)
                                     calculateRevenue(billetValue, person? person.comissao : '' )
                                 } else {
                                     setSearchedName('')
                                     setProvider({'nome': '', 'comissao': '', 'endereco': '' })
+                                    setPercentage('')
                                     setRevenue('')
                                 }
                             }}
                             onChangeKeyboard={element =>{
-                                if (element.value !== '') {
+                                if (element && element.value !== '') {
                                     let person = providers.find(provider => provider.nome === element.value)
-                                    if (person) setProvider(person)
+                                    if (person) {
+                                        setProvider(person)
+                                        setPercentage(person.comissao)
+                                    }
                                     setSearchedName(element.value)
                                     calculateRevenue(billetValue, person? person.comissao : '')
                                 } else {
                                     setSearchedName('')
                                     setProvider({'nome': '', 'comissao': '', 'endereco': '' })
+                                    setPercentage('')
                                     setRevenue('')
                                 }
                             }
                             }
                             list={providers.map(provider => provider.nome)}
-                            placeholder="Nome do(a) fornecedor(a)"
+                            placeholder="Nome do fabricante"
                         />
                     } />,
                     <FormInput name='address' label='Endereço' input={
@@ -188,8 +211,8 @@ const RegisterBillet = () => {
                                     setProvider({...provider, endereco: ''})
                             }}
                             onChangeKeyboard={element =>{
-                                if (element.value !== '')
-                                    setProvider({...provider, endereco: value})
+                                if (element && element.value !== '')
+                                    setProvider({...provider, endereco: element.value})
                                 else
                                     setProvider({...provider, endereco: ''})
                             }}
@@ -210,15 +233,16 @@ const RegisterBillet = () => {
                     } />,
                     <FormInput name='value' label='Valor' input={
                         <InputText
-                            value={billetValue}
+                            value={currencyFormat(billetValue)}
                             onChange={({ target: { value } }) => {
-                                setBilletValue(value)
-                                calculateRevenue(value, provider.comissao)
+                                const toInteger = parseInt(value.replace(/[R$\.,]/g, ''), 10)
+                                setBilletValue(maskInput(toInteger, '#######', true))
+                                calculateRevenue(toInteger, provider.comissao)
                             }}
-                            placeholder='Use . para os centavos'
+                            placeholder='R$ 100,00'
                         />
                     } />,
-                    <FormInput name='paymentMethod' label='Forma de Pagamento' input={
+                    <FormInput name='paymentMethod' label='Meio de Pagamento' input={
                         <Dropdown
                             value={paymentMethod}
                             onChange={({ target: { value } }) => setPaymentMethod(value)}
@@ -232,7 +256,7 @@ const RegisterBillet = () => {
                     <FormInput name='romaneio' label='Romaneio' input={
                         <InputText
                             value={romaneio}
-                            onChange={({ target: { value } }) => setRomaneio(value)}
+                            onChange={({ target: { value } }) => setRomaneio(maskInput(value, '############', true))}
                             placeholder='Nº do romaneio'
                         />
                     } />,
@@ -250,15 +274,19 @@ const RegisterBillet = () => {
                     } />,
                     <FormInput name='percentage' label='Porcentagem' input={
                         <InputText
-                            value={provider.comissao? `${provider.comissao} %` : ''}
-                            onChange={() => {}}
-                            readOnly={true}
+                            value={percentage? `${percentage} %` : ''}
+                            onChange={({ target: { value } }) => {
+                                let newPrctg = value.replace(/\s/g, '').replace('%', '')
+                                setPercentage(newPrctg)
+                                calculateRevenue(billetValue, newPrctg)
+                            }}
+                            readOnly={false}
                             placeholder='0.00 %'
                         />
                     } />,
                     <FormInput name='revenue' label='Receita' input={
                         <InputText
-                            value={revenue? `R$ ${revenue}` : ''}
+                            value={revenue? `R$ ${revenue}` : `R$ 0.00`}
                             onChange={() => {}}
                             readOnly={true}
                             placeholder='R$ 0.00'

@@ -3,10 +3,10 @@ import { dateHourFormatter, intFormatter, numberFormatter, singleDateFormatter }
 
 const sendToBackend = state => () => {
     const { billet, saleDate, provider, storeowner, billetValue, paymentMethod, romaneio,
-        dueDate, revenue, advisor, type, setSearchedName, setBillet, setSaleDate, setProvider, setStoreowner,
+        dueDate, revenue, advisor, type, submitCount, percentage, setSearchedName, setBillet, setSaleDate, setProvider, setStoreowner,
         setBilletValue, setPaymentMethod, setRomaneio, setDueDate, setRevenue, setAdvisor,
-        setType } = state
-    const comissao = numberFormatter(provider.comissao)? numberFormatter(provider.comissao)/100 : ''
+        setType, setSubmitCount, setPercentage } = state
+    const comissao = numberFormatter(percentage)? numberFormatter(percentage)/100 : 0.00
     const today = new Date()
     const url = process.env.SHEET_URL
     const body = {
@@ -16,13 +16,13 @@ const sendToBackend = state => () => {
         range: 'Boletos!A1',
         resource: {
             values: [
-                [dateHourFormatter(today), intFormatter(romaneio), intFormatter(billet), today.getMonth()+1, today.getFullYear(), singleDateFormatter(saleDate),
-                    storeowner, numberFormatter(billetValue), comissao, revenue, provider.nome, paymentMethod,
+                [dateHourFormatter(today), intFormatter(romaneio), intFormatter(billet), today.getMonth()+1, today.getFullYear(),
+                    singleDateFormatter(saleDate), storeowner, numberFormatter(billetValue)? numberFormatter(billetValue)/100 : 0.00 , comissao, revenue, provider.nome, paymentMethod,
                     type, advisor, singleDateFormatter(dueDate), '-', provider.endereco.split(' — ')[0],
-                    provider.endereco.split(' — ')[1], '', '', '', '', '']
+                    provider.endereco.split(' — ')[1]]
             ]
         },
-        valueInputOption: 'raw'
+        valueInputOption: 'user_entered'
     }
 
     const config = {
@@ -47,6 +47,8 @@ const sendToBackend = state => () => {
             setRevenue(''),
             setAdvisor(''),
             setType('')
+            setSubmitCount(submitCount+1)
+            setPercentage('')
             // resolve Promise with message to user
             resolve('Boleto adicionado com sucesso !')
         } catch (error) {

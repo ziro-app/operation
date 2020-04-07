@@ -69,17 +69,17 @@ const fetch = (setIsLoading, setIsError, setProviders, setStoreowners, setAdviso
         try {
             const dataStoreowners = await axios(config)
             const [, ...listStoreowners] = dataStoreowners.data.values
-            listStoreowners.map(storeowner => storeowner[1] !== ''? storeowners.push(storeowner[1]): '')
+            listStoreowners.map(storeowner => storeowner[10] !== '' ? storeowners.push(storeowner[10]) : '')
             setStoreowners(storeowners)
 
             const dataProviders = await axios(configProvider)
             const [, ...listProviders] = dataProviders.data.values
             listProviders.map(provider => {
-                providers.push(Object.assign({'nome': provider[0]? provider[0] : '', 'comissao': provider[1]? provider[1].replace(/\s/g, '').replace('%', '') : '', 'endereco': '' }))
+                providers.push(Object.assign({ 'nome': provider[0] ? provider[0] : '', 'comissao': provider[1] ? provider[1].replace(/\s/g, '').replace('%', '') : '', 'endereco': '' }))
             })
             setProviders(providers)
-            const addresses = listProviders.map( (supplierInfo) => Object.assign({}, {
-                [supplierInfo[0]]: supplierInfo.slice(2).reduce( (fullAddress, value, index, array) => {
+            const addresses = listProviders.map((supplierInfo) => Object.assign({}, {
+                [supplierInfo[0]]: supplierInfo.slice(2).reduce((fullAddress, value, index, array) => {
                     if (index % 2 === 0 && array[index + 1])
                         fullAddress.push(`${array[index]} — ${array[index + 1]}`)
                     return fullAddress

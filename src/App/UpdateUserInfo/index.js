@@ -7,7 +7,7 @@ import sendToBackend from './sendToBackend'
 
 const UpdateUserInfo = () => {
     const { uid, userPos, name, nickname, cpf, height, emergencyContact, initialDate, maritalStatus, github, birthDate, emergencyName, issuingBody, kinship, weight, rg, shippingDate, personalPhone, amountCharged, cep, city, cityState, address, bankNumber, accountNumber, agency } = useContext(userContext)
-    const partAddress = address.split(', ')
+    const partAddress = address ? address.split(', ') : []
     const [newName, setNewName] = useState(name)
     const [errorName, setErrorName] = useState('')
     const [loadingName, setLoadingName] = useState(false)
@@ -198,7 +198,7 @@ const UpdateUserInfo = () => {
         }
     }
     const validateCityState = () => {
-        if (/(^\D{2}$)/.test(cityState) & statesList.includes(cityState)) {
+        if (statesList.includes(newCityState)) {
             setErrorCityState('')
             return true
         } else {

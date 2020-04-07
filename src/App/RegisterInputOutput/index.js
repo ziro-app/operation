@@ -5,6 +5,8 @@ import Form from '@bit/vitorbarbosa19.ziro.form'
 import FormInput from '@bit/vitorbarbosa19.ziro.form-input'
 import InputText from '@bit/vitorbarbosa19.ziro.input-text'
 import Dropdown from '@bit/vitorbarbosa19.ziro.dropdown'
+import currencyFormat from '@ziro/currency-format'
+import maskInput from '@ziro/mask-input'
 
 const InputOutput = () => {
     const { nickname } = useContext(userContext)
@@ -26,7 +28,7 @@ const InputOutput = () => {
             message: 'Campo obrigatório'
         }, {
             name: 'value',
-            validation: value => (/[0-9]+/g).test(value),
+            validation: value => !!value,
             value: value,
             message: 'Valor obrigatório'
         }
@@ -36,7 +38,7 @@ const InputOutput = () => {
         <>
             <Form
                 validations={validations}
-                sendToBackend={sendToBackend? sendToBackend(state) : () => null}
+                sendToBackend={sendToBackend ? sendToBackend(state) : () => null}
                 inputs={[
                     <FormInput name='category' label='Categoria' input={
                         <Dropdown
@@ -52,9 +54,12 @@ const InputOutput = () => {
                     } />,
                     <FormInput name='value' label='Valor' input={
                         <InputText
-                            value={value}
-                            onChange={({ target: { value } }) => setValue(value)}
-                            placeholder='Use . para os centavos'
+                            value={currencyFormat(value)}
+                            onChange={({ target: { value } }) => {
+                                const toInteger = parseInt(value.replace(/[R$\.,]/g, ''), 10)
+                                setValue(maskInput(toInteger, '#######', true))
+                            }}
+                            placeholder='R$ 00,00'
                         />
                     } />,
                     <FormInput name='description' label='Descrição' input={
