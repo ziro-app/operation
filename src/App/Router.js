@@ -27,9 +27,14 @@ import MaterialRequest from './MaterialRequest/index'
 import RegisterInputOutput from './RegisterInputOutput/index'
 import NotFound from '@bit/vitorbarbosa19.ziro.not-found'
 import UpdateBrandsInfos from './UpdateBrandsInfos'
+import UserCart from './UserCart'
+import UserCartItem from './UserCartItem'
+import { useRoute, useLocation } from 'wouter'
 
 
 const Router = ({ isLogged }) => {
+    const [match,params] = useRoute('/pedidos/:userId/:requestId?')
+    const [location] = useLocation()
     const publicRoutes = {
         '/': <Login />,
         '/login': <Login />,
@@ -69,7 +74,9 @@ const Router = ({ isLogged }) => {
         '/update': <HeaderBack title='Atualizar informações' navigateTo='/conta'><UpdateUserInfo /></HeaderBack>,
         '/atualizar-fabricantes': <HeaderBack title='Atualizar fabricantes' navigateTo='/assessoria'><UpdateBrandsInfos /></HeaderBack>,
         '/entrada-saida': <HeaderBack title='Entrada/Saída do Caixa' navigateTo='/administrativo'><RegisterInputOutput /></HeaderBack>,
-        '/show-info': <ShowInfo internal={true} />
+        '/show-info': <ShowInfo internal={true} />,
+        [match&&!params.requestId?location:null]: <HeaderBack title='Pedidos' navigateTo='/conta'><UserCart /></HeaderBack>,
+        [match&&params.requestId?location:null]: <HeaderBack title='Pedido' navigateTo={`pedidos/${params && params.userId}`}><UserCartItem /></HeaderBack>
     }
     return routeMatcher(isLogged, publicRoutes, privateRoutes, <Login />, <NotFound fallback='/' />)
 }
