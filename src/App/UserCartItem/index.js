@@ -5,11 +5,13 @@ import Spinner from '@bit/vitorbarbosa19.ziro.spinner-with-div'
 import Button from '@bit/vitorbarbosa19.ziro.button'
 import Input from '@bit/vitorbarbosa19.ziro.input-text'
 import RImg from 'react-image'
+import { imageStyle, card, content, qtyLabel, qtyContainer } from './styles'
+import parsePrice from './parsePrice'
 
 export default () => {
 
-    const [m,{ userId, requestId }] = useRoute('/pedidos/:userId/:requestId')
-    const [l, setLocation] = useLocation()
+    const { userId, requestId } = useRoute('/pedidos/:userId/:requestId')[1]
+    const setLocation = useLocation()[1]
     const [isQuering, setIsQuering] = useState(true)
     const [request, setRequest] = useState()
 
@@ -27,18 +29,27 @@ export default () => {
 
     const setValue = useCallback((key, value, index) => {
         setRequest(old => {
-            const oldProducts = old.products;
-            oldProducts[index][key] = value;
-            return { ...old, products: oldProducts }
+            const products = old.products;
+            products[index][key] = value;
+            return { ...old, products }
         })
     },[])
+
+    const setQuantity = useCallback((size, color, qty, index) => {
+        setRequest(old => {
+            const products = old.products;
+            if(!products[index]['availableQuantities']) products[index]['availableQuantities'] = {}
+            products[index]['availableQuantities'][`${size}-${color}`] = qty;
+            return {...old, products }
+        })
+    })
 
     const send = useCallback(() => {
         const newRequest = request
         newRequest.products = request.products.map(({ sizes, colors, ...product }) => {
             const newProduct = product
-            if(sizes) newProduct.sizes = sizes instanceof Array ? sizes : sizes.split(',')
-            if(colors) newProduct.colors = colors instanceof Array ? colors : colors.split(',')
+            if(sizes) newProduct.sizes = sizes
+            if(colors) newProduct.colors = colors
             return newProduct
         })
         newRequest.status = 'waitingCheckout'
@@ -48,7 +59,7 @@ export default () => {
         .doc(requestId).set(newRequest)
         .then(() => setLocation(`/pedidos/${userId}`))
         .catch((error) => console.log({ error }))
-    },[request])
+    },[userId,request])
 
     if(isQuering) return <Spinner />
 
@@ -57,45 +68,54 @@ export default () => {
     return (
         <div style={{ display: 'grid', alignItems: 'center', gridGap: '10px' }}>
             <label style={{ padding: '10px', fontSize: '20px' }}>{request.brand}</label>
-                {request.products.map(({ image, price, sizes, colors }, index) => 
+                {request.products.map(({ image, price, sizes, colors, availableQuantities }, index) => 
                 <RImg
                     key={image}
                     src={image}
-                    style={{ objectFit: 'cover', width: (window.innerWidth-50)/2,height: (window.innerWidth-50)/2  }}
+                    style={imageStyle}
                     container={(children) =>
-                        <div
-                            style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', padding: '10px', background: 'white', gridGap: '10px', boxShadow: 'rgba(34, 34, 34, 0.3) 0px 5px 15px -4px' }}
-                        >
-                            {children}
-                            <div style={{ display: 'grid', alignContent: 'start' }}>
-                                <label style={{ fontSize: 15, padding: '5px 10px' }}>Preço</label>
-                                <Input
-                                    placeholder='00,00'
-                                    value={price||''}
-                                    onChange={({ target: { value }}) => {
-                                        let _value = value.replace(',','')
-                                        _value = parseInt(_value).toString()
-                                        if(/^[0-9]*$/gm.test(_value)) {
-                                            const r = _value.substring(0,_value.length-2)||'0'
-                                            let c = _value.substring(_value.length-2)
-                                            if(c.length==1) c = `0${c}`
-                                            setValue('price', `${r},${c}`, index)
-                                        }
-                                    }}
-                                />
-                                <label style={{ fontSize: 15, padding: '5px 10px' }}>Tamanhos</label>
-                                <Input
-                                    placeholder='P,M,G'
-                                    value={sizes instanceof Array ? sizes.join(',') : sizes||''}
-                                    onChange={({ target: { value }}) => setValue('sizes', value, index)}
-                                />
-                                <label style={{ fontSize: 15, padding: '5px 10px' }}>Cores</label>
-                                <Input
-                                    placeholder='Azul,Amarelo'
-                                    value={colors instanceof Array ? colors.join(',') : colors||''}
-                                    onChange={({ target: { value }}) => setValue('colors', value, index)}
-                                />
+                        <div style={card}>
+                            <label style={{ padding: '0px 10px' }}>{`Peça ${index+1}`}</label>
+                            <div style={content}>
+                                {children}
+                                <div style={{ display: 'grid', alignContent: 'start' }}>
+                                    <label style={{ fontSize: 15, padding: '5px 10px' }}>Preço</label>
+                                    <Input
+                                        placeholder='00,00'
+                                        value={price||''}
+                                        onChange={({ target: { value }}) => parsePrice(value,setValue,index)}
+                                    />
+                                    <label style={{ fontSize: 15, padding: '5px 10px' }}>Tamanhos</label>
+                                    <Input
+                                        placeholder='P,M,G'
+                                        value={sizes && sizes.join(',')||''}
+                                        onChange={({ target: { value }}) => setValue('sizes', value ? value.split(',') : '', index)}
+                                    />
+                                    <label style={{ fontSize: 15, padding: '5px 10px' }}>Cores</label>
+                                    <Input
+                                        placeholder='Azul,Amarelo'
+                                        value={colors && colors.join(',')||''}
+                                        onChange={({ target: { value }}) => setValue('colors', value ? value.split(',') : '', index)}
+                                    />
+                                </div>
                             </div>
+                            {
+                                sizes && colors && 
+                                [
+                                    <label key='qtyLabel' style={qtyLabel}>Quantidades</label>,
+                                    sizes.map((size) => colors.map((color) => size && color ? (
+                                        <div key={`${size}-${color}`} style={qtyContainer}>
+                                            <label>{size}</label>
+                                            <label>{color}</label>
+                                            <Input
+                                                placeholder='1'
+                                                value={availableQuantities&&availableQuantities[`${size}-${color}`]||''}
+                                                onChange={({ target: { value }}) => /^[0-9]*$/gm.test(value)&&setQuantity(size,color,value,index)}
+                                            />
+                                        </div>
+                                        ): null))
+                                ]
+                            }
                         </div>
                     }
                     loaderContainer={() => null}

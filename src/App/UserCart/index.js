@@ -4,6 +4,7 @@ import Icon from '@bit/vitorbarbosa19.ziro.icon'
 import Spinner from '@bit/vitorbarbosa19.ziro.spinner-with-div'
 import { motion } from 'framer-motion'
 import { db } from '../../Firebase'
+import { button, bubble } from './styles'
 
 const statusTitles = {
     waitingResponse: 'Esperando Resposta',
@@ -12,8 +13,8 @@ const statusTitles = {
 
 export default () => {
 
-    const [m,{ userId }] = useRoute('/pedidos/:userId')
-    const [l, setLocation] = useLocation()
+    const { userId } = useRoute('/pedidos/:userId')[1]
+    const setLocation = useLocation()[1]
     const [requests, setRequests] = useState({})
     const [queringRequests, setQueringRequests] = useState(true)
     const [userData, setUserData] = useState('')
@@ -62,30 +63,10 @@ export default () => {
                                     key={id}
                                     whileTap={{ scale: 0.95 }}
                                     onClick={() => setLocation(`pedidos/${userId}/${id}`)}
-                                    style={{
-                                        display: 'grid',
-                                        padding: '20px',
-                                        background: 'white',
-                                        gridGap: '10px',
-                                        boxShadow: 'rgba(34, 34, 34, 0.3) 0px 5px 15px -4px',
-                                        gridTemplateColumns: '1fr auto auto',
-                                        alignItems: 'center',
-                                    }}
+                                    style={button}
                                 >
                                     <label style={{ fontSize: 16 }}>{brand}</label>
-                                    <div
-                                        style={{
-                                        height: 20,
-                                        width: 20,
-                                        background: '#E0E0E0',
-                                        borderRadius: '50%',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        display: 'grid',
-                                        }}
-                                    >
-                                        {products.length}
-                                    </div>
+                                    <div style={bubble}>{products.length}</div>
                                     <div style={{ transform: 'rotate(90deg)' }}>
                                         <Icon type='chevronUp' size={20} color='black' />
                                     </div>
