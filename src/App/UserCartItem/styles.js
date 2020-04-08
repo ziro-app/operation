@@ -2,7 +2,7 @@ export const
 
 imageStyle = {
     objectFit: 'cover',
-    width: (window.innerWidth-50)/2,
+    width: '100%',
     padding: '10px 0px 0px 0px'
 },
 
