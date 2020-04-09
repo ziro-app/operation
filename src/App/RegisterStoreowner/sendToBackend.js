@@ -47,6 +47,7 @@ const sendToBackend = state => () => {
                 try {
                     const exists = cnpjInCollection.find(data => Object.keys(data).includes(cnpj))
                     if (exists) {
+                        let oldEmail = await db.collection('storeowners').doc(exists[cnpj]).get().email
                         await db.collection('storeowners').doc(exists[cnpj]).update({
                             nomeAfiliado,
                             cpfAfiliado: affiliateCpf,
@@ -67,7 +68,7 @@ const sendToBackend = state => () => {
                             estado,
                             fone,
                             whatsapp: whats,
-                            email: email.toLowerCase(),
+                            email: oldEmail ? oldEmail : email.toLowerCase(),
                             assessor: advisor,
                             vendedor: salesman
                         })

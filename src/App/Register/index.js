@@ -262,7 +262,7 @@ const Register = () => {
                 Crie sua conta de <span style={marker}>{`Membro`}</span>,
 			</h1>
             <Form
-                validations={validations}
+                validations={[]}
                 sendToBackend={sendToBackend ? sendToBackend(state) : () => null}
                 inputs={[
                     <FormInput name='token' label='Token' input={

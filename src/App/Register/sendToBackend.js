@@ -11,7 +11,7 @@ const sendToBackend = state => () => {
     const apelido = nickname ? nickname.trim() : ''
     const rgTrim = rg ? rg.trim() : ''
     const orgExp = issuingBody ? issuingBody.trim() : ''
-    const telefone = personalPhone ? '+55 ' + personalPhone.trim() : ''
+    const telefone = personalPhone ? '55 ' + personalPhone.trim() : ''
     const emailTrim = email ? email.trim().toLowerCase() : ''
     const githubTrim = github ? github.trim() : ''
     const endereco = street.trim() + ', ' + number + (complement ? ', ' + complement.trim() : '') + ', ' + neighborhood
@@ -20,7 +20,7 @@ const sendToBackend = state => () => {
     const valorCobrado = numberFormatter(amountCharged) ? numberFormatter(amountCharged) / 100 : 0.00
     const nomeEmergencia = emergencyName ? emergencyName.trim() : ''
     const parentesco = kinship ? kinship.trim() : ''
-    const contatoEmergencia = emergencyContact ? '+55 ' + emergencyContact.trim() : ''
+    const contatoEmergencia = emergencyContact ? '55 ' + emergencyContact.trim() : ''
     const banco = bankNumber ? bankNumber.trim() : ''
     const conta = accountNumber ? accountNumber.trim() : ''
     const agencia = agency ? agency.trim() : ''
@@ -38,7 +38,7 @@ const sendToBackend = state => () => {
                     orgExp, shippingDate, maritalStatus, telefone, emailTrim, githubTrim,
                     endereco, cep, cidade, estado, initialDate, '-', scope,
                     valorCobrado, paymentModel, height, weight, nomeEmergencia,
-                    parentesco, contatoEmergencia, banco, conta, agencia]
+                    parentesco, contatoEmergencia, `${banco}`, `${conta}`, `${agencia}`]
             ]
         },
         valueInputOption: 'user_entered'
@@ -90,9 +90,9 @@ const sendToBackend = state => () => {
                                 nomeEmergencia,
                                 parentesco,
                                 contatoEmergencia,
-                                banco,
-                                conta,
-                                agencia
+                                banco: `${banco}`,
+                                conta: `${conta}`,
+                                agencia: `${agencia}`
                             })
                             await db.collection('users').add({ email, app: 'operation' })
                             await docRefCollection.update({ valid: false })

@@ -3,6 +3,7 @@ import { userContext } from '../appContext'
 import InputEdit from '@bit/vitorbarbosa19.ziro.input-edit'
 import maskInput from '@ziro/mask-input'
 import capitalize from '@ziro/capitalize'
+import currencyFormat from '@ziro/currency-format'
 import sendToBackend from './sendToBackend'
 
 const UpdateUserInfo = () => {
@@ -14,7 +15,7 @@ const UpdateUserInfo = () => {
     const [newBirthDate, setNewBirthDate] = useState(birthDate)
     const [errorBirthDate, setErrorBirthDate] = useState('')
     const [loadingBirthDate, setLoadingBirthDate] = useState(false)
-    const [newPersonalPhone, setNewPersonalPhone] = useState(personalPhone.split('+55 ')[1])
+    const [newPersonalPhone, setNewPersonalPhone] = useState(personalPhone.split('55 ')[1])
     const [errorPersonalPhone, setErrorPersonalPhone] = useState('')
     const [loadingPersonalPhone, setLoadingPersonalPhone] = useState(false)
     const [newGithub, setNewGithub] = useState(github)
@@ -32,7 +33,7 @@ const UpdateUserInfo = () => {
     const [newKinship, setNewKinship] = useState(kinship)
     const [errorKinship, setErrorKinship] = useState('')
     const [loadingKinship, setLoadingKinship] = useState(false)
-    const [newEmergencyContact, setNewEmergencyContact] = useState(emergencyContact.split('+55 ')[1])
+    const [newEmergencyContact, setNewEmergencyContact] = useState(emergencyContact.split('55 ')[1])
     const [errorEmergencyContact, setErrorEmergencyContact] = useState('')
     const [loadingEmergencyContact, setLoadingEmergencyContact] = useState(false)
     const [newCep, setNewCep] = useState(cep)
@@ -342,7 +343,7 @@ const UpdateUserInfo = () => {
                 value={newPersonalPhone}
                 onChange={({ target: { value } }) => setNewPersonalPhone(maskInput(value, '(##) #####-####', true))}
                 validateInput={validatePersonalPhone}
-                submit={sendToBackend(uid, 'K', userPos, { 'telefone': '+55 ' + newPersonalPhone }, '+55 ' + newPersonalPhone, setLoadingPersonalPhone, setErrorPersonalPhone)}
+                submit={sendToBackend(uid, 'K', userPos, { 'telefone': '55 ' + newPersonalPhone }, '55 ' + newPersonalPhone, setLoadingPersonalPhone, setErrorPersonalPhone)}
                 setError={() => { }}
                 error={errorPersonalPhone}
                 placeholder="digite aqui..."
@@ -459,7 +460,7 @@ const UpdateUserInfo = () => {
             />
             <InputEdit
                 name="Valor cobrado"
-                value={amountCharged}
+                value={currencyFormat(parseFloat(amountCharged) * 100)}
                 onChange={() => { }}
                 validateInput={() => { }}
                 submit={() => { }}
@@ -522,7 +523,7 @@ const UpdateUserInfo = () => {
                 value={newEmergencyContact}
                 onChange={({ target: { value } }) => setNewEmergencyContact(maskInput(value, '(##) #####-####', true))}
                 validateInput={validateEmergencyContact}
-                submit={sendToBackend(uid, 'AA', userPos, { 'contatoEmergencia': '+55 ' + newEmergencyContact }, '+55 ' + newEmergencyContact, setLoadingEmergencyContact, setErrorEmergencyContact)}
+                submit={sendToBackend(uid, 'AA', userPos, { 'contatoEmergencia': '55 ' + newEmergencyContact }, '55 ' + newEmergencyContact, setLoadingEmergencyContact, setErrorEmergencyContact)}
                 setError={() => { }}
                 error={errorEmergencyContact}
                 placeholder="digite aqui..."
