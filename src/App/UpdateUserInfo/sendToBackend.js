@@ -26,12 +26,12 @@ const sendToBackend = (uid, column, row, obj, newProp, setIsLoading, setError) =
             await post(url, body, config)
             try {
                 await db.collection('team').doc(uid).update(obj)
+                resolve('Atualizado com sucesso')
             } catch (error) {
                 console.log(error)
                 if (error.response) console.log(error.response)
                 throw 'Erro ao salvar na Firestore'
             }
-            resolve('Deu bom!')
         } catch (error) {
             if (error.customError) {
                 setError(error)

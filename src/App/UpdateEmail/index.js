@@ -5,5 +5,5 @@ import { userContext } from '../appContext'
 
 export default () => {
     const { userPos } = useContext(userContext)
-    return <UpdateEmail row={userPos} sendToBackend={sendToBackend} />
+    return <UpdateEmail row={userPos} sendToBackend={sendToBackend} navigateTo='/login' />
 }

@@ -128,7 +128,7 @@ const sendToBackend = state => () => {
                 }
                 window.location.assign('/confirmar-email')
             } else {
-                reject('Token inváliddo')
+                throw { msg: 'Token inválido', customError: true }
             }
         } catch (error) {
             if (error.customError) reject(error)

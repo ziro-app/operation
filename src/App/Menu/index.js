@@ -9,56 +9,56 @@ import Icon from '@bit/vitorbarbosa19.ziro.icon'
 import { containerWithPadding } from '@ziro/theme'
 
 export const Menu = ({ title, children }) => {
-	const [isOpen, setIsOpen] = useState(false)
-	const { name, nickname, cpf } = useContext(userContext)
-	return (
-		<div style={containerWithPadding}>
-			<Header type='icon' title={title} icon='menu' setIsOpen={() => setIsOpen(true)} />
-			<Drawer isOpen={isOpen} setIsOpen={() => setIsOpen(false)}>
-				<DrawerPanel
-					username={nickname || 'Usuário'}
-					userdata={cpf ? `CPF: ${cpf}` : ''}
-					options={[
-						{
-							path: '/administrativo',
-							onClick: () => setIsOpen(false),
-							icon: <Icon type='file' size={15} strokeWidth={2} />,
-							text: 'Administrativo'
-						},{
-							path: '/assessoria',
-							onClick: () => setIsOpen(false),
-							icon: <Icon type='shopping' size={15} strokeWidth={2} />,
-							text: 'Assessoria'
-						},{
-							path: '/logistica',
-							onClick: () => setIsOpen(false),
-							icon: <Icon type='truck' size={15} strokeWidth={2} />,
-							text: 'Logística'
-						},
-						{
-							path: '/conta',
-							onClick: () => setIsOpen(false),
-							icon: <Icon type='gear' size={15} strokeWidth={2} />,
-							text: 'Minha conta'
-						},
-						{
-							path: '#',
-							onClick: () => auth.signOut(),
-							icon: <Icon type='logout' size={15} strokeWidth={3} />,
-							text: 'Sair'
-						},
-					]}
-				/>
-			</Drawer>
-			{children}
-		</div>
-	)
+    const [isOpen, setIsOpen] = useState(false)
+    const { name, nickname, cpf } = useContext(userContext)
+    return (
+        <div style={containerWithPadding}>
+            <Header type='icon' title={title} icon='menu' setIsOpen={() => setIsOpen(true)} />
+            <Drawer isOpen={isOpen} setIsOpen={() => setIsOpen(false)}>
+                <DrawerPanel
+                    username={nickname || 'Usuário'}
+                    userdata={cpf ? `CPF: ${cpf}` : ''}
+                    options={[
+                        {
+                            path: '/administrativo',
+                            onClick: () => setIsOpen(false),
+                            icon: <Icon type='file' size={15} strokeWidth={2} />,
+                            text: 'Administrativo'
+                        }, {
+                            path: '/assessoria',
+                            onClick: () => setIsOpen(false),
+                            icon: <Icon type='shopping' size={15} strokeWidth={2} />,
+                            text: 'Assessoria'
+                        }, {
+                            path: '/logistica',
+                            onClick: () => setIsOpen(false),
+                            icon: <Icon type='truck' size={15} strokeWidth={2} />,
+                            text: 'Logística'
+                        },
+                        {
+                            path: '/login',
+                            onClick: () => setIsOpen(false),
+                            icon: <Icon type='gear' size={15} strokeWidth={2} />,
+                            text: 'Minha conta'
+                        },
+                        {
+                            path: '/login',
+                            onClick: () => auth.signOut(),
+                            icon: <Icon type='logout' size={15} strokeWidth={3} />,
+                            text: 'Sair'
+                        },
+                    ]}
+                />
+            </Drawer>
+            {children}
+        </div>
+    )
 }
 
 Menu.propTypes = {
-	title: PropTypes.string.isRequired,
-	children: PropTypes.oneOfType([
-		PropTypes.object,
-		PropTypes.arrayOf(PropTypes.element)
-	]).isRequired
+    title: PropTypes.string.isRequired,
+    children: PropTypes.oneOfType([
+        PropTypes.object,
+        PropTypes.arrayOf(PropTypes.element)
+    ]).isRequired
 }

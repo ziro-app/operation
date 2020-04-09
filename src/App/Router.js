@@ -42,7 +42,7 @@ const Router = ({ isLogged }) => {
         '/': <Login />,
         '/login': <Login />,
         '/cadastrar': <Register />,
-        '/problemas-acesso': <LoginTrouble />,
+        '/problemas-acesso': <LoginTrouble navigateTo='/login' />,
         '/reenviar-email': <ResendEmail />,
         '/resetar-senha': <ResetPass />,
         '/confirmar-email': <ConfirmEmail />,
@@ -50,7 +50,7 @@ const Router = ({ isLogged }) => {
     }
     const privateRoutes = { // Menu can't be put inside the components because then it'll unmount on transition
         '/': <Menu title='Minha Conta'><MyAccount /></Menu>,
-        '/conta': <Menu title='Minha Conta'><MyAccount /></Menu>,
+        '/login': <Menu title='Minha Conta'><MyAccount /></Menu>,
         '/trocar-email': <UpdateEmail />,
         '/trocar-senha': <UpdatePass />,
         '/deletar-conta': <DeleteAccount />,
@@ -78,10 +78,10 @@ const Router = ({ isLogged }) => {
         '/cadastrar-afiliado': <HeaderBack title='Cadastrar afiliado' navigateTo='/assessoria'><RegisterAffiliate /></HeaderBack>,
         '/visualizar-afiliado': <HeaderBack title='Visualizar afiliado' navigateTo='/assessoria'><UpdateAffiliate /></HeaderBack>,
         '/upload-imagem': <HeaderBack title='Upload de imagens' navigateTo='/assessoria'><ImageUpload /></HeaderBack>,
-        '/update': <HeaderBack title='Atualizar informações' navigateTo='/conta'><UpdateUserInfo /></HeaderBack>,
+        '/update': <HeaderBack title='Atualizar informações' navigateTo='/login'><UpdateUserInfo /></HeaderBack>,
         '/atualizar-fabricantes': <HeaderBack title='Atualizar fabricantes' navigateTo='/assessoria'><UpdateBrandsInfos /></HeaderBack>,
         '/entrada-saida': <HeaderBack title='Entrada/Saída do Caixa' navigateTo='/administrativo'><RegisterInputOutput /></HeaderBack>,
-        [match && !params.userId ? location : null]: <HeaderBack title='Procurar Pedidos' navigateTo='/conta'><SearchUserCart /></HeaderBack>,
+        [match && !params.userId ? location : null]: <HeaderBack title='Procurar Pedidos' navigateTo='/login'><SearchUserCart /></HeaderBack>,
         [match && params.userId && !params.requestId ? location : null]: <HeaderBack title='Pedidos' navigateTo='/pedidos'><UserCart /></HeaderBack>,
         [match && params.userId && params.requestId ? location : null]: <HeaderBack title='Pedido' navigateTo={`pedidos/${params && params.userId}`}><UserCartItem /></HeaderBack>,
         '/show-info': <ShowInfo internal={true} />
