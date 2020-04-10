@@ -15,7 +15,7 @@ module.exports = (env, { mode }) => {
                         loader: 'babel-loader',
                         options: {
                             presets: ['@babel/preset-env', '@babel/preset-react'],
-                            plugins: ['@babel/plugin-transform-runtime']
+                            plugins: ['@babel/plugin-transform-runtime', 'react-hot-loader/babel']
                         }
                     }
                 },
@@ -25,7 +25,12 @@ module.exports = (env, { mode }) => {
                 }
             ]
         },
-        plugins: [new HtmlWebpackPlugin({ template: './src/index.html' })]
+        plugins: [new HtmlWebpackPlugin({ template: './src/index.html' })],
+        resolve: {
+            alias: {
+                'react-dom': '@hot-loader/react-dom'
+            }
+        }
     }
     if (mode === 'development') {
         const {
@@ -47,7 +52,7 @@ module.exports = (env, { mode }) => {
             cnpj_token
         } = require('./credentials')
         config.devtool = 'cheap-module-eval-source-map'
-        config.devServer = { historyApiFallback: true }
+        config.devServer = { historyApiFallback: true, hot: true }
         config.plugins.push(
             new webpack.DefinePlugin({
                 'process.env': {

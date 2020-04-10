@@ -72,7 +72,7 @@ const Router = ({ isLogged }) => {
         '/consultar-frete': <HeaderBack title='Consulta de frete' navigateTo='/logistica'><ConsultShipping /></HeaderBack>,
         '/cadastrar-despesa': <HeaderBack title='Cadastrar despesa' navigateTo='/logistica'><RegisterExpenses /></HeaderBack>,
         '/cadastrar-boleto': <HeaderBack title='Cadastrar boleto' navigateTo='/assessoria'><RegisterBillet /></HeaderBack>,
-        '/requerir-material': <HeaderBack title='Requerir material' navigateTo='/administrativo'><MaterialRequest /></HeaderBack>,
+        '/requerir-material': <HeaderBack title='Requisição de material' navigateTo='/administrativo'><MaterialRequest /></HeaderBack>,
         '/visualizar-lojista': <HeaderBack title='Visualizar lojista' navigateTo='/assessoria'><UpdateStoreowner /></HeaderBack>,
         '/cadastrar-lojista': <HeaderBack title='Cadastrar lojista' navigateTo='/assessoria'><RegisterStoreowner /></HeaderBack>,
         '/cadastrar-afiliado': <HeaderBack title='Cadastrar afiliado' navigateTo='/assessoria'><RegisterAffiliate /></HeaderBack>,

@@ -1,3 +1,4 @@
+import { hot } from 'react-hot-loader/root'
 import React, { useState, useEffect } from 'react'
 import { post } from 'axios'
 import { auth, db } from '../Firebase/index'
@@ -7,7 +8,7 @@ import Error from '@bit/vitorbarbosa19.ziro.error'
 import ErrorBoundary from '@bit/vitorbarbosa19.ziro.error-boundary'
 import Router from './Router'
 
-export const App = () => {
+const App = () => {
     const [loading, setLoading] = useState(true)
     const [errorLoading, setErrorLoading] = useState(false)
     const [uid, setUid] = useState(null)
@@ -187,3 +188,5 @@ export const App = () => {
         </ErrorBoundary>
     )
 }
+
+export default hot(App)
