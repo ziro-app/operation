@@ -137,12 +137,12 @@ const Register = () => {
             name: 'city',
             validation: value => /[a-zA-Z]+/g.test(value),
             value: city,
-            message: 'Campo obrigatória'
+            message: 'Campo obrigatório'
         }, {
             name: 'cityState',
             validation: value => /(^\D{2}$)/.test(value) & statesList.includes(value),
             value: cityState,
-            message: 'Campo obrigatória'
+            message: 'Campo obrigatório'
         }, {
             name: 'initialDate',
             validation: value => /^(?:(?:31(\/)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(\/)(?:0?[13-9]|1[0-2])\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$|^(?:29(\/)0?2\3(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\d|2[0-8])(\/)(?:(?:0?[1-9])|(?:1[0-2]))\4(?:(?:1[6-9]|[2-9]\d)?\d{2})$/.test(value),
@@ -269,14 +269,14 @@ const Register = () => {
                         <InputText
                             value={token}
                             onChange={({ target: { value } }) => setToken(maskInput(value, '##########', false))}
-                            placeholder='Para validação cadastral'
+                            placeholder='Token de acesso'
                         />
                     } />,
                     <FormInput name='name' label='Nome Completo' input={
                         <InputText
                             value={name}
                             onChange={({ target: { value } }) => setName(capitalize(value))}
-                            placeholder='Para armazenamento interno'
+                            placeholder='Seu nome'
                         />
                     } />,
                     <FormInput name='nickname' label='Apelido' input={
@@ -343,7 +343,7 @@ const Register = () => {
                         <InputText
                             value={github}
                             onChange={({ target: { value } }) => setGithub(value)}
-                            placeholder='Apenas usuário'
+                            placeholder='Ex.: vitorbarbosa19'
                         />
                     } />,
                     <FormInput name='cep' label='CEP' input={
@@ -464,7 +464,7 @@ const Register = () => {
                         <InputText
                             value={emergencyContact}
                             onChange={({ target: { value } }) => setEmergencyContact(maskInput(value, '(##) #####-####', true))}
-                            placeholder='Número para contato'
+                            placeholder='(86) 99743-6822'
                         />
                     } />,
                     <FormInput name='bankNumber' label='Número do Banco' input={
