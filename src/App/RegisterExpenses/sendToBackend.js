@@ -2,7 +2,7 @@ import { post } from 'axios'
 import { dateHourFormatterUTC3, numberFormatter } from '../utils'
 
 const mountBankTransfer = ({ paymentMethod, bankTransfer, beneficiary, beneficiaryDocument, bankName, agency, accountNumber }) => {
-    if(paymentMethod === 'Transferência Bancária' || bankTransfer === 'Sim')
+    if (paymentMethod === 'Transferência Bancária' || bankTransfer === 'Sim')
         return `Sim, Beneficiário: ${beneficiary} - Documento: ${beneficiaryDocument} - Banco: ${bankName} - Agência: ${agency} - Conta: ${accountNumber}`
     else return 'Não'
 }
@@ -10,12 +10,13 @@ const mountBankTransfer = ({ paymentMethod, bankTransfer, beneficiary, beneficia
 const sendToBackend = state => () => {
     const { nickname, expenseAmount, type, operationalDescription, date, attendance,
         haveRefound, note, commonDescription, paymentMethod, numberOfInstallments,
-        setExpenseAmount, setOperacionalDescription, setDate, setAttendance, setHaveRefound,
-        setNote, setCommonDescription, setPaymentMethod, setNumberOfInstallments, setBankTransfer,
-        setBankName, setAccountNumber, setAgency } = state
+        setExpenseAmount, setType, setOperacionalDescription, setDate, setFocusDate,
+        setAttendance, setHaveRefound, setNote, setCommonDescription, setPaymentMethod,
+        setNumberOfInstallments, setBankTransfer, setBankName, setAccountNumber, setAgency,
+        setBeneficiary, setBeneficiaryDocument } = state
     const transfer = mountBankTransfer(state)
-    const value = expenseAmount? numberFormatter(expenseAmount)/100 : ''
-    const atendimento = attendance? attendance.split(' - ')[0] : ''
+    const value = expenseAmount ? numberFormatter(expenseAmount) / 100 : ''
+    const atendimento = attendance ? attendance.split(' - ')[0] : ''
     const url = process.env.SHEET_URL
     const body = {
         apiResource: 'values',
@@ -26,7 +27,7 @@ const sendToBackend = state => () => {
             values: [
                 [dateHourFormatterUTC3(new Date()), nickname, value, type, operationalDescription,
                     atendimento, haveRefound, note, commonDescription, paymentMethod, numberOfInstallments,
-                    transfer, type === 'Operacional'? date : '', type==='Comum'? date : '']
+                    transfer, type === 'Operacional' ? date : '', type === 'Comum' ? date : '']
             ]
         },
         valueInputOption: 'user_entered'
@@ -41,6 +42,7 @@ const sendToBackend = state => () => {
         try {
             await post(url, body, config)
             setExpenseAmount('')
+            setType('')
             setBankTransfer('')
             setOperacionalDescription('')
             setAttendance('')
@@ -48,11 +50,14 @@ const sendToBackend = state => () => {
             setNote('')
             setCommonDescription('')
             setDate('')
+            setFocusDate(false)
             setPaymentMethod('')
             setNumberOfInstallments('')
             setBankName('')
             setAccountNumber('')
             setAgency('')
+            setBeneficiary('')
+            setBeneficiaryDocument('')
             resolve('Despesa cadastrada com sucesso.')
         } catch (error) {
             if (error.customError) reject(error)

@@ -2,6 +2,10 @@ import { db } from '../../Firebase/index'
 import { post } from 'axios'
 
 const sendToBackend = (uid, column, row, obj, newProp, setIsLoading, setError) => () => {
+    let property
+    if (Object.keys(obj)[0] === 'altura') property = newProp.replace('.', ',')
+    else if (Object.keys(obj)[0] === 'agencia') property = `'${newProp}`
+    else property = newProp
     const url = process.env.SHEET_URL
     const body = {
         apiResource: 'values',
@@ -10,7 +14,7 @@ const sendToBackend = (uid, column, row, obj, newProp, setIsLoading, setError) =
         valueInputOption: 'user_entered',
         spreadsheetId: process.env.SHEET_ID,
         resource: {
-            values: [[newProp]]
+            values: [[property]]
         }
     }
 
