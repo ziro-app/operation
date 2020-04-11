@@ -14,21 +14,6 @@ const sendToBackend = state => () => {
     const nomeAfiliado = affiliateName.split(' - ')[1] ? affiliateName.split(' - ')[1] : 'NENHUM'
     const today = new Date()
     const url = process.env.SHEET_URL
-    const body = {
-        apiResource: 'values',
-        apiMethod: 'append',
-        spreadsheetId: process.env.SHEET_STOREOWNERS_ID,
-        range: 'Base!A1',
-        resource: {
-            values: [
-                [dateHourFormatterUTC3(today), `${fnameTrim} ${lnameTrim}`, whats, email.toLowerCase(), rg, cpf, birth, instaTrim,
-                    cnpj, ie, razao, fantasia, complemento ? `${rua}, ${numero}, ${complemento}` : `${rua}, ${numero}`, bairro, cep, cidade,
-                    estado, fone, nomeAfiliado, affiliateCpf, advisor, salesman]
-            ]
-        },
-        valueInputOption: 'user_entered'
-    }
-
     const config = {
         headers: {
             'Content-type': 'application/json',
@@ -37,17 +22,22 @@ const sendToBackend = state => () => {
     }
     return new Promise(async (resolve, reject) => {
         try {
+            let oldEmail
             if (cnpjValid) {
                 const documents = await db.collection('storeowners').get()
                 documents.forEach(document => {
                     if (document.data().cnpj !== '')
                         cnpjInCollection.push({ [document.data().cnpj]: document.id })
                 });
-                await post(url, body, config)
+
                 try {
                     const exists = cnpjInCollection.find(data => Object.keys(data).includes(cnpj))
                     if (exists) {
-                        let oldEmail = await db.collection('storeowners').doc(exists[cnpj]).get().email
+                        await db.collection('storeowners').doc(exists[cnpj]).get().then(doc => {
+                            if (doc.exists) {
+                                oldEmail = doc.data().email
+                            }
+                        })
                         await db.collection('storeowners').doc(exists[cnpj]).update({
                             nomeAfiliado,
                             cpfAfiliado: affiliateCpf,
@@ -99,6 +89,21 @@ const sendToBackend = state => () => {
                             vendedor: salesman
                         })
                     }
+                    const body = {
+                        apiResource: 'values',
+                        apiMethod: 'append',
+                        spreadsheetId: process.env.SHEET_STOREOWNERS_ID,
+                        range: 'Base!A1',
+                        resource: {
+                            values: [
+                                [dateHourFormatterUTC3(today), `${fnameTrim} ${lnameTrim}`, whats, oldEmail ? oldEmail : email.toLowerCase(), rg, cpf, birth, instaTrim,
+                                    cnpj, ie, razao, fantasia, complemento ? `${rua}, ${numero}, ${complemento}` : `${rua}, ${numero}`, bairro, cep, cidade,
+                                    estado, fone, nomeAfiliado, affiliateCpf, advisor, salesman]
+                            ]
+                        },
+                        valueInputOption: 'user_entered'
+                    }
+                    await post(url, body, config)
 
                     // clear all fields after submission
                     setSearchedName('')
