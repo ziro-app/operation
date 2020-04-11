@@ -41,8 +41,9 @@ const sendToBackend = state => () => {
     return new Promise(async (resolve, reject) => {
         try {
             await post(url, body, config)
-            setExpenseAmount('')
+            setPaymentMethod('')
             setType('')
+            setExpenseAmount('')
             setBankTransfer('')
             setOperacionalDescription('')
             setAttendance('')
@@ -51,7 +52,6 @@ const sendToBackend = state => () => {
             setCommonDescription('')
             setDate('')
             setFocusDate(false)
-            setPaymentMethod('')
             setNumberOfInstallments('')
             setBankName('')
             setAccountNumber('')
