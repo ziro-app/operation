@@ -270,8 +270,6 @@ const Register = () => {
                             value={token}
                             onChange={({ target: { value } }) => setToken(maskInput(value, '##########', false))}
                             placeholder='Token de acesso'
-                            type='text'
-                            inputmode='numeric'
                         />
                     } />,
                     <FormInput name='name' label='Nome Completo' input={
@@ -383,8 +381,6 @@ const Register = () => {
                             value={complement}
                             onChange={({ target: { value } }) => setComplement(value.toUpperCase())}
                             placeholder='BLOCO K'
-                            type='text'
-                            inputmode='numeric'
                         />
                     } />,
                     <FormInput name='neighborhood' label='Bairro' input={
@@ -511,7 +507,6 @@ const Register = () => {
                             value={email}
                             onChange={({ target: { value } }) => setEmail(value.toLowerCase())}
                             placeholder='Para acesso ao app'
-                            type='text'
                             inputmode='email'
                             autocomplete='email'
                         />
