@@ -270,6 +270,7 @@ const Register = () => {
                             value={token}
                             onChange={({ target: { value } }) => setToken(maskInput(value, '##########', false))}
                             placeholder='Token de acesso'
+                            inputmode='numeric'
                         />
                     } />,
                     <FormInput name='name' label='Nome Completo' input={
@@ -291,6 +292,7 @@ const Register = () => {
                             value={birthDate}
                             onChange={({ target: { value } }) => setBirthDate(maskInput(value, '##/##/####', true))}
                             placeholder='01/10/1990'
+                            inputmode='numeric'
                         />
                     } />,
                     <FormInput name='cpf' label='CPF' input={
@@ -298,6 +300,7 @@ const Register = () => {
                             value={cpf}
                             onChange={({ target: { value } }) => setCpf(maskInput(value, '###.###.###-##', true))}
                             placeholder='000.111.222-33'
+                            inputmode='numeric'
                         />
                     } />,
                     <FormInput name='rg' label='RG' input={
@@ -305,6 +308,7 @@ const Register = () => {
                             value={rg}
                             onChange={({ target: { value } }) => setRg(maskInput(value, '##############', false))}
                             placeholder='000.111.222'
+                            inputmode='numeric'
                         />
                     } />,
                     <FormInput name='issuingBody' label='Órgão Expeditor' input={
@@ -319,6 +323,7 @@ const Register = () => {
                             value={shippingDate}
                             onChange={({ target: { value } }) => setShippingDate(maskInput(value, '##/##/####', true))}
                             placeholder='01/10/1990'
+                            inputmode='numeric'
                         />
                     } />,
                     <FormInput name='maritalStatus' label='Estado Civil' input={
@@ -337,6 +342,7 @@ const Register = () => {
                             value={personalPhone}
                             onChange={({ target: { value } }) => setPersonalPhone(maskInput(value, '(##) #####-####', true))}
                             placeholder='(86) 99743-6822'
+                            inputmode='tel'
                         />
                     } />,
                     <FormInput name='github' label='Github' input={
@@ -353,6 +359,7 @@ const Register = () => {
                             submitting={searchingCep}
                             onChange={(e) => cepHandleChange(e)}
                             placeholder='00000-111'
+                            inputmode='numeric'
                         />
                     } />,
                     <FormInput name='street' label='Rua' input={
@@ -367,6 +374,7 @@ const Register = () => {
                             value={number}
                             onChange={({ target: { value } }) => setNumber(maskInput(value.toUpperCase(), '######', true))}
                             placeholder='1283'
+                            inputmode='numeric'
                         />
                     } />,
                     <FormInput name='complement' label='Complemento' input={
@@ -374,6 +382,7 @@ const Register = () => {
                             value={complement}
                             onChange={({ target: { value } }) => setComplement(value.toUpperCase())}
                             placeholder='BLOCO K'
+                            inputmode='numeric'
                         />
                     } />,
                     <FormInput name='neighborhood' label='Bairro' input={
@@ -409,6 +418,7 @@ const Register = () => {
                             }
                             list={scopeList}
                             placeholder="Área de atuação"
+                            inputmode='numeric'
                         />
                     } />,
                     <FormInput name='amountCharged' label='Valor Cobrado' input={
@@ -419,6 +429,7 @@ const Register = () => {
                                 setAmountCharged(maskInput(toInteger, '#######', true))
                             }}
                             placeholder='Valor cobrado pelo trabalho'
+                            inputmode='numeric'
                         />
                     } />,
                     <FormInput name='paymentModel' label='Modelo de Pagamento' input={
@@ -437,6 +448,7 @@ const Register = () => {
                             value={height}
                             onChange={({ target: { value } }) => setHeight(maskInput(value, '#.##', true))}
                             placeholder='Para contrato de seguro'
+                            inputmode='numeric'
                         />
                     } />,
                     <FormInput name='weight' label='Peso em quilogramas' input={
@@ -444,6 +456,7 @@ const Register = () => {
                             value={weight}
                             onChange={({ target: { value } }) => setWeight(maskInput(value, '###', true))}
                             placeholder='Para contrato de seguro'
+                            inputmode='numeric'
                         />
                     } />,
                     <FormInput name='emergencyName' label='Nome do Contato de Emergência' input={
@@ -465,6 +478,7 @@ const Register = () => {
                             value={emergencyContact}
                             onChange={({ target: { value } }) => setEmergencyContact(maskInput(value, '(##) #####-####', true))}
                             placeholder='(86) 99743-6822'
+                            inputmode='tel'
                         />
                     } />,
                     <FormInput name='bankNumber' label='Número do Banco' input={
@@ -472,6 +486,7 @@ const Register = () => {
                             value={bankNumber}
                             onChange={({ target: { value } }) => setBankNumber(maskInput(value, '###', false))}
                             placeholder='Ex.: 260'
+                            inputmode='numeric'
                         />
                     } />,
                     <FormInput name='accountNumber' label='Número da Conta' input={
@@ -479,6 +494,7 @@ const Register = () => {
                             value={accountNumber}
                             onChange={({ target: { value } }) => setAccountNumber(value)}
                             placeholder='Ex.: 9472156-8'
+                            inputmode='numeric'
                         />
                     } />,
                     <FormInput name='agency' label='Agência' input={
@@ -486,6 +502,7 @@ const Register = () => {
                             value={agency}
                             onChange={({ target: { value } }) => setAgency(value)}
                             placeholder='Ex.: 0001'
+                            inputmode='numeric'
                         />
                     } />,
                     <FormInput name='email' label='Email' input={
@@ -493,6 +510,8 @@ const Register = () => {
                             value={email}
                             onChange={({ target: { value } }) => setEmail(value.toLowerCase())}
                             placeholder='Para acesso ao app'
+                            inputmode='email'
+                            autocomplete='email'
                         />
                     } />,
                     <FormInput name='pass' label='Senha' input={
