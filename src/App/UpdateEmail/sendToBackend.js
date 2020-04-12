@@ -23,7 +23,7 @@ const sendToBackend = state => () => {
 
     return new Promise(async (resolve, reject) => {
         try {
-            await post(url, body, config)
+            if (row) await post(url, body, config)
             try {
                 const user = auth.currentUser
                 const credential = fbauth.EmailAuthProvider.credential(user.email, pass)
