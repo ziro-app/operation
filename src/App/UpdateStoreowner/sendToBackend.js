@@ -52,20 +52,21 @@ export const inputEditUpdate = (cnpj, column, row, obj, newProp, setIsLoading, s
 }
 
 export const formUpdate = (state, cnpj, row) => async () => {
-    const { affiliateName, affiliateCpf, advisor, salesman, storeowner, setAffiliateName, setAffiliateCpf, setAdvisor, setSalesman, setStoreowner } = state
+    const { affiliateName, affiliateCpf, advisor, salesman, link, storeowner, setAffiliateName, setAffiliateCpf, setAdvisor, setSalesman, setStoreowner, setLink } = state
     const nomeAfiliado = affiliateName ? affiliateName.trim() : ''
     const cpfAfiliado = affiliateCpf ? affiliateCpf.trim() : ''
     const assessor = advisor ? advisor.trim() : ''
     const vendedor = salesman ? salesman.trim() : ''
+    const vinculo = link ? link.trim() : ''
     const url = process.env.SHEET_URL
     const body = {
         apiResource: 'values',
         apiMethod: 'update',
-        range: `Base!S${row}:V${row}`,
+        range: `Base!S${row}:W${row}`,
         valueInputOption: 'raw',
         spreadsheetId: process.env.SHEET_STOREOWNERS_ID,
         resource: {
-            values: [[nomeAfiliado.split(' - ')[1] ? nomeAfiliado.split(' - ')[1] : 'NENHUM', cpfAfiliado, assessor, vendedor]]
+            values: [[nomeAfiliado.split(' - ')[1] ? nomeAfiliado.split(' - ')[1] : 'NENHUM', cpfAfiliado, assessor, vendedor, vinculo]]
         }
     }
     const config = {
@@ -81,14 +82,14 @@ export const formUpdate = (state, cnpj, row) => async () => {
                 const snapCollection = await db.collection('storeowners').where('cnpj', '==', cnpj).get()
                 let docId
                 snapCollection.forEach(doc => docId = doc.id)
-                await db.collection('storeowners').doc(docId).update({ nomeAfiliado: nomeAfiliado.split(' - ')[1] ? nomeAfiliado.split(' - ')[1] : 'NENHUM', cpfAfiliado, assessor, vendedor })
+                await db.collection('storeowners').doc(docId).update({ nomeAfiliado: nomeAfiliado.split(' - ')[1] ? nomeAfiliado.split(' - ')[1] : 'NENHUM', cpfAfiliado, assessor, vendedor, vinculo })
             } catch (error) {
                 console.log(error)
                 if (error.response) console.log(error.response)
                 throw 'Erro ao salvar na Firestore'
             }
             // resolve Promise with message to user
-            setStoreowner({ ...storeowner, assessor })
+            setStoreowner({ ...storeowner, assessor, vinculo })
             resolve('Atualizado com sucesso')
         } catch (error) {
             if (error.customError) reject(error)

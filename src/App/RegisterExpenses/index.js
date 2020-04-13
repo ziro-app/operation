@@ -172,6 +172,7 @@ const RegisterExpenses = () => {
                             setExpenseAmount(maskInput(toInteger, '#######', true))
                         }}
                         placeholder='R$ 100,00'
+                        inputmode='numeric'
                     />
                 } />,
                 <FormInput name='type' label='Tipo' input={

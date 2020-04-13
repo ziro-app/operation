@@ -20,7 +20,7 @@ const RegisterBillet = () => {
     const [searchedName, setSearchedName] = useState('')
     const [saleDate, setSaleDate] = useState('')
     const [focusSale, setFocusSale] = useState(false)
-    const [provider, setProvider] = useState({'nome': '', 'comissao': '', 'endereco': '' })
+    const [provider, setProvider] = useState({ 'nome': '', 'comissao': '', 'endereco': '' })
     const [providers, setProviders] = useState([])
     const [addresses, setAddresses] = useState([])
     const [storeowner, setStoreowner] = useState('')
@@ -59,7 +59,7 @@ const RegisterBillet = () => {
             message: 'Fabricante inválido'
         }, {
             name: 'address',
-            validation: value => provider.nome? Object.values(addresses.find(address => Object.keys(address)[0] === provider.nome))[0].includes(value) : false,
+            validation: value => provider.nome ? Object.values(addresses.find(address => Object.keys(address)[0] === provider.nome))[0].includes(value) : false,
             value: provider.endereco,
             message: 'Endereço inválido'
         }, {
@@ -112,7 +112,7 @@ const RegisterBillet = () => {
     ]
     const round = (num, places) => {
         if (!("" + num).includes("e")) {
-            return +(Math.round(num + "e+" + places)  + "e-" + places);
+            return +(Math.round(num + "e+" + places) + "e-" + places);
         } else {
             let arr = ("" + num).split("e");
             let sig = ""
@@ -124,9 +124,9 @@ const RegisterBillet = () => {
     }
 
     const calculateRevenue = (value, comissao) => {
-        if(value && comissao){
-            let percent = numberFormatter(comissao)? numberFormatter(comissao)/100 : 0.00
-            let val = round((parseFloat(value/100) * percent), 2)
+        if (value && comissao) {
+            let percent = numberFormatter(comissao) ? numberFormatter(comissao) / 100 : 0.00
+            let val = round((parseFloat(value / 100) * percent), 2)
             setRevenue(val)
         }
     }
@@ -140,13 +140,14 @@ const RegisterBillet = () => {
         <>
             <Form
                 validations={validations}
-                sendToBackend={sendToBackend? sendToBackend(state) : () => null}
+                sendToBackend={sendToBackend ? sendToBackend(state) : () => null}
                 inputs={[
                     <FormInput name='billet' label='Boleto' input={
                         <InputText
                             value={billet}
                             onChange={({ target: { value } }) => setBillet(maskInput(value, '#####', true))}
                             placeholder='Nº do boleto'
+                            inputmode='numeric'
                         />
                     } />,
                     <FormInput name='saleDate' label='Data da Venda' input={
@@ -172,15 +173,15 @@ const RegisterBillet = () => {
                                         setPercentage(person.comissao)
                                     }
                                     setSearchedName(value)
-                                    calculateRevenue(billetValue, person? person.comissao : '' )
+                                    calculateRevenue(billetValue, person ? person.comissao : '')
                                 } else {
                                     setSearchedName('')
-                                    setProvider({'nome': '', 'comissao': '', 'endereco': '' })
+                                    setProvider({ 'nome': '', 'comissao': '', 'endereco': '' })
                                     setPercentage('')
                                     setRevenue('')
                                 }
                             }}
-                            onChangeKeyboard={element =>{
+                            onChangeKeyboard={element => {
                                 if (element && element.value !== '') {
                                     let person = providers.find(provider => provider.nome === element.value)
                                     if (person) {
@@ -188,10 +189,10 @@ const RegisterBillet = () => {
                                         setPercentage(person.comissao)
                                     }
                                     setSearchedName(element.value)
-                                    calculateRevenue(billetValue, person? person.comissao : '')
+                                    calculateRevenue(billetValue, person ? person.comissao : '')
                                 } else {
                                     setSearchedName('')
-                                    setProvider({'nome': '', 'comissao': '', 'endereco': '' })
+                                    setProvider({ 'nome': '', 'comissao': '', 'endereco': '' })
                                     setPercentage('')
                                     setRevenue('')
                                 }
@@ -206,17 +207,17 @@ const RegisterBillet = () => {
                             value={provider.endereco}
                             onChange={({ target: { value } }) => {
                                 if (value !== '')
-                                    setProvider({...provider, endereco: value})
+                                    setProvider({ ...provider, endereco: value })
                                 else
-                                    setProvider({...provider, endereco: ''})
+                                    setProvider({ ...provider, endereco: '' })
                             }}
-                            onChangeKeyboard={element =>{
+                            onChangeKeyboard={element => {
                                 if (element && element.value !== '')
-                                    setProvider({...provider, endereco: element.value})
+                                    setProvider({ ...provider, endereco: element.value })
                                 else
-                                    setProvider({...provider, endereco: ''})
+                                    setProvider({ ...provider, endereco: '' })
                             }}
-                            list={provider.nome? Object.values(addresses.find(address => Object.keys(address)[0] === provider.nome))[0] : []}
+                            list={provider.nome ? Object.values(addresses.find(address => Object.keys(address)[0] === provider.nome))[0] : []}
                             placeholder="Brás — Casemiro de Abreu, 800"
                         />
                     } />,
@@ -240,6 +241,7 @@ const RegisterBillet = () => {
                                 calculateRevenue(toInteger, provider.comissao)
                             }}
                             placeholder='R$ 100,00'
+                            inputmode='numeric'
                         />
                     } />,
                     <FormInput name='paymentMethod' label='Meio de Pagamento' input={
@@ -258,6 +260,7 @@ const RegisterBillet = () => {
                             value={romaneio}
                             onChange={({ target: { value } }) => setRomaneio(maskInput(value, '############', true))}
                             placeholder='Nº do romaneio'
+                            inputmode='numeric'
                         />
                     } />,
                     <FormInput name='dueDate' label='Data de Vencimento' input={
@@ -274,7 +277,7 @@ const RegisterBillet = () => {
                     } />,
                     <FormInput name='percentage' label='Porcentagem' input={
                         <InputText
-                            value={percentage? `${percentage} %` : ''}
+                            value={percentage ? `${percentage} %` : ''}
                             onChange={({ target: { value } }) => {
                                 let newPrctg = value.replace(/\s/g, '').replace('%', '')
                                 setPercentage(newPrctg)
@@ -282,39 +285,40 @@ const RegisterBillet = () => {
                             }}
                             readOnly={false}
                             placeholder='0.00 %'
+                            inputmode='numeric'
                         />
                     } />,
                     <FormInput name='revenue' label='Receita' input={
                         <InputText
-                            value={revenue? `R$ ${revenue}` : `R$ 0.00`}
-                            onChange={() => {}}
+                            value={revenue ? `R$ ${revenue}` : `R$ 0.00`}
+                            onChange={() => { }}
                             readOnly={true}
                             placeholder='R$ 0.00'
                         />
                     } />,
                     <FormInput name='advisor' label='Assessor(a)' input={
-						<Dropdown
-							value={advisor}
-							onChange={({ target: { value } }) => setAdvisor(value)}
-							onChangeKeyboard={element =>
-								element ? setAdvisor(element.value) : null
-							}
-							list={advisors}
-							placeholder="Nome do(a) assessor(a)"
-						/>
+                        <Dropdown
+                            value={advisor}
+                            onChange={({ target: { value } }) => setAdvisor(value)}
+                            onChangeKeyboard={element =>
+                                element ? setAdvisor(element.value) : null
+                            }
+                            list={advisors}
+                            placeholder="Nome do(a) assessor(a)"
+                        />
                     } />,
                     <FormInput name='type' label='Tipo' input={
-						<Dropdown
-							value={type}
-							onChange={({ target: { value } }) => setType(value)}
-							onChangeKeyboard={element =>
-								element ? setType(element.value) : null
-							}
-							list={typeList}
-							placeholder="Tipo da compra"
-							readOnly={true}
-						/>
-					} />
+                        <Dropdown
+                            value={type}
+                            onChange={({ target: { value } }) => setType(value)}
+                            onChangeKeyboard={element =>
+                                element ? setType(element.value) : null
+                            }
+                            list={typeList}
+                            placeholder="Tipo da compra"
+                            readOnly={true}
+                        />
+                    } />
                 ]}
             />
         </>

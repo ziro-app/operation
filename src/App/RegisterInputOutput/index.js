@@ -60,6 +60,7 @@ const InputOutput = () => {
                                 setValue(maskInput(toInteger, '#######', true))
                             }}
                             placeholder='R$ 00,00'
+                            inputmode='numeric'
                         />
                     } />,
                     <FormInput name='description' label='Descrição' input={

@@ -281,6 +281,7 @@ const UpdateUserInfo = () => {
                 placeholder="digite aqui..."
                 editable={true}
                 isLoading={loadingBirthDate}
+                inputmode='numeric'
             />
             <InputEdit
                 name="CPF"
@@ -292,6 +293,7 @@ const UpdateUserInfo = () => {
                 error={''}
                 editable={false}
                 isLoading={false}
+                inputmode='numeric'
             />
             <InputEdit
                 name="RG"
@@ -303,6 +305,7 @@ const UpdateUserInfo = () => {
                 error={''}
                 editable={false}
                 isLoading={false}
+                inputmode='numeric'
             />
             <InputEdit
                 name="Órgão expeditor"
@@ -349,6 +352,7 @@ const UpdateUserInfo = () => {
                 placeholder="digite aqui..."
                 editable={true}
                 isLoading={loadingPersonalPhone}
+                inputmode='tel'
             />
             <InputEdit
                 name="Github"
@@ -373,6 +377,7 @@ const UpdateUserInfo = () => {
                 placeholder="digite aqui..."
                 editable={true}
                 isLoading={loadingCep}
+                inputmode='numeric'
             />
             <InputEdit
                 name="Rua"
@@ -397,6 +402,7 @@ const UpdateUserInfo = () => {
                 placeholder="digite aqui..."
                 editable={true}
                 isLoading={loadingNumber}
+                inputmode='numeric'
             />
             <InputEdit
                 name="Complemento"
@@ -457,6 +463,7 @@ const UpdateUserInfo = () => {
                 placeholder="digite aqui..."
                 editable={false}
                 isLoading={false}
+                inputmode='numeric'
             />
             <InputEdit
                 name="Valor cobrado"
@@ -481,6 +488,7 @@ const UpdateUserInfo = () => {
                 placeholder="digite aqui..."
                 editable={true}
                 isLoading={loadingHeight}
+                inputmode='numeric'
             />
             <InputEdit
                 name="Peso em quilogramas"
@@ -493,6 +501,7 @@ const UpdateUserInfo = () => {
                 placeholder="digite aqui..."
                 editable={true}
                 isLoading={loadingWeight}
+                inputmode='numeric'
             />
             <InputEdit
                 name="Nome contato de emergência"
@@ -529,6 +538,7 @@ const UpdateUserInfo = () => {
                 placeholder="digite aqui..."
                 editable={true}
                 isLoading={loadingEmergencyContact}
+                inputmode='tel'
             />
             <InputEdit
                 name="Número do Banco"
@@ -541,6 +551,7 @@ const UpdateUserInfo = () => {
                 placeholder="digite aqui..."
                 editable={true}
                 isLoading={loadingBankNumber}
+                inputmode='numeric'
             />
             <InputEdit
                 name="Número da Conta"
@@ -553,6 +564,7 @@ const UpdateUserInfo = () => {
                 placeholder="digite aqui..."
                 editable={true}
                 isLoading={loadingAccountNumber}
+                inputmode='numeric'
             />
             <InputEdit
                 name="Agência"
@@ -565,6 +577,7 @@ const UpdateUserInfo = () => {
                 placeholder="digite aqui..."
                 editable={true}
                 isLoading={loadingAgency}
+                inputmode='numeric'
             />
         </>
     )

@@ -218,6 +218,7 @@ const UpdateAffiliate = () => {
                     error={errorCpf}
                     editable={true}
                     isLoading={loadingCpf}
+                    inputmode='numeric'
                 />
                 <InputEdit
                     name="Whatsapp"
@@ -230,6 +231,7 @@ const UpdateAffiliate = () => {
                     placeholder="digite aqui..."
                     editable={true}
                     isLoading={loadingWhatsapp}
+                    inputmode='tel'
                 />
                 <InputEdit
                     name="Instagram da Marca"
@@ -246,7 +248,7 @@ const UpdateAffiliate = () => {
                 <br />
                 <Form
                     validations={validations}
-                    sendToBackend={dropdownUpdate? dropdownUpdate(state, affiliateRow) : () => null}
+                    sendToBackend={dropdownUpdate ? dropdownUpdate(state, affiliateRow) : () => null}
                     inputs={[
                         <FormInput name='brand' label='Marca' input={
                             <Dropdown
@@ -258,7 +260,7 @@ const UpdateAffiliate = () => {
                                 list={brands}
                                 placeholder='Marca onde trabalha'
                                 onChangeKeyboard={element => {
-                                    if(element) {
+                                    if (element) {
                                         setBrand(element.value)
                                         setBranch('')
                                     } else null

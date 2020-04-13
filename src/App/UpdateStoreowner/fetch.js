@@ -1,10 +1,11 @@
 import axios from 'axios'
 
-const fetch = (setIsLoading, setIsError, setStoreowners, setAdvisors, setAffiliates, setSellers) => {
+const fetch = (setIsLoading, setIsError, setStoreowners, setAdvisors, setAffiliates, setSellers, setLinkList) => {
     const source = axios.CancelToken.source()
     const affiliates = ['NENHUM']
     const advisors = ['NENHUM']
     const sellers = ['NENHUM']
+    const links = []
     const run = async () => {
         const config = {
             method: 'POST',
@@ -54,6 +55,8 @@ const fetch = (setIsLoading, setIsError, setStoreowners, setAdvisors, setAffilia
         try {
             const dataStoreowners = await axios(config)
             const [, ...listStoreowners] = dataStoreowners.data.values
+            listStoreowners.map(storeowner => links.push(`${Object.values(storeowner)[10]}`))
+            setLinkList(['NENHUM'].concat(links.sort()))
             setStoreowners(listStoreowners)
 
             const dataAffiliates = await axios(configAffiliate)
