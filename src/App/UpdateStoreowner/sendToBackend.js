@@ -2,6 +2,9 @@ import { db } from '../../Firebase/index'
 import { post } from 'axios'
 
 export const inputEditUpdate = (cnpj, column, row, obj, newProp, setIsLoading, setError) => () => {
+    let property
+    if (Object.keys(obj)[0] === 'ie') property = `'${newProp}`
+    else property = newProp
     const url = process.env.SHEET_URL
     const body = {
         apiResource: 'values',
@@ -10,7 +13,7 @@ export const inputEditUpdate = (cnpj, column, row, obj, newProp, setIsLoading, s
         valueInputOption: 'raw',
         spreadsheetId: process.env.SHEET_STOREOWNERS_ID,
         resource: {
-            values: [[newProp]]
+            values: [[property]]
         }
     }
 
