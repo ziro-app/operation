@@ -58,15 +58,15 @@ export default () => {
                     <div key={status} style={{ display: 'grid', gridGap: '10px' }}>
                         <label style={{ fontSize: 15, color: 'grey', padding: '10px' }}>{statusTitles[status]||status}</label>
                         {
-                            Object.entries(_requests).map(([id, { brand, products }]) => (
+                            Object.entries(_requests).map(([id, { brandName, products }]) => (
                                 <motion.div 
                                     key={id}
                                     whileTap={{ scale: 0.95 }}
                                     onClick={() => setLocation(`pedidos/${userId}/${id}`)}
                                     style={button}
                                 >
-                                    <label style={{ fontSize: 16 }}>{brand}</label>
-                                    <div style={bubble}>{products.length}</div>
+                                    <label style={{ fontSize: 16 }}>{brandName}</label>
+                                    <div style={bubble}>{Object.keys(products).length}</div>
                                     <div style={{ transform: 'rotate(90deg)' }}>
                                         <Icon type='chevronUp' size={20} color='black' />
                                     </div>
