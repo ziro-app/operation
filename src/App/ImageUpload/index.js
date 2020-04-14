@@ -36,6 +36,7 @@ export default () => {
 				<label style={title}>Etapa 1</label>
 				<Dropdown
 					readOnly={false}
+					submitting={isSubmitting}
 					value={brand}
 					onChange={({ target: { value } }) => setBrand(value)}
 					list={brands}
@@ -47,6 +48,7 @@ export default () => {
 				<label style={title}>Etapa 2</label>
 				<Dropdown
 					readOnly={false}
+					submitting={isSubmitting}
 					value={pricetag}
 					onChange={({ target: { value } }) => setPricetag(value)}
 					list={['Sim','Não']}
@@ -58,6 +60,7 @@ export default () => {
 				<label style={title}>Etapa 3</label>
 				<Dropdown
 					readOnly={false}
+					submitting={isSubmitting}
 					value={photoPeriod}
 					onChange={({ target: { value } }) => setPhotoPeriod(value)}
 					list={['Nova','Antiga']}

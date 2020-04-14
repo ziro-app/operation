@@ -118,6 +118,7 @@ const RegisterAffiliate = () => {
                             value={cpf}
                             onChange={({ target: { value } }) => setCpf(maskInput(value, '###.###.###-##', true))}
                             placeholder='000.111.222-33'
+                            inputmode='numeric'
                         />
                     } />,
                     <FormInput name='whats' label='Whatsapp' input={
@@ -125,6 +126,7 @@ const RegisterAffiliate = () => {
                             value={whats}
                             onChange={({ target: { value } }) => setWhats(maskInput(value, '(##) #####-####', true))}
                             placeholder='(11) 91122-3344'
+                            inputmode='tel'
                         />
                     } />
                 ]}

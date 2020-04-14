@@ -65,12 +65,12 @@ const RegisterExpenses = () => {
             message: 'Tipo inválido'
         }, {
             name: 'operationalDescription',
-            validation: value => type === 'Operacional'? ODList.includes(value) : true,
+            validation: value => type === 'Operacional' ? ODList.includes(value) : true,
             value: operationalDescription,
             message: 'Favorecido inválido'
         }, {
             name: 'attendance',
-            validation: value => type === 'Operacional'? attendanceList.includes(value) : true,
+            validation: value => type === 'Operacional' ? attendanceList.includes(value) : true,
             value: attendance,
             message: 'Atendimento inválido'
         }, {
@@ -80,57 +80,57 @@ const RegisterExpenses = () => {
             message: 'Valor inválido'
         }, {
             name: 'paymentMethod',
-            validation: value => type === 'Comum'? paymentMethodList.includes(value) : true,
+            validation: value => type === 'Comum' ? paymentMethodList.includes(value) : true,
             value: paymentMethod,
             message: 'Meio de pagamento inválido'
         }, {
             name: 'haveRefound',
-            validation: value => type === 'Operacional'? refoundList.includes(value) : true,
+            validation: value => type === 'Operacional' ? refoundList.includes(value) : true,
             value: haveRefound,
             message: 'Valor inválido'
         }, {
             name: 'commonDescription',
-            validation: value => type === 'Comum'? !!value : true,
+            validation: value => type === 'Comum' ? !!value : true,
             value: commonDescription,
             message: 'Descrição inválida'
         }, {
             name: 'bankTransfer',
-            validation: value => type === 'Operacional'? bankTransferList.includes(value) : true,
+            validation: value => type === 'Operacional' ? bankTransferList.includes(value) : true,
             value: bankTransfer,
             message: 'Opção inválida'
         }, {
             name: 'bankName',
-            validation: value => (paymentMethod === 'Transferência Bancária' || bankTransfer === 'Sim')? !!value : true,
+            validation: value => (paymentMethod === 'Transferência Bancária' || bankTransfer === 'Sim') ? !!value : true,
             value: bankName,
             message: 'Campo inválido'
         }, {
             name: 'accountNumber',
-            validation: value => (paymentMethod === 'Transferência Bancária' || bankTransfer === 'Sim')? !!value : true,
+            validation: value => (paymentMethod === 'Transferência Bancária' || bankTransfer === 'Sim') ? !!value : true,
             value: accountNumber,
             message: 'Conta inválida'
         }, {
             name: 'agency',
-            validation: value => (paymentMethod === 'Transferência Bancária' || bankTransfer === 'Sim')? !!value : true,
+            validation: value => (paymentMethod === 'Transferência Bancária' || bankTransfer === 'Sim') ? !!value : true,
             value: agency,
             message: 'Agência inválida'
         }, {
             name: 'note',
-            validation: value => operationalDescription === 'CLIENTES'? !!value : true,
+            validation: value => operationalDescription === 'CLIENTES' ? !!value : true,
             value: note,
             message: 'Campo obrigatório'
         }, {
             name: 'beneficiary',
-            validation: value => (paymentMethod === 'Transferência Bancária' || bankTransfer === 'Sim')? !!value : true,
+            validation: value => (paymentMethod === 'Transferência Bancária' || bankTransfer === 'Sim') ? !!value : true,
             value: beneficiary,
             message: 'Campo obrigatório'
         }, {
             name: 'beneficiaryDocument',
-            validation: value => (paymentMethod === 'Transferência Bancária' || bankTransfer === 'Sim')? validateCpfOrCnpj(value) : true,
+            validation: value => (paymentMethod === 'Transferência Bancária' || bankTransfer === 'Sim') ? validateCpfOrCnpj(value) : true,
             value: beneficiaryDocument,
             message: 'Documento inválido'
         }, {
             name: 'numberOfInstallments',
-            validation: value => paymentMethod === 'Cartão de Crédito'? (/(^\d{1}$)/.test(value)) || (/(^\d{2}$)/.test(value) || value === '') : true,
+            validation: value => paymentMethod === 'Cartão de Crédito' ? (/(^\d{1}$)/.test(value)) || (/(^\d{2}$)/.test(value) || value === '') : true,
             value: numberOfInstallments,
             message: 'Valor inválido'
         }
@@ -147,6 +147,11 @@ const RegisterExpenses = () => {
         setFocusDate(false)
         setPaymentMethod('')
         setNumberOfInstallments('')
+        setBankName('')
+        setAccountNumber('')
+        setAgency('')
+        setBeneficiary('')
+        setBeneficiaryDocument('')
     }
 
     useEffect(() => fetch(setIsLoading, setIsError, setAttendanceList), [])
@@ -156,39 +161,40 @@ const RegisterExpenses = () => {
 
     return (
         <Form
-        validations={validations}
-        sendToBackend={sendToBackend? sendToBackend(state) : () => null}
-        inputs={[
-            <FormInput name='expenseAmount' label='Valor' input={
-                <InputText
-                    value={currencyFormat(expenseAmount)}
-                    onChange={({ target: { value } }) => {
-                        const toInteger = parseInt(value.replace(/[R$\.,]/g, ''), 10)
-                        setExpenseAmount(maskInput(toInteger, '#######', true))
-                    }}
-                    placeholder='R$ 100,00'
-                />
-            } />,
-            <FormInput name='type' label='Tipo' input={
-                <Dropdown
-                    value={type}
-                    onChange={({ target: { value } }) => {
-                        setType(value)
-                        clearFields()
-                    }}
-                    onChangeKeyboard={element => {
-                        if(element){
-                            setType(element.value)
+            validations={validations}
+            sendToBackend={sendToBackend ? sendToBackend(state) : () => null}
+            inputs={[
+                <FormInput name='expenseAmount' label='Valor' input={
+                    <InputText
+                        value={currencyFormat(expenseAmount)}
+                        onChange={({ target: { value } }) => {
+                            const toInteger = parseInt(value.replace(/[R$\.,]/g, ''), 10)
+                            setExpenseAmount(maskInput(toInteger, '#######', true))
+                        }}
+                        placeholder='R$ 100,00'
+                        inputmode='numeric'
+                    />
+                } />,
+                <FormInput name='type' label='Tipo' input={
+                    <Dropdown
+                        value={type}
+                        onChange={({ target: { value } }) => {
+                            setType(value)
                             clearFields()
-                        } else null
-                    }
-                    }
-                    readOnly={true}
-                    list={typeList}
-                    placeholder="Tipo da despesa"
-                />}
-            />,
-            ...matchForm(state)
+                        }}
+                        onChangeKeyboard={element => {
+                            if (element) {
+                                setType(element.value)
+                                clearFields()
+                            } else null
+                        }
+                        }
+                        readOnly={true}
+                        list={typeList}
+                        placeholder="Tipo da despesa"
+                    />}
+                />,
+                ...matchForm(state)
             ]}
         />
     )

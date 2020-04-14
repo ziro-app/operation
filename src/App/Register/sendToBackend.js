@@ -34,11 +34,11 @@ const sendToBackend = state => () => {
         range: 'Base!A1',
         resource: {
             values: [
-                [dateHourFormatterUTC3(new Date()), md5(emailTrim), nome, apelido, birthDate, cpf, rgTrim,
+                [dateHourFormatterUTC3(new Date()), md5(emailTrim), nome, apelido, birthDate, cpf, `'${rgTrim}`,
                     orgExp, shippingDate, maritalStatus, telefone, emailTrim, githubTrim,
                     endereco, cep, cidade, estado, initialDate, '-', scope,
-                    valorCobrado, paymentModel, height, weight, nomeEmergencia,
-                    parentesco, contatoEmergencia, `${banco}`, `${conta}`, `${agencia}`]
+                    valorCobrado, paymentModel, height.replace('.',','), weight, nomeEmergencia,
+                    parentesco, contatoEmergencia, banco, conta, `'${agencia}`]
             ]
         },
         valueInputOption: 'user_entered'
