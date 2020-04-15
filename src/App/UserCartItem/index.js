@@ -98,8 +98,6 @@ export default () => {
 
     if(!request) throw "REQUEST_NOT_FOUND"
 
-    console.log({ request, untouchedRequest })
-
     return (
         <div style={{ display: 'grid', alignItems: 'center', gridGap: '10px' }}>
             <label style={{ padding: '10px', fontSize: '20px' }}>{request.brandName}</label>
