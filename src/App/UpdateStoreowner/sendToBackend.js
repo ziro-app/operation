@@ -10,7 +10,7 @@ export const inputEditUpdate = (cnpj, column, row, obj, newProp, setIsLoading, s
         apiResource: 'values',
         apiMethod: 'update',
         range: `Base!${column}${row}`,
-        valueInputOption: 'raw',
+        valueInputOption: 'user_entered',
         spreadsheetId: process.env.SHEET_STOREOWNERS_ID,
         resource: {
             values: [[property]]
