@@ -44,8 +44,8 @@ export default () => {
                 }
                 return { ...prev, [productId]: newProduct }
             },{})
-            setRequest(data)
-            setUntouchedRequest(data)
+            setRequest(Object.assign({},{ ...data, products: Object.entries(data.products).reduce((prev,[key,value]) => ({ ...prev, [key]: Object.assign({},value) }),{}) }) )
+            setUntouchedRequest(Object.assign({},{ ...data, products: Object.entries(data.products).reduce((prev,[key,value]) => ({ ...prev, [key]: Object.assign({},value) }),{}) }) )
             setIsQuering(false)
         })
     },[userId, requestId])
@@ -77,6 +77,7 @@ export default () => {
         const newProduct = Object.assign({},request.products[productId])
         delete newProduct['sizes']
         delete newProduct['colors']
+        console.log({ newProduct })
         try {
             await db.collection('catalog-user-data')
             .doc(userId)
@@ -106,7 +107,7 @@ export default () => {
                         src={product.url}
                         style={{ objectFit: 'cover', width: '100%' }}
                         container={children => 
-                            product.status === 'waitingInfo' || editing === productId ?
+                            untouchedRequest.products[productId].status === 'waitingInfo' || editing === productId ?
                             <EditCard
                                 image={children}
                                 setValue={setValue}
