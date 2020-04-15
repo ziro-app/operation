@@ -11,6 +11,7 @@ import RImg from 'react-image'
 import { imageStyle, card, content, qtyLabel, qtyContainer } from './styles'
 import parsePrice from './parsePrice'
 import EditCard from './editCard'
+import ObjectAssignDeep from 'object-assign-deep'
 
 
 export default () => {
@@ -44,8 +45,9 @@ export default () => {
                 }
                 return { ...prev, [productId]: newProduct }
             },{})
-            setRequest(Object.assign({},{ ...data, products: Object.entries(data.products).reduce((prev,[key,value]) => ({ ...prev, [key]: Object.assign({},value) }),{}) }) )
-            setUntouchedRequest(Object.assign({},{ ...data, products: Object.entries(data.products).reduce((prev,[key,value]) => ({ ...prev, [key]: Object.assign({},value) }),{}) }) )
+
+            setRequest(ObjectAssignDeep({},data))
+            setUntouchedRequest(ObjectAssignDeep({},data))
             setIsQuering(false)
         })
     },[userId, requestId])
@@ -77,7 +79,6 @@ export default () => {
         const newProduct = Object.assign({},request.products[productId])
         delete newProduct['sizes']
         delete newProduct['colors']
-        console.log({ newProduct })
         try {
             await db.collection('catalog-user-data')
             .doc(userId)
@@ -96,6 +97,8 @@ export default () => {
     if(isQuering) return <Spinner />
 
     if(!request) throw "REQUEST_NOT_FOUND"
+
+    console.log({ request, untouchedRequest })
 
     return (
         <div style={{ display: 'grid', alignItems: 'center', gridGap: '10px' }}>
