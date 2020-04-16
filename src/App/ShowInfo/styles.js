@@ -1,4 +1,4 @@
-import { fontTitle, fontSizeInput, gradient, shadow } from '@ziro/theme'
+import { fontTitle, fontSizeInput, gradient, shadow, primaryColor } from '@ziro/theme'
 
 export const
 
@@ -24,7 +24,6 @@ blockTitle = {
     ...name,
     fontSize: '1.5rem',
     display: 'grid',
-    marginTop: '50px',
     textAlign: 'left',
 },
 
@@ -63,4 +62,11 @@ button = {
     textAlign: 'center',
     background: gradient,
     boxShadow: `0px 3px 12px -3px rgba(34,34,34,0.65)`
+},
+
+bar = {
+    margin: '30px 0',
+    border: 'none',
+    height: '2px',
+    background: '#EAEAEA'
 }

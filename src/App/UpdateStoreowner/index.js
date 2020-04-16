@@ -131,6 +131,14 @@ const UpdateStoreowner = () => {
         })
         return pos + 1
     }
+
+    const formatCorporateName = (corporateName) => {
+        if (corporateName) {
+            let cleanString = corporateName.replace(/[\.,-]/g, '')
+            return cleanString.replace(/  /g, ' ').split(' ').join('-')
+        } else return 'N/A'
+    }
+
     const storeownerHandleSuccess = async person => {
         setFoundStoreowner(true)
         const partAddress = person[23] ? person[23].split(', ') : []
@@ -154,7 +162,7 @@ const UpdateStoreowner = () => {
         setNewCep(person[24] ? person[24] : '')
         setNewCity(person[25] ? person[25] : '')
         setNewState(person[26] ? person[26] : '')
-        setTextArea(person[8] ? `https://interno.ziro.app/show-info?doc=${person[8]}&razao=${person[10]}` : '')
+        setTextArea(person[8] ? `https://interno.ziro.app/show-info?doc=${person[8]}&razao=${formatCorporateName(person[10])}` : '')
         setLink(person[22] ? person[22] : '')
         setStoreowner(Object.assign({ 'cadastro': person[0] ? person[0] : '', 'afiliado': person[18] ? person[18] : '', 'afiliado_cpf': person[19] ? person[19] : '', 'lojista': person[1] ? person[1] : '', 'rg': person[4] ? person[4] : '', 'cpf': person[5] ? person[5] : '', 'nascimento': person[6] ? person[6] : '', 'instagram': person[7] ? person[7] : '', 'cnpj': person[8] ? person[8] : '', 'ie': person[9] ? person[9] : '', 'razao': person[10] ? person[10] : '', 'fantasia': person[11] ? person[11] : '', 'endereco': person[12] ? person[12] : '', 'bairro': person[13] ? person[13] : '', 'cep': person[14] ? person[14] : '', 'cidade': person[15] ? person[15] : '', 'estado': person[16] ? person[16] : '', 'fone': person[17] ? person[17] : '', 'email': person[3] ? person[3] : '', 'assessor': person[20] ? person[20] : '', 'vendedor': person[21] ? person[21] : '', 'whats': person[2] ? person[2] : '', 'entrega': person[23] ? person[23] : '', 'bairroEntrega': person[24] ? person[24] : '', 'cepEntrega': person[25] ? person[25] : '', 'cidadeEntrega': person[26] ? person[26] : '', 'estadoEntrega': person[27] ? person[27] : '', 'vinculo': person[22] ? person[22] : '' }))
         if (person[8]) {
