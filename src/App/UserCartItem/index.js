@@ -13,11 +13,16 @@ import parsePrice from './parsePrice'
 import EditCard from './editCard'
 import ObjectAssignDeep from 'object-assign-deep'
 
+const PTstatus = {
+    'available': 'Aberto',
+    'unavailable': 'Indisponível',
+    'closed': 'Fechado',
+}
+
 
 export default () => {
 
     const { userId, requestId } = useRoute('/pedidos/:userId/:requestId')[1]
-    const setLocation = useLocation()[1]
     const [isQuering, setIsQuering] = useState(true)
     const [untouchedRequest, setUntouchedRequest] = useState()
     const [request, setRequest] = useState()
@@ -120,12 +125,27 @@ export default () => {
                             <div style={{ display: 'grid', gridTemplateColumns: '100px 1fr', boxShadow: card.boxShadow, minHeight: '100px', alignItems: 'center', gridGap: '10px' }}>
                                 {children}
                                 <div style={{ display: 'grid', padding: '10px', alignContent: 'space-between', height: '100%', boxSizing: 'border-box' }}>
-                                    <label>{ product.status === 'unavailable' ? 'Indisponível' : 'Quantidades'}</label>
+                                    <label>{PTstatus[product.status]}</label>
                                     {
                                         product.status === 'available' &&
                                         <div style={{ display: 'grid', padding: '10px' }}>
+                                            <label style={{ fontSize: 13 }}>Disponível:</label>
                                             {
                                                 Object.entries(product.availableQuantities).map(([key,value]) => (
+                                                    <div key={key} style={{ display: 'grid', gridTemplateColumns: '1fr auto' }}>
+                                                        <label style={{ fontSize: 10 }}>{`${key}:`}</label>
+                                                        <label style={{ fontSize: 10 }}>{value}</label>
+                                                    </div>
+                                                ))
+                                            }
+                                        </div>
+                                    }
+                                    {
+                                        product.status === 'closed' &&
+                                        <div style={{ display: 'grid', padding: '10px' }}>
+                                        <label style={{ fontSize: 13 }}>Pedido:</label>
+                                            {
+                                                Object.entries(product.requestedQuantities).map(([key,value]) => (
                                                     <div key={key} style={{ display: 'grid', gridTemplateColumns: '1fr auto' }}>
                                                         <label style={{ fontSize: 10 }}>{`${key}:`}</label>
                                                         <label style={{ fontSize: 10 }}>{value}</label>
@@ -139,7 +159,8 @@ export default () => {
                                         <Button
                                             type='button'
                                             cta='Editar'
-                                            click={() => setEditing(productId)}
+                                            click={() => product.status!=='closed' && setEditing(productId)}
+                                            submitting={product.status==='closed'}
                                         />
                                     </div>
                                 </div>
