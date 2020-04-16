@@ -7,7 +7,7 @@ import SocialMedia from '@bit/vitorbarbosa19.ziro.social-media'
 import Button from '@bit/vitorbarbosa19.ziro.button'
 import { containerWithPadding } from '@ziro/theme'
 import fetch from './fetch'
-import { container, name, block, blockTitle, containerOneColumn, containerTwoColumn, containerTwoColumnButton, button } from './styles'
+import { container, name, block, blockTitle, containerOneColumn, containerTwoColumn, containerTwoColumnButton, button, bar } from './styles'
 import { alertColor, successColor } from '@ziro/theme'
 
 const ShowInfo = () => {
@@ -64,6 +64,7 @@ const ShowInfo = () => {
                 <SocialMedia />
             </div>
             <div style={block}>
+                <hr style={bar} />
                 <label style={blockTitle}>Informações do CNPJ</label>
                 <div style={containerTwoColumnButton} >
                     <InputEdit
@@ -161,6 +162,7 @@ const ShowInfo = () => {
                         isLoading={false}
                     />
                 </div>
+                <hr style={bar} />
                 <label style={blockTitle}>Endereço do CNPJ</label>
                 <div style={containerOneColumn} >
                     <InputEdit
@@ -221,6 +223,7 @@ const ShowInfo = () => {
                         isLoading={false}
                     />
                 </div>
+                <hr style={bar} />
                 <label style={blockTitle}>Informações do comprador</label>
                 <div style={containerOneColumn} >
                     <InputEdit
@@ -281,6 +284,7 @@ const ShowInfo = () => {
                         isLoading={false}
                     />
                 </div>
+                <hr style={bar} />
                 <label style={blockTitle}>Endereço de entrega</label>
                 <div style={containerOneColumn} >
                     <InputEdit
