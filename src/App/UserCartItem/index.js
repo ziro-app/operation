@@ -84,6 +84,9 @@ export default () => {
         const newProduct = Object.assign({},request.products[productId])
         delete newProduct['sizes']
         delete newProduct['colors']
+        newProduct.requestedQuantities = {}
+        if(newProduct.status === 'closed') newProduct.status = 'available' 
+        console.log({ newProduct })
         try {
             await db.collection('catalog-user-data')
             .doc(userId)
@@ -145,12 +148,15 @@ export default () => {
                                         <div style={{ display: 'grid', padding: '10px' }}>
                                         <label style={{ fontSize: 13 }}>Pedido:</label>
                                             {
+                                                Object.keys(product.requestedQuantities).length ?
                                                 Object.entries(product.requestedQuantities).map(([key,value]) => (
                                                     <div key={key} style={{ display: 'grid', gridTemplateColumns: '1fr auto' }}>
                                                         <label style={{ fontSize: 10 }}>{`${key}:`}</label>
                                                         <label style={{ fontSize: 10 }}>{value}</label>
                                                     </div>
-                                                ))
+                                                )) : (
+                                                    <label style={{ fontSize: 10, color: 'grey' }}>Nenhum pedido</label>
+                                                )
                                             }
                                         </div>
                                     }
@@ -159,8 +165,7 @@ export default () => {
                                         <Button
                                             type='button'
                                             cta='Editar'
-                                            click={() => product.status!=='closed' && setEditing(productId)}
-                                            submitting={product.status==='closed'}
+                                            click={() => setEditing(productId)}
                                         />
                                     </div>
                                 </div>
@@ -170,64 +175,6 @@ export default () => {
                     />
                 ))
             }
-            {/* <label style={{ padding: '10px', fontSize: '20px' }}>{request.brand}</label>
-                {request.products.map(({ image, price, sizes, colors, availableQuantities }, index) => 
-                <RImg
-                    key={image}
-                    src={image}
-                    style={imageStyle}
-                    container={(children) =>
-                        <div style={card}>
-                            <label style={{ padding: '0px 10px' }}>{`Peça ${index+1}`}</label>
-                            <div style={content}>
-                                {children}
-                                <div style={{ display: 'grid', alignContent: 'start' }}>
-                                    <label style={{ fontSize: 15, padding: '5px 10px' }}>Preço</label>
-                                    <Input
-                                        placeholder='00,00'
-                                        value={price||''}
-                                        onChange={({ target: { value }}) => parsePrice(value,setValue,index)}
-                                    />
-                                    <label style={{ fontSize: 15, padding: '5px 10px' }}>Tamanhos</label>
-                                    <Input
-                                        placeholder='P,M,G'
-                                        value={sizes && sizes.join(',')||''}
-                                        onChange={({ target: { value }}) => setValue('sizes', value ? value.split(',') : '', index)}
-                                    />
-                                    <label style={{ fontSize: 15, padding: '5px 10px' }}>Cores</label>
-                                    <Input
-                                        placeholder='Azul,Amarelo'
-                                        value={colors && colors.join(',')||''}
-                                        onChange={({ target: { value }}) => setValue('colors', value ? value.split(',') : '', index)}
-                                    />
-                                </div>
-                            </div>
-                            {
-                                sizes && colors && 
-                                [
-                                    <label key='qtyLabel' style={qtyLabel}>Quantidades</label>,
-                                    sizes.map((size) => colors.map((color) => size && color ? (
-                                        <div key={`${size}-${color}`} style={qtyContainer}>
-                                            <label>{size}</label>
-                                            <label>{color}</label>
-                                            <Input
-                                                placeholder='1'
-                                                value={availableQuantities&&availableQuantities[`${size}-${color}`]||''}
-                                                onChange={({ target: { value }}) => /^[0-9]*$/gm.test(value)&&setQuantity(size,color,value,index)}
-                                            />
-                                        </div>
-                                        ): null))
-                                ]
-                            }
-                        </div>
-                    }
-                    loaderContainer={() => null}
-                />)}
-                <Button
-                    type='button'
-                    cta='Atualizar'
-                    click={send}
-                /> */}
         </div>
     )
 }

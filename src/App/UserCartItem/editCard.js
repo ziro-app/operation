@@ -9,6 +9,7 @@ import parsePrice from './parsePrice'
 const PTstatus = {
     'available': 'Disponível',
     'unavailable': 'Indisponível',
+    'closed': 'Disponível',
     'waitingInfo': ''
 }
 
@@ -32,7 +33,7 @@ export default ({ image, setValue, setQuantity, update, product }) => {
                     />
                 }
             />,
-            ...(product.status !== 'available' ? []:[
+            ...(product.status !== 'available' && product.status !== 'closed' ? []:[
                 <FormInput
                     name='price'
                     label='Preço'
