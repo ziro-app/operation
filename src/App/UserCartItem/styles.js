@@ -1,9 +1,49 @@
+import { primaryColor, secondaryColor, grayColor3, fontTitle } from '@ziro/theme'
+
 export const 
 
-imageStyle = {
+brandCart = {
+    display: 'grid',
+    gridGap: '25px'
+},
+
+brandName = {
+    marginBottom: '-20px',
+    padding: '10px 0',
+    fontFamily: fontTitle,
+    fontSize: '20px'
+},
+
+cardBlock = {
+    display: 'grid',
+    gridTemplateColumns: '100px 1fr',
+    borderRadius: '7px',
+    boxShadow: 'rgba(34, 34, 34, 0.3) 0px 5px 12px -1px'
+},
+
+image = {
     objectFit: 'cover',
     width: '100%',
-    padding: '10px 0px 0px 0px'
+    borderTopLeftRadius: '7px',
+    borderBottomLeftRadius: '7px'
+},
+
+cardText = {
+    display: 'grid',
+    padding: '10px'
+},
+
+icon = {
+    alignSelf: 'center',
+    justifySelf: 'end',
+    display: 'grid',
+    justifyItems: 'center',
+    alignItems: 'center',
+    width: '40px',
+    height: '40px',
+    borderRadius: '50%',
+    background: 'white',
+    boxShadow: 'rgba(34, 34, 34, 0.3) 0px 5px 12px -1px'
 },
 
 card = {

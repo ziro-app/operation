@@ -1,17 +1,19 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { useRoute, useLocation } from 'wouter'
 import { db } from '../../Firebase'
+import Header from '@bit/vitorbarbosa19.ziro.header'
 import Spinner from '@bit/vitorbarbosa19.ziro.spinner-with-div'
-import Button from '@bit/vitorbarbosa19.ziro.button'
+import Icon from '@bit/vitorbarbosa19.ziro.icon'
 import Input from '@bit/vitorbarbosa19.ziro.input-text'
 import DropDown from '@bit/vitorbarbosa19.ziro.dropdown'
 import Form from '@bit/vitorbarbosa19.ziro.form'
 import FormInput from '@bit/vitorbarbosa19.ziro.form-input'
 import RImg from 'react-image'
-import { imageStyle, card, content, qtyLabel, qtyContainer } from './styles'
+import { brandCart, brandName, cardBlock, image, cardText, icon, card, content, qtyLabel, qtyContainer } from './styles'
 import parsePrice from './parsePrice'
 import EditCard from './editCard'
 import ObjectAssignDeep from 'object-assign-deep'
+import { containerWithPadding } from '@ziro/theme'
 
 const PTstatus = {
     'available': 'Aberto',
@@ -107,74 +109,72 @@ export default () => {
     if(!request) throw "REQUEST_NOT_FOUND"
 
     return (
-        <div style={{ display: 'grid', alignItems: 'center', gridGap: '10px' }}>
-            <label style={{ padding: '10px', fontSize: '20px' }}>{request.brandName}</label>
-            {
-                Object.entries(request.products).map(([productId,product]) => (
-                    <RImg
-                        key={productId}
-                        src={product.url}
-                        style={{ objectFit: 'cover', width: '100%' }}
-                        container={children => 
-                            untouchedRequest.products[productId].status === 'waitingInfo' || editing === productId ?
-                            <EditCard
-                                image={children}
-                                setValue={setValue}
-                                setQuantity={setQuantity}
-                                update={update}
-                                product={{ ...product, productId }}
-                            />
-                            :
-                            <div style={{ display: 'grid', gridTemplateColumns: '100px 1fr', boxShadow: card.boxShadow, minHeight: '100px', alignItems: 'center', gridGap: '10px' }}>
-                                {children}
-                                <div style={{ display: 'grid', padding: '10px', alignContent: 'space-between', height: '100%', boxSizing: 'border-box' }}>
-                                    <label>{PTstatus[product.status]}</label>
-                                    {
-                                        product.status === 'available' &&
-                                        <div style={{ display: 'grid', padding: '10px' }}>
-                                            <label style={{ fontSize: 13 }}>Disponível:</label>
-                                            {
-                                                Object.entries(product.availableQuantities).map(([key,value]) => (
-                                                    <div key={key} style={{ display: 'grid', gridTemplateColumns: '1fr auto' }}>
-                                                        <label style={{ fontSize: 10 }}>{`${key}:`}</label>
-                                                        <label style={{ fontSize: 10 }}>{value}</label>
-                                                    </div>
-                                                ))
-                                            }
+        <div style={containerWithPadding}>
+            <Header type='icon-link' title={userId} navigateTo={`/pedidos/${userId}`} icon='back' />
+            <div style={brandCart}>
+                <label style={brandName}>{request.brandName}</label>
+                {
+                    Object.entries(request.products).map(([productId,product]) => (
+                        <RImg
+                            key={productId}
+                            src={product.url}
+                            style={image}
+                            container={children => 
+                                untouchedRequest.products[productId].status === 'waitingInfo' || editing === productId ?
+                                <EditCard
+                                    image={children}
+                                    setValue={setValue}
+                                    setQuantity={setQuantity}
+                                    update={update}
+                                    product={{ ...product, productId }}
+                                />
+                                :
+                                <div style={cardBlock}>
+                                    {children}
+                                    <div style={cardText}>
+                                        <label>{PTstatus[product.status]}</label>
+                                        {
+                                            product.status === 'available' &&
+                                            <div style={{ display: 'grid', padding: '10px' }}>
+                                                <label style={{ fontSize: 13 }}>Disponível:</label>
+                                                {
+                                                    Object.entries(product.availableQuantities).map(([key,value]) => (
+                                                        <div key={key} style={{ display: 'grid', gridTemplateColumns: '1fr auto' }}>
+                                                            <label style={{ fontSize: 10 }}>{`${key}:`}</label>
+                                                            <label style={{ fontSize: 10 }}>{value}</label>
+                                                        </div>
+                                                    ))
+                                                }
+                                            </div>
+                                        }
+                                        {
+                                            product.status === 'closed' &&
+                                            <div style={{ display: 'grid' }}>
+                                            <label style={{ fontSize: 13 }}>Pedido:</label>
+                                                {
+                                                    Object.keys(product.requestedQuantities).length ?
+                                                    Object.entries(product.requestedQuantities).map(([key,value]) => (
+                                                        <div key={key} style={{ display: 'grid', gridTemplateColumns: '1fr auto' }}>
+                                                            <label style={{ fontSize: 10 }}>{`${key}:`}</label>
+                                                            <label style={{ fontSize: 10 }}>{value}</label>
+                                                        </div>
+                                                    )) : (
+                                                        <label style={{ fontSize: 10, color: 'grey' }}>Nenhum pedido</label>
+                                                    )
+                                                }
+                                            </div>
+                                        }
+                                        <div style={icon}>
+                                            <Icon type='pen' size={18} strokeWidth={3} onClick={() => setEditing(productId)} />
                                         </div>
-                                    }
-                                    {
-                                        product.status === 'closed' &&
-                                        <div style={{ display: 'grid', padding: '10px' }}>
-                                        <label style={{ fontSize: 13 }}>Pedido:</label>
-                                            {
-                                                Object.keys(product.requestedQuantities).length ?
-                                                Object.entries(product.requestedQuantities).map(([key,value]) => (
-                                                    <div key={key} style={{ display: 'grid', gridTemplateColumns: '1fr auto' }}>
-                                                        <label style={{ fontSize: 10 }}>{`${key}:`}</label>
-                                                        <label style={{ fontSize: 10 }}>{value}</label>
-                                                    </div>
-                                                )) : (
-                                                    <label style={{ fontSize: 10, color: 'grey' }}>Nenhum pedido</label>
-                                                )
-                                            }
-                                        </div>
-                                    }
-                                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr'}}>
-                                        <div/>
-                                        <Button
-                                            type='button'
-                                            cta='Editar'
-                                            click={() => setEditing(productId)}
-                                        />
                                     </div>
                                 </div>
-                            </div>
-                        }
-                        loaderContainer={() => null}
-                    />
-                ))
-            }
+                            }
+                            loaderContainer={() => null}
+                        />
+                    ))
+                }
+            </div>
         </div>
     )
 }

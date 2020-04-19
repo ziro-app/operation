@@ -54,21 +54,30 @@ const Router = ({ isLogged }) => {
         '/trocar-email': <UpdateEmail />,
         '/trocar-senha': <UpdatePass />,
         '/deletar-conta': <DeleteAccount />,
-        '/administrativo': <Menu title='Administrativo'><Submenu options={[
-            ['Requisição de Material', 'requerir-material'],
-            ['Entrada/Saída do Caixa', 'entrada-saida']]} /></Menu>,
-        '/assessoria': <Menu title='Assessoria'><Submenu options={[
-            ['Cadastrar boleto', 'cadastrar-boleto'],
-            ['Upload de imagens', 'upload-imagem'],
-            ['Atualizar Fabricantes', '/atualizar-fabricantes'],
-            ['Lojista: Cadastrar', '/cadastrar-lojista'],
-            ['Lojista: Ver/Editar', '/visualizar-lojista'],
-            ['Lojista: Pedidos', '/pedidos'],
-            ['Afiliado: Cadastrar', '/cadastrar-afiliado'],
-            ['Afiliado: Ver/Editar', '/visualizar-afiliado']]} /></Menu>,
-        '/logistica': <Menu title='Logística'><Submenu options={[
-            ['Cadastrar despesa', 'cadastrar-despesa'],
-            ['Consulta de frete', 'consultar-frete']]} /></Menu>,
+        '/administrativo':
+            <Menu title='Administrativo'>
+                <Submenu options={[
+                ['Requisição de Material', 'requerir-material'],
+                ['Entrada/Saída do Caixa', 'entrada-saida']]} />
+            </Menu>,
+        '/assessoria':
+            <Menu title='Assessoria'>
+                <Submenu options={[
+                ['Cadastrar boleto', 'cadastrar-boleto'],
+                ['Upload de imagens', 'upload-imagem'],
+                ['Atualizar Fabricantes', '/atualizar-fabricantes'],
+                ['Lojista: Cadastrar', '/cadastrar-lojista'],
+                ['Lojista: Ver/Editar', '/visualizar-lojista'],
+                ['Lojista: Pedidos', '/pedidos'],
+                ['Afiliado: Cadastrar', '/cadastrar-afiliado'],
+                ['Afiliado: Ver/Editar', '/visualizar-afiliado']]} />
+            </Menu>,
+        '/logistica':
+            <Menu title='Logística'>
+                <Submenu options={[
+                ['Cadastrar despesa', 'cadastrar-despesa'],
+                ['Consulta de frete', 'consultar-frete']]} />
+            </Menu>,
         '/consultar-frete': <HeaderBack title='Consulta de frete' navigateTo='/logistica'><ConsultShipping /></HeaderBack>,
         '/cadastrar-despesa': <HeaderBack title='Cadastrar despesa' navigateTo='/logistica'><RegisterExpenses /></HeaderBack>,
         '/cadastrar-boleto': <HeaderBack title='Cadastrar boleto' navigateTo='/assessoria'><RegisterBillet /></HeaderBack>,
@@ -83,7 +92,7 @@ const Router = ({ isLogged }) => {
         '/entrada-saida': <HeaderBack title='Entrada/Saída do Caixa' navigateTo='/administrativo'><RegisterInputOutput /></HeaderBack>,
         [match && !params.userId ? location : null]: <HeaderBack title='Procurar pedidos' navigateTo='/assessoria'><SearchUserCart /></HeaderBack>,
         [match && params.userId && !params.requestId ? location : null]: <UserCart />,
-        [match && params.userId && params.requestId ? location : null]: <HeaderBack title='Pedido' navigateTo={`pedidos/${params && params.userId}`}><UserCartItem /></HeaderBack>,
+        [match && params.userId && params.requestId ? location : null]: <UserCartItem />,
         '/show-info': <ShowInfo internal={true} />
         // '/migration': <FirebaseMigration /> -> Inacabado
     }
