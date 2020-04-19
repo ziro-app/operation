@@ -1,5 +1,6 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 // import { useLocation } from 'wouter'
+import fetch from './fetch'
 import Spinner from '@bit/vitorbarbosa19.ziro.spinner-with-div'
 import Error from '@bit/vitorbarbosa19.ziro.error'
 import Form from '@bit/vitorbarbosa19.ziro.form'
@@ -12,6 +13,7 @@ export default () => {
     const [isLoading, setIsLoading] = useState(true)
     const [isError, setIsError] = useState(false)
     const [searching, setSearching] = useState(false)
+    const [storeowners, setStoreowners] = useState([])
     const [razao, setRazao] = useState('')
     // const search = useCallback(() => {
     //     setNotFound(false)
@@ -32,11 +34,12 @@ export default () => {
     const validations = [
         {
             name: 'razao',
-            validation: value => ['razão 1','razão 2'].includes(razao),
+            validation: value => storeowners.includes(value),
             value: razao,
             message: 'Razão inválida'
         }
     ]
+    useEffect(() => fetch(setIsLoading, setIsError, setStoreowners), [])
     if (isLoading) return <Spinner />
     if (isError) return <Error />
     return (
@@ -55,7 +58,7 @@ export default () => {
                             submitting={searching}
                             onChange={({ target: { value } }) => setRazao(value)}
                             onChangeKeyboard={element => element ? setRazao(element.value) : null}
-                            list={['razão 1','razão 2']}
+                            list={storeowners}
                             placeholder='Razão do lojista'
                         />
                     } />,
