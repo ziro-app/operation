@@ -82,7 +82,7 @@ const Router = ({ isLogged }) => {
         '/atualizar-fabricantes': <HeaderBack title='Atualizar fabricantes' navigateTo='/assessoria'><UpdateBrandsInfos /></HeaderBack>,
         '/entrada-saida': <HeaderBack title='Entrada/Saída do Caixa' navigateTo='/administrativo'><RegisterInputOutput /></HeaderBack>,
         [match && !params.userId ? location : null]: <HeaderBack title='Procurar pedidos' navigateTo='/assessoria'><SearchUserCart /></HeaderBack>,
-        [match && params.userId && !params.requestId ? location : null]: <HeaderBack title='Pedidos' navigateTo='/pedidos'><UserCart /></HeaderBack>,
+        [match && params.userId && !params.requestId ? location : null]: <UserCart />,
         [match && params.userId && params.requestId ? location : null]: <HeaderBack title='Pedido' navigateTo={`pedidos/${params && params.userId}`}><UserCartItem /></HeaderBack>,
         '/show-info': <ShowInfo internal={true} />
         // '/migration': <FirebaseMigration /> -> Inacabado
