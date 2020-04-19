@@ -5,7 +5,7 @@ import Icon from '@bit/vitorbarbosa19.ziro.icon'
 import Spinner from '@bit/vitorbarbosa19.ziro.spinner-with-div'
 import { motion } from 'framer-motion'
 import { db } from '../../Firebase'
-import { cart, statusBlock, statusName, button, bubble } from './styles'
+import { cart, statusBlock, statusName, card, dot, bubble } from './styles'
 import { containerWithPadding } from '@ziro/theme'
 
 const statusTitles = {
@@ -59,22 +59,25 @@ export default () => {
                 {requests && Object.entries(requests).map(([status, _requests]) => (
                     <div key={status} style={statusBlock}>
                         <label style={statusName}>{statusTitles[status]||status}</label>
-                        {
-                            Object.entries(_requests).map(([id, { brandName, products }]) => (
-                                <motion.div 
-                                    key={id}
-                                    whileTap={{ scale: 0.95 }}
-                                    onClick={() => setLocation(`pedidos/${userId}/${id}`)}
-                                    style={button}
-                                >
-                                    <label style={{ fontSize: 16 }}>{brandName}</label>
-                                    <div style={bubble}>{Object.keys(products).length}</div>
-                                    <div style={{ transform: 'rotate(90deg)' }}>
-                                        <Icon type='chevronUp' size={20} color='black' />
-                                    </div>
-                                </motion.div>
-                            ))
-                        }
+                        {Object.entries(_requests).map(([id, { brandName, products }]) => (
+                            <motion.div 
+                                key={id}
+                                whileTap={{ scale: 0.95 }}
+                                onClick={() => setLocation(`pedidos/${userId}/${id}`)}
+                                style={card}
+                            >
+                                <label style={{ fontSize: 16 }}>
+                                    {brandName}
+                                    <span style={dot}>.</span>
+                                </label>
+                                <div style={bubble}>
+                                    {Object.keys(products).length}
+                                </div>
+                                <div style={{ transform: 'rotate(90deg)' }}>
+                                    <Icon type='chevronUp' size={20} color='black' />
+                                </div>
+                            </motion.div>
+                        ))}
                     </div>
                 ))}
             </div>

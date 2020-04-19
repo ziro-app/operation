@@ -1,4 +1,4 @@
-import { primaryColor, grayColor3, fontTitle } from '@ziro/theme'
+import { primaryColor, secondaryColor, grayColor3, fontTitle } from '@ziro/theme'
 
 export const
 
@@ -19,7 +19,7 @@ statusName = {
     marginBottom: '-10px'
 },
 
-button = {
+card = {
     display: 'grid',
     padding: '25px 20px',
     background: 'white',
@@ -29,6 +29,11 @@ button = {
     alignItems: 'center',
     fontFamily: fontTitle,
     color: primaryColor
+},
+
+dot = {
+    fontSize: '21px',
+    color: secondaryColor
 },
 
 bubble = {
