@@ -1,19 +1,18 @@
-import React, { useState, useCallback } from 'react'
-import { useLocation } from 'wouter'
+import React, { useState } from 'react'
+// import { useLocation } from 'wouter'
 import Spinner from '@bit/vitorbarbosa19.ziro.spinner-with-div'
+import Error from '@bit/vitorbarbosa19.ziro.error'
 import Form from '@bit/vitorbarbosa19.ziro.form'
 import FormInput from '@bit/vitorbarbosa19.ziro.form-input'
 import Dropdown from '@bit/vitorbarbosa19.ziro.dropdown'
-import Button from '@bit/vitorbarbosa19.ziro.button'
-import { db } from '../../Firebase'
-import { fontTitle } from '@ziro/theme'
+// import { db } from '../../Firebase'
+// import { fontTitle } from '@ziro/theme'
 
 export default () => {
-    const [,setLocation] = useLocation()
-    const [razao, setRazao] = useState('')
-    const [notFound, setNotFound] = useState(false)
+    const [isLoading, setIsLoading] = useState(true)
+    const [isError, setIsError] = useState(false)
     const [searching, setSearching] = useState(false)
-
+    const [razao, setRazao] = useState('')
     // const search = useCallback(() => {
     //     setNotFound(false)
     //     setSearching(true)
@@ -38,6 +37,8 @@ export default () => {
             message: 'Razão inválida'
         }
     ]
+    if (isLoading) return <Spinner />
+    if (isError) return <Error />
     return (
         <div style={{ display: 'grid', gridGap: '20px' }}>
             <label>Procure o pedido pela razão social do lojista</label>
