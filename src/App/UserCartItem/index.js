@@ -3,13 +3,13 @@ import { useRoute, useLocation } from 'wouter'
 import { db } from '../../Firebase'
 import Header from '@bit/vitorbarbosa19.ziro.header'
 import Spinner from '@bit/vitorbarbosa19.ziro.spinner-with-div'
-import Icon from '@bit/vitorbarbosa19.ziro.icon'
+import Button from '@bit/vitorbarbosa19.ziro.button'
 import Input from '@bit/vitorbarbosa19.ziro.input-text'
 import DropDown from '@bit/vitorbarbosa19.ziro.dropdown'
 import Form from '@bit/vitorbarbosa19.ziro.form'
 import FormInput from '@bit/vitorbarbosa19.ziro.form-input'
 import RImg from 'react-image'
-import { brandCart, brandName, cardBlock, image, cardText, icon, card, content, qtyLabel, qtyContainer } from './styles'
+import { brandCart, brandName, cardBlock, image, cardText, icon, orderStatus, order, orderTitle, orderGrid, orderQty, available, button, card, content, qtyLabel, qtyContainer } from './styles'
 import parsePrice from './parsePrice'
 import EditCard from './editCard'
 import ObjectAssignDeep from 'object-assign-deep'
@@ -132,16 +132,16 @@ export default () => {
                                 <div style={cardBlock}>
                                     {children}
                                     <div style={cardText}>
-                                        <label>{PTstatus[product.status]}</label>
+                                        <label style={orderStatus(product.status === 'unavailable')}>{PTstatus[product.status]}</label>
                                         {
                                             product.status === 'available' &&
-                                            <div style={{ display: 'grid', padding: '10px' }}>
-                                                <label style={{ fontSize: 13 }}>Disponível:</label>
+                                            <div style={order}>
+                                                <label style={orderTitle}>Disponível</label>
                                                 {
                                                     Object.entries(product.availableQuantities).map(([key,value]) => (
-                                                        <div key={key} style={{ display: 'grid', gridTemplateColumns: '1fr auto' }}>
-                                                            <label style={{ fontSize: 10 }}>{`${key}:`}</label>
-                                                            <label style={{ fontSize: 10 }}>{value}</label>
+                                                        <div key={key} style={orderGrid}>
+                                                            <label style={orderQty}>{`${key}:`}</label>
+                                                            <label style={orderQty}>{value}</label>
                                                         </div>
                                                     ))
                                                 }
@@ -149,14 +149,14 @@ export default () => {
                                         }
                                         {
                                             product.status === 'closed' &&
-                                            <div style={{ display: 'grid' }}>
-                                            <label style={{ fontSize: 13 }}>Pedido:</label>
+                                            <div style={order}>
+                                            <label style={orderTitle}>Pedido</label>
                                                 {
                                                     Object.keys(product.requestedQuantities).length ?
                                                     Object.entries(product.requestedQuantities).map(([key,value]) => (
-                                                        <div key={key} style={{ display: 'grid', gridTemplateColumns: '1fr auto' }}>
-                                                            <label style={{ fontSize: 10 }}>{`${key}:`}</label>
-                                                            <label style={{ fontSize: 10 }}>{value}</label>
+                                                        <div key={key} style={orderGrid}>
+                                                            <label style={orderQty}>{`${key}:`}</label>
+                                                            <label style={orderQty}>{value}</label>
                                                         </div>
                                                     )) : (
                                                         <label style={{ fontSize: 10, color: 'grey' }}>Nenhum pedido</label>
@@ -164,9 +164,8 @@ export default () => {
                                                 }
                                             </div>
                                         }
-                                        <div style={icon}>
-                                            <Icon type='pen' size={18} strokeWidth={3} onClick={() => setEditing(productId)} />
-                                        </div>
+                                            {/*<Icon type='pen' size={18} strokeWidth={3} onClick={() => setEditing(productId)} />*/}
+                                            <Button style={button} type='button' cta='Editar' click={() => setEditing(productId)} />
                                     </div>
                                 </div>
                             }

@@ -23,7 +23,7 @@ card = {
     display: 'grid',
     padding: '25px 20px',
     background: 'white',
-    borderRadius: '10px',
+    borderRadius: '8px',
     boxShadow: 'rgba(34, 34, 34, 0.3) 0px 5px 12px -1px',
     gridTemplateColumns: '1fr auto auto',
     alignItems: 'center',

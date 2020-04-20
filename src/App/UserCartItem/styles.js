@@ -1,10 +1,10 @@
-import { primaryColor, secondaryColor, grayColor3, fontTitle } from '@ziro/theme'
+import { primaryColor, secondaryColor, grayColor2, fontTitle, gradient } from '@ziro/theme'
 
 export const 
 
 brandCart = {
     display: 'grid',
-    gridGap: '25px'
+    gridGap: '40px'
 },
 
 brandName = {
@@ -16,21 +16,25 @@ brandName = {
 
 cardBlock = {
     display: 'grid',
-    gridTemplateColumns: '100px 1fr',
-    borderRadius: '7px',
-    boxShadow: 'rgba(34, 34, 34, 0.3) 0px 5px 12px -1px'
+    gridTemplateColumns: '80px 1fr',
+    alignItems: 'end',
+    padding: '20px 15px',
+    borderRadius: '5px',
+    boxShadow: 'rgba(34, 34, 34, 0.3) 0px 3px 15px -1px'
 },
 
 image = {
+    alignSelf: 'start',
     objectFit: 'cover',
     width: '100%',
-    borderTopLeftRadius: '7px',
-    borderBottomLeftRadius: '7px'
+    borderRadius: '3px'
 },
 
 cardText = {
     display: 'grid',
-    padding: '10px'
+    alignItems: 'center',
+    gridRowGap: '15px',
+    padding: '0 0 0 15px'
 },
 
 icon = {
@@ -44,6 +48,54 @@ icon = {
     borderRadius: '50%',
     background: 'white',
     boxShadow: 'rgba(34, 34, 34, 0.3) 0px 5px 12px -1px'
+},
+
+orderStatus = status => ({
+    fontFamily: fontTitle,
+    textAlign: status ? 'center' : 'left',
+    alignSelf: status ? 'end' : 'initial'
+}),
+
+order = {
+    display: 'grid',
+    gridRowGap: '2px'
+},
+
+orderTitle = {
+    color: grayColor2,
+    fontSize: '1.4rem',
+    fontWeight: '500'
+},
+
+orderGrid = {
+    display: 'grid',
+    gridTemplateColumns: '1fr auto'
+},
+
+orderQty = {
+    fontSize: '1.4rem'
+},
+
+button = {
+    margin: '10px auto 0',
+    display: 'block', // necessary for link version
+    WebkitAppearance: 'none',
+    WebkitTapHighlightColor: 'rgba(0,0,0,0)',
+    MozAppearance: 'none',
+    outline: 'none',
+    cursor: 'pointer',
+    height: '30px',
+    width: '100%',
+    maxWidth: '200px',
+    padding: '8px 0px',
+    border: 'none',
+    borderRadius: '20px',
+    fontFamily: fontTitle,
+    fontSize: '1.3rem',
+    color: '#FFF',
+    textAlign: 'center',
+    background: gradient,
+    boxShadow: `0px 3px 12px -3px rgba(34,34,34,0.65)`
 },
 
 card = {
