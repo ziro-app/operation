@@ -1,5 +1,5 @@
 import { post } from 'axios'
-import { dateHourFormatterUTC3 } from '../utils'
+import dateHourFormatterUTC3 from '@ziro/format-date-utc3'
 
 const sendToBackend = state => () => {
     const { brand, branch, insta, fname, lname, cpf, whats } = state
@@ -18,7 +18,7 @@ const sendToBackend = state => () => {
                 [dateHourFormatterUTC3(new Date()), cpf, fnameTrim, lnameTrim, whats, '', brand, branchTrim, instaTrim]
             ]
         },
-        valueInputOption: 'raw'
+        valueInputOption: 'user_entered'
     }
     const config = {
         headers: {

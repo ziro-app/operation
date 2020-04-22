@@ -1,5 +1,6 @@
 import { post } from 'axios'
-import { dateHourFormatterUTC3, numberFormatter } from '../utils'
+import dateHourFormatterUTC3 from '@ziro/format-date-utc3'
+import { numberFormatter } from '../utils'
 
 const sendToBackend = state => () => {
     const { nickname, category, value, description, setCategory, setValue, setDescription } = state
@@ -19,7 +20,7 @@ const sendToBackend = state => () => {
                 [data, descricao, valor]
             ]
         },
-        valueInputOption: 'raw'
+        valueInputOption: 'user_entered'
     }
     const config = {
         headers: {

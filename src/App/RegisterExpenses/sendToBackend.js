@@ -1,5 +1,6 @@
 import { post } from 'axios'
-import { dateHourFormatterUTC3, numberFormatter } from '../utils'
+import dateHourFormatterUTC3 from '@ziro/format-date-utc3'
+import { numberFormatter } from '../utils'
 
 const mountBankTransfer = ({ paymentMethod, bankTransfer, beneficiary, beneficiaryDocument, bankName, agency, accountNumber }) => {
     if (paymentMethod === 'Transferência Bancária' || bankTransfer === 'Sim')

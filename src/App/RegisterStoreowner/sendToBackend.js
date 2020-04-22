@@ -1,6 +1,6 @@
 import { db } from '../../Firebase/index'
 import { post } from 'axios'
-import { dateHourFormatterUTC3 } from '../utils'
+import dateHourFormatterUTC3 from '@ziro/format-date-utc3'
 
 const sendToBackend = state => () => {
     const cnpjInCollection = []
