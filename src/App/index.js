@@ -52,7 +52,6 @@ const App = () => {
         "range": "Base",
         "spreadsheetId": process.env.SHEET_ID
     }
-
     useEffect(() => {
         let unsubscribe = () => null
         return auth.onAuthStateChanged(async user => {

@@ -1,4 +1,6 @@
 import React, { useMemo } from 'react'
+import currencyFormat from '@ziro/currency-format'
+import maskInput from '@ziro/mask-input'
 import Form from '@bit/vitorbarbosa19.ziro.form'
 import FormInput from '@bit/vitorbarbosa19.ziro.form-input'
 import InputText from '@bit/vitorbarbosa19.ziro.input-text'
@@ -30,6 +32,8 @@ export default ({ image, setValue, setQuantity, update, product }) => {
                         list={['Disponível','Indisponível']}
                         value={PTstatus[product.status]||''}
                         onChange={({ target: { value } }) => setValue('status',INstatus[value]||'waitingInfo',product.productId)}
+                        onChangeKeyboard={element => element ? setValue('status',INstatus[element.value]||'waitingInfo',product.productId) : null}
+                        placeholder='Está disponível em estoque?'
                     />
                 }
             />,
@@ -39,9 +43,14 @@ export default ({ image, setValue, setQuantity, update, product }) => {
                     label='Preço'
                     input={
                         <InputText
-                            placeholder='00,00'
-                            value={product.price||''}
-                            onChange={({ target: { value }}) => parsePrice(value,setValue,product.productId)}
+                            // onChange={({ target: { value }}) => parsePrice(value,setValue,product.productId)}
+                            value={currencyFormat(product.price || '')}
+                            onChange={({ target: { value } }) => {
+                                const toInteger = parseInt(value.replace(/[R$\.,]/g, ''), 10)
+                                setValue('price',maskInput(toInteger, '#######', true),product.productId)
+                            }}
+                            placeholder='R$ 100,00'
+                            inputMode='numeric'
                         />
                     }
                 />,
@@ -125,7 +134,7 @@ export default ({ image, setValue, setQuantity, update, product }) => {
         return (
             <div style={{ display: 'grid', gridTemplateColumns: '1fr', boxShadow: card.boxShadow }}>
                 {image}
-                <div style={{ display: 'grid', gridGap: '10px', padding: '10px' }}>
+                <div style={{ padding: '10px 10px 30px' }}>
                     <Form
                         buttonName='Atualizar'
                         validations={validations}

@@ -4,7 +4,7 @@ export const
 
 brandCart = {
     display: 'grid',
-    gridGap: '40px'
+    gridGap: '20px'
 },
 
 brandName = {
@@ -18,9 +18,9 @@ cardBlock = {
     display: 'grid',
     gridTemplateColumns: '80px 1fr',
     alignItems: 'end',
-    padding: '20px 15px',
-    borderRadius: '5px',
-    boxShadow: 'rgba(34, 34, 34, 0.3) 0px 3px 15px -1px'
+    padding: '20px 10px',
+    borderRadius: '3px',
+    boxShadow: 'rgba(34, 34, 34, 0.3) 0px 5px 10px -1px'
 },
 
 image = {
@@ -47,7 +47,7 @@ icon = {
     height: '40px',
     borderRadius: '50%',
     background: 'white',
-    boxShadow: 'rgba(34, 34, 34, 0.3) 0px 5px 12px -1px'
+    boxShadow: 'rgba(34, 34, 34, 0.3) 0px 5px 10px -1px'
 },
 
 orderStatus = status => ({

@@ -147,7 +147,7 @@ const RegisterBillet = () => {
                             value={billet}
                             onChange={({ target: { value } }) => setBillet(maskInput(value, '#####', true))}
                             placeholder='Nº do boleto'
-                            inputmode='numeric'
+                            inputMode='numeric'
                         />
                     } />,
                     <FormInput name='saleDate' label='Data da Venda' input={
@@ -241,7 +241,7 @@ const RegisterBillet = () => {
                                 calculateRevenue(toInteger, provider.comissao)
                             }}
                             placeholder='R$ 100,00'
-                            inputmode='numeric'
+                            inputMode='numeric'
                         />
                     } />,
                     <FormInput name='paymentMethod' label='Meio de Pagamento' input={
@@ -260,7 +260,7 @@ const RegisterBillet = () => {
                             value={romaneio}
                             onChange={({ target: { value } }) => setRomaneio(maskInput(value, '############', true))}
                             placeholder='Nº do romaneio'
-                            inputmode='numeric'
+                            inputMode='numeric'
                         />
                     } />,
                     <FormInput name='dueDate' label='Data de Vencimento' input={
@@ -285,7 +285,7 @@ const RegisterBillet = () => {
                             }}
                             readOnly={false}
                             placeholder='0.00 %'
-                            inputmode='numeric'
+                            inputMode='numeric'
                         />
                     } />,
                     <FormInput name='revenue' label='Receita' input={

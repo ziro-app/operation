@@ -9,25 +9,26 @@ cart = {
 
 statusBlock = {
     display: 'grid',
-    gridRowGap: '25px'
+    gridRowGap: '15px'
 },
 
 statusName = {
+    marginBottom: '-10px',
     padding: '0 10px',
     color: primaryColor,
-    fontSize: '1.5rem',
-    marginBottom: '-10px'
+    fontFamily: fontTitle,
+    fontSize: '1.3rem',
+    textTransform: 'uppercase'
 },
 
 card = {
     display: 'grid',
-    padding: '25px 20px',
+    padding: '12px 20px',
     background: 'white',
-    borderRadius: '8px',
-    boxShadow: 'rgba(34, 34, 34, 0.3) 0px 5px 12px -1px',
+    borderRadius: '5px',
+    boxShadow: 'rgba(34, 34, 34, 0.3) 0px 3px 8px -1px',
     gridTemplateColumns: '1fr auto auto',
     alignItems: 'center',
-    fontFamily: fontTitle,
     color: primaryColor
 },
 
