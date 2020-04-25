@@ -98,7 +98,7 @@ const sendToBackend = state => () => {
                             values: [
                                 [dateHourFormatterUTC3(today), `${fnameTrim} ${lnameTrim}`, whats, oldEmail ? oldEmail : email.toLowerCase(), rg, cpf, birth, instaTrim,
                                     cnpj, ie, razao, fantasia, complemento ? `${rua}, ${numero}, ${complemento}` : `${rua}, ${numero}`, bairro, cep, cidade,
-                                    estado, fone, nomeAfiliado, affiliateCpf, advisor, salesman]
+                                    estado, fone, nomeAfiliado, affiliateCpf, advisor, salesman, 'NENHUM']
                             ]
                         },
                         valueInputOption: 'user_entered'
