@@ -1,7 +1,13 @@
 import { db } from '../../Firebase'
 
+const removeDuplicates = arrayWithDuplicates => {
+	return arrayWithDuplicates.reduce((accumulated, current) => {
+		if (accumulated.includes(current)) return accumulated
+		return [...accumulated, current]
+	}, [])
+}
+
 const fetch = setIsLoading => {
-	try {
 		// return db.collection('catalog-user-data').where('cart','==',true).onSnapshot(snap =>
 		// 	snap.forEach(async users => {
 		// 		const items = await db.collection('catalog-user-data').doc(users.id).collection('cart').get()
@@ -9,25 +15,24 @@ const fetch = setIsLoading => {
 		// 	})
 		// )
 		// return db.collectionGroup('cart').where('status','==','open')
-		const run = async () => {
+	const run = async () => {
+		try {
 			const orders = await db.collectionGroup('cart').where('status','==','open').get()
 			const customerRefs = []
 			orders.forEach(doc => customerRefs.push(doc.ref.parent.parent.id))
-			console.log(customerRefs)
-			const customers = await Promise.all(customerRefs.map(async ref => {
+			const dedupedCustomerRefs = removeDuplicates(customerRefs)
+			const customers = await Promise.all(dedupedCustomerRefs.map(async ref => {
 				const customer = await db.collection('storeowners').doc(ref).get()
-				console.log(customer)
-				console.log(customer.data())
 				return customer.data()
 			}))
 			console.log(customers)
+		} catch (error) {
+			console.log(error)
+		} finally {
+			setIsLoading(false)		
 		}
-		run()
-	} catch (error) {
-		console.log(error)
-	} finally {
-		setIsLoading(false)
-	}	
+	}
+	run()
 }
 
 export default fetch
