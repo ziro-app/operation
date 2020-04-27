@@ -6,7 +6,6 @@ import FormInput from '@bit/vitorbarbosa19.ziro.form-input'
 import InputText from '@bit/vitorbarbosa19.ziro.input-text'
 import DropDown from '@bit/vitorbarbosa19.ziro.dropdown'
 import { card } from './styles'
-import parsePrice from './parsePrice'
 
 const PTstatus = {
     'available': 'Disponível',
@@ -20,129 +19,161 @@ const INstatus = {
     'Indisponível': 'unavailable'
 }
 
-export default ({ image, setValue, setQuantity, update, product }) => {
+export default ({ image, product, setProduct, sizes, setSizes, colors, setColors, update }) => {
 
-    const inputs = useMemo(() => 
-        ([
-            <FormInput
-                name='availability'
-                label='Disponibilidade'
-                input={
-                    <DropDown
-                        list={['Disponível','Indisponível']}
-                        value={PTstatus[product.status]||''}
-                        onChange={({ target: { value } }) => setValue('status',INstatus[value]||'waitingInfo',product.productId)}
-                        onChangeKeyboard={element => element ? setValue('status',INstatus[element.value]||'waitingInfo',product.productId) : null}
-                        placeholder='Está disponível em estoque?'
-                    />
-                }
-            />,
-            ...(product.status !== 'available' && product.status !== 'closed' ? []:[
-                <FormInput
-                    name='price'
-                    label='Preço'
-                    input={
-                        <InputText
-                            // onChange={({ target: { value }}) => parsePrice(value,setValue,product.productId)}
-                            value={currencyFormat(product.price || '')}
-                            onChange={({ target: { value } }) => {
-                                const toInteger = parseInt(value.replace(/[R$\.,]/g, ''), 10)
-                                setValue('price',maskInput(toInteger, '#######', true),product.productId)
-                            }}
-                            placeholder='R$ 100,00'
-                            inputMode='numeric'
-                        />
-                    }
-                />,
-                <FormInput
-                    name='sizes'
-                    label='Tamanhos'
-                    input={
-                        <InputText
-                            placeholder='P,M,G'
-                            value={product.sizes && product.sizes.join(',')||''}
-                            onChange={({ target: { value }}) => setValue('sizes', value ? value.split(',') : '', product.productId)}
-                        />
-                    }
-                />,
-                <FormInput
-                    name='colors'
-                    label='Cores'
-                    input={
-                        <InputText
-                            placeholder='Azul,Amarelo'
-                            value={product.colors && product.colors.join(',')||''}
-                            onChange={({ target: { value }}) => setValue('colors', value ? value.split(',') : '', product.productId)}
-                        />
-                    }
-                />,
-                <FormInput
-                    name='quantities'
-                    label='Quantidades'
-                    input={
-                        product.sizes ?
-                            <div style={{ display: 'grid', gridGap: '10px', padding: '10px' }}>
-                                {
-                                    product.sizes.map((size) =>
-                                    (product.colors||['']).map((color) => 
-                                        <div key={`${size}-${color}`} style={{ display: 'grid', gridTemplateColumns: '1fr 2fr 2fr', alignItems: 'center' }}>
-                                            <label>{size}</label>
-                                            <label>{color}</label>
-                                            <InputText
-                                                placeholder='1'
-                                                value={(product.availableQuantities&&product.availableQuantities[`${size}-${color}`])||''}
-                                                onChange={({ target: { value }}) => /^[0-9]*$/gm.test(value)&&setQuantity(size,color,value,product.productId)}
-                                            />
-                                        </div>
-                                    ))
-                                }
-                            </div>
-                            :
-                            <InputText
-                                placeholder='1'
-                                value={product.availableQuantities||''}
-                                onChange={({ target: { value } }) => /^[0-9]*$/gm.test(value)&&setQuantity(undefined,undefined,value,product.productId)}
-                            />
-                    }
+    console.log({ product })
+
+    const availabilityInput = useMemo(() => 
+        <FormInput
+            name='availability'
+            label='Disponibilidade'
+            input={
+                <DropDown
+                    list={['Disponível','Indisponível']}
+                    value={PTstatus[product.status]||''}
+                    onChange={({ target: { value } }) => setProduct(old => ({ ...old, status: INstatus[value]||'waitingInfo' }))}
+                    onChangeKeyboard={element => element && setProduct(old => ({ ...old, status: INstatus[element.value]||'waitingInfo' }))}
+                    placeholder='Está disponível em estoque?'
                 />
-            ])
-        ]),[product])
+            }
+        />
+    ,[product.status])
 
-        const validations = useMemo(() => [
-            {
-                name: 'availability',
-                validation: value => value !== 'waitingInfo',
-                value: product.status,
-                message: 'Campo obrigatório'
-            },
-            ...(product.status !== 'available' ? []:[
-                {
-                    name: 'price',
-                    validation: value => !!value,
-                    value: product.price,
-                    message: 'Campo obrigatório'
-                },
-                {
-                    name: 'quantities',
-                    validation: value => !!value,
-                    value: product.availableQuantities,
-                    message: 'Campo obrigatório'
-                }
-            ])
-        ],[product])
+    const priceInput = useMemo(() => product.status === 'available' &&
+        <FormInput
+            name='price'
+            label='Preço'
+            input={
+                <InputText
+                    value={currencyFormat(product.price || '')}
+                    onChange={({ target: { value } }) => {
+                        const toInteger = parseInt(value.replace(/[R$\.,]/g, ''), 10)
+                        setProduct(old => ({ ...old, price: maskInput(toInteger, '#######', true) }))
+                    }}
+                    placeholder='R$ 100,00'
+                    inputMode='numeric'
+                />
+            }
+        />
+    ,[product.status,product.price])
 
-        return (
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr', boxShadow: card.boxShadow }}>
-                {image}
-                <div style={{ padding: '10px 10px 30px' }}>
-                    <Form
-                        buttonName='Atualizar'
-                        validations={validations}
-                        sendToBackend={() => update(product.productId)}
-                        inputs={inputs}
-                    />
+    const referenceIdInput = useMemo(() => product.status === 'available' &&
+        <FormInput
+            name='referenceId'
+            label='Referência'
+            input={
+                <InputText
+                    value={product.referenceId||''}
+                    onChange={({ target: { value } }) => setProduct(old => ({ ...old, referenceId: value }))}
+                    placeholder='Referência da loja'
+                />
+            }
+        />
+    ,[product.status,product.referenceId])
+
+    const descriptionInput = useMemo(() => product.status === 'available' &&
+        <FormInput
+            name='description'
+            label='Descrição'
+            input={
+                <InputText
+                    value={product.description||''}
+                    onChange={({ target: { value } }) => setProduct(old => ({ ...old, description: value }))}
+                    placeholder='Descrição'
+                />
+            }
+        />
+    ,[product.status,product.description])
+
+    const sizesInput = useMemo(() => product.status === 'available' &&
+        <FormInput
+            name='sizes'
+            label='Tamanhos'
+            input={
+                <InputText
+                    placeholder='P,M,G'
+                    value={sizes && sizes.join(',')||''}
+                    onChange={({ target: { value }}) => setSizes(value ? value.split(',') : '')}
+                />
+            }
+        />
+    ,[product.status, sizes])
+
+    const colorsInput = useMemo(() => product.status === 'available' &&
+        <FormInput
+            name='colors'
+            label='Cores'
+            input={
+                <InputText
+                    placeholder='Azul,Amarelo'
+                    value={colors && colors.join(',')||''}
+                    onChange={({ target: { value }}) => setColors(value ? value.split(',') : '')}
+                />
+            }
+        />
+    ,[product.status, colors])
+
+    const quantitiesInput = useMemo(() => product.status === 'available' && sizes.length &&
+        <FormInput
+            name='quantities'
+            label='Quantidades'
+            input={
+                <div style={{ display: 'grid', gridGap: '10px', padding: '10px' }}>
+                    {
+                        sizes.map((size) =>
+                        (colors.length ? colors:['']).map((color) => 
+                            <div key={`${size}-${color}`} style={{ display: 'grid', gridTemplateColumns: '1fr 2fr 2fr', alignItems: 'center' }}>
+                                <label>{size}</label>
+                                <label>{color}</label>
+                                <InputText
+                                    placeholder='1'
+                                    value={(product.availableQuantities&&product.availableQuantities[`${size}-${color}`])||''}
+                                    onChange={({ target: { value }}) => /^[0-9]*$/gm.test(value)&&
+                                        setProduct(old => ({ ...old, availableQuantities: { ...(old.availableQuantities||{}), [`${size}-${color}`]: value }}))
+                                    }
+                                />
+                            </div>
+                        ))
+                    }
                 </div>
+            }
+        />
+    ,[product.status,sizes,colors,product.availableQuantities])
+
+    const inputs = useMemo(
+        () => [availabilityInput,priceInput,referenceIdInput,descriptionInput,sizesInput,colorsInput,quantitiesInput].filter(input => !!input),
+        [availabilityInput,priceInput,referenceIdInput,descriptionInput,sizesInput,colorsInput,quantitiesInput]
+    )
+
+    const validations = useMemo(() => [
+        {
+            name: 'availability',
+            validation: value => value !== 'waitingInfo',
+            value: product.status,
+            message: 'Campo obrigatório'
+        },
+        ...(product.status !== 'available' ? []:[
+            {
+                name: 'price',
+                validation: value => !!value,
+                value: product.price,
+                message: 'Campo obrigatório'
+            }
+        ])
+    ],[product])
+
+    return (
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr', boxShadow: card.boxShadow }}>
+            {image}
+            <div style={{ padding: '10px 10px 30px' }}>
+                <Form
+                    buttonName='Atualizar'
+                    validations={validations}
+                    sendToBackend={update}
+                    inputs={inputs}
+                />
             </div>
-        )
+        </div>
+    )
 
 }
