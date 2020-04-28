@@ -57,8 +57,6 @@ export default () => {
 
     if(!cartItem) throw "REQUEST_NOT_FOUND"
 
-    console.log({ cartItem, storeownerData })
-
     return (
         <div style={containerWithPadding}>
             <Header type='icon-link' title={`${storeownerData.fname} ${storeownerData.lname}`} navigateTo={`/pedidos/${storeownerId}`} icon='back' />

@@ -34,7 +34,11 @@ export default ({ productId, cartProduct }) => {
 
     const update = useCallback(async () => {
         try {
-            if(product.status==='waitingInfo'||product.status==='unavailable') await productRef.update({
+            if(product.status==='available'&&!product.availableQuantities) await productRef.update({
+                ...product,
+                status: 'waitingStock',
+            })
+            else if(product.status==='waitingInfo'||product.status==='unavailable') await productRef.update({
                 status: product.status,
                 price: fs.FieldValue.delete(),
                 referenceId: fs.FieldValue.delete(),
@@ -71,7 +75,7 @@ export default ({ productId, cartProduct }) => {
                         update={update}
                     />
                     :
-                    product.status === 'unavailable' ?
+                    initialStatus === 'unavailable' && cartProduct.status !== 'closed' ?
                     <InfoCard product={{ requestedQuantities: {}, ...product, ...cartProduct }} image={children} setEditing={setEditing} /> :
                     <SummaryCard product={{ requestedQuantities: {}, ...product, ...cartProduct }} image={children} setEditing={setEditing} />
             }

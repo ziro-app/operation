@@ -107,7 +107,17 @@ export default ({ image, product, setProduct, sizes, setSizes, colors, setColors
                 <InputText
                     placeholder='Azul,Amarelo'
                     value={colors && colors.join(',')||''}
-                    onChange={({ target: { value }}) => setColors(value ? value.split(',') : '')}
+                    onChange={({ target: { value }}) => {
+                        const newColors = value.split(',')
+                        setProduct(old =>{
+                            const newQuantities = Object.entries(old.availableQuantities||{}).reduce((prev,[key,value]) => {
+                                if(newColors.some((color) => key.endsWith(color))) return { ...prev, [key]: value }
+                                else return prev
+                            },{})
+                            return { ...old, availableQuantities: newQuantities }
+                        })
+                        setColors(value ? newColors : '')
+                    }}
                 />
             }
         />
@@ -128,9 +138,12 @@ export default ({ image, product, setProduct, sizes, setSizes, colors, setColors
                                 <InputText
                                     placeholder='1'
                                     value={(product.availableQuantities&&product.availableQuantities[`${size}-${color}`])||''}
-                                    onChange={({ target: { value }}) => /^[0-9]*$/gm.test(value)&&
-                                        setProduct(old => ({ ...old, availableQuantities: { ...(old.availableQuantities||{}), [`${size}-${color}`]: value }}))
-                                    }
+                                    onChange={({ target: { value }}) => /^[0-9]*$/gm.test(value)&&setProduct(old => {
+                                        if(value==='0') return old
+                                        const newQuantities = Object.assign({},old.availableQuantities||{})
+                                        newQuantities[`${size}-${color}`] = value
+                                        return ({ ...old, availableQuantities: newQuantities })
+                                    })}
                                 />
                             </div>
                         ))
