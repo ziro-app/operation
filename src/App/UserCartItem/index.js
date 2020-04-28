@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react'
+import { get } from 'axios'
 import { useRoute, useLocation } from 'wouter'
 import { db } from '../../Firebase'
 import Header from '@bit/vitorbarbosa19.ziro.header'
@@ -29,6 +30,8 @@ export default () => {
     const [fetchingStoreownerData, setFetchingStoreownerData] = useState(true)
     const [cartItem, setCartItem] = useState()
     const [storeownerData, setStoreownerData] = useState()
+    const [prices, setPrices] = useState({})
+    const [urls, setURLs] = useState({})
 
     useEffect(() => {
         const catalogDataObserver = db.collection('catalog-user-data')
@@ -53,6 +56,24 @@ export default () => {
         }
     },[storeownerId, cartItemId])
 
+    const downloadAllImages = useCallback(() => {
+        Object.values(urls).forEach(url => {
+            // get('https://scontent.faqa1-1.fna.fbcdn.net/v/t1.0-9/51291870_578876865857649_8257876385285013504_n.jpg?_nc_cat=111&_nc_sid=dd9801&_nc_ohc=lLNPOIGXKnEAX-IH33y&_nc_ht=scontent.faqa1-1.fna&oh=cd48bc16df805c3514714f0a495d271c&oe=5ECCDBAC',{ responseType: 'arraybuffer'})
+            get(url,{ responseType: 'arraybuffer' })
+            .then(({ data }) => {
+
+                const url = window.URL.createObjectURL(new Blob([Buffer.from(data,'binary')]));
+                const link = document.createElement("a");
+                link.href = url;
+                link.setAttribute("download", "image.png"); //or any other extension
+                document.body.appendChild(link);
+                link.click();
+
+            })
+            .catch(error => console.log({ error }))
+        })
+    },[urls])
+
     if(fetchingCartItem||fetchingStoreownerData) return <Spinner />
 
     if(!cartItem) throw "REQUEST_NOT_FOUND"
@@ -62,7 +83,15 @@ export default () => {
             <Header type='icon-link' title={`${storeownerData.fname} ${storeownerData.lname}`} navigateTo={`/pedidos/${storeownerId}`} icon='back' />
             <div style={brandCart}>
                 <label style={brandName}>{cartItem.brandName}</label>
-                {cartItem.productIds.map((productId) => <Card productId={productId} cartProduct={cartItem.products[productId]}/>)}
+                <Button type='button' cta='Fazer download' click={downloadAllImages}/>
+                {cartItem.productIds.map((productId) => 
+                    <Card
+                        productId={productId}
+                        cartProduct={cartItem.products[productId]}
+                        setPrice={(price)=>setPrices(old => ({ ...old, [productId]: price }))}
+                        setURL={(url) => setURLs(old => ({ ...old, [productId]: url }))}
+                    />
+                )}
             </div>
         </div>
     )

@@ -8,7 +8,7 @@ import SummaryCard from './summaryCard'
 import InfoCard from './infoCard'
 
 
-export default ({ productId, cartProduct }) => {
+export default ({ productId, cartProduct, setURL, setPrice }) => {
 
     const [productRef] = useState(db.collection('catalog-images').doc(productId))
     const [fetchingProduct, setFetchingProduct] = useState(true)
@@ -27,6 +27,8 @@ export default ({ productId, cartProduct }) => {
                 if(color) setColors(old => old.includes(color) ? old:[...old,color])
             })
         }
+        setPrice(data.price)
+        setURL(data.url)
         setProduct(data)
         setInitialStatus(data.status)
         setFetchingProduct(false)
