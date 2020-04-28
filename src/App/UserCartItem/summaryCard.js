@@ -22,22 +22,6 @@ export default ({ image, product, setEditing }) => {
           <label>{currencyFormat(product.price)}</label>
         </div>
         <div>
-          <label style={priceLabel}>Grade disponível</label>
-          <div style={stock}>
-            {Object.keys(product.availableQuantities||{}).length ?
-              Object.entries(product.availableQuantities).map(([key, qty]) => (
-              <div key={key} style={stockGrid}>
-                <label style={stockLabel}>{`${key}`}</label>
-                <label style={stockQty}>{qty}</label>
-              </div>))
-              :
-              <div>
-                  <label style={infoCardLabel}>nenhuma grade</label>
-              </div>
-            }
-          </div>
-        </div>
-        <div>
           <label style={priceLabel}>Grade escolhida</label>
           <div style={stock}>
             {Object.keys(product.requestedQuantities||{}).length ?
