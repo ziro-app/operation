@@ -21,8 +21,6 @@ const INstatus = {
 
 export default ({ image, product, setProduct, sizes, setSizes, colors, setColors, update }) => {
 
-    console.log({ product })
-
     const availabilityInput = useMemo(() => 
         <FormInput
             name='availability'

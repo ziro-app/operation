@@ -88,6 +88,7 @@ export default () => {
                 <Button type='button' cta='Fazer download' click={downloadAllImages}/>
                 {cartItem.productIds.map((productId) => 
                     <Card
+                        key={productId}
                         productId={productId}
                         cartProduct={cartItem.products[productId]}
                         setPrice={(price)=>setPrices(old => ({ ...old, [productId]: price }))}
