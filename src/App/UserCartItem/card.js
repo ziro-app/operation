@@ -36,7 +36,7 @@ export default ({ productId, cartProduct, setURL, setPrice }) => {
 
     const update = useCallback(async () => {
         try {
-            const cartsWithThisProduct = await db.collectionGroup('cart').where('productIds','array-contains',productId).where('status','==','open').get()
+            const cartsWithThisProduct = await db.collectionGroup('cart').where('productIds','array-contains',productId).where('status','>','closed').get()
             await db.runTransaction(async transaction => {
                 if(product.status==='available'&&!Object.keys(product.availableQuantities||{}).length) 
                     transaction.update(productRef,{ ...product, status: 'waitingStock' })
@@ -57,7 +57,9 @@ export default ({ productId, cartProduct, setURL, setPrice }) => {
                                 requestedQuantities: fs.FieldValue.delete(),
                                 status: fs.FieldValue.delete()
                             }
-                        }
+                        },
+                        status: 'open',
+                        total: fs.FieldValue.delete()
                     },{ merge: true }))
             })
             setEditing(false)

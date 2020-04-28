@@ -1,27 +1,18 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect, useCallback, useMemo } from 'react'
 import { get } from 'axios'
-import { useRoute, useLocation } from 'wouter'
+import { useRoute } from 'wouter'
 import { db } from '../../Firebase'
 import JSZip from 'jszip'
 import Header from '@bit/vitorbarbosa19.ziro.header'
 import Spinner from '@bit/vitorbarbosa19.ziro.spinner-with-div'
 import Button from '@bit/vitorbarbosa19.ziro.button'
-import Input from '@bit/vitorbarbosa19.ziro.input-text'
-import DropDown from '@bit/vitorbarbosa19.ziro.dropdown'
-import Form from '@bit/vitorbarbosa19.ziro.form'
-import FormInput from '@bit/vitorbarbosa19.ziro.form-input'
-import RImg from 'react-image'
-import { brandCart, brandName, cardBlock, image, cardText, icon, orderStatus, order, orderTitle, orderGrid, orderQty, available, button, card, content, qtyLabel, qtyContainer } from './styles'
+import { brandCart, brandName } from './styles'
 import Card from './card'
-import SummaryCard from './summaryCard'
-import ObjectAssignDeep from 'object-assign-deep'
+import currencyFormat from '@ziro/currency-format'
+import { summary, saleSummary, total, priceTotal } from './styles_catalog'
 import { containerWithPadding } from '@ziro/theme'
+import { reduceTotal } from './utils'
 
-const PTstatus = {
-    'available': 'Aberto',
-    'unavailable': 'Indisponível',
-    'closed': 'Fechado',
-}
 
 
 export default () => {
@@ -29,10 +20,16 @@ export default () => {
     const { storeownerId, cartItemId } = useRoute('/pedidos/:storeownerId/:cartItemId')[1]
     const [fetchingCartItem, setFetchingCartItem] = useState(true)
     const [fetchingStoreownerData, setFetchingStoreownerData] = useState(true)
-    const [cartItem, setCartItem] = useState()
+    const [cartItem, setCartItem] = useState({})
     const [storeownerData, setStoreownerData] = useState()
     const [prices, setPrices] = useState({})
     const [urls, setURLs] = useState({})
+
+    const [totalItems, totalPrice] = useMemo(() => (cartItem.productIds && cartItem.products ? cartItem.productIds.reduce(reduceTotal(prices, cartItem.products), [0, 0]) : [0, 0]), [
+        cartItem.productIds,
+        cartItem.products,
+        prices,
+      ]);
 
     useEffect(() => {
         const catalogDataObserver = db.collection('catalog-user-data')
@@ -56,6 +53,20 @@ export default () => {
             storeownerObserver()
         }
     },[storeownerId, cartItemId])
+
+    const confirmCartItem = useCallback(async () => {
+        try {
+            await db.collection('catalog-user-data')
+            .doc(storeownerId)
+            .collection('cart')
+            .doc(cartItemId)
+            .set({ status: 'waitingPayment'},{merge: true })
+        }
+        catch(error) {
+            console.log({ error })
+            throw error
+        }
+    })
 
     const downloadAllImages = useCallback(async () => {
         const zip = new JSZip()
@@ -95,6 +106,25 @@ export default () => {
                         setURL={(url) => setURLs(old => ({ ...old, [productId]: url }))}
                     />
                 )}
+                <div style={summary}>
+                  <div style={saleSummary}>
+                    <label style={total}>Total da compra</label>
+                    <label style={priceTotal}>{currencyFormat(totalPrice)}</label>
+                  </div>
+                  <div style={saleSummary}>
+                    <label style={total}>Quantidade</label>
+                    <label style={priceTotal}>{totalItems}</label>
+                  </div>
+                </div>
+                {
+                    cartItem.status === 'waitingConfirmation' &&
+                    <Button
+                        type="button"
+                        cta={'Confirmar pedido'}
+                        click={confirmCartItem}
+                        submitting={false}
+                    />
+                }
             </div>
         </div>
     )
