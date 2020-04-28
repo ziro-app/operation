@@ -34,18 +34,30 @@ export default ({ productId, cartProduct }) => {
 
     const update = useCallback(async () => {
         try {
-            if(product.status==='available'&&!product.availableQuantities) await productRef.update({
-                ...product,
-                status: 'waitingStock',
+            const cartsWithThisProduct = await db.collectionGroup('cart').where('productIds','array-contains',productId).where('status','==','open').get()
+            await db.runTransaction(async transaction => {
+                if(product.status==='available'&&!product.availableQuantities) 
+                    transaction.update(productRef,{ ...product, status: 'waitingStock' })
+                else if(product.status==='waitingInfo'||product.status==='unavailable') 
+                    transaction.update(productRef,{
+                        status: product.status,
+                        price: fs.FieldValue.delete(),
+                        referenceId: fs.FieldValue.delete(),
+                        description: fs.FieldValue.delete(),
+                        availableQuantities: fs.FieldValue.delete(),
+                    })
+                else transaction.update(productRef,product)
+
+                cartsWithThisProduct.docs.forEach((doc) => 
+                    transaction.set(doc.ref,{
+                        products: {
+                            [productId]: {
+                                requestedQuantities: fs.FieldValue.delete(),
+                                status: fs.FieldValue.delete()
+                            }
+                        }
+                    },{ merge: true }))
             })
-            else if(product.status==='waitingInfo'||product.status==='unavailable') await productRef.update({
-                status: product.status,
-                price: fs.FieldValue.delete(),
-                referenceId: fs.FieldValue.delete(),
-                description: fs.FieldValue.delete(),
-                availableQuantities: fs.FieldValue.delete(),
-            })
-            else await productRef.update(product)
             setEditing(false)
         }
         catch(error) {
