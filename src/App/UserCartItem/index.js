@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react'
 import { get } from 'axios'
 import { useRoute, useLocation } from 'wouter'
 import { db } from '../../Firebase'
+import JSZip from 'jszip'
 import Header from '@bit/vitorbarbosa19.ziro.header'
 import Spinner from '@bit/vitorbarbosa19.ziro.spinner-with-div'
 import Button from '@bit/vitorbarbosa19.ziro.button'
@@ -56,22 +57,23 @@ export default () => {
         }
     },[storeownerId, cartItemId])
 
-    const downloadAllImages = useCallback(() => {
-        Object.entries(urls).forEach(([productId,url]) => {
-            // get('https://scontent.faqa1-1.fna.fbcdn.net/v/t1.0-9/51291870_578876865857649_8257876385285013504_n.jpg?_nc_cat=111&_nc_sid=dd9801&_nc_ohc=lLNPOIGXKnEAX-IH33y&_nc_ht=scontent.faqa1-1.fna&oh=cd48bc16df805c3514714f0a495d271c&oe=5ECCDBAC',{ responseType: 'arraybuffer'})
+    const downloadAllImages = useCallback(async () => {
+        const zip = new JSZip()
+        const folder = zip.folder(`${storeownerData.fname}_${storeownerData.lname}`)
+        await Promise.all(Object.entries(urls).map(([productId,url]) => {
+            // return get('https://scontent.faqa1-1.fna.fbcdn.net/v/t1.0-9/51291870_578876865857649_8257876385285013504_n.jpg?_nc_cat=111&_nc_sid=dd9801&_nc_ohc=lLNPOIGXKnEAX-IH33y&_nc_ht=scontent.faqa1-1.fna&oh=cd48bc16df805c3514714f0a495d271c&oe=5ECCDBAC',{ responseType: 'arraybuffer'})
             get(url,{ responseType: 'arraybuffer' })
             .then(({ data }) => {
-
-                const url = window.URL.createObjectURL(new Blob([Buffer.from(data,'binary')]));
-                const link = document.createElement("a");
-                link.href = url;
-                link.setAttribute("download", `${storeownerData.fname}_${storeownerData.lname}_${cartItem.productIds.indexOf(productId)+1}.png`); //or any other extension
-                document.body.appendChild(link);
-                link.click();
-
+                folder.file(`${cartItem.productIds.indexOf(productId)+1}.png`, new Blob([Buffer.from(data,'binary')]))
             })
-            .catch(error => console.log({ error }))
-        })
+        }))
+        const content = await zip.generateAsync({ type: 'blob' })
+        const url = window.URL.createObjectURL(content);
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", `${storeownerData.fname}_${storeownerData.lname}.zip`); //or any other extension
+        document.body.appendChild(link);
+        link.click();
     },[urls])
 
     if(fetchingCartItem||fetchingStoreownerData) return <Spinner />
