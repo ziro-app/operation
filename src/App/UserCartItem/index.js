@@ -57,7 +57,7 @@ export default () => {
     },[storeownerId, cartItemId])
 
     const downloadAllImages = useCallback(() => {
-        Object.values(urls).forEach(url => {
+        Object.entries(urls).forEach(([productId,url]) => {
             // get('https://scontent.faqa1-1.fna.fbcdn.net/v/t1.0-9/51291870_578876865857649_8257876385285013504_n.jpg?_nc_cat=111&_nc_sid=dd9801&_nc_ohc=lLNPOIGXKnEAX-IH33y&_nc_ht=scontent.faqa1-1.fna&oh=cd48bc16df805c3514714f0a495d271c&oe=5ECCDBAC',{ responseType: 'arraybuffer'})
             get(url,{ responseType: 'arraybuffer' })
             .then(({ data }) => {
@@ -65,7 +65,7 @@ export default () => {
                 const url = window.URL.createObjectURL(new Blob([Buffer.from(data,'binary')]));
                 const link = document.createElement("a");
                 link.href = url;
-                link.setAttribute("download", "image.png"); //or any other extension
+                link.setAttribute("download", `${storeownerData.fname}_${storeownerData.lname}_${cartItem.productIds.indexOf(productId)+1}.png`); //or any other extension
                 document.body.appendChild(link);
                 link.click();
 
