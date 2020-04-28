@@ -36,7 +36,7 @@ export default ({ productId, cartProduct }) => {
         try {
             const cartsWithThisProduct = await db.collectionGroup('cart').where('productIds','array-contains',productId).where('status','==','open').get()
             await db.runTransaction(async transaction => {
-                if(product.status==='available'&&!product.availableQuantities) 
+                if(product.status==='available'&&!Object.keys(product.availableQuantities||{}).length) 
                     transaction.update(productRef,{ ...product, status: 'waitingStock' })
                 else if(product.status==='waitingInfo'||product.status==='unavailable') 
                     transaction.update(productRef,{
