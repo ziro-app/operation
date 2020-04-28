@@ -62,7 +62,7 @@ export default () => {
         const folder = zip.folder(`${storeownerData.fname}_${storeownerData.lname}`)
         await Promise.all(Object.entries(urls).map(([productId,url]) => {
             // return get('https://scontent.faqa1-1.fna.fbcdn.net/v/t1.0-9/51291870_578876865857649_8257876385285013504_n.jpg?_nc_cat=111&_nc_sid=dd9801&_nc_ohc=lLNPOIGXKnEAX-IH33y&_nc_ht=scontent.faqa1-1.fna&oh=cd48bc16df805c3514714f0a495d271c&oe=5ECCDBAC',{ responseType: 'arraybuffer'})
-            get(url,{ responseType: 'arraybuffer' })
+            return get(url,{ responseType: 'arraybuffer' })
             .then(({ data }) => {
                 folder.file(`${cartItem.productIds.indexOf(productId)+1}.png`, new Blob([Buffer.from(data,'binary')]))
             })
