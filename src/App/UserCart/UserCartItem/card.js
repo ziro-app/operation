@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import RImg from 'react-image'
 import { image } from './styles'
-import { db, fs } from '../../Firebase'
+import { db, fs } from '../../../Firebase'
 import SpinnerWithDiv from '@bit/vitorbarbosa19.ziro.spinner-with-div'
 import EditCard from './editCard'
 import SummaryCard from './summaryCard'

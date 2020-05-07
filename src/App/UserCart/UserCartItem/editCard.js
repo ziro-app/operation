@@ -151,10 +151,8 @@ export default ({ image, product, setProduct, sizes, setSizes, colors, setColors
         />
     ,[product.status,sizes,colors,product.availableQuantities])
 
-    const inputs = useMemo(
-        () => [availabilityInput,priceInput,referenceIdInput,descriptionInput,sizesInput,colorsInput,quantitiesInput].filter(input => !!input),
-        [availabilityInput,priceInput,referenceIdInput,descriptionInput,sizesInput,colorsInput,quantitiesInput]
-    )
+    const _inputs = [availabilityInput,priceInput,referenceIdInput,descriptionInput,sizesInput,colorsInput,quantitiesInput]
+    const inputs = useMemo(() => _inputs.filter(input => !!input),_inputs)
 
     const validations = useMemo(() => [
         {

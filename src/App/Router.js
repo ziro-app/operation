@@ -30,13 +30,11 @@ import RegisterInputOutput from './RegisterInputOutput/index'
 import NotFound from '@bit/vitorbarbosa19.ziro.not-found'
 import UpdateBrandsInfos from './UpdateBrandsInfos'
 import UserCart from './UserCart'
-import UserCartItem from './UserCartItem'
-import SearchUserCart from './SearchUserCart'
 import { useRoute, useLocation } from 'wouter'
 
 
 const Router = ({ isLogged }) => {
-    const [match, params] = useRoute('/pedidos/:userId?/:requestId?')
+    const [match, params] = useRoute('/pedidos/:cartId?')
     const [location] = useLocation()
     const publicRoutes = {
         '/': <Login />,
@@ -90,9 +88,10 @@ const Router = ({ isLogged }) => {
         '/update': <HeaderBack title='Atualizar informações' navigateTo='/login'><UpdateUserInfo /></HeaderBack>,
         '/atualizar-fabricantes': <HeaderBack title='Atualizar fabricantes' navigateTo='/assessoria'><UpdateBrandsInfos /></HeaderBack>,
         '/entrada-saida': <HeaderBack title='Entrada/Saída do Caixa' navigateTo='/administrativo'><RegisterInputOutput /></HeaderBack>,
-        [match && !params.userId ? location : null]: <HeaderBack title='Procurar pedidos' navigateTo='/assessoria'><SearchUserCart /></HeaderBack>,
-        [match && params.userId && !params.requestId ? location : null]: <UserCart />,
-        [match && params.userId && params.requestId ? location : null]: <UserCartItem />,
+        [match ? location : null]: <UserCart { ...params } />,
+        // [match && !params.userId ? location : null]: <HeaderBack title='Procurar pedidos' navigateTo='/assessoria'><SearchUserCart /></HeaderBack>,
+        // [match && params.userId && !params.requestId ? location : null]: <UserCart />,
+        // [match && params.userId && params.requestId ? location : null]: <UserCartItem />,
         '/show-info': <ShowInfo internal={true} />
         // '/migration': <FirebaseMigration /> -> Inacabado
     }
