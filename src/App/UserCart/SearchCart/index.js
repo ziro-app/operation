@@ -97,7 +97,7 @@ export default ({ carts, storeowners, setQueryStr }) => {
                                     </label>
                                 </div>
                                 <div style={bubble}>
-                                    {cart.productIds.length}
+                                    {cart.productIds?.length||'0'}
                                 </div>
                                 <div style={{ transform: 'rotate(90deg)' }}>
                                     <Icon type='chevronUp' size={20} color='black' />
