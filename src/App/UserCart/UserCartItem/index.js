@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react'
 import { get } from 'axios'
 import { useRoute } from 'wouter'
-import { db } from '../../../Firebase'
+import { db, fs } from '../../../Firebase'
 import JSZip from 'jszip'
 import Header from '@bit/vitorbarbosa19.ziro.header'
 import Spinner from '@bit/vitorbarbosa19.ziro.spinner-with-div'
@@ -28,16 +28,16 @@ export default ({ cart: { productIds, products, ...cart }, storeowner, oldQuery 
     const confirmCartItem = useCallback(async () => {
         try {
             await db.collection('catalog-user-data')
-            .doc(storeowner.id)
+            .doc(cart.storeownerId)
             .collection('cart')
             .doc(cart.id)
-            .set({ status: 'waitingPayment'},{merge: true })
+            .set({ status: 'waitingPayment', lastUpdate: fs.FieldValue.serverTimestamp(), updatedBy: 'seller', total: `${totalPrice}` },{merge: true })
         }
         catch(error) {
             console.log({ error })
             throw error
         }
-    })
+    },[cart, totalPrice])
 
     const downloadAllImages = useCallback(async () => {
         try {
@@ -96,6 +96,15 @@ export default ({ cart: { productIds, products, ...cart }, storeowner, oldQuery 
                         cta={'Confirmar pedido'}
                         click={confirmCartItem}
                         submitting={false}
+                    />
+                }
+                {
+                    cart.status === 'waitingPayment' &&
+                    <Button
+                        type="button"
+                        cta={'Aguardando pagamento'}
+                        click={() => {}}
+                        submitting={true}
                     />
                 }
             </div>

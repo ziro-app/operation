@@ -59,7 +59,9 @@ export default ({ productId, cartProduct, setURL, setPrice }) => {
                             }
                         },
                         status: 'open',
-                        total: fs.FieldValue.delete()
+                        total: fs.FieldValue.delete(),
+                        lastUpdate: fs.FieldValue.serverTimestamp(),
+                        updatedBy: 'seller'
                     },{ merge: true }))
             })
             setEditing(false)

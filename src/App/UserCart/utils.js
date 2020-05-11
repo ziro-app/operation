@@ -81,14 +81,18 @@ const withPredicate = (seller, storeownerId, status) => cart =>
 // funcao para criar um objeto { status: [carts] }
 const toStatusObject = (acc,cur) => cur.status ? ({ ...acc, [cur.status]: [...acc[cur.status]||[],cur] }) : prev
 
-const toConsumableCarts = (cart) => {
-    const _added = new Date(cart.added.seconds*1000)
+const toReadableDate = (dateInSeconds) => {
+    const _added = new Date(dateInSeconds*1000)
     const _month = _added.getMonth()+1
     const _day = _added.getDate()
     const _hour = _added.getHours()
     const _minute = _added.getMinutes()
     const [month,day,hour,minute] = [_month,_day,_hour,_minute].map(value => `${(value < 10 ? '0':'')}${value}`)
-    return { ...cart, added: `${day}/${month} as ${hour}:${minute}` }
+    return `${day}/${month} as ${hour}:${minute}`
+}
+
+const toConsumableCarts = ({ added, lastUpdate, ...cart }) => {
+    return { ...cart, added: toReadableDate(added.seconds), lastUpdate: lastUpdate && toReadableDate(lastUpdate.seconds) }
 }
 
 export const prepareCartsForConsume = (carts,seller,storeownerId,status) => () => {

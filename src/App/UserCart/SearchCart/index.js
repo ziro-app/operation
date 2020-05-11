@@ -93,7 +93,10 @@ export default ({ carts, storeowners, setQueryStr }) => {
                                         <span style={dot}>.</span>
                                     </label>
                                     <label style={{ fontSize: 10, color: 'grey' }}>
-                                        {cart.brandName} - {cart.added}
+                                        {cart.brandName}
+                                    </label>
+                                    <label style={{ fontSize: 10, color: 'grey' }}>
+                                        {cart.lastUpdate?`Atualizado em: ${cart.lastUpdate}`:`Adcionado em: ${cart.added}`}
                                     </label>
                                 </div>
                                 <div style={bubble}>
