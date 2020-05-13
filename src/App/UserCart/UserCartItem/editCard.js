@@ -137,7 +137,6 @@ export default ({ image, product, setProduct, sizes, setSizes, colors, setColors
                                     placeholder='1'
                                     value={(product.availableQuantities&&product.availableQuantities[`${size}-${color}`])||''}
                                     onChange={({ target: { value }}) => /^[0-9]*$/gm.test(value)&&setProduct(old => {
-                                        if(value==='0') return old
                                         const newQuantities = Object.assign({},old.availableQuantities||{})
                                         newQuantities[`${size}-${color}`] = value
                                         return ({ ...old, availableQuantities: newQuantities })
