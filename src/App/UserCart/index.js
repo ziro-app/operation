@@ -1,86 +1,36 @@
-import React, { useEffect, useState } from 'react'
-import { useRoute, useLocation } from 'wouter'
-import Header from '@bit/vitorbarbosa19.ziro.header'
-import Icon from '@bit/vitorbarbosa19.ziro.icon'
-import Spinner from '@bit/vitorbarbosa19.ziro.spinner-with-div'
-import { motion } from 'framer-motion'
+import React, { useEffect, useState, useMemo } from 'react'
 import { db } from '../../Firebase'
-import { cart, statusBlock, statusName, card, dot, bubble } from './styles'
-import { containerWithPadding } from '@ziro/theme'
+import { toCartArray, toStoreownerData } from './utils'
+import SearchCart from './SearchCart'
+import CartItem from './UserCartItem'
+import SpinnerWithDiv from '@bit/vitorbarbosa19.ziro.spinner-with-div'
 
-const statusTitles = {
-    open: 'Em aberto',
-    waitingPayment: 'Esperando Pagamento',
-}
+export default ({ cartId }) => {
 
-export default () => {
-
-    const { userId } = useRoute('/pedidos/:userId')[1]
-    const setLocation = useLocation()[1]
-    const [requests, setRequests] = useState({})
-    const [queringRequests, setQueringRequests] = useState(true)
-    const [userData, setUserData] = useState('')
-    const [queringUser, setQueringUser] = useState(true)
+    const [carts, setCarts] = useState([])
+    const [fecthingCarts, setFetchingCarts] = useState(true)
+    const [storeowners, setStoreowners] = useState({})
+    const [fetchingStoreowners, setFetchingStoreowners] = useState(true)
+    const [queryStr, setQueryStr] = useState()
 
     useEffect(() => {
-        if(!userId) return;
-        const cartObserver = db.collection('catalog-user-data')
-            .doc(userId)
-            .collection('cart')
-            .onSnapshot((snap) => {
-                const docs = snap.docChanges().reduce((prev, cur) => {
-                    const { status, ...data } = cur.doc.data()
-                    return { ...prev, [status]: { ...(prev[status]||{}), [cur.doc.id]: data } }
-                },{})
-                setRequests(old => ({ ...old, ...docs }))
-                setQueringRequests(false)
-            })
-        const userObserver = db.collection('storeowners')
-            .doc(userId)
-            .onSnapshot((snap) => {
-                const data = snap.data()
-                setUserData(data)
-                setQueringUser(false)
-            })
+        const cartObserver = db
+            .collectionGroup('cart')
+            .orderBy('added','asc')
+            .onSnapshot(({ docs }) => setCarts(docs.reduce(toCartArray,[])) || setFetchingCarts(false))
+        const storeownersObserver = db
+            .collection('storeowners')
+            .onSnapshot(({ docs }) => setStoreowners(docs.reduce(toStoreownerData,{})) || setFetchingStoreowners(false))
         return () => {
             cartObserver()
-            userObserver()
+            storeownersObserver()
         }
-    },[userId])
+    },[])
 
-    if(!userData&&!queringUser) throw 'USER_NOT_FOUND'
+    const selectedCart = useMemo(() => cartId ? carts.find(({ id }) => id === cartId) : undefined,[cartId, carts])
+    const selectedStoreowner = useMemo(() => selectedCart ? storeowners[selectedCart.storeownerId] : undefined, [selectedCart, storeowners])
 
-    if(queringRequests||queringUser) return <Spinner />
-
-    return (
-        <div style={containerWithPadding}>
-            <Header type='icon-link' title={userData.razao} navigateTo='pedidos' icon='back' />
-            <div style={cart}>
-                {requests && Object.entries(requests).map(([status, _requests]) => (
-                    <div key={status} style={statusBlock}>
-                        <label style={statusName}>{statusTitles[status]||status}</label>
-                        {Object.entries(_requests).map(([id, { brandName, products }]) => (
-                            <motion.div 
-                                key={id}
-                                whileTap={{ scale: 0.95 }}
-                                onClick={() => setLocation(`pedidos/${userId}/${id}`)}
-                                style={card}
-                            >
-                                <label style={{ fontSize: 16 }}>
-                                    {brandName}
-                                    <span style={dot}>.</span>
-                                </label>
-                                <div style={bubble}>
-                                    {Object.keys(products).length}
-                                </div>
-                                <div style={{ transform: 'rotate(90deg)' }}>
-                                    <Icon type='chevronUp' size={20} color='black' />
-                                </div>
-                            </motion.div>
-                        ))}
-                    </div>
-                ))}
-            </div>
-        </div>
-    )
+    if(fecthingCarts||fetchingStoreowners) return <SpinnerWithDiv />
+    if(cartId && selectedCart && selectedStoreowner) return <CartItem cart={selectedCart} storeowner={selectedStoreowner} oldQuery={queryStr} />
+    return <SearchCart carts={carts} storeowners={storeowners} setQueryStr={setQueryStr}/>
 }

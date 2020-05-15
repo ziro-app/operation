@@ -19,7 +19,8 @@ const sendToBackend = (setIsSubmitting, setIsSubmitted, setBrand, brand, brandsA
 					url,
 					timestamp,
 					pricetag,
-					photoPeriod
+					photoPeriod,
+					bucket: `${Math.floor(Math.random()*(20-Number.MIN_VALUE))}`//will be used to fetch random images on front-end
 				})
 				return [url,timestamp,brandName]
 			} else {
@@ -31,7 +32,8 @@ const sendToBackend = (setIsSubmitting, setIsSubmitted, setBrand, brand, brandsA
 					url,
 					timestamp,
 					pricetag,
-					photoPeriod
+					photoPeriod,
+					bucket: `${Math.floor(Math.random()*(20-Number.MIN_VALUE))}`//will be used to fetch random images on front-end
 				})
 				return [url,timestamp]
 			}
