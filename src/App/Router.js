@@ -23,6 +23,7 @@ import RegisterExpenses from './RegisterExpenses/index'
 import ConsultShipping from './ConsultShipping/index'
 // import FirebaseMigration from './FirebaseMigration/index' -> Inacabado
 import ImageUpload from './ImageUpload/index'
+import CreatePayment from './CreatePayment/index'
 import Submenu from '@bit/vitorbarbosa19.ziro.submenu'
 import UpdateUserInfo from './UpdateUserInfo/index'
 import MaterialRequest from './MaterialRequest/index'
@@ -55,26 +56,27 @@ const Router = ({ isLogged }) => {
         '/administrativo':
             <Menu title='Administrativo'>
                 <Submenu options={[
-                ['Requisição de Material', 'requerir-material'],
-                ['Entrada/Saída do Caixa', 'entrada-saida']]} />
+                    ['Requisição de Material', 'requerir-material'],
+                    ['Entrada/Saída do Caixa', 'entrada-saida']]} />
             </Menu>,
         '/assessoria':
             <Menu title='Assessoria'>
                 <Submenu options={[
-                ['Cadastrar boleto', 'cadastrar-boleto'],
-                ['Upload de imagens', 'upload-imagem'],
-                ['Atualizar Fabricantes', '/atualizar-fabricantes'],
-                ['Lojista: Cadastrar', '/cadastrar-lojista'],
-                ['Lojista: Ver/Editar', '/visualizar-lojista'],
-                ['Lojista: Pedidos', '/pedidos'],
-                ['Afiliado: Cadastrar', '/cadastrar-afiliado'],
-                ['Afiliado: Ver/Editar', '/visualizar-afiliado']]} />
+                    ['Cadastrar boleto', 'cadastrar-boleto'],
+                    ['Upload de imagens', 'upload-imagem'],
+                    ['Atualizar Fabricantes', '/atualizar-fabricantes'],
+                    ['Lojista: Cadastrar', '/cadastrar-lojista'],
+                    ['Lojista: Ver/Editar', '/visualizar-lojista'],
+                    ['Lojista: Pedidos', '/pedidos'],
+                    ['Lojista: Criar pagamento', 'criar-pagamento'],
+                    ['Afiliado: Cadastrar', '/cadastrar-afiliado'],
+                    ['Afiliado: Ver/Editar', '/visualizar-afiliado']]} />
             </Menu>,
         '/logistica':
             <Menu title='Logística'>
                 <Submenu options={[
-                ['Cadastrar despesa', 'cadastrar-despesa'],
-                ['Consulta de frete', 'consultar-frete']]} />
+                    ['Cadastrar despesa', 'cadastrar-despesa'],
+                    ['Consulta de frete', 'consultar-frete']]} />
             </Menu>,
         '/consultar-frete': <HeaderBack title='Consulta de frete' navigateTo='/logistica'><ConsultShipping /></HeaderBack>,
         '/cadastrar-despesa': <HeaderBack title='Cadastrar despesa' navigateTo='/logistica'><RegisterExpenses /></HeaderBack>,
@@ -87,8 +89,9 @@ const Router = ({ isLogged }) => {
         '/upload-imagem': <HeaderBack title='Upload de imagens' navigateTo='/assessoria'><ImageUpload /></HeaderBack>,
         '/update': <HeaderBack title='Atualizar informações' navigateTo='/login'><UpdateUserInfo /></HeaderBack>,
         '/atualizar-fabricantes': <HeaderBack title='Atualizar fabricantes' navigateTo='/assessoria'><UpdateBrandsInfos /></HeaderBack>,
+        '/criar-pagamento': <HeaderBack title='Criar pagamento' navigateTo='/assessoria'><CreatePayment /></HeaderBack>,
         '/entrada-saida': <HeaderBack title='Entrada/Saída do Caixa' navigateTo='/administrativo'><RegisterInputOutput /></HeaderBack>,
-        [match ? location : null]: <UserCart { ...params } />,
+        [match ? location : null]: <UserCart {...params} />,
         // [match && !params.userId ? location : null]: <HeaderBack title='Procurar pedidos' navigateTo='/assessoria'><SearchUserCart /></HeaderBack>,
         // [match && params.userId && !params.requestId ? location : null]: <UserCart />,
         // [match && params.userId && params.requestId ? location : null]: <UserCartItem />,
