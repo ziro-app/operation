@@ -1,34 +1,41 @@
 import { db } from '../../Firebase/index'
 
 const sendToBackend = state => () => {
-    const { seller, sellerId, charge, maxInstallments, setFantasy, setCharge, setMaxInstallments } = state
+    const { nickname, seller, sellerId, charge, maxInstallments, setFantasy, setCharge, setMaxInstallments } = state
+    const nome = nickname ? nickname.trim() : ''
     const baseUrl = 'https://catalogo.ziro.app/transacao?doc='
     return new Promise(async (resolve, reject) => {
         try {
-            if (seller && sellerId) {
-                const docRef = await db.collection('credit-card-payments').add({
-                    dateLinkCreated: new Date(),
-                    seller,
-                    sellerZoopId: sellerId,
-                    charge,
-                    maxInstallments,
-                    status: 'Aguardando Pagamento'
-                })
-                try {
-                    const doc = await docRef.get()
-                    if (doc) await navigator.clipboard.writeText(`${baseUrl}${doc.id}`)
-                } catch (error) {
-                    console.log(error)
-                    reject('Error in clipboard API')
+            if (nome === 'Uiller' || nome === 'Vitor') {
+                if (seller && sellerId) {
+                    const docRef = await db.collection('credit-card-payments').add({
+                        dateLinkCreated: new Date(),
+                        seller,
+                        sellerZoopId: sellerId,
+                        charge,
+                        maxInstallments,
+                        status: 'Aguardando Pagamento'
+                    })
+                    try {
+                        const doc = await docRef.get()
+                        if (doc) await navigator.clipboard.writeText(`${baseUrl}${doc.id}`)
+                    } catch (error) {
+                        throw { msg: 'Erro ao realizar a cópia', copyError: true }
+                    }
+                    resolve('Link copiado')
+                    setFantasy('')
+                    setCharge('')
+                    setMaxInstallments('')
+                } else {
+                    throw { msg: 'Vendedor não encontrado', customError: true }
                 }
-                resolve('Link copiado')
-                setFantasy('')
+            } else throw { msg: 'Permissão insuficiente', customError: true }
+        } catch (error) {
+            if (error.copyError) {
+                resolve('Link criado')
                 setCharge('')
                 setMaxInstallments('')
-            } else {
-                throw { msg: 'Vendedor não encontrado', customError: true }
             }
-        } catch (error) {
             if (error.customError) reject(error)
             else {
                 console.log(error)
