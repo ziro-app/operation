@@ -40,6 +40,8 @@ export default ({ productId, cartProduct, setURL, setPrice }) => {
             await db.runTransaction(async transaction => {
                 if(product.status==='available'&&!Object.keys(product.availableQuantities||{}).length) 
                     transaction.update(productRef,{ ...product, status: 'waitingStock' })
+                else if(product.status==='available'&&Object.values(product.availableQuantities||{}).reduce((acc,cur) => acc+parseInt(cur),0)===0)
+                    transaction.update(productRef,{ ...product, status: 'soldOut' })
                 else if(product.status==='waitingInfo'||product.status==='unavailable') 
                     transaction.update(productRef,{
                         status: product.status,
