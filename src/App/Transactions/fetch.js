@@ -24,7 +24,10 @@ const fetch = (
     setIsLoadingMore
 ) => {
     //setIsLoadingResults(true);
-    setIsLoadingMore(true);
+    if(payments)
+        setIsLoadingMore(true);
+    else
+        setIsLoadingMore(false);
     let query = "";
     if (!sellerFilter && !statusFilter) {
         query = db
@@ -111,7 +114,10 @@ const fetch = (
                     }
 
                     setTotalTransactions(collectionData.docs.length);
-                    if (!collectionData.docs.length) throw "Sem dados";
+                    if (!collectionData.docs.length){
+                        setPayments([]);
+                        setIsLoadingMore(false);
+                    }
                     const paymentDoc = [];
                     if (!snapshot.empty) {
                         snapshot.forEach((doc) => {

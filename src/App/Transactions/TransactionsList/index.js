@@ -17,6 +17,8 @@ export default ({ transactions, btnMoreClick, hasMore, loadingMore }) => {
                 btnMoreClick={btnMoreClick}
                 hasMore={hasMore}
                 isSearching={loadingMore}
+                messageEmptyTransactions={'Não há transações para os filtros selecionados'}
+                messageWelcomeTransactions={'Fim das transações'}
             />
         </motion.div>
     );
