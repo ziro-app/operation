@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { motion } from 'framer-motion'
 import currencyFormat from '@ziro/currency-format'
 import maskInput from '@ziro/mask-input'
 import sendToBackend from './sendToBackend'
@@ -47,7 +48,7 @@ const CreatePayment = () => {
     if (errorLoading) return <Error />
 
     return (
-        <>
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
             <Form
                 validations={validations}
                 sendToBackend={sendToBackend ? sendToBackend(state) : () => null}
@@ -112,7 +113,7 @@ const CreatePayment = () => {
                         }
                     />
                 ]} />
-        </>
+        </motion.div>
     )
 }
 

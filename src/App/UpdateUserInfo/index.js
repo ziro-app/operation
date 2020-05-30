@@ -1,4 +1,5 @@
 import React, { useState, useContext } from 'react'
+import { motion } from 'framer-motion'
 import { userContext } from '../appContext'
 import InputEdit from '@bit/vitorbarbosa19.ziro.input-edit'
 import maskInput from '@ziro/mask-input'
@@ -245,7 +246,7 @@ const UpdateUserInfo = () => {
     }
 
     return (
-        <>
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
             <InputEdit
                 name="Nome Completo"
                 value={newName}
@@ -281,7 +282,7 @@ const UpdateUserInfo = () => {
                 placeholder="digite aqui..."
                 editable={true}
                 isLoading={loadingBirthDate}
-                inputmode='numeric'
+                inputMode='numeric'
             />
             <InputEdit
                 name="CPF"
@@ -293,7 +294,7 @@ const UpdateUserInfo = () => {
                 error={''}
                 editable={false}
                 isLoading={false}
-                inputmode='numeric'
+                inputMode='numeric'
             />
             <InputEdit
                 name="RG"
@@ -305,7 +306,7 @@ const UpdateUserInfo = () => {
                 error={''}
                 editable={false}
                 isLoading={false}
-                inputmode='numeric'
+                inputMode='numeric'
             />
             <InputEdit
                 name="Órgão expeditor"
@@ -352,7 +353,7 @@ const UpdateUserInfo = () => {
                 placeholder="digite aqui..."
                 editable={true}
                 isLoading={loadingPersonalPhone}
-                inputmode='tel'
+                inputMode='tel'
             />
             <InputEdit
                 name="Github"
@@ -377,7 +378,7 @@ const UpdateUserInfo = () => {
                 placeholder="digite aqui..."
                 editable={true}
                 isLoading={loadingCep}
-                inputmode='numeric'
+                inputMode='numeric'
             />
             <InputEdit
                 name="Rua"
@@ -402,7 +403,7 @@ const UpdateUserInfo = () => {
                 placeholder="digite aqui..."
                 editable={true}
                 isLoading={loadingNumber}
-                inputmode='numeric'
+                inputMode='numeric'
             />
             <InputEdit
                 name="Complemento"
@@ -463,7 +464,7 @@ const UpdateUserInfo = () => {
                 placeholder="digite aqui..."
                 editable={false}
                 isLoading={false}
-                inputmode='numeric'
+                inputMode='numeric'
             />
             <InputEdit
                 name="Valor cobrado"
@@ -488,7 +489,7 @@ const UpdateUserInfo = () => {
                 placeholder="digite aqui..."
                 editable={true}
                 isLoading={loadingHeight}
-                inputmode='numeric'
+                inputMode='numeric'
             />
             <InputEdit
                 name="Peso em quilogramas"
@@ -501,7 +502,7 @@ const UpdateUserInfo = () => {
                 placeholder="digite aqui..."
                 editable={true}
                 isLoading={loadingWeight}
-                inputmode='numeric'
+                inputMode='numeric'
             />
             <InputEdit
                 name="Nome contato de emergência"
@@ -538,7 +539,7 @@ const UpdateUserInfo = () => {
                 placeholder="digite aqui..."
                 editable={true}
                 isLoading={loadingEmergencyContact}
-                inputmode='tel'
+                inputMode='tel'
             />
             <InputEdit
                 name="Número do Banco"
@@ -551,7 +552,7 @@ const UpdateUserInfo = () => {
                 placeholder="digite aqui..."
                 editable={true}
                 isLoading={loadingBankNumber}
-                inputmode='numeric'
+                inputMode='numeric'
             />
             <InputEdit
                 name="Número da Conta"
@@ -564,7 +565,7 @@ const UpdateUserInfo = () => {
                 placeholder="digite aqui..."
                 editable={true}
                 isLoading={loadingAccountNumber}
-                inputmode='numeric'
+                inputMode='numeric'
             />
             <InputEdit
                 name="Agência"
@@ -577,9 +578,9 @@ const UpdateUserInfo = () => {
                 placeholder="digite aqui..."
                 editable={true}
                 isLoading={loadingAgency}
-                inputmode='numeric'
+                inputMode='numeric'
             />
-        </>
+        </motion.div>
     )
 }
 

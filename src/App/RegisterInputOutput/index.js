@@ -1,4 +1,5 @@
 import React, { useState, useContext } from 'react'
+import { motion } from 'framer-motion'
 import { userContext } from '../appContext'
 import sendToBackend from './sendToBackend'
 import Form from '@bit/vitorbarbosa19.ziro.form'
@@ -35,7 +36,7 @@ const InputOutput = () => {
     ]
 
     return (
-        <>
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
             <Form
                 validations={validations}
                 sendToBackend={sendToBackend ? sendToBackend(state) : () => null}
@@ -60,7 +61,7 @@ const InputOutput = () => {
                                 setValue(maskInput(toInteger, '#######', true))
                             }}
                             placeholder='R$ 00,00'
-                            inputmode='numeric'
+                            inputMode='numeric'
                         />
                     } />,
                     <FormInput name='description' label='Descrição' input={
@@ -72,7 +73,7 @@ const InputOutput = () => {
                     } />
                 ]}
             />
-        </>
+        </motion.div>
     )
 }
 

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
+import { motion } from 'framer-motion'
 import { post } from 'axios'
 import InputEdit from '@bit/vitorbarbosa19.ziro.input-edit'
 import Spinner from '@bit/vitorbarbosa19.ziro.spinner'
@@ -307,7 +308,7 @@ const UpdateStoreowner = () => {
     if (isError) return <Error />
 
     return (
-        <>
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
             <Dropdown
                 value={searchedName}
                 onChange={({ target: { value } }) => {
@@ -744,7 +745,7 @@ const UpdateStoreowner = () => {
                     ]}
                 />
             </> : <></>}
-        </>
+        </motion.div>
     )
 }
 

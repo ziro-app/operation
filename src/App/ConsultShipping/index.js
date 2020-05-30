@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { motion } from 'framer-motion'
 import Form from '@bit/vitorbarbosa19.ziro.form'
 import FormInput from '@bit/vitorbarbosa19.ziro.form-input'
 import InputText from '@bit/vitorbarbosa19.ziro.input-text'
@@ -80,7 +81,7 @@ const ConsultShipping = () => {
     ]
 
     return (
-        <>
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
             <Form
                 validations={validations}
                 sendToBackend={sendToBackend ? sendToBackend(state) : () => null}
@@ -200,7 +201,7 @@ const ConsultShipping = () => {
                     </div>
                 </div>
             </Modal>
-        </>
+        </motion.div>
     )
 
 }

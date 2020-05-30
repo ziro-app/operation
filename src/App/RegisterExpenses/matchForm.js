@@ -90,7 +90,7 @@ const operationalForm = ({ attendance, setAttendance, attendanceList, date, setD
                     setBeneficiaryDocument(maskInput(value, mask, true))
                 }}
                 placeholder='CPF ou CNPJ'
-                inputmode='numeric'
+                inputMode='numeric'
             />
         } /> : <FormInput name='' label='' input={<></>} />,
         bankTransfer === 'Sim' ? <FormInput name='bankName' label='Nome do Banco' input={
@@ -105,7 +105,7 @@ const operationalForm = ({ attendance, setAttendance, attendanceList, date, setD
                 value={accountNumber}
                 onChange={({ target: { value } }) => setAccountNumber(value)}
                 placeholder='Ex.: 14637-8'
-                inputmode='numeric'
+                inputMode='numeric'
             />
         } /> : <FormInput name='' label='' input={<></>} />,
         bankTransfer === 'Sim' ? <FormInput name='agency' label='Número da Agência' input={
@@ -113,7 +113,7 @@ const operationalForm = ({ attendance, setAttendance, attendanceList, date, setD
                 value={agency}
                 onChange={({ target: { value } }) => setAgency(value)}
                 placeholder='Ex.: 1463-8'
-                inputmode='numeric'
+                inputMode='numeric'
             />
         } /> : <FormInput name='' label='' input={<></>} />
     ]
@@ -206,7 +206,7 @@ const creditCardForm = ({ commonDescription, setCommonDescription, paymentMethod
                 onChange={({ target: { value } }) => setNumberOfInstallments(maskInput(value, '##', true))}
                 readOnly={false}
                 placeholder='Apenas se maior que 1'
-                inputmode='numeric'
+                inputMode='numeric'
             />
         } />
     ]
@@ -276,7 +276,7 @@ const bankTransferForm = ({ commonDescription, setCommonDescription, paymentMeth
                     setBeneficiaryDocument(maskInput(value, mask, true))
                 }}
                 placeholder='CPF ou CNPJ'
-                inputmode='numeric'
+                inputMode='numeric'
             />
         } />,
         <FormInput name='bankName' label='Nome do Banco' input={
@@ -291,7 +291,7 @@ const bankTransferForm = ({ commonDescription, setCommonDescription, paymentMeth
                 value={accountNumber}
                 onChange={({ target: { value } }) => setAccountNumber(value)}
                 placeholder='Ex.: 14637-8'
-                inputmode='numeric'
+                inputMode='numeric'
             />
         } />,
         <FormInput name='agency' label='Número da Agência' input={
@@ -299,7 +299,7 @@ const bankTransferForm = ({ commonDescription, setCommonDescription, paymentMeth
                 value={agency}
                 onChange={({ target: { value } }) => setAgency(value)}
                 placeholder='Ex.: 1463-8'
-                inputmode='numeric'
+                inputMode='numeric'
             />
         } />]
     return fields

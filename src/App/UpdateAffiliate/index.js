@@ -218,7 +218,7 @@ const UpdateAffiliate = () => {
                     error={errorCpf}
                     editable={true}
                     isLoading={loadingCpf}
-                    inputmode='numeric'
+                    inputMode='numeric'
                 />
                 <InputEdit
                     name="Whatsapp"
@@ -231,7 +231,7 @@ const UpdateAffiliate = () => {
                     placeholder="digite aqui..."
                     editable={true}
                     isLoading={loadingWhatsapp}
-                    inputmode='tel'
+                    inputMode='tel'
                 />
                 <InputEdit
                     name="Instagram da Marca"

@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { motion } from 'framer-motion'
 import { Router2 as routeMatcher } from '@ziro/router'
 import Login from './Login/index'
 import Register from './Register/index'
@@ -31,6 +32,7 @@ import RegisterInputOutput from './RegisterInputOutput/index'
 import NotFound from '@bit/vitorbarbosa19.ziro.not-found'
 import UpdateBrandsInfos from './UpdateBrandsInfos'
 import UserCart from './UserCart'
+import UploadBillet from './UploadBillet'
 import { useRoute, useLocation } from 'wouter'
 
 
@@ -48,36 +50,44 @@ const Router = ({ isLogged }) => {
         '/show-info': <ShowInfo />
     }
     const privateRoutes = { // Menu can't be put inside the components because then it'll unmount on transition
-        '/': <Menu title='Minha Conta'><MyAccount /></Menu>,
+        '/': <Menu title='Minha Conta'><motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}><MyAccount /></motion.div></Menu>,
         '/login': <Menu title='Minha Conta'><MyAccount /></Menu>,
         '/trocar-email': <UpdateEmail />,
         '/trocar-senha': <UpdatePass />,
         '/deletar-conta': <DeleteAccount />,
         '/administrativo':
             <Menu title='Administrativo'>
-                <Submenu options={[
-                    ['Requisição de Material', 'requerir-material'],
-                    ['Entrada/Saída do Caixa', 'entrada-saida']]} />
+                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+                    <Submenu options={[
+                        ['Requisição de Material', 'requerir-material'],
+                        ['Entrada/Saída do Caixa', 'entrada-saida']]} />
+                </motion.div>
             </Menu>,
         '/assessoria':
             <Menu title='Assessoria'>
-                <Submenu options={[
-                    ['Cadastrar boleto', 'cadastrar-boleto'],
-                    ['Upload de imagens', 'upload-imagem'],
-                    ['Atualizar Fabricantes', '/atualizar-fabricantes'],
-                    ['Lojista: Cadastrar', '/cadastrar-lojista'],
-                    ['Lojista: Ver/Editar', '/visualizar-lojista'],
-                    ['Lojista: Pedidos', '/pedidos'],
-                    ['Lojista: Criar pagamento', 'criar-pagamento'],
-                    ['Afiliado: Cadastrar', '/cadastrar-afiliado'],
-                    ['Afiliado: Ver/Editar', '/visualizar-afiliado']]} />
+                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+                    <Submenu options={[
+                        ['Boletos: Cadastrar', 'cadastrar-boleto'],
+                        ['Boletos: Upload', 'upload-boleto'],
+                        ['Upload de imagens', 'upload-imagem'],
+                        ['Atualizar Fabricantes', '/atualizar-fabricantes'],
+                        ['Lojista: Cadastrar', '/cadastrar-lojista'],
+                        ['Lojista: Ver/Editar', '/visualizar-lojista'],
+                        ['Lojista: Pedidos', '/pedidos'],
+                        ['Lojista: Criar pagamento', 'criar-pagamento'],
+                        ['Afiliado: Cadastrar', '/cadastrar-afiliado'],
+                        ['Afiliado: Ver/Editar', '/visualizar-afiliado']]} />
+                </motion.div>
             </Menu>,
         '/logistica':
             <Menu title='Logística'>
-                <Submenu options={[
-                    ['Cadastrar despesa', 'cadastrar-despesa'],
-                    ['Consulta de frete', 'consultar-frete']]} />
+                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+                    <Submenu options={[
+                        ['Cadastrar despesa', 'cadastrar-despesa'],
+                        ['Consulta de frete', 'consultar-frete']]} />
+                </motion.div>
             </Menu>,
+        '/upload-boleto': <HeaderBack title='Upload de boleto' navigateTo='/assessoria'><UploadBillet /></HeaderBack>,
         '/consultar-frete': <HeaderBack title='Consulta de frete' navigateTo='/logistica'><ConsultShipping /></HeaderBack>,
         '/cadastrar-despesa': <HeaderBack title='Cadastrar despesa' navigateTo='/logistica'><RegisterExpenses /></HeaderBack>,
         '/cadastrar-boleto': <HeaderBack title='Cadastrar boleto' navigateTo='/assessoria'><RegisterBillet /></HeaderBack>,
