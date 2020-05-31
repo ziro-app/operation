@@ -3,7 +3,7 @@ import { db } from '../../Firebase/index'
 const sendToBackend = state => () => {
     const { nickname, seller, sellerId, charge, maxInstallments, setFantasy, setCharge, setMaxInstallments } = state
     const nome = nickname ? nickname.trim() : ''
-    const baseUrl = 'https://catalogo.ziro.app/transacao?doc='
+    const baseUrl = 'https://ziro.app/transacao?doc='
     return new Promise(async (resolve, reject) => {
         try {
             if (nome === 'Uiller' || nome === 'Vitor') {
