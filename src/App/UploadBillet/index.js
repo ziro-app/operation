@@ -16,8 +16,9 @@ export default () => {
     const [isLoading, setIsLoading] = useState(true)
     const [billets, setBillets] = useState([]);
     const [billet, setBillet] = useState('');
+    const [filename, setFilename] = useState('');
     const [fileBillet, setFileBillet] = useState({});
-    const setState = { setBillet, setFileBillet };
+    const setState = { setBillet, setFileBillet, setFilename };
     const state = { billet, fileBillet, ...setState };
     const validations = [
         {
@@ -29,7 +30,7 @@ export default () => {
             name: 'fileBillet',
             validation: value => value !== undefined && value !== '' && /(\.jpg|\.jpeg|\.png)$/.test(value.name),
             value: fileBillet,
-            message: 'Formatos válidos: .png e .jpg'
+            message: 'Formatos válidos: .png, .jpg e .jpeg'
         }
     ];
     /*
@@ -61,7 +62,8 @@ export default () => {
                     <FormInput name='fileBillet' label='Foto do boleto' input={
                         <SingleImageUpload
                             setFile={setFileBillet}
-                            persistFilename={fileBillet.name ? fileBillet.name : ''}
+                            filename={filename ? filename : ''}
+                            setFilename={setFilename}
                             indexOfFile={0}
                         />
                     } />

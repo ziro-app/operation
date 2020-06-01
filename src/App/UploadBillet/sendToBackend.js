@@ -27,7 +27,7 @@ const findBilletRow = async billetNumber => {
 };
 
 const sendToBackend = state => () => {
-    const { billet, fileBillet, setBillet, setFileBillet } = state;
+    const { billet, fileBillet, setFilename, setBillet, setFileBillet } = state;
     return new Promise(async (resolve, reject) => {
         try {
             if (fileBillet.size === 0) throw { msg: 'Imagem com tamanho vazio', customError: true };
@@ -57,6 +57,7 @@ const sendToBackend = state => () => {
             };
             await post(url, body, config);
             setBillet('');
+            setFilename('');
             setFileBillet({ name: 'Arraste imagens ou escolha do dispositivo' });
             resolve('Boleto enviado com sucesso')
         } catch (error) {
