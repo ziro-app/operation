@@ -33,11 +33,15 @@ import NotFound from '@bit/vitorbarbosa19.ziro.not-found'
 import UpdateBrandsInfos from './UpdateBrandsInfos'
 import UserCart from './UserCart'
 import UploadBillet from './UploadBillet'
+import Transactions from "./Transactions/Index";
 import { useRoute, useLocation } from 'wouter'
 
 
 const Router = ({ isLogged }) => {
     const [match, params] = useRoute('/pedidos/:cartId?')
+    const [matchTransactions, paramsTransactions] = useRoute(
+        "/transacoes/:transactionId?/:receivableId?"
+    );
     const [location] = useLocation()
     const publicRoutes = {
         '/': <Login />,
@@ -54,6 +58,10 @@ const Router = ({ isLogged }) => {
         '/login': <Menu title='Minha Conta'><MyAccount /></Menu>,
         '/trocar-email': <UpdateEmail />,
         '/trocar-senha': <UpdatePass />,
+        "/transacoes": <Transactions {...paramsTransactions} />,
+        [matchTransactions ? location : null]: (
+            <Transactions {...paramsTransactions} />
+        ),
         '/deletar-conta': <DeleteAccount />,
         '/administrativo':
             <Menu title='Administrativo'>
@@ -74,6 +82,7 @@ const Router = ({ isLogged }) => {
                         ['Lojista: Cadastrar', '/cadastrar-lojista'],
                         ['Lojista: Ver/Editar', '/visualizar-lojista'],
                         ['Lojista: Pedidos', '/pedidos'],
+                        ["Lojista: Transações", "/transacoes"],
                         ['Lojista: Criar pagamento', 'criar-pagamento'],
                         ['Afiliado: Cadastrar', '/cadastrar-afiliado'],
                         ['Afiliado: Ver/Editar', '/visualizar-afiliado']]} />

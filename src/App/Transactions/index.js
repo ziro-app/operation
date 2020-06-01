@@ -206,23 +206,20 @@ const Transactions = ({
                     display: "grid",
                     gridGap: "5px",
                     padding: "10px 0px 20px 0px",
-                    borderTop: "2px solid black",
-                    borderBottom: "2px solid black",
-                    marginBottom: "20px",
+                    marginBottom: "10px",
                 }}
             >
-                <label>Filtrar:</label>
                 <Dropdown
                     value={sellerFilter || ""}
                     list={listSellers}
-                    placeholder="Vendedor"
+                    placeholder="Filtrar vendedor"
                     onChange={({ target: { value } }) => setSellerFilter(value)}
                     onChangeKeyboard={(e) => e && setSellerFilter(e.value)}
                 />
                 <Dropdown
                     value={statusFilter || ""}
                     list={listStatus}
-                    placeholder="Status"
+                    placeholder="Filtrar status"
                     onChange={({ target: { value } }) => setStatusFilter(value)}
                     onChangeKeyboard={(e) => e && setStatusFilter(e.value)}
                 />
@@ -236,25 +233,6 @@ const Transactions = ({
                     transactions={payments}
                     btnMoreClick={() => {
                         setLimitFetch(limitFetch + 10);
-                        /*setLoadingMore(true);
-                        fetch(
-                            setIsLoading,
-                            setErrorLoading,
-                            payments,
-                            setPayments,
-                            zoopId,
-                            10,
-                            lastDoc,
-                            setLastDoc,
-                            setTotalTransactions,
-                            setLoadingMore,
-                            setStatusFilter,
-                            statusFilter,
-                            setSellerFilter,
-                            sellerFilter,
-                            setNumberOfLoops,
-                            setIsLoadingResults
-                        );*/
                     }}
                     hasMore={!(payments.length === totalTransactions)}
                     loadingMore={loadingMore}
