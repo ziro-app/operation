@@ -1,10 +1,9 @@
-import React, { useState } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import { motion } from 'framer-motion'
 import { dropzone, instructions, button, input, styleTag } from './styles'
 
-const ImageUpload = ({ setFile, indexOfFile, persistFilename }) => {
-    const [filename, setFilename] = useState(persistFilename ? persistFilename : '')
+const ImageUpload = ({ setFile, filename, setFilename, indexOfFile }) => {
 
     const handleDragEnter = e => {
         e.preventDefault()
