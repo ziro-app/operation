@@ -6,7 +6,7 @@ import Form from '@bit/vitorbarbosa19.ziro.form';
 import FormInput from '@bit/vitorbarbosa19.ziro.form-input';
 import InputText from '@bit/vitorbarbosa19.ziro.input-text';
 import maskInput from '@ziro/mask-input';
-import SingleImageUpload from './SingleImageUpload/index';
+import SingleImageUpload from '../SingleImageUpload/index';
 import fetch from './fetch';
 import sendToBackend from './sendToBackend';
 import { container, block, title } from './styles';
