@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react'
+import { motion } from 'framer-motion'
 import Spinner from '@bit/vitorbarbosa19.ziro.spinner'
 import Error from '@bit/vitorbarbosa19.ziro.error'
 import Dropdown from '@bit/vitorbarbosa19.ziro.dropdown'
@@ -160,43 +161,45 @@ const RegisterExpenses = () => {
     if (isError) return <Error />
 
     return (
-        <Form
-            validations={validations}
-            sendToBackend={sendToBackend ? sendToBackend(state) : () => null}
-            inputs={[
-                <FormInput name='expenseAmount' label='Valor' input={
-                    <InputText
-                        value={currencyFormat(expenseAmount)}
-                        onChange={({ target: { value } }) => {
-                            const toInteger = parseInt(value.replace(/[R$\.,]/g, ''), 10)
-                            setExpenseAmount(maskInput(toInteger, '#######', true))
-                        }}
-                        placeholder='R$ 100,00'
-                        inputmode='numeric'
-                    />
-                } />,
-                <FormInput name='type' label='Tipo' input={
-                    <Dropdown
-                        value={type}
-                        onChange={({ target: { value } }) => {
-                            setType(value)
-                            clearFields()
-                        }}
-                        onChangeKeyboard={element => {
-                            if (element) {
-                                setType(element.value)
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+            <Form
+                validations={validations}
+                sendToBackend={sendToBackend ? sendToBackend(state) : () => null}
+                inputs={[
+                    <FormInput name='expenseAmount' label='Valor' input={
+                        <InputText
+                            value={currencyFormat(expenseAmount)}
+                            onChange={({ target: { value } }) => {
+                                const toInteger = parseInt(value.replace(/[R$\.,]/g, ''), 10)
+                                setExpenseAmount(maskInput(toInteger, '#######', true))
+                            }}
+                            placeholder='R$ 100,00'
+                            inputMode='numeric'
+                        />
+                    } />,
+                    <FormInput name='type' label='Tipo' input={
+                        <Dropdown
+                            value={type}
+                            onChange={({ target: { value } }) => {
+                                setType(value)
                                 clearFields()
-                            } else null
-                        }
-                        }
-                        readOnly={true}
-                        list={typeList}
-                        placeholder="Tipo da despesa"
-                    />}
-                />,
-                ...matchForm(state)
-            ]}
-        />
+                            }}
+                            onChangeKeyboard={element => {
+                                if (element) {
+                                    setType(element.value)
+                                    clearFields()
+                                } else null
+                            }
+                            }
+                            readOnly={true}
+                            list={typeList}
+                            placeholder="Tipo da despesa"
+                        />}
+                    />,
+                    ...matchForm(state)
+                ]}
+            />
+        </motion.div>
     )
 }
 

@@ -1,4 +1,5 @@
 import React, { useState, useContext } from 'react'
+import { motion } from 'framer-motion'
 import { userContext } from '../appContext'
 import sendToBackend from './sendToBackend'
 import Form from '@bit/vitorbarbosa19.ziro.form'
@@ -34,7 +35,7 @@ const MaterialRequest = () => {
     ]
 
     return (
-        <>
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
             <Form
                 validations={validations}
                 sendToBackend={sendToBackend ? sendToBackend(state) : () => null}
@@ -72,7 +73,7 @@ const MaterialRequest = () => {
                     } />
                 ]}
             />
-        </>
+        </motion.div>
     )
 }
 

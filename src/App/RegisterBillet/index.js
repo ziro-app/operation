@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { motion } from 'framer-motion'
 import Spinner from '@bit/vitorbarbosa19.ziro.spinner'
 import Error from '@bit/vitorbarbosa19.ziro.error'
 import Dropdown from '@bit/vitorbarbosa19.ziro.dropdown'
@@ -137,7 +138,7 @@ const RegisterBillet = () => {
     if (isError) return <Error />
 
     return (
-        <>
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
             <Form
                 validations={validations}
                 sendToBackend={sendToBackend ? sendToBackend(state) : () => null}
@@ -321,7 +322,7 @@ const RegisterBillet = () => {
                     } />
                 ]}
             />
-        </>
+        </motion.div>
     )
 }
 
