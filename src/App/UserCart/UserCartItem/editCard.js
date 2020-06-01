@@ -11,12 +11,13 @@ const PTstatus = {
     'available': 'Disponível',
     'unavailable': 'Indisponível',
     'closed': 'Disponível',
-    'waitingInfo': ''
+    'waitingInfo': '',
+    'soldOut': 'Indisponível'
 }
 
 const INstatus = {
     'Disponível': 'available',
-    'Indisponível': 'unavailable'
+    'Indisponível': 'soldOut'
 }
 
 export default ({ image, product, setProduct, sizes, setSizes, colors, setColors, update }) => {
@@ -163,8 +164,8 @@ export default ({ image, product, setProduct, sizes, setSizes, colors, setColors
         ...(product.status !== 'available' ? []:[
             {
                 name: 'price',
-                validation: value => !!value,
-                value: product.price,
+                validation: ([price,totalQty]) => totalQty > 0 ? !!price:true,
+                value: [product.price,Object.values(product.availableQuantities||{}).reduce((acc,prev) => acc+parseInt(prev),0)],
                 message: 'Campo obrigatório'
             }
         ])
