@@ -9,6 +9,7 @@ import FormInput from '@bit/vitorbarbosa19.ziro.form-input'
 import InputText from '@bit/vitorbarbosa19.ziro.input-text'
 import maskInput from '@ziro/mask-input'
 import currencyFormat from '@ziro/currency-format'
+import SingleImageUpload from '../SingleImageUpload/index'
 import fetch from './fetch'
 import sendToBackend from './sendToBackend'
 import { numberFormatter } from '../utils'
@@ -39,9 +40,11 @@ const RegisterBillet = () => {
     const typeList = ['Online', 'Offline'].sort()
     const [percentage, setPercentage] = useState('')
     const [submitCount, setSubmitCount] = useState(0)
+    const [file, setFile] = useState('');
+    const [filename, setFilename] = useState('')
 
-    const setState = { setSearchedName, setBillet, setSaleDate, setProvider, setStoreowner, setBilletValue, setPaymentMethod, setRomaneio, setDueDate, setRevenue, setAdvisor, setType, setSubmitCount, setPercentage }
-    const state = { billet, saleDate, provider, storeowner, billetValue, paymentMethod, romaneio, dueDate, revenue, advisor, type, submitCount, percentage, ...setState }
+    const setState = { setFile, setFilename, setSearchedName, setBillet, setSaleDate, setProvider, setStoreowner, setBilletValue, setPaymentMethod, setRomaneio, setDueDate, setRevenue, setAdvisor, setType, setSubmitCount, setPercentage }
+    const state = { file, filename, billet, saleDate, provider, storeowner, billetValue, paymentMethod, romaneio, dueDate, revenue, advisor, type, submitCount, percentage, ...setState }
     const validations = [
         {
             name: 'billet',
@@ -109,6 +112,11 @@ const RegisterBillet = () => {
             validation: value => value <= billetValue,
             value: revenue,
             message: 'Valor inválido'
+        }, {
+            name: 'file',
+            validation: value => value !== undefined && value !== '' && /(\.jpg|\.jpeg|\.png)$/.test(value.name),
+            value: file,
+            message: 'Formatos válidos: .png, .jpg e .jpeg'
         }
     ]
     const round = (num, places) => {
@@ -318,6 +326,14 @@ const RegisterBillet = () => {
                             list={typeList}
                             placeholder="Tipo da compra"
                             readOnly={true}
+                        />
+                    } />,
+                    <FormInput name='file' label='Foto do boleto' input={
+                        <SingleImageUpload
+                            setFile={setFile}
+                            filename={filename ? filename : ''}
+                            setFilename={setFilename}
+                            indexOfFile={0}
                         />
                     } />
                 ]}
