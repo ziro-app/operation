@@ -33,7 +33,7 @@ import NotFound from '@bit/vitorbarbosa19.ziro.not-found'
 import UpdateBrandsInfos from './UpdateBrandsInfos'
 import UserCart from './UserCart'
 import UploadBillet from './UploadBillet'
-import Transactions from "./Transactions/Index";
+import Transactions from "./Transactions/index";
 import { useRoute, useLocation } from 'wouter'
 
 

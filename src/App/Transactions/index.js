@@ -232,17 +232,20 @@ const Transactions = ({
                 <TransactionsList
                     transactions={payments}
                     btnMoreClick={() => {
+                        setIsLoadingMore(true);
+
                         setLimitFetch(limitFetch + 10);
                     }}
                     hasMore={!(payments.length === totalTransactions)}
+                    isSearching={isLoadingMore}
                     loadingMore={loadingMore}
                 />
             )}
-            {isLoadingMore && (
+            {/*isLoadingMore && (
                 <div style={spinner}>
                     <Spinner size="5.5rem" />
                 </div>
-            )}
+            )*/}
         </div>
     );
 };
