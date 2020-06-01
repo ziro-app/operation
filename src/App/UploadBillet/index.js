@@ -27,7 +27,7 @@ export default () => {
             message: 'Boleto inválido'
         }, {
             name: 'fileBillet',
-            validation: value => value !== undefined && value !== '' && /(\.jpg|\.png)$/.test(value.name),
+            validation: value => value !== undefined && value !== '' && /(\.jpg|\.jpeg|\.png)$/.test(value.name),
             value: fileBillet,
             message: 'Formatos válidos: .png e .jpg'
         }
