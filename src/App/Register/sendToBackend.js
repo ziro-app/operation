@@ -1,7 +1,7 @@
 import { auth, db } from '../../Firebase/index'
 import { post } from 'axios'
 import md5 from 'md5';
-import dateHourFormatterUTC3 from '@ziro/format-date-utc3'
+import { formatDateUTC3 } from '@ziro/format-date-utc3'
 import { numberFormatter } from '../utils'
 
 const sendToBackend = state => () => {
@@ -35,7 +35,7 @@ const sendToBackend = state => () => {
         range: 'Base!A1',
         resource: {
             values: [
-                [dateHourFormatterUTC3(new Date()), md5(emailTrim), nome, apelido, birthDate, cpf, `'${rgTrim}`,
+                [formatDateUTC3(new Date()), md5(emailTrim), nome, apelido, birthDate, cpf, `'${rgTrim}`,
                     orgExp, shippingDate, maritalStatus, telefone, emailTrim, githubTrim,
                     endereco, cep, cidade, estado, initialDate, '-', scope,
                     valorCobrado, paymentModel, height.replace('.', ','), weight, nomeEmergencia,

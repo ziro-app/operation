@@ -1,5 +1,5 @@
 import { post } from 'axios'
-import dateHourFormatterUTC3 from '@ziro/format-date-utc3'
+import { formatDateUTC3 } from '@ziro/format-date-utc3'
 import { numberFormatter } from '../utils'
 
 const mountBankTransfer = ({ paymentMethod, bankTransfer, beneficiary, beneficiaryDocument, bankName, agency, accountNumber }) => {
@@ -26,7 +26,7 @@ const sendToBackend = state => () => {
         range: 'Despesas!A1',
         resource: {
             values: [
-                [dateHourFormatterUTC3(new Date()), nickname, value, type, operationalDescription,
+                [formatDateUTC3(new Date()), nickname, value, type, operationalDescription,
                     atendimento, haveRefound, note, commonDescription, paymentMethod, numberOfInstallments,
                     transfer, type === 'Operacional' ? date : '', type === 'Comum' ? date : '']
             ]

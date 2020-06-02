@@ -11,12 +11,15 @@ import maskInput from '@ziro/mask-input'
 import currencyFormat from '@ziro/currency-format'
 import SingleImageUpload from '../SingleImageUpload/index'
 import fetch from './fetch'
+import getBillets from './getBillets'
 import sendToBackend from './sendToBackend'
 import { numberFormatter } from '../utils'
 
 const RegisterBillet = () => {
     const [isLoading, setIsLoading] = useState(true)
     const [isError, setIsError] = useState(false)
+    const [isLoadingBillets, setIsLoadingBillets] = useState(true)
+    const [isErrorBillets, setIsErrorBillets] = useState(false)
     const [billet, setBillet] = useState('')
     const [billets, setBillets] = useState([])
     const [searchedName, setSearchedName] = useState('')
@@ -140,10 +143,11 @@ const RegisterBillet = () => {
         }
     }
 
-    useEffect(() => fetch(setIsLoading, setIsError, setProviders, setStoreowners, setAdvisors, setAddresses, setBillets), [submitCount])
+    useEffect(() => getBillets(setIsLoadingBillets, setIsErrorBillets, setBillets), [submitCount])
+    useEffect(() => fetch(setIsLoading, setIsError, setProviders, setStoreowners, setAdvisors, setAddresses), [])
 
-    if (isLoading) return <div style={{ display: 'grid' }}><Spinner size='5rem' /></div>
-    if (isError) return <Error />
+    if (isLoading || isLoadingBillets) return <div style={{ display: 'grid' }}><Spinner size='5rem' /></div>
+    if (isError || isErrorBillets) return <Error />
 
     return (
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>

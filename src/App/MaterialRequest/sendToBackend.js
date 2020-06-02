@@ -1,5 +1,5 @@
 import { post } from 'axios'
-import dateHourFormatterUTC3 from '@ziro/format-date-utc3'
+import { formatDateUTC3 } from '@ziro/format-date-utc3'
 
 const sendToBackend = state => () => {
     const { nickname, category, requiredItems, itemIsOver, setCategory, setRequiredItems, setItemIsOver } = state
@@ -15,7 +15,7 @@ const sendToBackend = state => () => {
         range: 'Material!A1',
         resource: {
             values: [
-                [dateHourFormatterUTC3(new Date()), nome, category, itens, itemIsOver]
+                [formatDateUTC3(new Date()), nome, category, itens, itemIsOver]
             ]
         },
         valueInputOption: 'user_entered'

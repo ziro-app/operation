@@ -74,7 +74,7 @@
         "@hot-loader/react-dom": "^16.12.0",
         "@ziro/capitalize": "^1.0.0",
         "@ziro/currency-format": "1.0.0",
-        "@ziro/format-date-utc3": "^1.0.0",
+        "@ziro/format-date-utc3": "^2.0.1",
         "@ziro/mask-input": "^1.0.0",
         "@ziro/remove-duplicates": "^1.0.1",
         "@ziro/router": "^3.0.0",

@@ -1,5 +1,5 @@
 import { post } from 'axios'
-import dateHourFormatterUTC3 from '@ziro/format-date-utc3'
+import { formatDateUTC3 } from '@ziro/format-date-utc3'
 import { numberFormatter } from '../utils'
 
 const sendToBackend = state => () => {
@@ -8,7 +8,7 @@ const sendToBackend = state => () => {
     const valor = numberFormatter(value) ? numberFormatter(value) / 100 : 0.00
     const descricao = description ? description.trim() : ''
     const url = process.env.SHEET_URL
-    const data = dateHourFormatterUTC3(new Date())
+    const data = formatDateUTC3(new Date())
 
     const body = {
         apiResource: 'values',

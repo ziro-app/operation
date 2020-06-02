@@ -1,6 +1,6 @@
 import { db } from '../../Firebase/index'
 import { post } from 'axios'
-import dateHourFormatterUTC3 from '@ziro/format-date-utc3'
+import { formatDateUTC3 } from '@ziro/format-date-utc3'
 
 const sendToBackend = state => () => {
     const cnpjInCollection = []
@@ -96,7 +96,7 @@ const sendToBackend = state => () => {
                         range: 'Base!A1',
                         resource: {
                             values: [
-                                [dateHourFormatterUTC3(today), `${fnameTrim} ${lnameTrim}`, whats, oldEmail ? oldEmail : email.toLowerCase(), rg, cpf, birth, instaTrim,
+                                [formatDateUTC3(today), `${fnameTrim} ${lnameTrim}`, whats, oldEmail ? oldEmail : email.toLowerCase(), rg, cpf, birth, instaTrim,
                                     cnpj, ie, razao, fantasia, complemento ? `${rua}, ${numero}, ${complemento}` : `${rua}, ${numero}`, bairro, cep, cidade,
                                     estado, fone, nomeAfiliado, affiliateCpf, advisor, salesman, 'NENHUM']
                             ]

@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const fetch = (setIsLoading, setIsError, setProviders, setStoreowners, setAdvisors, setAddresses, setBillets) => {
+const fetch = (setIsLoading, setIsError, setProviders, setStoreowners, setAdvisors, setAddresses) => {
     const source = axios.CancelToken.source()
     const advisors = []
     const storeowners = []
@@ -51,21 +51,6 @@ const fetch = (setIsLoading, setIsError, setProviders, setStoreowners, setAdviso
             },
             cancelToken: source.token
         }
-        const configBillets = {
-            method: 'POST',
-            url: process.env.SHEET_URL,
-            data: {
-                apiResource: 'values',
-                apiMethod: 'get',
-                spreadsheetId: process.env.SHEET_ID_BILLETS,
-                range: 'Boletos!C:C'
-            },
-            headers: {
-                'Authorization': process.env.SHEET_TOKEN,
-                'Content-Type': 'application/json'
-            },
-            cancelToken: source.token
-        }
         try {
             const dataStoreowners = await axios(config)
             const [, ...listStoreowners] = dataStoreowners.data.values
@@ -97,10 +82,6 @@ const fetch = (setIsLoading, setIsError, setProviders, setStoreowners, setAdviso
                 }
             })
             setAdvisors(advisors)
-
-            const billets = await axios(configBillets)
-            const [, ...listBillets] = billets.data.values
-            setBillets(listBillets.flat())
 
         } catch (error) {
             if (error.response) console.log(error.response)
