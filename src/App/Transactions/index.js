@@ -198,7 +198,7 @@ const Transactions = ({
             <Header
                 type="icon-link"
                 title="Transações"
-                navigateTo="/"
+                navigateTo="/assessoria"
                 icon="back"
             />
             <div
@@ -238,7 +238,7 @@ const Transactions = ({
                     }}
                     hasMore={!(payments.length === totalTransactions)}
                     isSearching={isLoadingMore}
-                    loadingMore={loadingMore}
+                    loadingMore={isLoadingMore}
                 />
             )}
             {/*isLoadingMore && (

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { useLocation } from "wouter";
+import axios from 'axios';
 import Table from "@bit/vitorbarbosa19.ziro.table";
 import Details from "@bit/vitorbarbosa19.ziro.details";
 import Icon from "@bit/vitorbarbosa19.ziro.icon";
@@ -10,6 +11,7 @@ import Error from "@bit/vitorbarbosa19.ziro.error";
 import Button from "@bit/vitorbarbosa19.ziro.button";
 import Modal from "@bit/vitorbarbosa19.ziro.modal";
 import Spinner from "@bit/vitorbarbosa19.ziro.spinner";
+import InputText from '@bit/vitorbarbosa19.ziro.input-text'
 import currencyFormat from "@ziro/currency-format";
 import { alertColor, containerWithPadding, successColor } from "@ziro/theme";
 import { db } from "../../../Firebase/index";
@@ -22,8 +24,10 @@ import {
     modalLabel,
     spinner,
 } from "./styles";
-
+import maskInput from "@ziro/mask-input";
+import fetch from "./fetch";
 const TransactionDetails = ({ transactions, transactionId }) => {
+    const [amount, setAmount] = useState('');
     const [receipt_id, setReceipt_id] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const [data, setData] = useState([]);
@@ -33,9 +37,148 @@ const TransactionDetails = ({ transactions, transactionId }) => {
     const [copyResultText, setCopyResultText] = useState("");
     const [copyResultStatus, setCopyResultStatus] = useState(true);
     const [cancelModal, setCancelModal] = useState(false);
+    const [captureModal, setCaptureModal] = useState(false);
+    const [splitTransactionModal, setSplitTransactionModal] = useState(false);
     const textAreaRef = useRef(null);
     const paymentLink = `https://ziro.app/transacao?doc=${transactionId}`;
     const [blocksStoreowner, setBlocksStoreowner] = useState([]);
+    const [validationMessage, setValidationMessage] = useState('');
+
+    const [numberOfLoops, setNumberOfLoops] = useState(0);
+
+    useEffect(()=> {
+        setValidationMessage('')
+    }, [splitTransactionModal,captureModal,cancelModal]);
+
+    const splitTransaction = async (transaction_id,on_behalf_of,amountTransaction) => {
+        try {
+            if(validationMessage)
+                return;
+
+            //amountTransaction = amountTransaction.replace('R$', '').replace(',', '').replace('.', '')
+
+            await axios
+                .post(
+                    `${process.env.PAY}/split-rules-create?transaction_id=${transaction_id}`,
+                    {
+                        recipient: transaction_id,
+                        on_behalf_of,
+                        amount,
+                    },
+                    {
+                        headers: {
+                            Authorization: `Basic ${process.env.PAY_TOKEN}`,
+                        },
+                    },
+                )
+                .then(result => {
+                    const { data } = result;
+                    console.log(data);
+                    const {status} = data;
+                    setSplitTransactionModal(false)
+                    if(status === 'succeeded'){
+                        /*transaction.status = 'Aprovado'
+                        document.location.reload(true);*/
+                    }
+
+                    // setError(true);
+                    // setLocation('/recibo');
+                });
+            setSplitTransactionModal(false)
+        } catch (e) {
+            // console.log(e.response);
+            setValidationMessage('Um erro ocorreu, entre em contato com o TI!');
+            console.log('erro na requisição para a divisão da zoop');
+            console.log(e.response.status);
+        }
+    };
+    const postCapture = async (transaction_id,on_behalf_of,amount) => {
+        try {
+            /*transaction_id = "be42973b540044d4907f510e81da6a21";
+            on_behalf_of= "6e4b9db52193481ca2a345dfc3577c8e";
+            amount= "32";
+
+            console.log(transaction_id)
+            console.log(on_behalf_of)
+            console.log(amount)*/
+            //console.log(amount.replace('R$', '').replace(',', ''))
+            amount= amount.replace('R$', '').replace(',', '').replace('.', '');
+            await axios
+                .post(
+                    `${process.env.PAY}/payments-capture?transaction_id=${transaction_id}`,
+                    {
+                        transaction_id,
+                        on_behalf_of,
+                        amount,
+                    },
+                    {
+                        headers: {
+                            Authorization: `Basic ${process.env.PAY_TOKEN}`,
+                        },
+                    },
+                )
+                .then(result => {
+                    const { data } = result;
+                    console.log(data);
+                    const {status} = data;
+                    setCaptureModal(false)
+                    if(status === 'succeeded'){
+                        transaction.status = 'Aprovado'
+                        document.location.reload(true);
+                    }
+
+                    // setError(true);
+                    // setLocation('/recibo');
+                });
+            setCancelModal(false)
+        } catch (e) {
+            // console.log(e.response);
+            setValidationMessage('Um erro ocorreu, entre em contato com o TI!');
+            console.log('erro na requisição para a captação da zoop');
+            console.log(e.response.status);
+        }
+    };
+
+    const cancelTransaction = async (transaction_id,on_behalf_of,amountBeforeConvert) => {
+        try {
+            const amount = (amountBeforeConvert.replace('R$', '').replace(',', '').replace('.', ''));
+
+            await axios
+                .post(
+                    `${process.env.PAY}/payments-void`,
+                    {
+                            transaction_id,
+                            on_behalf_of,
+                            amount,
+                    },
+                    {
+                        headers: {
+                            Authorization: `Basic ${process.env.PAY_TOKEN}`,
+                        }
+                    },
+                )
+                .then(result => {
+                    const { data } = result;
+                    const {status} = data;
+                    setCancelModal(false)
+                    if(status === 'succeeded'){
+                        transaction.status = 'Cancelado'
+                        document.location.reload(true);
+                    }
+
+                    // setError(true);
+                    // setLocation('/recibo');
+                });
+            setCancelModal(false)
+        } catch (e) {
+            // console.log(e.response);
+            console.log('erro na requisição para o cancelamento da zoop');
+            console.log(e.response.status);
+            if(e.response.status === 402){
+                setValidationMessage('A transação já foi cancelada!');
+            }
+        }
+    };
 
     const deleteTransaction = async () => {
         setIsLoading(true);
@@ -84,174 +227,261 @@ const TransactionDetails = ({ transactions, transactionId }) => {
     };
 
     useEffect(() => {
-        const effectTransaction = transactions.filter(
+        /*const effectTransaction = transactions.filter(
             (transaction) => transaction.transactionId === transactionId
         )[0];
+        if(effectTransaction)
         setTransaction(effectTransaction);
-        if (effectTransaction) {
-            let block;
-            let dataTable;
-            let feesFormatted = effectTransaction.fees
-                ? `- ${currencyFormat(
-                      parseFloat(effectTransaction.fees.replace(".", ""))
-                  )}`
-                : "-";
-            let liquidFormatted = effectTransaction.fees
-                ? currencyFormat(
-                      parseFloat(
-                          `${(
-                              stringToFloat(effectTransaction.charge) -
-                              parseFloat(effectTransaction.fees)
-                          ).toFixed(2)}`.replace(/[R$\.,]/g, "")
-                      )
-                  )
-                : "-";
+        else*/
+        if(numberOfLoops<2){
+            setNumberOfLoops(numberOfLoops+1);
+        async function getTransaction(transactionId,setTransaction) {
+            fetch(transactionId,setTransaction);
+        }
+        getTransaction(transactionId,setTransaction).then(response => {
+            {
+            if (transaction) {
+                let block;
+                let dataTable;
+                let feesFormatted = transaction.fees
+                    ? `- ${currencyFormat(
+                        parseFloat(transaction.fees.replace(".", ""))
+                    )}`
+                    : "-";
+                let liquidFormatted = transaction.fees
+                    ? currencyFormat(
+                        parseFloat(
+                            `${(
+                                stringToFloat(transaction.charge) -
+                                parseFloat(transaction.fees)
+                            ).toFixed(2)}`.replace(/[R$\.,]/g, "")
+                        )
+                    )
+                    : "-";
 
-            block = [
-                {
-                    header: "Venda",
-                    body: [
-                        {
-                            title: "Lojista",
-                            content: effectTransaction.buyerRazao
-                                ? effectTransaction.buyerRazao
-                                : "-",
-                        },
-                        {
-                            title: "Valor",
-                            content: effectTransaction.charge,
-                        },
-                        {
-                            title: "Tarifa Ziro Pay",
-                            content: feesFormatted,
-                        },
-                        {
-                            title: "Valor líquido",
-                            content: liquidFormatted,
-                        },
-                        {
-                            title: "Parcela máxima",
-                            content: `${effectTransaction.maxInstallments}x`,
-                        },
-                        {
-                            title: "Parcela escolhida",
-                            content: effectTransaction.installments
-                                ? `${effectTransaction.installments}x`
-                                : "-",
-                        },
-                        {
-                            title: "Data",
-                            content: effectTransaction.date
-                                ? `${effectTransaction.date}`
-                                : "-",
-                        },
-                        {
-                            title: "Status",
-                            content: effectTransaction.status,
-                            color: effectTransaction.statusColor,
-                        },
-                    ],
-                },
-            ];
-
-            if (effectTransaction.receivables.length) {
-                const sortedTransactions = effectTransaction.receivables.sort(
-                    (a, b) => b.installment - a.installment
-                );
-                const paidRows = [];
-                const paidClicks = [];
-                let paidAmount = 0;
-                let paidAmountWithoutFees = 0;
-                const unpaidRows = [];
-                const unpaidClicks = [];
-                let unpaidAmount = 0;
-                let unpaidAmountWithoutFees = 0;
-                sortedTransactions.map((transaction) => {
-                    if (!transaction.paid_at) {
-                        let upAm = round(
-                            parseFloat(transaction.gross_amount),
-                            2
-                        );
-                        let upAmw = round(parseFloat(transaction.amount), 2);
-                        unpaidRows.push([
-                            `${transaction.installment}`,
-                            `${parcelFormat(upAm)}`,
-                            `${parcelFormat(upAmw)}`,
-                            `${dateFormat(transaction.expected_on)}`,
-                            <Icon type="chevronRight" size={14} />,
-                        ]);
-                        unpaidClicks.push(() =>
-                            setLocation(
-                                `/transacoes/${transactionId}/${transaction.receivableZoopId}`
-                            )
-                        );
-                        unpaidAmount += parseFloat(upAm);
-                        unpaidAmountWithoutFees += parseFloat(upAmw);
-                    } else {
-                        let upAm = round(
-                            parseFloat(transaction.gross_amount),
-                            2
-                        );
-                        let upAmw = round(parseFloat(transaction.amount), 2);
-                        paidRows.push([
-                            `${transaction.installment}`,
-                            `${parcelFormat(upAm)}`,
-                            `${parcelFormat(upAmw)}`,
-                            `${dateFormat(transaction.paid_at)}`,
-                            <Icon type="chevronRight" size={14} />,
-                        ]);
-                        paidClicks.push(() =>
-                            setLocation(
-                                `/transacoes/${transactionId}/${transaction.receivableZoopId}`
-                            )
-                        );
-                        paidAmount += parseFloat(upAm);
-                        paidAmountWithoutFees += parseFloat(upAmw);
-                    }
-                });
-                dataTable = [
+                block = [
                     {
-                        title: "Lançamentos Pagos",
-                        header: ["Parc.", "Bruto", "Líquido", "Data", ""],
-                        rows: paidRows.reverse(),
-                        rowsClicks: paidClicks.reverse(),
-                        totals: [
-                            "-",
-                            `${parcelFormat(round(paidAmount, 2))}`,
-                            `${parcelFormat(round(paidAmountWithoutFees, 2))}`,
-                            "-",
-                            "",
-                        ],
-                    },
-                    {
-                        title: "Lançamentos Futuros",
-                        header: ["Parc.", "Bruto", "Líquido", "Data", ""],
-                        rows: unpaidRows.reverse(),
-                        rowsClicks: unpaidClicks.reverse(),
-                        totals: [
-                            "-",
-                            `${parcelFormat(round(unpaidAmount, 2))}`,
-                            `${parcelFormat(
-                                round(unpaidAmountWithoutFees, 2)
-                            )}`,
-                            "-",
-                            "",
+                        header: "Venda",
+                        body: [
+                            {
+                                title: "Lojista",
+                                content: transaction.buyerRazao
+                                    ? transaction.buyerRazao
+                                    : "-",
+                            },
+                            {
+                                title: "Marca",
+                                content: transaction.seller,
+                            },
+                            {
+                                title: "Valor",
+                                content: transaction.charge,
+                            },
+                            {
+                                title: "Tarifa Ziro Pay",
+                                content: feesFormatted,
+                            },
+                            {
+                                title: "Valor líquido",
+                                content: liquidFormatted,
+                            },
+                            {
+                                title: "Parcela máxima",
+                                content: `${transaction.maxInstallments}x`,
+                            },
+                            {
+                                title: "Parcela escolhida",
+                                content: transaction.installments
+                                    ? `${transaction.installments}x`
+                                    : "-",
+                            },
+                            {
+                                title: "Data",
+                                content: transaction.date
+                                    ? `${transaction.date}`
+                                    : "-",
+                            },
+                            {
+                                title: "Status",
+                                content: transaction.status,
+                                color: transaction.statusColor,
+                            },
                         ],
                     },
                 ];
+
+                if (typeof transaction.receivables !== 'undefined' && transaction.receivables.length) {
+                    const sortedTransactions = transaction.receivables.sort(
+                        (a, b) => b.installment - a.installment
+                    );
+                    const paidRows = [];
+                    const paidClicks = [];
+                    let paidAmount = 0;
+                    let paidAmountWithoutFees = 0;
+                    const unpaidRows = [];
+                    const unpaidClicks = [];
+                    let unpaidAmount = 0;
+                    let unpaidAmountWithoutFees = 0;
+                    sortedTransactions.map((transaction) => {
+                        if (!transaction.paid_at) {
+                            let upAm = round(
+                                parseFloat(transaction.gross_amount),
+                                2
+                            );
+                            let upAmw = round(parseFloat(transaction.amount), 2);
+                            unpaidRows.push([
+                                `${transaction.installment}`,
+                                `${parcelFormat(upAm)}`,
+                                `${parcelFormat(upAmw)}`,
+                                `${dateFormat(transaction.expected_on)}`,
+                                <Icon type="chevronRight" size={14} />,
+                            ]);
+                            unpaidClicks.push(() =>
+                                setLocation(
+                                    `/transacoes/${transactionId}/${transaction.receivableZoopId}`
+                                )
+                            );
+                            unpaidAmount += parseFloat(upAm);
+                            unpaidAmountWithoutFees += parseFloat(upAmw);
+                        } else {
+                            let upAm = round(
+                                parseFloat(transaction.gross_amount),
+                                2
+                            );
+                            let upAmw = round(parseFloat(transaction.amount), 2);
+                            paidRows.push([
+                                `${transaction.installment}`,
+                                `${parcelFormat(upAm)}`,
+                                `${parcelFormat(upAmw)}`,
+                                `${dateFormat(transaction.paid_at)}`,
+                                <Icon type="chevronRight" size={14} />,
+                            ]);
+                            paidClicks.push(() =>
+                                setLocation(
+                                    `/transacoes/${transactionId}/${transaction.receivableZoopId}`
+                                )
+                            );
+                            paidAmount += parseFloat(upAm);
+                            paidAmountWithoutFees += parseFloat(upAmw);
+                        }
+                    });
+                    dataTable = [
+                        {
+                            title: "Lançamentos Pagos",
+                            header: ["Parc.", "Bruto", "Líquido", "Data", ""],
+                            rows: paidRows.reverse(),
+                            rowsClicks: paidClicks.reverse(),
+                            totals: [
+                                "-",
+                                `${parcelFormat(round(paidAmount, 2))}`,
+                                `${parcelFormat(round(paidAmountWithoutFees, 2))}`,
+                                "-",
+                                "",
+                            ],
+                        },
+                        {
+                            title: "Lançamentos Futuros",
+                            header: ["Parc.", "Bruto", "Líquido", "Data", ""],
+                            rows: unpaidRows.reverse(),
+                            rowsClicks: unpaidClicks.reverse(),
+                            totals: [
+                                "-",
+                                `${parcelFormat(round(unpaidAmount, 2))}`,
+                                `${parcelFormat(
+                                    round(unpaidAmountWithoutFees, 2)
+                                )}`,
+                                "-",
+                                "",
+                            ],
+                        },
+                    ];
+                }
+
+                setBlocks(block);
+                setData(dataTable ? dataTable : []);
+
+                {
+                    let blockStoreowner;
+                    if (
+                        transaction.status === "Aprovada" ||
+                        transaction.status === "Pré Autorizado" ||
+                        transaction.status === "Cancelado"
+                    ) {
+                        const installmentsNumber = parseInt(
+                            transaction.installments
+                        );
+                        if (transaction.installments > 0) {
+                            blockStoreowner = [
+
+                                {
+                                    header: "Cartão",
+                                    body: [
+                                        {
+                                            title: "Bandeira",
+                                            content: transaction.brand
+                                                ? transaction.brand
+                                                : "-",
+                                        },
+                                        {
+                                            title: "Número",
+                                            content: transaction.firstFour
+                                                ? `${transaction.firstFour}...${transaction.lastFour}`
+                                                : "-",
+                                        },
+                                        {
+                                            title: "Portador",
+                                            content: transaction.cardholder
+                                                ? transaction.cardholder.toUpperCase()
+                                                : "-",
+                                        },
+                                    ],
+                                },
+                            ];
+                        }
+                    } else {
+                        blockStoreowner = [
+                            {
+                                header: "Cartão",
+                                body: [
+                                    {
+                                        title: "Bandeira",
+                                        content: transaction.brand
+                                            ? transaction.brand
+                                            : "-",
+                                    },
+                                    {
+                                        title: "Número",
+                                        content: transaction.firstFour
+                                            ? `${transaction.firstFour}...${transaction.lastFour}`
+                                            : "-",
+                                    },
+                                    {
+                                        title: "Portador",
+                                        content: transaction.cardholder
+                                            ? transaction.cardholder.toUpperCase()
+                                            : "-",
+                                    },
+                                ],
+                            },
+                        ];
+                    }
+                    setBlocksStoreowner(blockStoreowner);
+                }
             }
-
-            setBlocks(block);
-            setData(dataTable ? dataTable : []);
+        }})
         }
-    }, []);
 
-    useEffect(() => {
+    }, [transaction]);
+    /*useEffect(() => {
         const effectTransaction = transactions.filter(
             (transaction) => transaction.transactionId === transactionId
         );
-        setTransaction(effectTransaction[0]);
-        setReceipt_id(effectTransaction[0].receiptId);
+        //setTransaction(effectTransaction[0]);
+        if(typeof transaction.receiptId !== 'undefined')
+            setReceipt_id(transaction.receiptId);
+        else
+            setReceipt_id('-');
+
         if (effectTransaction[0]) {
             let block;
             if (
@@ -264,36 +494,6 @@ const TransactionDetails = ({ transactions, transactionId }) => {
                 );
                 if (effectTransaction[0].installments > 0) {
                     block = [
-                        {
-                            header: "Compra",
-                            body: [
-                                {
-                                    title: "Marca",
-                                    content: effectTransaction[0].seller,
-                                },
-                                {
-                                    title: "Valor",
-                                    content: effectTransaction[0].charge,
-                                },
-                                {
-                                    title: "Forma",
-                                    content: installmentsNumber
-                                        ? `Crédito ${installmentsNumber}x`
-                                        : "-",
-                                },
-                                {
-                                    title: "Data",
-                                    content: effectTransaction[0].date
-                                        ? `${effectTransaction[0].date}`
-                                        : "-",
-                                },
-                                {
-                                    title: "Status",
-                                    content: effectTransaction[0].status,
-                                    color: effectTransaction[0].statusColor,
-                                },
-                            ],
-                        },
 
                         {
                             header: "Cartão",
@@ -323,36 +523,6 @@ const TransactionDetails = ({ transactions, transactionId }) => {
             } else {
                 block = [
                     {
-                        header: "Compra",
-                        body: [
-                            {
-                                title: "Marca",
-                                content: effectTransaction[0].seller,
-                            },
-                            {
-                                title: "Valor",
-                                content: effectTransaction[0].charge,
-                            },
-                            {
-                                title: "Forma",
-                                content: effectTransaction[0].installments
-                                    ? `Crédito ${effectTransaction[0].installments}x`
-                                    : "-",
-                            },
-                            {
-                                title: "Data",
-                                content: effectTransaction[0].date
-                                    ? `${effectTransaction[0].date}`
-                                    : "-",
-                            },
-                            {
-                                title: "Status",
-                                content: effectTransaction[0].status,
-                                color: effectTransaction[0].statusColor,
-                            },
-                        ],
-                    },
-                    {
                         header: "Cartão",
                         body: [
                             {
@@ -379,9 +549,7 @@ const TransactionDetails = ({ transactions, transactionId }) => {
             }
             setBlocksStoreowner(block);
         }
-        /**/
-    }, []);
-
+    }, []);*/
     if (isLoading)
         return (
             <div style={spinner}>
@@ -398,7 +566,6 @@ const TransactionDetails = ({ transactions, transactionId }) => {
                 backRouteFunction={(route) => setLocation(route)}
             />
         );
-
     return (
         <motion.div
             initial={{ opacity: 0 }}
@@ -418,8 +585,176 @@ const TransactionDetails = ({ transactions, transactionId }) => {
                 navigateTo="transacoes"
                 icon="back"
             />
+
             <div style={{ display: "grid", gridRowGap: "40px" }}>
                 <Details blocks={blocksStoreowner} />
+
+                <div style={buttonContainer}>
+                    {(transaction.status === 'Pré Autorizado') &&(
+                    <div>
+                        <Modal
+                            boxStyle={modalContainer}
+                            isOpen={captureModal}
+                            setIsOpen={() => setCaptureModal(false)}
+                        >
+                            <div
+                                style={{
+                                    display: "grid",
+                                    gridTemplateRows: "1fr auto",
+                                    gridRowGap: "20px",
+                                }}
+                            >
+                                <label style={modalLabel}>
+                                    Deseja realmente já capturar o valor?
+                                </label>
+                                <div
+                                    style={{
+                                        display: "grid",
+                                        gridTemplateColumns: "1fr 1fr",
+                                        gridColumnGap: "20px",
+                                        gridRowGap: "10px",
+                                    }}
+                                >
+                                    <Button
+                                        type="button"
+                                        cta="Capturar"
+                                        click={() => postCapture(transaction.transactionZoopId,transaction.sellerZoopId,transaction.charge)}
+                                        template="regular"
+                                    />
+                                    <Button
+                                        type="button"
+                                        cta="Cancelar"
+                                        click={() =>
+                                            setCaptureModal(false)
+                                        }
+                                        template="light"
+                                    />
+                                    {validationMessage && <label style={{color:alertColor}}>{validationMessage}</label>}
+                                </div>
+                            </div>
+                        </Modal>
+                        <Button
+                            type="button"
+                            cta="Capturar transação"
+                            click={() => setCaptureModal(true)}
+                            template="regular"
+                        />
+                    </div>)}
+                    {transaction.status === 'teste' && (
+                        <div>
+                        <Modal
+                            boxStyle={modalContainer}
+                            isOpen={splitTransactionModal}
+                            setIsOpen={() => setSplitTransactionModal(false)}
+                        >
+                            <div
+                                style={{
+                                    display: "grid",
+                                    gridTemplateRows: "1fr",
+                                    gridRowGap: "20px",
+                                }}
+                            >
+                                <label style={modalLabel}>
+                                    Coloque valor a ser cobrado do lojista!
+                                </label>
+                                <div
+                                    style={{
+                                        display: "grid",
+                                        gridTemplateColumns: "1fr",
+                                        gridColumnGap: "10px",
+                                        gridRowGap: "10px",
+                                    }}
+                                >
+                                    <InputText
+                                        value={currencyFormat(amount)}
+                                        onChange={({ target: { value } }) => {
+                                            const toInteger = parseInt(value.replace(/[R$\.,]/g, ''), 10)
+                                            const transactionAmount = parseInt(transaction.charge.replace('R$', '').replace(',', '').replace('.', ''));
+                                            if(toInteger > transactionAmount)
+                                                setValidationMessage('O valor não pode ser maior que o da transação!');
+                                            else setValidationMessage('')
+                                            return setAmount(maskInput(toInteger, '#######', true))
+                                        }}
+                                        placeholder='R$1.299,99'
+                                    />
+                                    <Button
+
+                                        type="button"
+                                        cta="Cobrar a divisão"
+                                        click={() => splitTransaction(transaction.transactionZoopId,transaction.sellerZoopId,transaction.charge)}
+                                        template="regular"
+                                    />
+                                    <Button
+
+                                        type="button"
+                                        cta="Cancelar"
+                                        click={() =>
+                                            setSplitTransactionModal(false)
+                                        }
+                                        template="light"
+                                    />
+                                    {validationMessage && <label style={{color:alertColor}}>{validationMessage}</label>}
+                                </div>
+                            </div>
+                        </Modal>
+                        <Button
+                            type="button"
+                            cta="Split da transação"
+                            click={() => setSplitTransactionModal(true)}
+                            template="regular"
+                        />
+                    </div>)}
+                    {(transaction.status === 'Aprovado' || transaction.status === 'Pré Aprovado' || transaction.status === 'Pré Autorizado') && (<div>
+                        <Modal
+                            boxStyle={modalContainer}
+                            isOpen={cancelModal}
+                            setIsOpen={() => setCancelModal(false)}
+                        >
+                            <div
+                                style={{
+                                    display: "grid",
+                                    gridTemplateRows: "1fr auto",
+                                    gridRowGap: "20px",
+                                }}
+                            >
+                                <label style={modalLabel}>
+                                    Deseja realmente cancelar a transação ?
+                                </label>
+                                <div
+                                    style={{
+                                        display: "grid",
+                                        gridTemplateColumns: "1fr 1fr",
+                                        gridColumnGap: "20px",
+                                    }}
+                                >
+                                    <Button
+                                        type="button"
+                                        cta="Sim"
+                                        click={() => cancelTransaction(transaction.transactionZoopId,transaction.sellerZoopId, transaction.charge)}
+                                        template="regular"
+                                    />
+                                    <Button
+                                        type="button"
+                                        cta="Não"
+                                        click={() =>
+                                            setCancelModal(false)
+                                        }
+                                        template="light"
+                                    />
+                                    {validationMessage && <label style={{color:alertColor}}>{validationMessage}</label>}
+                                </div>
+                            </div>
+                        </Modal>
+                        <Button
+                            type="button"
+                            cta="Cancelar transação"
+                            click={() => setCancelModal(true)}
+                            template="destructive"
+                        />
+                    </div>)}
+
+
+                </div>
                 <Details blocks={blocks} />
                 {(transaction.status === "Aprovado" ||
                     transaction.status === "Pago" ||
