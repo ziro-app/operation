@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { motion } from 'framer-motion'
 import currencyFormat from '@ziro/currency-format'
 import maskInput from '@ziro/mask-input'
@@ -9,6 +9,7 @@ import FormInput from '@bit/vitorbarbosa19.ziro.form-input'
 import InputText from '@bit/vitorbarbosa19.ziro.input-text'
 import SpinnerWithDiv from '@bit/vitorbarbosa19.ziro.spinner-with-div'
 import Dropdown from '@bit/vitorbarbosa19.ziro.dropdown'
+import { userContext } from '../appContext'
 import fetch from './fetch'
 
 const CreatePayment = () => {
@@ -20,7 +21,8 @@ const CreatePayment = () => {
     const [zoopId, setZoopId] = useState('')
     const [charge, setCharge] = useState('')
     const [maxInstallments, setMaxInstallments] = useState('')
-    const state = { seller: capitalize(fantasy), sellerId: zoopId, charge, maxInstallments, setFantasy, setCharge, setMaxInstallments }
+    const { nickname } = useContext(userContext)
+    const state = { nickname, seller: capitalize(fantasy), sellerId: zoopId, charge, maxInstallments, setFantasy, setCharge, setMaxInstallments }
     const validations = [
         {
             name: 'fantasy',
