@@ -29,10 +29,12 @@ import fetch from "./fetch";
 const TransactionDetails = ({ transactions, transactionId }) => {
     const [amount, setAmount] = useState('');
     const [receipt_id, setReceipt_id] = useState("");
+    const [error,setError] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [data, setData] = useState([]);
     const [blocks, setBlocks] = useState([]);
     const [transaction, setTransaction] = useState({});
+    const [nothing, setNothing] = useState(false);
     const [, setLocation] = useLocation();
     const [copyResultText, setCopyResultText] = useState("");
     const [copyResultStatus, setCopyResultStatus] = useState(true);
@@ -233,14 +235,18 @@ const TransactionDetails = ({ transactions, transactionId }) => {
         if(effectTransaction)
         setTransaction(effectTransaction);
         else*/
+        if(!nothing){
         if(numberOfLoops<2){
             setNumberOfLoops(numberOfLoops+1);
-        async function getTransaction(transactionId,setTransaction) {
-            fetch(transactionId,setTransaction);
+        async function getTransaction(transactionId,setTransaction,setError) {
+            fetch(transactionId,setTransaction,setError);
         }
-        getTransaction(transactionId,setTransaction).then(response => {
+        getTransaction(transactionId,setTransaction,setError).then(response => {
+            if(error){
+                setNothing(true)
+            }
             {
-            if (transaction) {
+            if (transaction && !nothing) {
                 let block;
                 let dataTable;
                 let feesFormatted = transaction.fees
@@ -468,10 +474,13 @@ const TransactionDetails = ({ transactions, transactionId }) => {
                     setBlocksStoreowner(blockStoreowner);
                 }
             }
-        }})
-        }
+        }}).catch((error) => {
+            setTransaction({})
+            setNothing(true)
+        })
+        }}
 
-    }, [transaction]);
+    }, [transaction,error]);
     /*useEffect(() => {
         const effectTransaction = transactions.filter(
             (transaction) => transaction.transactionId === transactionId
@@ -556,14 +565,16 @@ const TransactionDetails = ({ transactions, transactionId }) => {
                 <Spinner size="5.5rem" />
             </div>
         );
-    if (!transaction)
+    if (nothing)
         return (
             <Error
                 message="Transação inválida ou não encontrada, retorne e tente novamente."
                 type="noData"
                 title="Erro ao buscar detalhes da transação"
                 backRoute="/transacoes"
-                backRouteFunction={(route) => setLocation(route)}
+                backRouteFunction={(route) => {
+                    setNothing(false)
+                    setLocation(route)}}
             />
         );
     return (
@@ -640,7 +651,7 @@ const TransactionDetails = ({ transactions, transactionId }) => {
                             template="regular"
                         />
                     </div>)}
-                    {transaction.status === 'teste' && (
+                    {transaction.status === 'Teste' && (
                         <div>
                         <Modal
                             boxStyle={modalContainer}

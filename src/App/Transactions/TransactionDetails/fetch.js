@@ -5,7 +5,8 @@ import { dateFormat } from "../utils";
 
 const fetch = (
     transactionId,
-    setTransaction
+    setTransaction,
+    setError
 ) => {
         const query = db
             .collection("credit-card-payments").doc(transactionId)
@@ -14,7 +15,7 @@ const fetch = (
             await query.onSnapshot(
                 async (snapshot) => {
                     const paymentDoc = [];
-                    if (!snapshot.empty) {
+                    if (snapshot.exists) {
                             const {
                                 charge,
                                 date,
@@ -76,6 +77,7 @@ const fetch = (
                             setTransaction(paymentDoc[0])
 
                     } else {
+                        setError(true)
                         //setLastDoc(null);
                         //if (payments) setPayments([]);
                     }
