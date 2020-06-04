@@ -171,7 +171,6 @@ const TransactionDetails = ({ transactions, transactionId }) => {
                     // setError(true);
                     // setLocation('/recibo');
                 });
-            setCancelModal(false)
         } catch (e) {
             // console.log(e.response);
             console.log('erro na requisição para o cancelamento da zoop');
