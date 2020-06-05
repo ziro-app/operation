@@ -56,15 +56,15 @@ const TransactionDetails = ({ transactions, transactionId }) => {
         try {
             if(validationMessage)
                 return;
-
+            console.log(transaction_id, on_behalf_of, amount);
             //amountTransaction = amountTransaction.replace('R$', '').replace(',', '').replace('.', '')
 
             await axios
                 .post(
                     `${process.env.PAY}/split-rules-create?transaction_id=${transaction_id}`,
                     {
-                        recipient: transaction_id,
-                        on_behalf_of,
+                        transaction_id,
+                        recipient: on_behalf_of,
                         amount,
                     },
                     {
@@ -650,7 +650,7 @@ const TransactionDetails = ({ transactions, transactionId }) => {
                             template="regular"
                         />
                     </div>)}
-                    {transaction.status === 'Teste' && (
+                    {(transaction.status === 'Pré Autorizado' || transaction.status === 'Aprovado') &&  (
                         <div>
                         <Modal
                             boxStyle={modalContainer}
@@ -703,8 +703,9 @@ const TransactionDetails = ({ transactions, transactionId }) => {
                                         }
                                         template="light"
                                     />
-                                    {validationMessage && <label style={{color:alertColor}}>{validationMessage}</label>}
+
                                 </div>
+                                {validationMessage && <label style={{color:alertColor}}>{validationMessage}</label>}
                             </div>
                         </Modal>
                         <Button
@@ -751,8 +752,9 @@ const TransactionDetails = ({ transactions, transactionId }) => {
                                         }
                                         template="light"
                                     />
-                                    {validationMessage && <label style={{color:alertColor}}>{validationMessage}</label>}
+
                                 </div>
+                                {validationMessage && <label style={{color:alertColor}}>{validationMessage}</label>}
                             </div>
                         </Modal>
                         <Button
