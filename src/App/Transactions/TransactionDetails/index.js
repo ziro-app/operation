@@ -13,7 +13,6 @@ import Modal from '@bit/vitorbarbosa19.ziro.modal';
 import Spinner from '@bit/vitorbarbosa19.ziro.spinner';
 import InputText from '@bit/vitorbarbosa19.ziro.input-text';
 import currencyFormat from '@ziro/currency-format';
-import Dropdown from '@bit/vitorbarbosa19.ziro.dropdown';
 import { alertColor, containerWithPadding, successColor } from '@ziro/theme';
 import { db } from '../../../Firebase/index';
 import { dateFormat, parcelFormat, round, stringToFloat } from '../utils';
@@ -489,7 +488,10 @@ const TransactionDetails = ({ transactions, transactionId }) => {
               <Button type="button" cta="Capturar transação" click={() => setCaptureModal(true)} template="regular" />
             </div>
           )}
-          {transaction.status === 'Teste' && (
+          {(transaction.status === 'Pré Autorizado' || transaction.status === 'Aprovado') && (
+            <Button type="button" cta="Cobrar a divisão" click={() => setLocation(`/transacoes/${transactionId}/split`)} template="regular" />
+          )}
+          {/*(transaction.status === 'Pré Autorizado' || transaction.status === 'Aprovado') && (
             <div>
               <Modal boxStyle={modalContainer} isOpen={splitTransactionModal} setIsOpen={() => setSplitTransactionModal(false)}>
                 <div
@@ -508,7 +510,6 @@ const TransactionDetails = ({ transactions, transactionId }) => {
                       gridRowGap: '10px',
                     }}
                   >
-                    <Dropdown list={['Porcentagem', 'Valor']} placeholder="Fabricante referido" />
                     <InputText
                       value={currencyFormat(amount)}
                       onChange={({ target: { value } }) => {
@@ -540,7 +541,7 @@ const TransactionDetails = ({ transactions, transactionId }) => {
               </Modal>
               <Button type="button" cta="Split da transação" click={() => setSplitTransactionModal(true)} template="regular" />
             </div>
-          )}
+          )*/}
           {(transaction.status === 'Aprovado' || transaction.status === 'Pré Aprovado' || transaction.status === 'Pré Autorizado') && (
             <div>
               <Modal boxStyle={modalContainer} isOpen={cancelModal} setIsOpen={() => setCancelModal(false)}>
