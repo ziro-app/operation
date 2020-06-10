@@ -51,6 +51,9 @@ module.exports = (env, { mode }) => {
             sheet_id_expenses,
             sheet_id_appointments,
             sheet_id_suppliers,
+            sheet_id_suppliers_banks,
+            sheet_id_suppliers_base,
+            sheet_id_link_payments,
             cnpj_url,
             cnpj_token
         } = require('./credentials')
@@ -76,6 +79,9 @@ module.exports = (env, { mode }) => {
                     SHEET_ID_EXPENSES: JSON.stringify(sheet_id_expenses),
                     SHEET_ID_APPOINTMENTS: JSON.stringify(sheet_id_appointments),
                     SHEET_ID_SUPPLIERS: JSON.stringify(sheet_id_suppliers),
+                    SHEET_ID_SUPPLIERS_BANKS: JSON.stringify(sheet_id_suppliers_banks),
+                    SHEET_ID_SUPPLIERS_BASE: JSON.stringify(sheet_id_suppliers_base),
+                    SHEET_ID_LINK_PAYMENTS: JSON.stringify(sheet_id_link_payments),
                     CNPJ_URL: JSON.stringify(cnpj_url),
                     CNPJ_TOKEN: JSON.stringify(cnpj_token)
                 }
@@ -118,6 +124,9 @@ module.exports = (env, { mode }) => {
                     SHEET_ID_EXPENSES: JSON.stringify(process.env.SHEET_ID_EXPENSES),
                     SHEET_ID_APPOINTMENTS: JSON.stringify(process.env.SHEET_ID_APPOINTMENTS),
                     SHEET_ID_SUPPLIERS: JSON.stringify(process.env.SHEET_ID_SUPPLIERS),
+                    SHEET_ID_SUPPLIERS_BANKS: JSON.stringify(process.env.SHEET_ID_SUPPLIERS_BANKS),
+                    SHEET_ID_SUPPLIERS_BASE: JSON.stringify(process.env.SHEET_ID_SUPPLIERS_BASE),
+                    SHEET_ID_LINK_PAYMENTS: JSON.stringify(process.env.SHEET_ID_LINK_PAYMENTS),
                     CNPJ_URL: JSON.stringify(process.env.CNPJ_URL),
                     CNPJ_TOKEN: JSON.stringify(process.env.CNPJ_TOKEN)
                 }

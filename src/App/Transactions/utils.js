@@ -35,4 +35,31 @@ export const round = (num, places) => {
         return formatted.replace('R$', '').includes(',') ? formatted.replace('R$', '') : `${formatted.replace('R$', '')},00`;
     },
 
-    stringToFloat = (str) => parseFloat(str.replace(/[R$\.,]/g, '')) / 100;
+    stringToFloat = (str) => parseFloat(str.replace(/[R$\.,]/g, '')) / 100,
+    internalFormat = value => {
+        if (value) {
+            const valueString = `${value}`
+            if (valueString.match(/^0[0-9]{0,1}$|^[1-9]([0-9]?)+$/g)) {
+                const noFormat = (parseInt(value, 10) / 100).toFixed(2)
+                if (noFormat.length <= '6')
+                    return `R$${noFormat.replace('.', ',')}`
+                else {
+                    const [integer, decimal] = noFormat.split('.')
+                    const indexToSlice = integer.length - 3
+                    const format = [integer.slice(0, indexToSlice), integer.slice(indexToSlice)].join('.')
+                    return `R$${[format, decimal].join(',')}`
+                }
+            } else {
+                const noFormat = `${round(value, 2)}`
+                if (noFormat.length <= '7')
+                    return `R$${noFormat.replace('.', ',')}`
+                else {
+                    const [integer, decimal] = noFormat.split('.')
+                    const indexToSlice = integer.length - 3
+                    const format = [integer.slice(0, indexToSlice), integer.slice(indexToSlice)].join('.')
+                    return `R$${[format, decimal].join(',')}`
+                }
+            }
+        }
+        return ''
+    }
