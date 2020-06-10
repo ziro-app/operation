@@ -72,15 +72,6 @@ const cardForm = ({ installment, setInstallment, installments, discount, setDisc
                 disabled={bank.banco ? true : false}
             />
         } /> : <FormInput name='' label='' input={<></>} />,
-        paymentType === 'TED' ? <FormInput name='accountNumber' label='Número da Conta' input={
-            <InputText
-                value={accountNumber}
-                onChange={({ target: { value } }) => bank.conta ? () => null : setAccountNumber(value)}
-                placeholder='Ex.: 14637-8'
-                inputMode='numeric'
-                disabled={bank.conta ? true : false}
-            />
-        } /> : <FormInput name='' label='' input={<></>} />,
         paymentType === 'TED' ? <FormInput name='agency' label='Número da Agência' input={
             <InputText
                 value={agency}
@@ -88,6 +79,15 @@ const cardForm = ({ installment, setInstallment, installments, discount, setDisc
                 placeholder='Ex.: 1463-8'
                 inputMode='numeric'
                 disabled={bank.agencia ? true : false}
+            />
+        } /> : <FormInput name='' label='' input={<></>} />,
+        paymentType === 'TED' ? <FormInput name='accountNumber' label='Número da Conta' input={
+            <InputText
+                value={accountNumber}
+                onChange={({ target: { value } }) => bank.conta ? () => null : setAccountNumber(value)}
+                placeholder='Ex.: 14637-8'
+                inputMode='numeric'
+                disabled={bank.conta ? true : false}
             />
         } /> : <FormInput name='' label='' input={<></>} />
     ]
@@ -127,15 +127,6 @@ const tedForm = ({ hasCommission, setHasCommission, commissionValue, setCommissi
                 disabled={bank.banco ? true : false}
             />
         } />,
-        <FormInput name='accountNumber' label='Número da Conta' input={
-            <InputText
-                value={accountNumber}
-                onChange={({ target: { value } }) => bank.conta ? () => null : setAccountNumber(value)}
-                placeholder='Ex.: 14637-8'
-                inputMode='numeric'
-                disabled={bank.conta ? true : false}
-            />
-        } />,
         <FormInput name='agency' label='Número da Agência' input={
             <InputText
                 value={agency}
@@ -143,6 +134,15 @@ const tedForm = ({ hasCommission, setHasCommission, commissionValue, setCommissi
                 placeholder='Ex.: 1463-8'
                 inputMode='numeric'
                 disabled={bank.agencia ? true : false}
+            />
+        } />,
+        <FormInput name='accountNumber' label='Número da Conta' input={
+            <InputText
+                value={accountNumber}
+                onChange={({ target: { value } }) => bank.conta ? () => null : setAccountNumber(value)}
+                placeholder='Ex.: 14637-8'
+                inputMode='numeric'
+                disabled={bank.conta ? true : false}
             />
         } />,
         <FormInput name='hasCommission' label='Descontado comissão?' input={

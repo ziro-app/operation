@@ -35,6 +35,7 @@ const LinkRequest = () => {
     const [bankName, setBankName] = useState('')
     const [accountNumber, setAccountNumber] = useState('')
     const [agency, setAgency] = useState('')
+    const [note, setNote] = useState('')
 
     // DADOS DO CARTÃO
     const [installment, setInstallment] = useState('')
@@ -49,12 +50,12 @@ const LinkRequest = () => {
     const setState = {
         setTotalAmount, setType, setStoreowner, setStoreownerName, setSupplier, setSupplierName,
         setRomaneio, setFilename, setInstallment, setDiscount, setPaymentType, setBeneficiary, setBeneficiaryDocument,
-        setBankName, setAccountNumber, setAgency, setBanks, setBank, setHasCommission, setCommissionValue
+        setBankName, setAccountNumber, setAgency, setBanks, setBank, setHasCommission, setCommissionValue, setNote
     }
     const state = {
         totalAmount, type, storeowner, storeownerName, supplier, supplierName, romaneio,
         installment, installments, discount, paymentType, beneficiary, beneficiaryDocument, bankName,
-        accountNumber, agency, banks, bank, hasCommission, commissionValue, ...setState
+        accountNumber, agency, banks, bank, hasCommission, commissionValue, note, ...setState
     }
 
     const validations = [
@@ -160,6 +161,7 @@ const LinkRequest = () => {
         setAgency('')
         setHasCommission('')
         setCommissionValue('')
+        setNote('')
     }
 
     useEffect(() => fetch(setIsLoading, setIsError, setStoreowners, setBanks, setSuppliers), [])
@@ -299,6 +301,13 @@ const LinkRequest = () => {
                             filename={filename ? filename : ''}
                             setFilename={setFilename}
                             indexOfFile={0}
+                        />
+                    } />,
+                    <FormInput name='note' label='Observação' input={
+                        <InputText
+                            value={note}
+                            onChange={({ target: { value } }) => setNote(value)}
+                            placeholder='Observações sobre o link'
                         />
                     } />,
                     ...matchForm(state)
