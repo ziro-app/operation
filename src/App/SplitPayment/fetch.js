@@ -2,8 +2,30 @@ import currencyFormat from '@ziro/currency-format';
 import { db } from '../../Firebase/index';
 import matchStatusColor from '../Transactions/matchStatusColor';
 import { dateFormat } from '../Transactions/utils';
+import axios from 'axios';
+import set from '@babel/runtime/helpers/esm/set';
 
-const fetch = (transactionId, setTransaction, setError) => {
+const getSplitRules = async (transaction_id, setTransaction, transaction, setList) => {
+  try {
+    await axios
+      .get(`${process.env.PAY}/split-rules-get?transaction_id=${transaction_id}`, {
+        headers: {
+          Authorization: `Basic ${process.env.PAY_TOKEN}`,
+        },
+      })
+      .then(result => {
+        const { data } = result;
+        //console.log(data.items);
+        const splitItems = data.items;
+        setList(splitItems);
+      });
+  } catch (e) {
+    console.log(e);
+    console.log('erro na requisição para o get de split rules da zoop');
+  }
+};
+
+const fetch = (transactionId, setTransaction, setError, transaction, setList) => {
   const query = db.collection('credit-card-payments').doc(transactionId);
   const run = async () => {
     try {
@@ -66,6 +88,7 @@ const fetch = (transactionId, setTransaction, setError) => {
               receiptId,
             });
             setTransaction(paymentDoc[0]);
+            await getSplitRules(transactionZoopId, setTransaction, transaction, setList);
           } else {
             setError(true);
             //setLastDoc(null);

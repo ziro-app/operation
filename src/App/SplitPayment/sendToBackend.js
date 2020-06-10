@@ -15,6 +15,8 @@ const sendToBackend = (
   chargeValue,
   setAmount,
   setChargeTypeInput,
+  list,
+  setList,
 ) => () => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -29,7 +31,7 @@ const sendToBackend = (
           if (chargeType === 'Porcentagem')
             amountToSend = parseFloat(chargeValue.replace('R$', '').replace(',', '').replace('.', '')) * (amount / 100);
           else amountToSend = amount;
-          console.log(amountToSend);
+          //console.log(amountToSend);
           //return;
           //amountTransaction = amountTransaction.replace('R$', '').replace(',', '').replace('.', '')
           await axios
@@ -48,8 +50,18 @@ const sendToBackend = (
             )
             .then(result => {
               const { data } = result;
-              console.log(data);
+              let listToAdd = list;
+              listToAdd.push(data);
+              setList(listToAdd);
+              //console.log(listToAdd);
+              //console.log(list);
               const { status } = data;
+              /*
+              let cityRef = db.collection('cities').doc('DC');
+
+// Set the 'capital' field of the city
+let updateSingle = cityRef.update({capital: true});
+               */
               if (status === 'succeeded') {
                 /*transaction.status = 'Aprovado'
                                                 document.location.reload(true);*/
@@ -63,7 +75,7 @@ const sendToBackend = (
         } catch (e) {
           // console.log(e.response);
           //setValidationMessage('Um erro ocorreu, entre em contato com o TI!');
-          throw { msg: 'Regra já criada para esta transação', customError: true };
+          throw { msg: 'Valor das regras ultrapassa o da transação!', customError: true };
         }
       } else {
         throw { msg: 'Pagamento não encontrado', customError: true };

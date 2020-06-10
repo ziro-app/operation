@@ -12,8 +12,13 @@ import Dropdown from '@bit/vitorbarbosa19.ziro.dropdown';
 import { userContext } from '../appContext';
 import fetch from './fetch';
 import Header from '@bit/vitorbarbosa19.ziro.header';
-import { containerWithPadding } from '@ziro/theme';
+import { fontTitle, containerWithPadding } from '@ziro/theme';
 import numeral from 'numeral';
+import { modalContainer, modalLabel, spinner } from '../Transactions/TransactionDetails/styles';
+import Spinner from '@bit/vitorbarbosa19.ziro.spinner';
+import Button from '@bit/vitorbarbosa19.ziro.button';
+import Modal from '@bit/vitorbarbosa19.ziro.modal';
+import axios from 'axios';
 
 const SplitPayment = ({ transactionId }) => {
   const [on_behalf_of, setOn_behalf_of] = useState('');
@@ -30,6 +35,11 @@ const SplitPayment = ({ transactionId }) => {
   const [transaction, setTransaction] = useState({});
   const [maxInstallments, setMaxInstallments] = useState('');
   const [validationMessage, setValidationMessage] = useState('');
+  const [cancelModal, setCancelModal] = useState(false);
+  const [loadingButton, setLoadingButton] = useState(false);
+  const [splitData, setSplitData] = useState('');
+  const [list, setList] = React.useState([]);
+
   const validations = [
     {
       name: 'chargeType',
@@ -45,14 +55,14 @@ const SplitPayment = ({ transactionId }) => {
     },
     {
       name: 'charge',
-      validation: value => !!value,
-      value: charge,
+      validation: () => !!amount,
+      value: amount,
       message: 'Campo obrigatório',
     },
   ];
   useEffect(() => {
     if (transactionId) {
-      fetch(transactionId, setTransaction, setError);
+      fetch(transactionId, setTransaction, setError, transaction, setList);
     }
   }, [transactionId]);
   useEffect(() => {
@@ -61,6 +71,86 @@ const SplitPayment = ({ transactionId }) => {
 
   //if (isLoading) return <SpinnerWithDiv size="5rem" />;
   if (errorLoading) return <Error />;
+
+  const deleteSplit = async (id, item) => {
+    try {
+      setLoadingButton(true);
+      await axios
+        .delete(`${process.env.PAY}/split-rules-delete?transaction_id=${transaction.transactionZoopId}&id=${id}`, {
+          headers: {
+            Authorization: `Basic ${process.env.PAY_TOKEN}`,
+          },
+        })
+        .then(result => {
+          const { data } = result;
+          const listForRemove = list;
+
+          const index = list.indexOf(item);
+          console.log(index);
+          listForRemove.splice(index, 1);
+          setList(listForRemove);
+          console.log(listForRemove);
+          console.log(list);
+
+          //setList()
+          //setSplitData(data);
+          //const { status } = data;
+
+          setLoadingButton(false);
+          setCancelModal(false);
+          //document.location.reload(true);
+
+          // setError(true);
+          // setLocation('/recibo');
+        });
+    } catch (e) {
+      setLoadingButton(false);
+      // console.log(e.response);
+      console.log('erro na requisição para o cancelamento da zoop');
+      console.log(e);
+    }
+  };
+
+  const cancelSplit = async (transaction_id, on_behalf_of, amountBeforeConvert) => {
+    try {
+      const amount = amountBeforeConvert.replace('R$', '').replace(',', '').replace('.', '');
+      setLoadingButton(true);
+      await axios
+        .get(
+          `${process.env.PAY}/split-rules-get?transaction_id=${transaction_id}`,
+          {
+            transaction_id,
+            on_behalf_of,
+            amount,
+          },
+          {
+            headers: {
+              Authorization: `Basic ${process.env.PAY_TOKEN}`,
+            },
+          },
+        )
+        .then(result => {
+          setLoadingButton(false);
+          const { data } = result;
+          setSplitData(data);
+          //const { status } = data;
+
+          setCancelModal(false);
+          //document.location.reload(true);
+
+          // setError(true);
+          // setLocation('/recibo');
+        });
+    } catch (e) {
+      setLoadingButton(false);
+      // console.log(e.response);
+      console.log('erro na requisição para o cancelamento da zoop');
+      console.log(e.response.status);
+      if (e.response.status === 402) {
+        setValidationMessage('A transação já foi cancelada!');
+      }
+    }
+  };
 
   return (
     <div style={containerWithPadding}>
@@ -81,6 +171,8 @@ const SplitPayment = ({ transactionId }) => {
                   transaction.charge,
                   setAmount,
                   setChargeTypeInput,
+                  list,
+                  setList,
                 )
               : () => null
           }
@@ -153,6 +245,29 @@ const SplitPayment = ({ transactionId }) => {
             />,
           ]}
         />
+        <div style={{ alignItems: 'center' }}>
+          <ul>
+            {list.map(item => (
+              <li key={item.id}>
+                <div
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    flexDirection: 'row',
+                    paddingBottom: '10px',
+                    verticalAlign: 'middle',
+                    margin: '5px',
+                  }}
+                >
+                  <label style={{ fontFamily: fontTitle, width: '500px' }}>Cobrança:R${item.amount}</label>
+                  <Button submitting={loadingButton} type="button" cta="Remover" click={() => deleteSplit(item.id, item)} template="regular" />
+                </div>
+                <hr />
+              </li>
+            ))}
+          </ul>
+        </div>
       </motion.div>
     </div>
   );
