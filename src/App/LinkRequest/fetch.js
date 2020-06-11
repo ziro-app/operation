@@ -14,38 +14,8 @@ const fetch = (setIsLoading, setIsError, setStoreowners, setBanks, setSuppliers)
             data: {
                 apiResource: 'values',
                 apiMethod: 'get',
-                spreadsheetId: process.env.SHEET_STOREOWNERS_ID,
-                range: 'Base!K:K'
-            },
-            headers: {
-                'Authorization': process.env.SHEET_TOKEN,
-                'Content-Type': 'application/json'
-            },
-            cancelToken: source.token
-        }
-        const configBanks = {
-            method: 'POST',
-            url: process.env.SHEET_URL,
-            data: {
-                apiResource: 'values',
-                apiMethod: 'get',
-                spreadsheetId: process.env.SHEET_ID_SUPPLIERS_BANKS,
-                range: 'Dados Bancários'
-            },
-            headers: {
-                'Authorization': process.env.SHEET_TOKEN,
-                'Content-Type': 'application/json'
-            },
-            cancelToken: source.token
-        }
-        const configSuppliers = {
-            method: 'POST',
-            url: process.env.SHEET_URL,
-            data: {
-                apiResource: 'values',
-                apiMethod: 'get',
-                spreadsheetId: process.env.SHEET_ID_SUPPLIERS_BASE,
-                range: 'Consulta!A:A'
+                spreadsheetId: process.env.SHEET_ID_FETCH_LINK,
+                range: 'Fetch!A:H'
             },
             headers: {
                 'Authorization': process.env.SHEET_TOKEN,
@@ -54,34 +24,28 @@ const fetch = (setIsLoading, setIsError, setStoreowners, setBanks, setSuppliers)
             cancelToken: source.token
         }
         try {
-            const dataStoreowners = await axios(config)
-            const [, ...listStoreowners] = dataStoreowners.data.values
-            listStoreowners.map(storeowner => {
-                let store = Object.assign(Object.assign({ 'razao': storeowner[0] ? storeowner[0] : '', 'duplicate': reasonsStoreowners.includes(storeowner[0]) }))
-                reasonsStoreowners.push(storeowner[0])
-                storeowners.push(store)
-            })
-            setStoreowners(storeowners)
-
-            const dataBanks = await axios(configBanks)
-            const [, ...listBanks] = dataBanks.data.values
-            listBanks.map(bank => {
-                if (bank[6] && (bank[6] === 'ok' || bank[6] === 'Ok')) {
-                    let bankData = Object.assign({ 'fabricante': bank[0] ? bank[0] : '', 'banco': bank[1] ? bank[1] : '', 'agencia': bank[2] ? bank[2] : '', 'conta': bank[3] ? bank[3] : '', razao: bank[4] ? bank[4] : '', 'cnpj': bank[5] ? bank[5] : '' })
+            const data = await axios(config)
+            const [, ...list] = data.data.values
+            list.map(data => {
+                if (data[0]) {
+                    let store = Object.assign(Object.assign({ 'razao': data[0] ? data[0] : '', 'duplicate': reasonsStoreowners.includes(data[0]) }))
+                    reasonsStoreowners.push(data[0])
+                    storeowners.push(store)
+                }
+                if (data[1]) {
+                    let sup = Object.assign(Object.assign({ 'fabricante': data[1] ? data[1] : '', 'duplicate': suppliersNames.includes(data[1]) }))
+                    suppliersNames.push(data[1])
+                    suppliers.push(sup)
+                }
+                if (data[7] && data[7].toLowerCase().trim() === 'ok') {
+                    let bankData = Object.assign({ 'fabricante': data[1] ? data[1] : '', 'banco': data[2] ? data[2] : '', 'agencia': data[3] ? data[3] : '', 'conta': data[4] ? data[4] : '', razao: data[5] ? data[5] : '', 'cnpj': data[6] ? data[6] : '' })
                     banks.push(bankData)
                 }
             })
+
+            setStoreowners(storeowners)
             setBanks(banks)
-
-            const dataSuppliers = await axios(configSuppliers)
-            const [, ...listSuppliers] = dataSuppliers.data.values
-            listSuppliers.map(supplier => {
-                let sup = Object.assign(Object.assign({ 'fabricante': supplier[0] ? supplier[0] : '', 'duplicate': suppliersNames.includes(supplier[0]) }))
-                suppliersNames.push(supplier[0])
-                suppliers.push(sup)
-            })
             setSuppliers(suppliers)
-
         } catch (error) {
             if (error.response) console.log(error.response)
             else console.log(error)

@@ -38,14 +38,15 @@ const randStr = () => {
 const sendToBackend = state => () => {
     const { totalAmount, type, storeownerName, supplierName, romaneio,
         installment, discount, paymentType, beneficiary, beneficiaryDocument, bankName,
-        accountNumber, agency, setTotalAmount, setType, setStoreowner, setStoreownerName, setSupplier, setSupplierName,
+        accountNumber, agency, note, setTotalAmount, setType, setStoreowner, setStoreownerName, setSupplier, setSupplierName,
         setRomaneio, setFilename, setInstallment, setDiscount, setPaymentType, setBeneficiary, setBeneficiaryDocument,
-        setBankName, setAccountNumber, setAgency, setBank, setHasCommission, setCommissionValue } = state;
+        setBankName, setAccountNumber, setAgency, setBank, setHasCommission, setCommissionValue, setNote } = state;
     const linkValue = type === 'Cartão de Crédito' ? internalFormat(defineCardValue(state)) : internalFormat(defineTEDValue(state));
     const total = totalAmount ? internalFormat(totalAmount) : '';
     const doc = beneficiaryDocument.startsWith('0') ? `'${beneficiaryDocument}` : beneficiaryDocument;
     const agencia = agency.startsWith('0') ? `'${agency}` : agency;
     const conta = accountNumber.startsWith('0') ? `'${accountNumber}` : accountNumber;
+    const obs = note ? note.trim() : '';
     const url = process.env.SHEET_URL;
     const config = {
         headers: {
@@ -73,7 +74,7 @@ const sendToBackend = state => () => {
                         values: [
                             [formatDateUTC3(new Date()), storeownerName, supplierName, linkValue, total,
                                 installment, discount, paymentType, imgUrl, beneficiary, bankName, agencia,
-                                conta, doc]
+                                conta, doc, obs]
                         ]
                     },
                     valueInputOption: 'user_entered'
@@ -87,7 +88,7 @@ const sendToBackend = state => () => {
                     resource: {
                         values: [
                             [formatDateUTC3(new Date()), storeownerName, supplierName, total, linkValue,
-                                imgUrl, beneficiary, bankName, agencia, conta, doc]
+                                imgUrl, beneficiary, bankName, agencia, conta, doc, obs]
                         ]
                     },
                     valueInputOption: 'user_entered'
@@ -113,6 +114,7 @@ const sendToBackend = state => () => {
             setAgency('')
             setHasCommission('')
             setCommissionValue('')
+            setNote('')
             resolve('Link cadastrado com sucesso.')
         } catch (error) {
             if (error.customError) reject(error)
