@@ -33,6 +33,7 @@ const fetch = (transactionId, setTransaction, setError) => {
             } = snapshot.data();
             const chargeFormatted = currencyFormat(charge);
             const dateFormatted = date ? dateFormat(date) : '';
+            const dateLinkCreatedFormatted = dateLinkCreated ? dateFormat(dateLinkCreated) : '';
 
             /*const dateFormatted = new Date(date.seconds * 1000)
                                 .toLocaleDateString("pt-br", {
@@ -46,7 +47,7 @@ const fetch = (transactionId, setTransaction, setError) => {
               transactionZoopId: transactionZoopId ? transactionZoopId : '',
               transactionId: snapshot.id,
               charge: chargeFormatted,
-              dateLinkCreated,
+              dateLinkCreated: dateLinkCreatedFormatted,
               date: dateFormatted,
               fees: fees ? fees : '',
               installments: installments ? installments : '',

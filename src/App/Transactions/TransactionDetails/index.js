@@ -36,7 +36,7 @@ const TransactionDetails = ({ transactions, transactionId }) => {
   const [captureModal, setCaptureModal] = useState(false);
   const [splitTransactionModal, setSplitTransactionModal] = useState(false);
   const textAreaRef = useRef(null);
-  const paymentLink = `https://ziro.app/transacao?doc=${transactionId}`;
+  const paymentLink = `https://ziro.app/pagamento/${transactionId}/escolher-cartao`;
   const [blocksStoreowner, setBlocksStoreowner] = useState([]);
   const [validationMessage, setValidationMessage] = useState('');
   const [loadingButton, setLoadingButton] = useState(false);
@@ -292,6 +292,10 @@ const TransactionDetails = ({ transactions, transactionId }) => {
                       {
                         title: 'Data',
                         content: transaction.date ? `${transaction.date}` : '-',
+                      },
+                      {
+                        title: 'Data de criação do link',
+                        content: transaction.dateLinkCreated ? `${transaction.dateLinkCreated}` : '-',
                       },
                       {
                         title: 'Status',

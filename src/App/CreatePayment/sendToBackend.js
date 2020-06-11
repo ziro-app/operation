@@ -3,7 +3,7 @@ import { db } from '../../Firebase/index';
 const sendToBackend = state => () => {
   const { nickname, seller, sellerId, charge, maxInstallments, setFantasy, setCharge, setMaxInstallments } = state;
   const nome = nickname ? nickname.trim() : '';
-  const baseUrl = 'https://ziro.app/transacao?doc=';
+  const baseUrl = 'https://ziro.app/pagamento/';
   return new Promise(async (resolve, reject) => {
     try {
       if (nome === 'Uiller' || nome === 'Vitor') {
@@ -18,7 +18,7 @@ const sendToBackend = state => () => {
           });
           try {
             const doc = await docRef.get();
-            if (doc) await navigator.clipboard.writeText(`${baseUrl}${doc.id}`);
+            if (doc) await navigator.clipboard.writeText(`${baseUrl}${doc.id}/escolher-cartao`);
           } catch (error) {
             throw { msg: 'Erro ao realizar a cópia', copyError: true };
           }
