@@ -20,6 +20,24 @@ export const Menu = ({ title, children }) => {
           userdata={cpf ? `CPF: ${cpf}` : ''}
           options={[
             {
+              path: '/pedidos',
+              onClick: () => setIsOpen(false),
+              icon: <Icon type="cart" size={15} strokeWidth={2} />,
+              text: 'Pedidos',
+            },
+            {
+              path: '/transacoes',
+              onClick: () => setIsOpen(false),
+              icon: <Icon type="card" size={15} strokeWidth={2} />,
+              text: 'Transações',
+            },
+            {
+              path: 'criar-pagamento',
+              onClick: () => setIsOpen(false),
+              icon: <Icon type="money" size={15} strokeWidth={2} />,
+              text: 'Criar link',
+            },
+            {
               path: '/administrativo',
               onClick: () => setIsOpen(false),
               icon: <Icon type="file" size={15} strokeWidth={2} />,
@@ -30,12 +48,6 @@ export const Menu = ({ title, children }) => {
               onClick: () => setIsOpen(false),
               icon: <Icon type="shopping" size={15} strokeWidth={2} />,
               text: 'Assessoria',
-            },
-            {
-              path: '/transacoes',
-              onClick: () => setIsOpen(false),
-              icon: <Icon type="card" size={15} strokeWidth={2} />,
-              text: 'Transações',
             },
             {
               path: '/logistica',

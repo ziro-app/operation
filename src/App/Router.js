@@ -97,9 +97,6 @@ const Router = ({ isLogged }) => {
                             ['Atualizar Fabricantes', '/atualizar-fabricantes'],
                             ['Lojista: Cadastrar', '/cadastrar-lojista'],
                             ['Lojista: Ver/Editar', '/visualizar-lojista'],
-                            ['Lojista: Pedidos', '/pedidos'],
-                            //['Lojista: Transações', '/transacoes'],
-                            ['Lojista: Criar pagamento', 'criar-pagamento'],
                             ['Afiliado: Cadastrar', '/cadastrar-afiliado'],
                             ['Afiliado: Ver/Editar', '/visualizar-afiliado'],
                         ]}

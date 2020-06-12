@@ -25,7 +25,7 @@ const SplitPayment = ({ transactionId }) => {
   const [amountTransaction, setAmountTransaction] = useState('');
   const [amount, setAmount] = useState('');
   const [error, setError] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [errorLoading, setErrorLoading] = useState(false);
   const [suppliers, setSuppliers] = useState([]);
   const [chargeTypes, setChargeTypes] = useState([]);
@@ -62,7 +62,7 @@ const SplitPayment = ({ transactionId }) => {
   ];
   useEffect(() => {
     if (transactionId) {
-      fetch(transactionId, setTransaction, setError, transaction, setList);
+      fetch(transactionId, setTransaction, setError, transaction, setList,setIsLoading);
     }
   }, [transactionId]);
   useEffect(() => {
@@ -245,29 +245,33 @@ const SplitPayment = ({ transactionId }) => {
             />,
           ]}
         />
-        <div style={{ alignItems: 'center' }}>
-          <ul>
-            {list.map(item => (
-              <li key={item.id}>
-                <div
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    flexDirection: 'row',
-                    paddingBottom: '10px',
-                    verticalAlign: 'middle',
-                    margin: '5px',
-                  }}
-                >
-                  <label style={{ fontFamily: fontTitle, width: '500px' }}>Cobrança:R${item.amount}</label>
-                  <Button submitting={loadingButton} type="button" cta="Remover" click={() => deleteSplit(item.id, item)} template="regular" />
-                </div>
-                <hr />
-              </li>
-            ))}
-          </ul>
-        </div>
+        {isLoading ? (
+          <SpinnerWithDiv size="5rem" />
+        ) : (
+          <div style={{ alignItems: 'center' }}>
+            <ul>
+              {list.map(item => (
+                <li key={item.id}>
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      flexDirection: 'row',
+                      paddingBottom: '10px',
+                      verticalAlign: 'middle',
+                      margin: '5px',
+                    }}
+                  >
+                    <label style={{ fontFamily: fontTitle, width: '500px' }}>Cobrança:R${item.amount}</label>
+                    <Button submitting={loadingButton} type="button" cta="Remover" click={() => deleteSplit(item.id, item)} template="regular" />
+                  </div>
+                  <hr />
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
       </motion.div>
     </div>
   );

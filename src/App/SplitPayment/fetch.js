@@ -5,8 +5,9 @@ import { dateFormat } from '../Transactions/utils';
 import axios from 'axios';
 import set from '@babel/runtime/helpers/esm/set';
 
-const getSplitRules = async (transaction_id, setTransaction, transaction, setList) => {
+const getSplitRules = async (transaction_id, setTransaction, transaction, setList, setIsLoading) => {
   try {
+    setIsLoading(true);
     await axios
       .get(`${process.env.PAY}/split-rules-get?transaction_id=${transaction_id}`, {
         headers: {
@@ -18,14 +19,16 @@ const getSplitRules = async (transaction_id, setTransaction, transaction, setLis
         //console.log(data.items);
         const splitItems = data.items;
         setList(splitItems);
+        setIsLoading(false);
       });
   } catch (e) {
     console.log(e);
     console.log('erro na requisição para o get de split rules da zoop');
+    setIsLoading(false);
   }
 };
 
-const fetch = (transactionId, setTransaction, setError, transaction, setList) => {
+const fetch = (transactionId, setTransaction, setError, transaction, setList, setIsLoading) => {
   const query = db.collection('credit-card-payments').doc(transactionId);
   const run = async () => {
     try {
@@ -88,7 +91,7 @@ const fetch = (transactionId, setTransaction, setError, transaction, setList) =>
               receiptId,
             });
             setTransaction(paymentDoc[0]);
-            await getSplitRules(transactionZoopId, setTransaction, transaction, setList);
+            await getSplitRules(transactionZoopId, setTransaction, transaction, setList, setIsLoading);
           } else {
             setError(true);
             //setLastDoc(null);

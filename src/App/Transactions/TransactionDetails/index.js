@@ -290,7 +290,7 @@ const TransactionDetails = ({ transactions, transactionId }) => {
                         content: transaction.installments ? `${transaction.installments}x` : '-',
                       },
                       {
-                        title: 'Data',
+                        title: 'Data de pagamento',
                         content: transaction.date ? `${transaction.date}` : '-',
                       },
                       {
