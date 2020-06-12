@@ -4,6 +4,7 @@ import InputText from '@bit/vitorbarbosa19.ziro.input-text'
 import Dropdown from '@bit/vitorbarbosa19.ziro.dropdown'
 import capitalize from '@ziro/capitalize'
 import maskInput from '@ziro/mask-input'
+import banksList from '../utils/banks'
 
 const cardForm = ({ installment, setInstallment, installments, discount, setDiscount, paymentType, setPaymentType, bank, bankName, setBankName, accountNumber, setAccountNumber, agency, setAgency, beneficiary, setBeneficiary, beneficiaryDocument, setBeneficiaryDocument }) => {
     const fields = [
@@ -64,12 +65,14 @@ const cardForm = ({ installment, setInstallment, installments, discount, setDisc
                 disabled={bank.cnpj ? true : false}
             />
         } /> : <FormInput name='' label='' input={<></>} />,
-        paymentType === 'TED' ? <FormInput name='bankName' label='Nome do Banco' input={
-            <InputText
+        paymentType === 'TED' ? <FormInput name='bankName' label='Banco' input={
+            <Dropdown
                 value={bankName}
-                onChange={({ target: { value } }) => bank.banco ? () => null : setBankName(value.toUpperCase())}
-                placeholder='Ex.: BANCO DO BRASIL'
-                disabled={bank.banco ? true : false}
+                onChange={({ target: { value } }) => bank.banco ? () => null : setBankName(value)}
+                onChangeKeyboard={element => bank.banco ? () => null : element.value ? setBankName(element.value) : null}
+                submitting={bank.banco ? true : false}
+                list={banksList.map(bank => bank.split(' - ')[1])}
+                placeholder='Ex.: Banco do Brasil'
             />
         } /> : <FormInput name='' label='' input={<></>} />,
         paymentType === 'TED' ? <FormInput name='agency' label='Número da Agência' input={
@@ -119,12 +122,14 @@ const tedForm = ({ hasCommission, setHasCommission, commissionValue, setCommissi
                 disabled={bank.cnpj ? true : false}
             />
         } />,
-        <FormInput name='bankName' label='Nome do Banco' input={
-            <InputText
+        <FormInput name='bankName' label='Banco' input={
+            <Dropdown
                 value={bankName}
-                onChange={({ target: { value } }) => bank.banco ? () => null : setBankName(value.toUpperCase())}
-                placeholder='Ex.: BANCO DO BRASIL'
-                disabled={bank.banco ? true : false}
+                onChange={({ target: { value } }) => bank.banco ? () => null : setBankName(value)}
+                onChangeKeyboard={element => bank.banco ? () => null : element.value ? setBankName(element.value) : null}
+                submitting={bank.banco ? true : false}
+                list={banksList.map(bank => bank.split(' - ')[1])}
+                placeholder='Ex.: Banco do Brasil'
             />
         } />,
         <FormInput name='agency' label='Número da Agência' input={

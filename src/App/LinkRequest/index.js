@@ -9,6 +9,7 @@ import InputText from '@bit/vitorbarbosa19.ziro.input-text'
 import maskInput from '@ziro/mask-input'
 import currencyFormat from '@ziro/currency-format'
 import SingleImageUpload from '../SingleImageUpload/index'
+import banksList from '../utils/banks'
 import fetch from './fetch'
 import sendToBackend from './sendToBackend'
 import matchForm from './matchForm'
@@ -111,9 +112,9 @@ const LinkRequest = () => {
             message: 'Documento inválido'
         }, {
             name: 'bankName',
-            validation: value => (type === 'TED' || paymentType === 'TED') ? !!value : true,
+            validation: value => (type === 'TED' || paymentType === 'TED') ? bank.banco ? true : banksList.find(bank => bank.split(' - ')[1] === value) !== undefined : true,
             value: bankName,
-            message: 'Campo obrigatório'
+            message: 'Banco inválido'
         }, {
             name: 'accountNumber',
             validation: value => (type === 'TED' || paymentType === 'TED') ? !!value : true,

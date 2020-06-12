@@ -1,17 +1,19 @@
 import { db } from '../../Firebase/index'
 import { post } from 'axios'
 import { formatDateUTC3 } from '@ziro/format-date-utc3'
+import maskInput from '@ziro/mask-input'
 
 const sendToBackend = state => () => {
     const cnpjInCollection = []
-    const { affiliateName, affiliateCpf, advisor, salesman, fname, lname, rg, cpf, birth, insta, cnpj, ie, razao, fantasia,
-        rua, numero, complemento, bairro, cep, cidade, estado, fone, whats, email, setSearchedName, setAffiliateName, setAffiliateCpf, setFname, setLname, setRg, setCpf,
-        setAdvisor, setSalesman, setBirth, setInsta, setCnpj, setIe, setRazao, setFantasia, setRua, setNumero, setComplemento, setBairro,
-        setCep, setCidade, setEstado, setFone, setWhats, setEmail, cnpjValid } = state
+    const { affiliateName, affiliateCpf, advisor, salesman, fname, lname, rg, cpf, birth, insta, cnpj, ie, reason, fantasia,
+        street, number, complement, neighborhood, cep, city, cityState, fone, whats, email, setSearchedName, setAffiliateName, setAffiliateCpf, setFname, setLname, setRg, setCpf,
+        setAdvisor, setSalesman, setBirth, setInsta, setCnpj, setIe, setReason, setFantasia, setStreet, setNumber, setComplement, setNeighborhood,
+        setCep, setCity, setCityState, setFone, setWhats, setEmail, cnpjValid } = state
     const instaTrim = insta ? insta.replace('@', '').trim().toLowerCase() : ''
     const fnameTrim = fname ? fname.trim() : ''
     const lnameTrim = lname ? lname.trim() : ''
     const nomeAfiliado = affiliateName.split(' - ')[1] ? affiliateName.split(' - ')[1] : 'NENHUM'
+    const formattedCep = cep? maskInput(cep, '##.###-###', true) : ''
     const today = new Date()
     const url = process.env.SHEET_URL
     const config = {
@@ -49,13 +51,13 @@ const sendToBackend = state => () => {
                             instagram: instaTrim,
                             cnpj,
                             ie,
-                            razao,
+                            razao: reason,
                             fantasia,
-                            endereco: complemento ? `${rua}, ${numero}, ${complemento}` : `${rua}, ${numero}`,
-                            bairro,
-                            cep,
-                            cidade,
-                            estado,
+                            endereco: complement ? `${street}, ${number}, ${complement}` : `${street}, ${number}`,
+                            bairro: neighborhood,
+                            cep: formattedCep,
+                            cidade: city,
+                            estado: cityState,
                             fone,
                             whatsapp: whats,
                             email: oldEmail ? oldEmail : email.toLowerCase(),
@@ -75,13 +77,13 @@ const sendToBackend = state => () => {
                             instagram: instaTrim,
                             cnpj,
                             ie,
-                            razao,
+                            razao: reason,
                             fantasia,
-                            endereco: complemento ? `${rua}, ${numero}, ${complemento}` : `${rua}, ${numero}`,
-                            bairro,
-                            cep,
-                            cidade,
-                            estado,
+                            endereco: complement ? `${street}, ${number}, ${complement}` : `${street}, ${number}`,
+                            bairro: neighborhood,
+                            cep: formattedCep,
+                            cidade: city,
+                            estado: cityState,
                             fone,
                             whatsapp: whats,
                             email: email.toLowerCase(),
@@ -97,8 +99,8 @@ const sendToBackend = state => () => {
                         resource: {
                             values: [
                                 [formatDateUTC3(today), `${fnameTrim} ${lnameTrim}`, whats, oldEmail ? oldEmail : email.toLowerCase(), rg, cpf, birth, instaTrim,
-                                    cnpj, ie, razao, fantasia, complemento ? `${rua}, ${numero}, ${complemento}` : `${rua}, ${numero}`, bairro, cep, cidade,
-                                    estado, fone, nomeAfiliado, affiliateCpf, advisor, salesman, 'NENHUM']
+                                    cnpj, ie, reason, fantasia, complement ? `${street}, ${number}, ${complement}` : `${street}, ${number}`, neighborhood, formattedCep, city,
+                                    cityState, fone, nomeAfiliado, affiliateCpf, advisor, salesman, 'NENHUM']
                             ]
                         },
                         valueInputOption: 'user_entered'
@@ -115,15 +117,15 @@ const sendToBackend = state => () => {
                     setInsta('')
                     setCnpj('')
                     setIe('')
-                    setRazao('')
+                    setReason('')
                     setFantasia('')
-                    setRua('')
-                    setNumero('')
-                    setComplemento('')
-                    setBairro('')
+                    setStreet('')
+                    setNumber('')
+                    setComplement('')
+                    setNeighborhood('')
                     setCep('')
-                    setCidade('')
-                    setEstado('')
+                    setCity('')
+                    setCityState('')
                     setFone('')
                     setWhats('')
                     setEmail('')
