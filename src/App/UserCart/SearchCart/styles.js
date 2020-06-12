@@ -1,4 +1,4 @@
-import { primaryColor, secondaryColor, grayColor3, fontTitle } from '@ziro/theme'
+import { primaryColor, secondaryColor, grayColor1, grayColor2, grayColor3, fontTitle } from '@ziro/theme'
 
 export const
 
@@ -35,6 +35,16 @@ card = {
 dot = {
     fontSize: '21px',
     color: secondaryColor
+},
+
+brandName = {
+    fontSize: '1.2rem'
+},
+
+timestamp = {
+    fontSize: '1.2rem',
+    fontWeight: '500',
+    color: grayColor2
 },
 
 bubble = {

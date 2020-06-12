@@ -11,7 +11,8 @@ brandName = {
     marginBottom: '-20px',
     padding: '10px 0',
     fontFamily: fontTitle,
-    fontSize: '20px'
+    fontSize: '20px',
+    textAlign: 'center'
 },
 
 cardBlock = {
@@ -96,6 +97,16 @@ button = {
     textAlign: 'center',
     background: gradient,
     boxShadow: `0px 3px 12px -3px rgba(34,34,34,0.65)`
+},
+
+buttonDownload = {
+    ...button,
+    maxWidth: 'none',
+    height: 'none',
+    margin: '0',
+    padding: '10px 0px',
+    fontSize: '1.5rem',
+    boxShadow: `0px 3px 12px -2px rgba(34,34,34,0.65)`
 },
 
 card = {

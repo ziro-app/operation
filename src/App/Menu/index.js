@@ -35,7 +35,7 @@ export const Menu = ({ title, children }) => {
               path: 'criar-pagamento',
               onClick: () => setIsOpen(false),
               icon: <Icon type="money" size={15} strokeWidth={2} />,
-              text: 'Criar link',
+              text: 'Criar Cobrança',
             },
             {
               path: '/administrativo',

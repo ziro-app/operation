@@ -6,7 +6,7 @@ import JSZip from "jszip";
 import Header from "@bit/vitorbarbosa19.ziro.header";
 import Spinner from "@bit/vitorbarbosa19.ziro.spinner-with-div";
 import Button from "@bit/vitorbarbosa19.ziro.button";
-import { brandCart, brandName } from "./styles";
+import { brandCart, brandName, buttonDownload } from "./styles";
 import Card from "./card";
 import currencyFormat from "@ziro/currency-format";
 import { summary, saleSummary, total, priceTotal } from "./styles_catalog";
@@ -98,8 +98,9 @@ export default ({
                 <label style={brandName}>{cart.brandName}</label>
                 <Button
                     type="button"
-                    cta="Fazer download"
+                    cta="Fazer download fotos"
                     click={downloadAllImages}
+                    style={buttonDownload}
                 />
                 {productIds.map((productId) => (
                     <Card
