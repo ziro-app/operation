@@ -36,7 +36,7 @@ const TransactionDetails = ({ transactions, transactionId }) => {
   const [captureModal, setCaptureModal] = useState(false);
   const [splitTransactionModal, setSplitTransactionModal] = useState(false);
   const textAreaRef = useRef(null);
-  const paymentLink = `https://ziro.app/pagamento/${transactionId}/escolher-cartao`;
+  const paymentLink = `https://ziro.app/pagamento/${transactionId}/escolher-cartao?doc`;
   const [blocksStoreowner, setBlocksStoreowner] = useState([]);
   const [validationMessage, setValidationMessage] = useState('');
   const [loadingButton, setLoadingButton] = useState(false);
