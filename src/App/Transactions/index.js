@@ -72,18 +72,11 @@ const Transactions = ({ transactionId, receivableId, carts, storeowners, setQuer
     const listSellers = listSellersForFilter;
     return (
         <Menu title="Transações">
-            <div
-                style={{
-                    display: 'grid',
-                    gridGap: '5px',
-                    padding: '10px 0px 20px 0px',
-                    marginBottom: '10px',
-                }}
-            >
+            <div style={{ display: 'grid', gridGap: '8px', marginBottom: '40px' }}>
                 <Dropdown
                     value={sellerFilter || ''}
                     list={listSellers}
-                    placeholder="Filtrar vendedor"
+                    placeholder="Filtrar fabricante"
                     onChange={({ target: { value } }) => setSellerFilter(value)}
                     onChangeKeyboard={e => e && setSellerFilter(e.value)}
                 />

@@ -51,7 +51,7 @@ const CreatePayment = () => {
   if (errorLoading) return <Error />;
 
   return (
-    <Menu title="Criar Pagamento">
+    <Menu title="Criar Cobrança">
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
         <Form
           validations={validations}

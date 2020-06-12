@@ -3,8 +3,8 @@ import Header from '@bit/vitorbarbosa19.ziro.header';
 import Icon from '@bit/vitorbarbosa19.ziro.icon';
 import Dropdown from '@bit/vitorbarbosa19.ziro.dropdown';
 import { motion } from 'framer-motion';
-import { cart, statusBlock, statusName, card, dot, bubble } from './styles';
-import { containerWithPadding } from '@ziro/theme';
+import { cart, statusBlock, statusName, card, brandName, timestamp, dot, bubble } from './styles';
+import { container } from '@ziro/theme';
 import { prepareStatusForConsume, prepareStoreownersForConsume, prepareSellersToConsume, prepareCartsForConsume } from '../utils';
 import { useQuery } from './useQuery';
 import { useLocation } from 'wouter';
@@ -51,29 +51,19 @@ export default ({ carts, storeowners, setQueryStr }) => {
 
   return (
     <Menu title="Pedidos">
-      <div style={containerWithPadding}>
-        <div
-          style={{
-            display: 'grid',
-            gridGap: '5px',
-            padding: '10px 0px 20px 0px',
-            borderTop: '2px solid black',
-            borderBottom: '2px solid black',
-            marginBottom: '20px',
-          }}
-        >
-          <label>Filtrar:</label>
+      <div style={container}>
+        <div style={{ display: 'grid', gridGap: '8px', marginBottom: '40px' }}>
           <Dropdown
             value={seller || ''}
             list={_sellers.options}
-            placeholder="Vendedor"
+            placeholder="Filtrar fabricante"
             onChange={({ target: { value } }) => setSeller(value)}
             onChangeKeyboard={e => e && setSeller(e.value)}
           />
           <Dropdown
             value={bufferStatus || ''}
             list={_status.options.PT}
-            placeholder="Status"
+            placeholder="Filtrar status"
             onChange={({ target: { value } }) =>
               !value || _status.convert.PTtoEN[value] ? setStatus(_status.convert.PTtoEN[value]) : setBufferStatus(value)
             }
@@ -82,7 +72,7 @@ export default ({ carts, storeowners, setQueryStr }) => {
           <Dropdown
             value={bufferRazao || ''}
             list={_storeowners.options.razoes}
-            placeholder="Comprador"
+            placeholder="Filtrar lojista"
             onChange={({ target: { value } }) =>
               !value || _storeowners.convert.RazaoToId[value] ? setStoreownerId(_storeowners.convert.RazaoToId[value]) : setBufferRazao(value)
             }
@@ -107,9 +97,9 @@ export default ({ carts, storeowners, setQueryStr }) => {
                       {_storeowners.convert.IdToRazao[cart.storeownerId]}
                       <span style={dot}>.</span>
                     </label>
-                    <label style={{ fontSize: 10, color: 'grey' }}>{cart.brandName}</label>
-                    <label style={{ fontSize: 10, color: 'grey' }}>
-                      {cart.lastUpdate ? `Atualizado em: ${cart.lastUpdate}` : `Adcionado em: ${cart.added}`}
+                    <label style={brandName}>{cart.brandName}</label>
+                    <label style={timestamp}>
+                      {cart.lastUpdate ? `Atualizado ${cart.lastUpdate}` : `Adicionado ${cart.added}`}
                     </label>
                   </div>
                   <div style={bubble}>{cart.productIds?.length || '0'}</div>

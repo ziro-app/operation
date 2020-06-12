@@ -91,10 +91,10 @@ const Router = ({ isLogged }) => {
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
           <Submenu
             options={[
+              ['Catalogo: Upload de imagens', 'upload-imagem'],
+              ['Catalogo: Atualizar Fabricantes', '/atualizar-fabricantes'],
               ['Boletos: Cadastrar', 'cadastrar-boleto'],
-              ['Boletos: Upload', 'upload-boleto'],
-              ['Upload de imagens', 'upload-imagem'],
-              ['Atualizar Fabricantes', '/atualizar-fabricantes'],
+              ['Boletos: Upload foto', 'upload-boleto'],
               ['Lojista: Cadastrar', '/cadastrar-lojista'],
               ['Lojista: Ver/Editar', '/visualizar-lojista'],
               ['Afiliado: Cadastrar', '/cadastrar-afiliado'],
