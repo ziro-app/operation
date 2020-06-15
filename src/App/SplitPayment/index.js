@@ -45,7 +45,7 @@ const SplitPayment = ({ transactionId }) => {
       name: 'chargeType',
       validation: value => chargeTypes.includes(value),
       value: chargeTypeInput,
-      message: 'Selecione uma das opções de cobrança!',
+      message: 'Campo obrigatório',
     },
     {
       name: 'charge',
@@ -68,7 +68,9 @@ const SplitPayment = ({ transactionId }) => {
   useEffect(() => {
     setChargeTypes(['Porcentagem', 'Valor']);
   }, []);
-
+  useEffect(() => {
+    setAmount('')
+  }, [chargeTypeInput])
   //if (isLoading) return <SpinnerWithDiv size="5rem" />;
   if (errorLoading) return <Error />;
 
@@ -155,7 +157,7 @@ const SplitPayment = ({ transactionId }) => {
   return (
     <div style={containerWithPadding}>
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-        <Header type="icon-link" title="Cobrança na divisão" navigateTo={`transacoes/${transactionId}`} icon="back" />
+        <Header type="icon-link" title="Cobrar via divisão" navigateTo={`transacoes/${transactionId}`} icon="back" />
         <Form
           validations={validations}
           sendToBackend={
@@ -182,6 +184,7 @@ const SplitPayment = ({ transactionId }) => {
               label="Cobrança em"
               input={
                 <Dropdown
+                  readOnly={true}
                   value={chargeTypeInput}
                   onChange={({ target: { value } }) => {
                     setChargeTypeInput(value);
@@ -217,16 +220,18 @@ const SplitPayment = ({ transactionId }) => {
               input={
                 chargeType === 'Porcentagem' ? (
                   <InputText
-                    value={amount.length === 2 ? `${amount}%` : amount}
+                    value={amount ? `% ${currencyFormat(amount).replace(/[R$]/g, '')}` : amount}
                     onChange={({ target: { value } }) => {
-                      const toInteger = parseInt(value);
-                      //const transactionAmount = parseInt(transaction.charge.replace('R$', '').replace(',', '').replace('.', ''));
-                      if (toInteger > 100) setValidationMessage('O valor não pode ser maior que o da transação!');
-                      else if (toInteger < 0) setValidationMessage('O valor não pode ser menor que o da transação!');
-                      else setValidationMessage('');
-                      return setAmount(maskInput(toInteger, '###', true));
+                      // const toInteger = parseInt(value);
+                      // if (toInteger > 100) setValidationMessage('Valor deve ser menor que o da transação');
+                      // else if (toInteger < 0) setValidationMessage('O valor não pode ser menor que o da transação!');
+                      // else setValidationMessage('');)
+                      const toInteger = parseInt(value.replace(/[\.,\s%]/g, ''), 10);
+                      if (toInteger > 10000) return setAmount(10000)
+                      return setAmount(maskInput(toInteger, '#####', true));
                     }}
-                    placeholder="20%"
+                    placeholder="% 20"
+                    inputMode='numeric'
                   />
                 ) : (
                   <InputText
@@ -234,11 +239,12 @@ const SplitPayment = ({ transactionId }) => {
                     onChange={({ target: { value } }) => {
                       const toInteger = parseInt(value.replace(/[R$\.,]/g, ''), 10);
                       const transactionAmount = parseInt(transaction.charge.replace('R$', '').replace(',', '').replace('.', ''));
-                      if (toInteger > transactionAmount) setValidationMessage('O valor não pode ser maior que o da transação!');
+                      if (toInteger > transactionAmount) setValidationMessage('Valor deve ser menor que o da transação');
                       else setValidationMessage('');
                       return setAmount(maskInput(toInteger, '#######', true));
                     }}
                     placeholder="R$1.299,99"
+                    inputMode='numeric'
                   />
                 )
               }

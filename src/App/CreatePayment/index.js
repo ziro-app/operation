@@ -100,6 +100,7 @@ const CreatePayment = () => {
                     return setCharge(maskInput(toInteger, '#######', true));
                   }}
                   placeholder="R$1.299,99"
+                  inputMode='numeric'
                 />
               }
             />,
@@ -111,6 +112,7 @@ const CreatePayment = () => {
                   value={maxInstallments}
                   onChange={({ target: { value } }) => setMaxInstallments(maskInput(value, '##', true))}
                   placeholder="10"
+                  inputMode='numeric'
                 />
               }
             />,
