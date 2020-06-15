@@ -16,7 +16,7 @@ import currencyFormat from '@ziro/currency-format';
 import { alertColor, containerWithPadding, successColor } from '@ziro/theme';
 import { db } from '../../../Firebase/index';
 import { dateFormat, parcelFormat, round, stringToFloat } from '../utils';
-import { buttonContainer, custom, illustrationContainer, modalContainer, modalLabel, spinner } from './styles';
+import { buttonContainer, custom, illustrationContainer, modalContainer, modalLabel, spinner, btn, btnRed } from './styles';
 import maskInput from '@ziro/mask-input';
 import fetch from './fetch';
 
@@ -85,7 +85,7 @@ const TransactionDetails = ({ transactions, transactionId }) => {
       setSplitTransactionModal(false);
     } catch (e) {
       // console.log(e.response);
-      setValidationMessage('Um erro ocorreu, entre em contato com o TI!');
+      setValidationMessage('Ocorreu um erro, contate suporte');
       console.log('erro na requisição para a divisão da zoop');
       console.log(e.response.status);
       setLoadingButton(false);
@@ -135,7 +135,7 @@ const TransactionDetails = ({ transactions, transactionId }) => {
     } catch (e) {
       setLoadingButton(false);
       // console.log(e.response);
-      setValidationMessage('Um erro ocorreu, entre em contato com o TI!');
+      setValidationMessage('Ocorreu um erro, contate suporte');
       console.log('erro na requisição para a captação da zoop');
       console.log(e.response.status);
     }
@@ -180,6 +180,7 @@ const TransactionDetails = ({ transactions, transactionId }) => {
       if (e.response.status === 402) {
         setValidationMessage('A transação já foi cancelada!');
       }
+      else setValidationMessage('Ocorreu um erro, contate suporte')
     }
   };
 
@@ -443,151 +444,112 @@ const TransactionDetails = ({ transactions, transactionId }) => {
         }}
       />
     );
+  const isApproved = transaction.status === 'Aprovado' || transaction.status === 'Pago' || transaction.status === 'Pré Autorizado'
+  const isCanceled = transaction.status === 'Cancelado' || transaction.status === 'Falhado'
+  const isWaiting = transaction.status === 'Aguardando Pagamento' || transaction.status === 'Aprovação Pendente'
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={containerWithPadding}>
       <input type="text" style={{ position: 'absolute', left: '-9999px' }} value={paymentLink} ref={textAreaRef} readOnly />
       <Header type="icon-link" title="Detalhes da venda" navigateTo="transacoes" icon="back" />
-
-      <div style={{ display: 'grid', gridRowGap: '40px' }}>
-        <Details blocks={blocksStoreowner} />
-
-        <div style={buttonContainer}>
-          {transaction.status === 'Pré Autorizado' && (
-            <div>
-              <Modal boxStyle={modalContainer} isOpen={captureModal} setIsOpen={() => setCaptureModal(false)}>
-                <div
-                  style={{
-                    display: 'grid',
-                    gridTemplateRows: '1fr auto',
-                    gridRowGap: '20px',
-                  }}
-                >
-                  <label style={modalLabel}>Deseja realmente já capturar o valor?</label>
-                  <div
-                    style={{
-                      display: 'grid',
-                      gridTemplateColumns: '1fr 1fr',
-                      gridColumnGap: '20px',
-                      gridRowGap: '10px',
-                    }}
-                  >
-                    {loadingButton ? (
-                      <div style={spinner}>
-                        <Spinner size="5.5rem" />
-                      </div>
-                    ) : (
-                      <Button
-                        type="button"
-                        cta="Capturar"
-                        click={() => postCapture(transaction.transactionZoopId, transaction.sellerZoopId, transaction.charge)}
-                        template="regular"
-                      />
-                    )}
-
-                    <Button type="button" cta="Cancelar" click={() => setCaptureModal(false)} template="light" />
-                    {validationMessage && <label style={{ color: alertColor }}>{validationMessage}</label>}
-                  </div>
-                </div>
-              </Modal>
-              <Button type="button" cta="Capturar transação" click={() => setCaptureModal(true)} template="regular" />
-            </div>
-          )}
-          {(transaction.status === 'Pré Autorizado' || transaction.status === 'Aprovado') && (
-            <Button type="button" cta="Cobrar a divisão" click={() => setLocation(`/transacoes/${transactionId}/split`)} template="regular" />
-          )}
-          {/*(transaction.status === 'Pré Autorizado' || transaction.status === 'Aprovado') && (
-            <div>
-              <Modal boxStyle={modalContainer} isOpen={splitTransactionModal} setIsOpen={() => setSplitTransactionModal(false)}>
-                <div
-                  style={{
-                    display: 'grid',
-                    gridTemplateRows: '1fr',
-                    gridRowGap: '20px',
-                  }}
-                >
-                  <label style={modalLabel}>Coloque a tarifa que será cobrada fabricante!</label>
-                  <div
-                    style={{
-                      display: 'grid',
-                      gridTemplateColumns: '1fr',
-                      gridColumnGap: '10px',
-                      gridRowGap: '10px',
-                    }}
-                  >
-                    <InputText
-                      value={currencyFormat(amount)}
-                      onChange={({ target: { value } }) => {
-                        const toInteger = parseInt(value.replace(/[R$\.,]/g, ''), 10);
-                        const transactionAmount = parseInt(transaction.charge.replace('R$', '').replace(',', '').replace('.', ''));
-                        if (toInteger > transactionAmount) setValidationMessage('O valor não pode ser maior que o da transação!');
-                        else setValidationMessage('');
-                        return setAmount(maskInput(toInteger, '#######', true));
-                      }}
-                      placeholder="R$1.299,99"
+      <div style={{ display: 'grid', gridRowGap: '20px' }}>
+        {transaction.status === 'Pré Autorizado' && (
+          <div style={{...buttonContainer, marginBottom: '-5px'}}>
+            <Modal boxStyle={modalContainer} isOpen={captureModal} setIsOpen={() => setCaptureModal(false)}>
+              <div
+                style={{
+                  display: 'grid',
+                  gridTemplateRows: '1fr auto',
+                  gridRowGap: '20px',
+                }}
+              >
+                <label style={modalLabel}>Confirma captura?</label>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gridColumnGap: '20px', gridRowGap: '10px' }}>
+                  {loadingButton ? (
+                    <div style={spinner}>
+                      <Spinner size="3.5rem" />
+                    </div>
+                  ) : (
+                    <Button
+                      type="button"
+                      cta="Sim"
+                      click={() => postCapture(transaction.transactionZoopId, transaction.sellerZoopId, transaction.charge)}
+                      template="regular"
                     />
-                    {loadingButton ? (
-                      <div style={spinner}>
-                        <Spinner size="5.5rem" />
-                      </div>
-                    ) : (
-                      <Button
-                        type="button"
-                        cta="Cobrar a divisão"
-                        click={() => splitTransaction(transaction.transactionZoopId, transaction.sellerZoopId, transaction.charge)}
-                        template="regular"
-                      />
-                    )}
-
-                    <Button type="button" cta="Cancelar" click={() => setSplitTransactionModal(false)} template="light" />
-                  </div>
-                  {validationMessage && <label style={{ color: alertColor }}>{validationMessage}</label>}
+                  )}
+                  <Button type="button" cta="Não" click={() => setCaptureModal(false)} template="light" />
                 </div>
-              </Modal>
-              <Button type="button" cta="Split da transação" click={() => setSplitTransactionModal(true)} template="regular" />
+                {validationMessage && <label style={{ color: alertColor }}>{validationMessage}</label>}
+              </div>
+            </Modal>
+            <Button style={btn} type="button" cta="Capturar transação" click={() => setCaptureModal(true)} template="regular" />
+          </div>
+        )}
+        {isApproved &&
+          <>
+            <Modal boxStyle={modalContainer} isOpen={cancelModal} setIsOpen={() => setCancelModal(false)}>
+              <div style={{ display: 'grid', gridTemplateRows: '1fr auto', gridRowGap: '20px' }}>
+                <label style={modalLabel}>Confirma cancelamento?</label>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gridColumnGap: '20px'}}>
+                  {loadingButton ? (
+                    <div style={spinner}>
+                      <Spinner size="3.5rem" />
+                    </div>
+                  ) : (
+                    <Button
+                      type="button"
+                      cta="Sim"
+                      click={() => cancelTransaction(transaction.transactionZoopId, transaction.sellerZoopId, transaction.charge)}
+                      template="regular"
+                    />
+                  )}
+                  <Button type="button" cta="Não" click={() => setCancelModal(false)} template="light" />
+                </div>
+                {validationMessage && <label style={{ color: alertColor }}>{validationMessage}</label>}
+              </div>
+            </Modal>
+            <div style={buttonContainer}>
+              <Button style={btn} type="button" cta="Efetuar divisão" click={() => setLocation(`/transacoes/${transactionId}/split`)} template="regular" />
+              <Button style={btnRed} type="button" cta="Cancelar transação" click={() => setCancelModal(true)} template="destructive" />
             </div>
-          )*/}
-          {(transaction.status === 'Aprovado' || transaction.status === 'Pré Aprovado' || transaction.status === 'Pré Autorizado') && (
+          </>
+        }
+        {isWaiting && (
+          <div style={{...buttonContainer, marginTop: '-25px' }}>
+            <div>
+              {copyResultText ? (
+                <div
+                  style={{
+                    padding: '0 0 5px',
+                    height: '24px',
+                    fontSize: '1.6rem',
+                    color: copyResultStatus ? successColor : alertColor,
+                    textAlign: 'center',
+                  }}
+                >
+                  <span>{copyResultText}</span>
+                </div>
+              ) : (
+                <div style={{ padding: '0 0 5px', height: '24px' }}>&nbsp;</div>
+              )}
+              <Button style={btn} type="button" cta="Copiar link" click={copyToClipboard} template="regular" />
+            </div>
             <div>
               <Modal boxStyle={modalContainer} isOpen={cancelModal} setIsOpen={() => setCancelModal(false)}>
-                <div
-                  style={{
-                    display: 'grid',
-                    gridTemplateRows: '1fr auto',
-                    gridRowGap: '20px',
-                  }}
-                >
-                  <label style={modalLabel}>Deseja realmente cancelar a transação ?</label>
-                  <div
-                    style={{
-                      display: 'grid',
-                      gridTemplateColumns: '1fr 1fr',
-                      gridColumnGap: '20px',
-                    }}
-                  >
-                    {loadingButton ? (
-                      <div style={spinner}>
-                        <Spinner size="5.5rem" />
-                      </div>
-                    ) : (
-                      <Button
-                        type="button"
-                        cta="Sim"
-                        click={() => cancelTransaction(transaction.transactionZoopId, transaction.sellerZoopId, transaction.charge)}
-                        template="regular"
-                      />
-                    )}
-
+                <div style={{ display: 'grid', gridTemplateRows: '1fr auto', gridRowGap: '20px' }}>
+                  <label style={modalLabel}>Deseja realmente cancelar o link ?</label>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gridColumnGap: '20px' }}>
+                    <Button type="button" cta="Sim" click={deleteTransaction} template="regular" />
                     <Button type="button" cta="Não" click={() => setCancelModal(false)} template="light" />
                   </div>
-                  {validationMessage && <label style={{ color: alertColor }}>{validationMessage}</label>}
                 </div>
               </Modal>
-              <Button type="button" cta="Cancelar transação" click={() => setCancelModal(true)} template="destructive" />
+              <Button style={btnRed} type="button" cta="Cancelar link" click={() => setCancelModal(true)} template="destructive" />
             </div>
-          )}
-        </div>
+          </div>
+        )}
+        <Details blocks={blocksStoreowner} />
         <Details blocks={blocks} />
-        {(transaction.status === 'Aprovado' || transaction.status === 'Pago' || transaction.status === 'Pré Autorizado') && (
+        {isApproved &&
           <>
             <Table
               data={data}
@@ -597,81 +559,20 @@ const TransactionDetails = ({ transactions, transactionId }) => {
               }}
             />
             <span style={{ fontFamily: 'Rubik', fontSize: '12px' }}>* Os valores das parcelas foram arredondados para a segunda casa decimal</span>
-          </>
-        )}
-        {(transaction.status === 'Cancelado' || transaction.status === 'Falhado') && (
+          </>}
+        {isCanceled &&
           <div style={illustrationContainer}>
             <div style={{ display: 'grid', justifyItems: 'center' }}>
               <Illustration type="paymentError" size={175} />
               <span style={custom(15, transaction.statusColor)}>Pagamento cancelado.</span>
             </div>
-          </div>
-        )}
-        {(transaction.status === 'Aguardando Pagamento' || transaction.status === 'Aprovação Pendente') && (
-          <>
-            <div style={illustrationContainer}>
-              <div
-                style={{
-                  display: 'grid',
-                  justifyItems: 'center',
-                }}
-              >
-                <Illustration type="waiting" size={200} />
-              </div>
+          </div>}
+        {isWaiting &&
+          <div style={illustrationContainer}>
+            <div style={{ display: 'grid', justifyItems: 'center'}}>
+              <Illustration type="waiting" size={200} />
             </div>
-            <div style={buttonContainer}>
-              <div>
-                {copyResultText ? (
-                  <div
-                    style={{
-                      padding: '0 0 5px',
-                      height: '24px',
-                      fontSize: '1.6rem',
-                      color: copyResultStatus ? successColor : alertColor,
-                      textAlign: 'center',
-                    }}
-                  >
-                    <span>{copyResultText}</span>
-                  </div>
-                ) : (
-                  <div
-                    style={{
-                      padding: '0 0 5px',
-                      height: '24px',
-                    }}
-                  >
-                    &nbsp;
-                  </div>
-                )}
-                <Button type="button" cta="Copiar link" click={copyToClipboard} template="regular" />
-              </div>
-              <div>
-                <Modal boxStyle={modalContainer} isOpen={cancelModal} setIsOpen={() => setCancelModal(false)}>
-                  <div
-                    style={{
-                      display: 'grid',
-                      gridTemplateRows: '1fr auto',
-                      gridRowGap: '20px',
-                    }}
-                  >
-                    <label style={modalLabel}>Deseja realmente cancelar o link ?</label>
-                    <div
-                      style={{
-                        display: 'grid',
-                        gridTemplateColumns: '1fr 1fr',
-                        gridColumnGap: '20px',
-                      }}
-                    >
-                      <Button type="button" cta="Sim" click={deleteTransaction} template="regular" />
-                      <Button type="button" cta="Não" click={() => setCancelModal(false)} template="light" />
-                    </div>
-                  </div>
-                </Modal>
-                <Button type="button" cta="Cancelar link" click={() => setCancelModal(true)} template="destructive" />
-              </div>
-            </div>
-          </>
-        )}
+          </div>}
       </div>
     </motion.div>
   );
