@@ -32,7 +32,8 @@ const sendToBackend = state => () => {
       } else throw { msg: 'Permissão insuficiente', customError: true };
     } catch (error) {
       if (error.copyError) {
-        resolve('Link criado');
+        resolve('Link criado. Acesse na aba de vendas');
+        setFantasy('')
         setCharge('');
         setMaxInstallments('');
       }
