@@ -7,7 +7,6 @@ import set from '@babel/runtime/helpers/esm/set';
 
 const getSplitRules = async (transaction_id, setTransaction, transaction, setList, setIsLoading) => {
   try {
-    setIsLoading(true);
     await axios
       .get(`${process.env.PAY}/split-rules-get?transaction_id=${transaction_id}`, {
         headers: {
@@ -16,7 +15,7 @@ const getSplitRules = async (transaction_id, setTransaction, transaction, setLis
       })
       .then(result => {
         const { data } = result;
-        //console.log(data.items);
+
         const splitItems = data.items;
         setList(splitItems);
         setIsLoading(false);
@@ -30,6 +29,7 @@ const getSplitRules = async (transaction_id, setTransaction, transaction, setLis
 
 const fetch = (transactionId, setTransaction, setError, transaction, setList, setIsLoading) => {
   const query = db.collection('credit-card-payments').doc(transactionId);
+  setIsLoading(true);
   const run = async () => {
     try {
       await query.onSnapshot(
@@ -55,6 +55,7 @@ const fetch = (transactionId, setTransaction, setError, transaction, setList, se
               lastFour,
               cardholder,
               receiptId,
+              split_rules,
             } = snapshot.data();
             const chargeFormatted = currencyFormat(charge);
             const dateFormatted = date ? dateFormat(date) : '';
@@ -89,9 +90,12 @@ const fetch = (transactionId, setTransaction, setError, transaction, setList, se
               lastFour,
               cardholder,
               receiptId,
+              split_rules,
             });
             setTransaction(paymentDoc[0]);
-            await getSplitRules(transactionZoopId, setTransaction, transaction, setList, setIsLoading);
+            setIsLoading(false);
+            //setList(split_rules);
+            //await getSplitRules(transactionZoopId, setTransaction, transaction, setList, setIsLoading);
           } else {
             setError(true);
             //setLastDoc(null);

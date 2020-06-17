@@ -40,6 +40,7 @@ const TransactionDetails = ({ transactions, transactionId }) => {
   const [blocksStoreowner, setBlocksStoreowner] = useState([]);
   const [validationMessage, setValidationMessage] = useState('');
   const [loadingButton, setLoadingButton] = useState(false);
+  const [remakeBlockTransaction, setRemakeBlockTransaction] = useState(false);
 
   const [numberOfLoops, setNumberOfLoops] = useState(0);
 
@@ -47,7 +48,7 @@ const TransactionDetails = ({ transactions, transactionId }) => {
     setValidationMessage('');
   }, [splitTransactionModal, captureModal, cancelModal]);
 
-  const splitTransaction = async (transaction_id, on_behalf_of, amountTransaction) => {
+  /* const splitTransaction = async (transaction_id, on_behalf_of, amountTransaction) => {
     try {
       if (validationMessage) return;
       console.log(transaction_id, on_behalf_of, amount);
@@ -75,8 +76,8 @@ const TransactionDetails = ({ transactions, transactionId }) => {
           setLoadingButton(false);
           setSplitTransactionModal(false);
           if (status === 'succeeded') {
-            /*transaction.status = 'Aprovado'
-                        document.location.reload(true);*/
+            transaction.status = 'Aprovado'
+                        document.location.reload(true);
           }
 
           // setError(true);
@@ -90,17 +91,10 @@ const TransactionDetails = ({ transactions, transactionId }) => {
       console.log(e.response.status);
       setLoadingButton(false);
     }
-  };
+  };*/
   const postCapture = async (transaction_id, on_behalf_of, amount) => {
     try {
-      /*transaction_id = "be42973b540044d4907f510e81da6a21";
-            on_behalf_of= "6e4b9db52193481ca2a345dfc3577c8e";
-            amount= "32";
-
-            console.log(transaction_id)
-            console.log(on_behalf_of)
-            console.log(amount)*/
-      //console.log(amount.replace('R$', '').replace(',', ''))
+      const snapRef = db.collection('credit-card-payments').doc(transactionId);
       setLoadingButton(true);
       amount = amount.replace('R$', '').replace(',', '').replace('.', '');
       await axios
@@ -120,14 +114,14 @@ const TransactionDetails = ({ transactions, transactionId }) => {
         .then(result => {
           setLoadingButton(false);
           const { data } = result;
-          console.log(data);
           const { status } = data;
           setCaptureModal(false);
           if (status === 'succeeded') {
-            transaction.status = 'Aprovado';
-            document.location.reload(true);
+            //transaction.status = 'Aprovado';
+            //document.location.reload(true);
           }
-
+          setNumberOfLoops(0);
+          snapRef.update({ status: 'Atualizando' });
           // setError(true);
           // setLocation('/recibo');
         });
@@ -143,6 +137,7 @@ const TransactionDetails = ({ transactions, transactionId }) => {
 
   const cancelTransaction = async (transaction_id, on_behalf_of, amountBeforeConvert) => {
     try {
+      const snapRef = db.collection('credit-card-payments').doc(transactionId);
       const amount = amountBeforeConvert.replace('R$', '').replace(',', '').replace('.', '');
       setLoadingButton(true);
       await axios
@@ -167,7 +162,9 @@ const TransactionDetails = ({ transactions, transactionId }) => {
           if (status === 'succeeded') {
             transaction.status = 'Cancelado';
           }
-          document.location.reload(true);
+          setNumberOfLoops(0);
+          snapRef.update({ status: 'Atualizando' });
+          //document.location.reload(true);
 
           // setError(true);
           // setLocation('/recibo');
@@ -179,8 +176,7 @@ const TransactionDetails = ({ transactions, transactionId }) => {
       console.log(e.response.status);
       if (e.response.status === 402) {
         setValidationMessage('A transação já foi cancelada!');
-      }
-      else setValidationMessage('Ocorreu um erro, contate suporte')
+      } else setValidationMessage('Ocorreu um erro, contate suporte');
     }
   };
 
@@ -239,7 +235,7 @@ const TransactionDetails = ({ transactions, transactionId }) => {
         setNumberOfLoops(numberOfLoops + 1);
 
         async function getTransaction(transactionId, setTransaction, setError) {
-          fetch(transactionId, setTransaction, setError);
+          fetch(transactionId, setTransaction, setError, setNumberOfLoops);
         }
 
         getTransaction(transactionId, setTransaction, setError)
@@ -415,12 +411,14 @@ const TransactionDetails = ({ transactions, transactionId }) => {
                   }
                   setBlocksStoreowner(blockStoreowner);
                 }
+                //setRemakeBlockTransaction(false);
               }
             }
           })
           .catch(error => {
             setTransaction({});
             setNothing(true);
+            //setRemakeBlockTransaction(false);
           });
       }
     }
@@ -444,16 +442,16 @@ const TransactionDetails = ({ transactions, transactionId }) => {
         }}
       />
     );
-  const isApproved = transaction.status === 'Aprovado' || transaction.status === 'Pago' || transaction.status === 'Pré Autorizado'
-  const isCanceled = transaction.status === 'Cancelado' || transaction.status === 'Falhado'
-  const isWaiting = transaction.status === 'Aguardando Pagamento' || transaction.status === 'Aprovação Pendente'
+  const isApproved = transaction.status === 'Aprovado' || transaction.status === 'Pago' || transaction.status === 'Pré Autorizado';
+  const isCanceled = transaction.status === 'Cancelado' || transaction.status === 'Falhado';
+  const isWaiting = transaction.status === 'Aguardando Pagamento' || transaction.status === 'Aprovação Pendente';
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={containerWithPadding}>
       <input type="text" style={{ position: 'absolute', left: '-9999px' }} value={paymentLink} ref={textAreaRef} readOnly />
       <Header type="icon-link" title="Detalhes da venda" navigateTo="transacoes" icon="back" />
       <div style={{ display: 'grid', gridRowGap: '20px' }}>
         {transaction.status === 'Pré Autorizado' && (
-          <div style={{...buttonContainer, marginBottom: '-5px'}}>
+          <div style={{ ...buttonContainer, marginBottom: '-5px' }}>
             <Modal boxStyle={modalContainer} isOpen={captureModal} setIsOpen={() => setCaptureModal(false)}>
               <div
                 style={{
@@ -484,12 +482,12 @@ const TransactionDetails = ({ transactions, transactionId }) => {
             <Button style={btn} type="button" cta="Capturar transação" click={() => setCaptureModal(true)} template="regular" />
           </div>
         )}
-        {isApproved &&
+        {isApproved && (
           <>
             <Modal boxStyle={modalContainer} isOpen={cancelModal} setIsOpen={() => setCancelModal(false)}>
               <div style={{ display: 'grid', gridTemplateRows: '1fr auto', gridRowGap: '20px' }}>
                 <label style={modalLabel}>Confirma cancelamento?</label>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gridColumnGap: '20px'}}>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gridColumnGap: '20px' }}>
                   {loadingButton ? (
                     <div style={spinner}>
                       <Spinner size="3.5rem" />
@@ -508,13 +506,19 @@ const TransactionDetails = ({ transactions, transactionId }) => {
               </div>
             </Modal>
             <div style={buttonContainer}>
-              <Button style={btn} type="button" cta="Efetuar divisão" click={() => setLocation(`/transacoes/${transactionId}/split`)} template="regular" />
+              <Button
+                style={btn}
+                type="button"
+                cta="Efetuar divisão"
+                click={() => setLocation(`/transacoes/${transactionId}/split`)}
+                template="regular"
+              />
               <Button style={btnRed} type="button" cta="Cancelar transação" click={() => setCancelModal(true)} template="destructive" />
             </div>
           </>
-        }
+        )}
         {isWaiting && (
-          <div style={{...buttonContainer, marginTop: '-25px' }}>
+          <div style={{ ...buttonContainer, marginTop: '-25px' }}>
             <div>
               {copyResultText ? (
                 <div
@@ -549,7 +553,7 @@ const TransactionDetails = ({ transactions, transactionId }) => {
         )}
         <Details blocks={blocksStoreowner} />
         <Details blocks={blocks} />
-        {isApproved &&
+        {isApproved && (
           <>
             <Table
               data={data}
@@ -559,20 +563,23 @@ const TransactionDetails = ({ transactions, transactionId }) => {
               }}
             />
             <span style={{ fontFamily: 'Rubik', fontSize: '12px' }}>* Os valores das parcelas foram arredondados para a segunda casa decimal</span>
-          </>}
-        {isCanceled &&
+          </>
+        )}
+        {isCanceled && (
           <div style={illustrationContainer}>
             <div style={{ display: 'grid', justifyItems: 'center' }}>
               <Illustration type="paymentError" size={175} />
               <span style={custom(15, transaction.statusColor)}>Pagamento cancelado.</span>
             </div>
-          </div>}
-        {isWaiting &&
+          </div>
+        )}
+        {isWaiting && (
           <div style={illustrationContainer}>
-            <div style={{ display: 'grid', justifyItems: 'center'}}>
+            <div style={{ display: 'grid', justifyItems: 'center' }}>
               <Illustration type="waiting" size={200} />
             </div>
-          </div>}
+          </div>
+        )}
       </div>
     </motion.div>
   );

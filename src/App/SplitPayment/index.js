@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import currencyFormat from '@ziro/currency-format';
 import maskInput from '@ziro/mask-input';
@@ -19,13 +19,23 @@ import Spinner from '@bit/vitorbarbosa19.ziro.spinner';
 import Button from '@bit/vitorbarbosa19.ziro.button';
 import Modal from '@bit/vitorbarbosa19.ziro.modal';
 import axios from 'axios';
+import { db } from '../../Firebase';
+
+function useIsMountedRef() {
+  const isMountedRef = useRef(null);
+  useEffect(() => {
+    isMountedRef.current = true;
+    return () => (isMountedRef.current = false);
+  });
+  return isMountedRef;
+}
 
 const SplitPayment = ({ transactionId }) => {
   const [on_behalf_of, setOn_behalf_of] = useState('');
   const [amountTransaction, setAmountTransaction] = useState('');
   const [amount, setAmount] = useState('');
   const [error, setError] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [errorLoading, setErrorLoading] = useState(false);
   const [suppliers, setSuppliers] = useState([]);
   const [chargeTypes, setChargeTypes] = useState([]);
@@ -38,8 +48,16 @@ const SplitPayment = ({ transactionId }) => {
   const [cancelModal, setCancelModal] = useState(false);
   const [loadingButton, setLoadingButton] = useState(false);
   const [splitData, setSplitData] = useState('');
-  const [list, setList] = React.useState([]);
+  const [list, setList] = useState([]);
+  const [splitName, setSplitName] = useState('');
+  const isMountedRef = useIsMountedRef();
 
+  useEffect(() => {
+    if (transaction) {
+      if (transaction.split_rules) setList(transaction.split_rules);
+      else if (list !== [] && transaction.split_rules === 'undefined') setList([]);
+    }
+  }, [transaction, list]);
   const validations = [
     {
       name: 'chargeType',
@@ -59,18 +77,31 @@ const SplitPayment = ({ transactionId }) => {
       value: amount,
       message: 'Campo obrigatório',
     },
+    {
+      name: 'charge',
+      validation: () => parseFloat(amount) < parseFloat(transaction.charge.replace('R$', '').replace(',', '').replace('.', '')),
+      value: amount,
+      message: `O valor não pode ser maior que o da transação, valor este que é de ${transaction.charge}`,
+    },
+    {
+      name: 'splitName',
+      validation: () => !!splitName,
+      value: splitName,
+      message: 'Campo obrigatório',
+    },
   ];
   useEffect(() => {
-    if (transactionId) {
-      fetch(transactionId, setTransaction, setError, transaction, setList,setIsLoading);
+    //let mounted = true;
+    if (transactionId && isMountedRef.current) {
+      fetch(transactionId, setTransaction, setError, transaction, setList, setIsLoading);
     }
-  }, [transactionId]);
+  }, [transactionId, isMountedRef]);
   useEffect(() => {
     setChargeTypes(['Porcentagem', 'Valor']);
   }, []);
   useEffect(() => {
-    setAmount('')
-  }, [chargeTypeInput])
+    setAmount('');
+  }, [chargeTypeInput]);
   //if (isLoading) return <SpinnerWithDiv size="5rem" />;
   if (errorLoading) return <Error />;
 
@@ -88,15 +119,11 @@ const SplitPayment = ({ transactionId }) => {
           const listForRemove = list;
 
           const index = list.indexOf(item);
-          console.log(index);
           listForRemove.splice(index, 1);
           setList(listForRemove);
-          console.log(listForRemove);
-          console.log(list);
 
-          //setList()
-          //setSplitData(data);
-          //const { status } = data;
+          const snapRef = db.collection('credit-card-payments').doc(transactionId);
+          snapRef.update({ split_rules: list });
 
           setLoadingButton(false);
           setCancelModal(false);
@@ -109,7 +136,6 @@ const SplitPayment = ({ transactionId }) => {
       setLoadingButton(false);
       // console.log(e.response);
       console.log('erro na requisição para o cancelamento da zoop');
-      console.log(e);
     }
   };
 
@@ -135,13 +161,8 @@ const SplitPayment = ({ transactionId }) => {
           setLoadingButton(false);
           const { data } = result;
           setSplitData(data);
-          //const { status } = data;
 
           setCancelModal(false);
-          //document.location.reload(true);
-
-          // setError(true);
-          // setLocation('/recibo');
         });
     } catch (e) {
       setLoadingButton(false);
@@ -153,6 +174,7 @@ const SplitPayment = ({ transactionId }) => {
       }
     }
   };
+  if (isLoading) return <SpinnerWithDiv size="5rem" />;
 
   return (
     <div style={containerWithPadding}>
@@ -175,6 +197,8 @@ const SplitPayment = ({ transactionId }) => {
                   setChargeTypeInput,
                   list,
                   setList,
+                  splitName,
+                  setSplitName,
                 )
               : () => null
           }
@@ -227,11 +251,11 @@ const SplitPayment = ({ transactionId }) => {
                       // else if (toInteger < 0) setValidationMessage('O valor não pode ser menor que o da transação!');
                       // else setValidationMessage('');)
                       const toInteger = parseInt(value.replace(/[\.,\s%]/g, ''), 10);
-                      if (toInteger > 10000) return setAmount(10000)
+                      if (toInteger > 10000) return setAmount(10000);
                       return setAmount(maskInput(toInteger, '#####', true));
                     }}
                     placeholder="% 20"
-                    inputMode='numeric'
+                    inputMode="numeric"
                   />
                 ) : (
                   <InputText
@@ -244,19 +268,31 @@ const SplitPayment = ({ transactionId }) => {
                       return setAmount(maskInput(toInteger, '#######', true));
                     }}
                     placeholder="R$1.299,99"
-                    inputMode='numeric'
+                    inputMode="numeric"
                   />
                 )
               }
             />,
+            <FormInput
+              name="splitName"
+              label="Nome da cobrança"
+              input={
+                <InputText
+                  value={splitName}
+                  onChange={({ target: { value } }) => {
+                    return setSplitName(maskInput(value, '###################', false));
+                  }}
+                  placeholder="Frete"
+                  inputMode="string"
+                />
+              }
+            />,
           ]}
         />
-        {isLoading ? (
-          <SpinnerWithDiv size="5rem" />
-        ) : (
+        {transaction.split_rules ? (
           <div style={{ alignItems: 'center' }}>
             <ul>
-              {list.map(item => (
+              {transaction.split_rules.map(item => (
                 <li key={item.id}>
                   <div
                     style={{
@@ -269,7 +305,9 @@ const SplitPayment = ({ transactionId }) => {
                       margin: '5px',
                     }}
                   >
-                    <label style={{ fontFamily: fontTitle, width: '500px' }}>Cobrança:R${item.amount}</label>
+                    <label style={{ fontFamily: fontTitle, width: '500px' }}>
+                      {item.splitName} R${item.amount}
+                    </label>
                     <Button submitting={loadingButton} type="button" cta="Remover" click={() => deleteSplit(item.id, item)} template="regular" />
                   </div>
                   <hr />
@@ -277,7 +315,7 @@ const SplitPayment = ({ transactionId }) => {
               ))}
             </ul>
           </div>
-        )}
+        ) : null}
       </motion.div>
     </div>
   );

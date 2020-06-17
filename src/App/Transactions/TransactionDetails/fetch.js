@@ -3,7 +3,7 @@ import { db } from '../../../Firebase/index';
 import matchStatusColor from '../matchStatusColor';
 import { dateFormat } from '../utils';
 
-const fetch = (transactionId, setTransaction, setError) => {
+const fetch = (transactionId, setTransaction, setError,setNumberOfLoops) => {
   const query = db.collection('credit-card-payments').doc(transactionId);
   const run = async () => {
     try {
@@ -66,6 +66,7 @@ const fetch = (transactionId, setTransaction, setError) => {
               cardholder,
               receiptId,
             });
+            setNumberOfLoops(0);
             setTransaction(paymentDoc[0]);
           } else {
             setError(true);
