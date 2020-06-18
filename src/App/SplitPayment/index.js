@@ -79,7 +79,8 @@ const SplitPayment = ({ transactionId }) => {
     },
     {
       name: 'charge',
-      validation: () => parseFloat(amount) < parseFloat(transaction.charge.replace('R$', '').replace(',', '').replace('.', '')),
+      validation: () =>
+        chargeType === 'Valor' ? parseFloat(amount) < parseFloat(transaction.charge.replace('R$', '').replace(',', '').replace('.', '')) : true,
       value: amount,
       message: `O valor não pode ser maior que o da transação, valor este que é de ${transaction.charge}`,
     },
