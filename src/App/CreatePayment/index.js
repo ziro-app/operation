@@ -54,7 +54,7 @@ const CreatePayment = () => {
             name: 'brands',
             validation: value => (fantasy === 'ZIRO' ? catalogBrands.includes(value) : true),
             value: brand,
-            message: 'Marca inválida',
+            message: 'Fabricante inválido',
         },
         {
             name: 'maxInstallments',
@@ -129,7 +129,7 @@ const CreatePayment = () => {
                             />,
                             <FormInput
                                 name="brands"
-                                label="Marcas"
+                                label="Pagamento em nome de:"
                                 input={
                                     <Dropdown
                                         disabled={true}
@@ -156,7 +156,7 @@ const CreatePayment = () => {
                                             } else null;
                                         }}
                                         list={catalogBrands.sort()}
-                                        placeholder="Marca referida"
+                                        placeholder="Fabricante"
                                     />
                                 }
                             />,
