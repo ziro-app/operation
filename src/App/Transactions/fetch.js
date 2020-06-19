@@ -1,17 +1,17 @@
-import currencyFormat from "@ziro/currency-format";
-import { db } from "../../Firebase/index";
-import matchStatusColor from "./matchStatusColor";
-import { dateFormat } from "./utils";
+import currencyFormat from '@ziro/currency-format';
+import {db} from '../../Firebase/index';
+import matchStatusColor from './matchStatusColor';
+import {dateFormat} from './utils';
 
 const fetch = (
-  setIsLoading,
-  setErrorLoading,
-  payments,
-  setPayments,
-  zoopId,
-  limit,
-  lastDoc,
-  setLastDoc,
+    setIsLoading,
+    setErrorLoading,
+    payments,
+    setPayments,
+    zoopId,
+    limit,
+    lastDoc,
+    setLastDoc,
   setTotalTransactions,
   setLoadingMore,
   setStatusFilter,
@@ -109,16 +109,17 @@ const fetch = (
                 transactionZoopId,
                 maxInstallments,
                 sellerZoopId,
-                status,
-                buyerRazao,
-                receivables,
-                receivement,
-                seller,
-                brand,
-                firstFour,
-                lastFour,
-                cardholder,
-                receiptId,
+                  status,
+                  buyerRazao,
+                  receivables,
+                  receivement,
+                  seller,
+                  brand,
+                  firstFour,
+                  lastFour,
+                  cardholder,
+                  receiptId,
+                  onBehalfOfBrand,
               } = doc.data();
               const chargeFormatted = currencyFormat(charge);
               const dateFormatted = date ? dateFormat(date) : '';
@@ -132,30 +133,26 @@ const fetch = (
                                 .replace(" de ", "/");*/
               const statusColor = matchStatusColor(status);
               paymentDoc.push({
-                transactionZoopId: transactionZoopId ? transactionZoopId : '',
-                transactionId: doc.id,
-                charge: chargeFormatted,
-                dateLinkCreated,
-                date: dateFormatted,
-                fees: fees ? fees : '',
-                installments: installments ? installments : '',
-                maxInstallments: maxInstallments ? maxInstallments : '',
-                seller: buyerRazao ? buyerRazao : '-',
-                sellerZoopId: sellerZoopId ? sellerZoopId : '',
-                status: status ? status : '',
-                statusColor: matchStatusColor(status),
-                buyerRazao,
-                receivables: receivables ? receivables : [],
-                receivement,
-                seller,
-                status,
-                date: dateFormatted,
-                brand,
-                firstFour,
-                lastFour,
-                installments,
-                cardholder,
-                statusColor,
+                  transactionZoopId: transactionZoopId ? transactionZoopId : '',
+                  transactionId: doc.id,
+                  charge: chargeFormatted,
+                  dateLinkCreated,
+                  date: dateFormatted,
+                  fees: fees ? fees : '',
+                  installments: installments ? installments : '',
+                  maxInstallments: maxInstallments ? maxInstallments : '',
+                  seller: seller === 'Ziro' && onBehalfOfBrand ? `${onBehalfOfBrand} - Ziro` : seller,
+                  //seller: buyerRazao ? buyerRazao : '-',
+                  sellerZoopId: sellerZoopId ? sellerZoopId : '',
+                  status: status ? status : '',
+                  statusColor: matchStatusColor(status),
+                  buyerRazao,
+                  receivables: receivables ? receivables : [],
+                  receivement,
+                  brand,
+                  firstFour,
+                  lastFour,
+                  cardholder,
                 receiptId,
               });
             });

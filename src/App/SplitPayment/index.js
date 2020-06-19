@@ -1,25 +1,19 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { motion } from 'framer-motion';
+import React, {useEffect, useRef, useState} from 'react';
+import {motion} from 'framer-motion';
 import currencyFormat from '@ziro/currency-format';
 import maskInput from '@ziro/mask-input';
 import sendToBackend from './sendToBackend';
-import capitalize from '@ziro/capitalize';
 import Form from '@bit/vitorbarbosa19.ziro.form';
 import FormInput from '@bit/vitorbarbosa19.ziro.form-input';
 import InputText from '@bit/vitorbarbosa19.ziro.input-text';
 import SpinnerWithDiv from '@bit/vitorbarbosa19.ziro.spinner-with-div';
 import Dropdown from '@bit/vitorbarbosa19.ziro.dropdown';
-import { userContext } from '../appContext';
 import fetch from './fetch';
 import Header from '@bit/vitorbarbosa19.ziro.header';
-import { fontTitle, containerWithPadding } from '@ziro/theme';
-import numeral from 'numeral';
-import { modalContainer, modalLabel, spinner } from '../Transactions/TransactionDetails/styles';
-import Spinner from '@bit/vitorbarbosa19.ziro.spinner';
+import {containerWithPadding, fontTitle} from '@ziro/theme';
 import Button from '@bit/vitorbarbosa19.ziro.button';
-import Modal from '@bit/vitorbarbosa19.ziro.modal';
 import axios from 'axios';
-import { db } from '../../Firebase';
+import {db} from '../../Firebase';
 
 function useIsMountedRef() {
   const isMountedRef = useRef(null);
@@ -65,18 +59,12 @@ const SplitPayment = ({ transactionId }) => {
       value: chargeTypeInput,
       message: 'Campo obrigatório',
     },
-    {
-      name: 'charge',
-      validation: () => !!!validationMessage,
-      value: charge,
-      message: `${validationMessage} Valor este que é de ${transaction.charge}`,
-    },
-    {
-      name: 'charge',
-      validation: () => !!amount,
-      value: amount,
-      message: 'Campo obrigatório',
-    },
+      {
+          name: 'charge',
+          validation: () => amount !== '',
+          value: amount,
+          message: 'Campo obrigatório',
+      },
     {
       name: 'charge',
       validation: () =>
@@ -137,42 +125,6 @@ const SplitPayment = ({ transactionId }) => {
       setLoadingButton(false);
       // console.log(e.response);
       console.log('erro na requisição para o cancelamento da zoop');
-    }
-  };
-
-  const cancelSplit = async (transaction_id, on_behalf_of, amountBeforeConvert) => {
-    try {
-      const amount = amountBeforeConvert.replace('R$', '').replace(',', '').replace('.', '');
-      setLoadingButton(true);
-      await axios
-        .get(
-          `${process.env.PAY}/split-rules-get?transaction_id=${transaction_id}`,
-          {
-            transaction_id,
-            on_behalf_of,
-            amount,
-          },
-          {
-            headers: {
-              Authorization: `Basic ${process.env.PAY_TOKEN}`,
-            },
-          },
-        )
-        .then(result => {
-          setLoadingButton(false);
-          const { data } = result;
-          setSplitData(data);
-
-          setCancelModal(false);
-        });
-    } catch (e) {
-      setLoadingButton(false);
-      // console.log(e.response);
-      console.log('erro na requisição para o cancelamento da zoop');
-      console.log(e.response.status);
-      if (e.response.status === 402) {
-        setValidationMessage('A transação já foi cancelada!');
-      }
     }
   };
   if (isLoading) return <SpinnerWithDiv size="5rem" />;
@@ -253,6 +205,7 @@ const SplitPayment = ({ transactionId }) => {
                       // else setValidationMessage('');)
                       const toInteger = parseInt(value.replace(/[\.,\s%]/g, ''), 10);
                       if (toInteger > 10000) return setAmount(10000);
+
                       return setAmount(maskInput(toInteger, '#####', true));
                     }}
                     placeholder="% 20"
@@ -262,11 +215,11 @@ const SplitPayment = ({ transactionId }) => {
                   <InputText
                     value={currencyFormat(amount)}
                     onChange={({ target: { value } }) => {
-                      const toInteger = parseInt(value.replace(/[R$\.,]/g, ''), 10);
-                      const transactionAmount = parseInt(transaction.charge.replace('R$', '').replace(',', '').replace('.', ''));
-                      if (toInteger > transactionAmount) setValidationMessage('Valor deve ser menor que o da transação');
-                      else setValidationMessage('');
-                      return setAmount(maskInput(toInteger, '#######', true));
+                        const toInteger = parseInt(value.replace(/[R$\.,]/g, ''), 10);
+                        const transactionAmount = parseInt(transaction.charge.replace('R$', '').replace(',', '').replace('.', ''));
+                        //if (toInteger > transactionAmount) setValidationMessage('Valor deve ser menor que o da transação');
+                        //else setValidationMessage('');
+                        return setAmount(maskInput(toInteger, '#######', true));
                     }}
                     placeholder="R$1.299,99"
                     inputMode="numeric"

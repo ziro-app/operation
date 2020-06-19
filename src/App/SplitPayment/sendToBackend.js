@@ -1,18 +1,16 @@
-import { auth, db } from '../../Firebase/index';
-import axios, { post } from 'axios';
-import md5 from 'md5';
-import { formatDateUTC3 } from '@ziro/format-date-utc3';
-import { numberFormatter } from '../utils';
+import {db} from '../../Firebase/index';
+import axios from 'axios';
 
-const addRuleToFirebase = () => {};
+const addRuleToFirebase = () => {
+};
 
 const sendToBackend = (
-  transactionId,
-  transactionZoopId,
-  on_behalf_of,
-  amount,
-  validationMessage,
-  setValidationMessage,
+    transactionId,
+    transactionZoopId,
+    on_behalf_of,
+    amount,
+    validationMessage,
+    setValidationMessage,
   chargeType,
   chargeValue,
   setAmount,
@@ -33,9 +31,8 @@ const sendToBackend = (
             throw 'Erro nas informações enviadas, verifique se o valor de cobrança não é maior que o da transação';
           }
           let amountToSend = 0;
-          if (chargeType === 'Porcentagem')
-            amountToSend = parseFloat(chargeValue.replace('R$', '').replace(',', '').replace('.', '')) * (amount / 100);
-          else amountToSend = amount;
+            if (chargeType === 'Porcentagem') amountToSend = parseFloat(amount.replace('R$', '').replace(',', '').replace('.', '')) / 100;
+            else amountToSend = amount;
           await axios
             .post(
               `${process.env.PAY}/split-rules-create?transaction_id=${transactionZoopId}`,

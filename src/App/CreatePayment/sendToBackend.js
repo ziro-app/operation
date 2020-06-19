@@ -1,20 +1,21 @@
-import { db } from '../../Firebase/index';
+import {db} from '../../Firebase/index';
 
 const sendToBackend = state => () => {
-  const { nickname, seller, sellerId, charge, maxInstallments, setFantasy, setCharge, setMaxInstallments } = state;
-  const nome = nickname ? nickname.trim() : '';
+    const {nickname, seller, onBehalfOfBrand, sellerId, charge, maxInstallments, setFantasy, setCharge, setMaxInstallments} = state;
+    const nome = nickname ? nickname.trim() : '';
   const baseUrl = 'https://ziro.app/pagamento/';
   return new Promise(async (resolve, reject) => {
     try {
       if (nome === 'Uiller' || nome === 'Vitor' || nome === 'Bruno') {
         if (seller && sellerId) {
           const docRef = await db.collection('credit-card-payments').add({
-            dateLinkCreated: new Date(),
-            seller,
-            sellerZoopId: sellerId,
-            charge,
-            maxInstallments,
-            status: 'Aguardando Pagamento',
+              dateLinkCreated: new Date(),
+              seller,
+              onBehalfOfBrand,
+              sellerZoopId: sellerId,
+              charge,
+              maxInstallments,
+              status: 'Aguardando Pagamento',
           });
           try {
             const doc = await docRef.get();
