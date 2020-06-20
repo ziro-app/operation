@@ -36,6 +36,7 @@ const sendToBackend = state => () => {
       if (error.copyError) {
         resolve('Link criado. Acesse na aba de vendas');
         setFantasy('');
+        setBrand('')
         setCharge('');
         setMaxInstallments('');
       }
