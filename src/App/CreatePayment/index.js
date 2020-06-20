@@ -1,5 +1,5 @@
-import React, {useContext, useEffect, useState} from 'react';
-import {motion} from 'framer-motion';
+import React, { useContext, useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
 import currencyFormat from '@ziro/currency-format';
 import maskInput from '@ziro/mask-input';
 import sendToBackend from './sendToBackend';
@@ -9,10 +9,9 @@ import FormInput from '@bit/vitorbarbosa19.ziro.form-input';
 import InputText from '@bit/vitorbarbosa19.ziro.input-text';
 import SpinnerWithDiv from '@bit/vitorbarbosa19.ziro.spinner-with-div';
 import Dropdown from '@bit/vitorbarbosa19.ziro.dropdown';
-import {userContext} from '../appContext';
+import { userContext } from '../appContext';
 import fetch from './fetch';
-import {Menu} from '../Menu';
-import {db} from '../../Firebase';
+import { Menu } from '../Menu';
 
 const CreatePayment = () => {
     const [isLoading, setIsLoading] = useState(true);
@@ -25,9 +24,10 @@ const CreatePayment = () => {
     const [zoopId, setZoopId] = useState('');
     const [charge, setCharge] = useState('');
     const [maxInstallments, setMaxInstallments] = useState('');
-    const {nickname} = useContext(userContext);
+    const { nickname } = useContext(userContext);
     const state = {
         nickname,
+        setBrand,
         seller: capitalize(fantasy),
         onBehalfOfBrand: capitalize(brand),
         sellerId: zoopId,
@@ -63,24 +63,6 @@ const CreatePayment = () => {
             message: 'Deve ser entre 1 e 10',
         },
     ];
-    useEffect(() => {
-        async function getCatalogBrands() {
-            try {
-                let list = [];
-                const snapRef = db.collection('catalog-brands');
-                const snapCollection = await snapRef.get();
-                snapCollection.forEach(document => {
-                    if (document.data().brand !== '') list.push(document.data().brand);
-                });
-                setCatalogBrands(list);
-                // console.log(snapCollection.data());
-            } catch (e) {
-                // console.log(e.response);
-            }
-        }
-
-        getCatalogBrands();
-    }, [catalogBrands]);
 
     useEffect(() => fetch(setIsLoading, setErrorLoading, setSuppliers, setFantasyNames, setCatalogBrands), []);
 
@@ -89,7 +71,7 @@ const CreatePayment = () => {
 
     return (
         <Menu title="Criar Cobrança">
-            <motion.div initial={{opacity: 0}} animate={{opacity: 1}}>
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
                 {fantasy === 'ZIRO' ? (
                     <Form
                         validations={validations}
@@ -101,7 +83,7 @@ const CreatePayment = () => {
                                 input={
                                     <Dropdown
                                         value={fantasy}
-                                        onChange={({target: {value}}) => {
+                                        onChange={({ target: { value } }) => {
                                             setFantasy(value);
                                             if (fantasyNames.includes(value)) {
                                                 const supplier = suppliers.filter(supplier => supplier.fantasia === value);
@@ -134,7 +116,7 @@ const CreatePayment = () => {
                                     <Dropdown
                                         disabled={true}
                                         value={brand}
-                                        onChange={({target: {value}}) => {
+                                        onChange={({ target: { value } }) => {
                                             setBrand(value);
                                             if (catalogBrands.includes(value)) {
                                                 const selectedBrand = catalogBrands.filter(item => item.brand === value);
@@ -166,7 +148,7 @@ const CreatePayment = () => {
                                 input={
                                     <InputText
                                         value={currencyFormat(charge)}
-                                        onChange={({target: {value}}) => {
+                                        onChange={({ target: { value } }) => {
                                             const toInteger = parseInt(value.replace(/[R$\.,]/g, ''), 10);
                                             return setCharge(maskInput(toInteger, '#######', true));
                                         }}
@@ -181,7 +163,7 @@ const CreatePayment = () => {
                                 input={
                                     <InputText
                                         value={maxInstallments}
-                                        onChange={({target: {value}}) => setMaxInstallments(maskInput(value, '##', true))}
+                                        onChange={({ target: { value } }) => setMaxInstallments(maskInput(value, '##', true))}
                                         placeholder="10"
                                         inputMode="numeric"
                                     />
@@ -200,7 +182,7 @@ const CreatePayment = () => {
                                 input={
                                     <Dropdown
                                         value={fantasy}
-                                        onChange={({target: {value}}) => {
+                                        onChange={({ target: { value } }) => {
                                             setFantasy(value);
                                             if (fantasyNames.includes(value)) {
                                                 const supplier = suppliers.filter(supplier => supplier.fantasia === value);
@@ -232,7 +214,7 @@ const CreatePayment = () => {
                                 input={
                                     <InputText
                                         value={currencyFormat(charge)}
-                                        onChange={({target: {value}}) => {
+                                        onChange={({ target: { value } }) => {
                                             const toInteger = parseInt(value.replace(/[R$\.,]/g, ''), 10);
                                             return setCharge(maskInput(toInteger, '#######', true));
                                         }}
@@ -247,7 +229,7 @@ const CreatePayment = () => {
                                 input={
                                     <InputText
                                         value={maxInstallments}
-                                        onChange={({target: {value}}) => setMaxInstallments(maskInput(value, '##', true))}
+                                        onChange={({ target: { value } }) => setMaxInstallments(maskInput(value, '##', true))}
                                         placeholder="10"
                                         inputMode="numeric"
                                     />
@@ -257,8 +239,8 @@ const CreatePayment = () => {
                     />
                 )}
             </motion.div>
-    </Menu>
-  );
+        </Menu>
+    );
 };
 
 export default CreatePayment;

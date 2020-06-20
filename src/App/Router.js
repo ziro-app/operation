@@ -24,6 +24,7 @@ import RegisterExpenses from './RegisterExpenses/index';
 import ConsultShipping from './ConsultShipping/index';
 // import FirebaseMigration from './FirebaseMigration/index' -> Inacabado
 import ImageUpload from './ImageUpload/index';
+import UploadImages from './UploadImages/index';
 import CreatePayment from './CreatePayment/index';
 import Submenu from '@bit/vitorbarbosa19.ziro.submenu';
 import UpdateUserInfo from './UpdateUserInfo/index';
@@ -36,12 +37,13 @@ import UploadBillet from './UploadBillet';
 import Transactions from './Transactions/index';
 import SplitPayment from './SplitPayment/index';
 import LinkRequest from './LinkRequest/index';
-import { useRoute, useLocation } from 'wouter';
+import { useLocation, useRoute } from 'wouter';
 
 const Router = ({ isLogged }) => {
   const [match, params] = useRoute('/pedidos/:cartId?');
   const [matchTransactions, paramsTransactions] = useRoute('/transacoes/:transactionId?/:receivableId?');
   const [matchTransactionsSplit, paramsTransactionsSplit] = useRoute('/transacoes/:transactionId?/split');
+
   const [location] = useLocation();
   const publicRoutes = {
     '/': <Login />,
@@ -92,6 +94,7 @@ const Router = ({ isLogged }) => {
           <Submenu
             options={[
               ['Catalogo: Upload de imagens', 'upload-imagem'],
+                //['Catalogo: Upload de imagens/Novo', 'upload-imagens'],
               ['Catalogo: Atualizar Fabricantes', '/atualizar-fabricantes'],
               ['Boletos: Cadastrar', 'cadastrar-boleto'],
               ['Boletos: Upload foto', 'upload-boleto'],
@@ -146,45 +149,50 @@ const Router = ({ isLogged }) => {
         <UpdateStoreowner />
       </HeaderBack>
     ),
-    '/cadastrar-lojista': (
-      <HeaderBack title="Cadastrar lojista" navigateTo="/assessoria">
-        <RegisterStoreowner />
-      </HeaderBack>
-    ),
-    '/cadastrar-afiliado': (
-      <HeaderBack title="Cadastrar afiliado" navigateTo="/assessoria">
-        <RegisterAffiliate />
-      </HeaderBack>
-    ),
-    '/visualizar-afiliado': (
-      <HeaderBack title="Visualizar afiliado" navigateTo="/assessoria">
-        <UpdateAffiliate />
-      </HeaderBack>
-    ),
-    '/upload-imagem': (
-      <HeaderBack title="Upload de imagens" navigateTo="/assessoria">
-        <ImageUpload />
-      </HeaderBack>
-    ),
-    '/update': (
-      <HeaderBack title="Atualizar informações" navigateTo="/login">
-        <UpdateUserInfo />
-      </HeaderBack>
-    ),
-    '/atualizar-fabricantes': (
-      <HeaderBack title="Atualizar fabricantes" navigateTo="/assessoria">
-        <UpdateBrandsInfos />
-      </HeaderBack>
-    ),
-    '/criar-pagamento': <CreatePayment />,
-    '/entrada-saida': (
-      <HeaderBack title="Entrada/Saída do Caixa" navigateTo="/administrativo">
-        <RegisterInputOutput />
-      </HeaderBack>
-    ),
-    '/solicitacao-link': (
-      <HeaderBack title="Solicitação de Link" navigateTo="/administrativo">
-        <LinkRequest />
+      '/cadastrar-lojista': (
+          <HeaderBack title="Cadastrar lojista" navigateTo="/assessoria">
+              <RegisterStoreowner/>
+          </HeaderBack>
+      ),
+      '/cadastrar-afiliado': (
+          <HeaderBack title="Cadastrar afiliado" navigateTo="/assessoria">
+              <RegisterAffiliate/>
+          </HeaderBack>
+      ),
+      '/visualizar-afiliado': (
+          <HeaderBack title="Visualizar afiliado" navigateTo="/assessoria">
+              <UpdateAffiliate/>
+          </HeaderBack>
+      ),
+      '/upload-imagem': (
+          <HeaderBack title="Upload de imagens" navigateTo="/assessoria">
+              <ImageUpload/>
+          </HeaderBack>
+      ),
+      '/upload-imagens': (
+          <HeaderBack title="Upload de imagens/Novo" navigateTo="/assessoria">
+              <UploadImages withIcon imgExtension={['.jpg', '.gif', '.png', '.gif']} maxFileSize={5242880}/>
+          </HeaderBack>
+      ),
+      '/update': (
+          <HeaderBack title="Atualizar informações" navigateTo="/login">
+              <UpdateUserInfo/>
+          </HeaderBack>
+      ),
+      '/atualizar-fabricantes': (
+          <HeaderBack title="Atualizar fabricantes" navigateTo="/assessoria">
+              <UpdateBrandsInfos/>
+          </HeaderBack>
+      ),
+      '/criar-pagamento': <CreatePayment/>,
+      '/entrada-saida': (
+          <HeaderBack title="Entrada/Saída do Caixa" navigateTo="/administrativo">
+              <RegisterInputOutput/>
+          </HeaderBack>
+      ),
+      '/solicitacao-link': (
+          <HeaderBack title="Solicitação de Link" navigateTo="/administrativo">
+              <LinkRequest/>
       </HeaderBack>
     ),
     [match ? location : null]: <UserCart {...params} />,
