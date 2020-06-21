@@ -6,7 +6,7 @@ const sendToBackend = state => () => {
     const baseUrl = 'https://ziro.app/pagamento/';
     return new Promise(async (resolve, reject) => {
         try {
-            if (nome === 'Uiller' || nome === 'Vitor' || nome === 'Bruno') {
+            if (nome === 'Uiller' || nome === 'Vitor' || nome === 'Bruno' || nome === 'João') {
                 if (seller && sellerId) {
                     const docRef = await db.collection('credit-card-payments').add({
                         dateLinkCreated: new Date(),
