@@ -1,7 +1,12 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './index.css';
 import Icon from '@bit/vitorbarbosa19.ziro.icon';
 import FlipMove from 'react-flip-move';
+import InputText from '@bit/vitorbarbosa19.ziro.input-text';
+import FormInput from '@bit/vitorbarbosa19.ziro.form-input';
+//import Dropdown from '@bit/vitorbarbosa19.ziro.dropdown';
+import Dropdown from './Dropdown/index';
+import fetch from './fetch';
 
 const styles = {
     display: 'flex',
@@ -12,11 +17,22 @@ const styles = {
 };
 
 const UploadImages = () => {
+    const [isLoading, setIsLoading] = useState(true);
+    const [isError, setIsError] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isSubmitted, setIsSubmitted] = useState(false);
+    const [brands, setBrands] = useState('');
+    const [brandsAndTrends, setBrandsAndTrends] = useState('');
+    const [brand, setBrand] = useState('');
+    const [pricetag, setPricetag] = useState('');
+    const [photoPeriod, setPhotoPeriod] = useState('');
     const [pictures, setPictures] = React.useState([]);
     const [filesList, setFiles] = React.useState([]);
     const [errors, setErrors] = React.useState([]);
+    const [sizes, setSizes] = React.useState(['P,M,G']);
     const imgExtension = ['.jpg', '.jpeg', '.gif', '.png'];
     const maxFileSize = 5242880;
+    useEffect(() => fetch(setIsLoading, setIsError, setBrands, setBrandsAndTrends), []);
 
     const onDrop = picture => {
         setPictures([...pictures, picture]);
@@ -109,6 +125,24 @@ const UploadImages = () => {
         setFiles(filteredFiles);
     }
 
+    function renderInputs() {
+        return pictures.map((picture, index) => {
+            return (
+                <FormInput
+                    name="sizes"
+                    label="Tamanhos"
+                    input={
+                        <InputText
+                            placeholder="P,M,G"
+                            value={(sizes && sizes.join(',')) || ''}
+                            onChange={({ target: { value } }) => setSizes(value ? value.split(',') : '')}
+                        />
+                    }
+                />
+            );
+        });
+    }
+
     function renderPreviewPictures() {
         return pictures.map((picture, index) => {
             return (
@@ -117,6 +151,74 @@ const UploadImages = () => {
                         X
                     </div>
                     <img src={picture} className="uploadPicture" alt="preview"/>
+                    <FormInput
+                        name="sizes"
+                        label="Tamanhos"
+                        input={
+                            <InputText
+                                placeholder="P,M,G"
+                                id="uploadPictureInput"
+                                value={(sizes && sizes.join(',')) || ''}
+                                onChange={({ target: { value } }) => setSizes(value ? value.split(',') : '')}
+                            />
+                        }
+                    />
+                    <FormInput
+                        name="sizes"
+                        label="Tamanhos"
+                        input={
+                            <InputText
+                                placeholder="P,M,G"
+                                id="uploadPictureInput"
+                                value={(sizes && sizes.join(',')) || ''}
+                                onChange={({ target: { value } }) => setSizes(value ? value.split(',') : '')}
+                            />
+                        }
+                    />
+                    <FormInput
+                        name="sizes"
+                        label="Tamanhos"
+                        input={
+                            <InputText
+                                placeholder="P,M,G"
+                                id="uploadPictureInput"
+                                value={(sizes && sizes.join(',')) || ''}
+                                onChange={({ target: { value } }) => setSizes(value ? value.split(',') : '')}
+                            />
+                        }
+                    />
+                    <FormInput
+                        name="brands"
+                        label="Marcas"
+                        input={
+                            <Dropdown
+                                id="uploadPictureInput"
+                                readOnly={false}
+                                submitting={isSubmitting}
+                                value={brand}
+                                onChange={({ target: { value } }) => setBrand(value)}
+                                list={brands}
+                                placeholder="Marcas"
+                                onChangeKeyboard={element => (element ? setBrand(element.value) : null)}
+                            />
+                        }
+                    />
+                    <FormInput
+                        name="brands"
+                        label="Preços"
+                        input={
+                            <Dropdown
+                                id="uploadPictureInput"
+                                readOnly={false}
+                                submitting={isSubmitting}
+                                value={pricetag}
+                                onChange={({ target: { value } }) => setPricetag(value)}
+                                list={['Sim', 'Não']}
+                                placeholder="Tem o preço na imagem?"
+                                onChangeKeyboard={element => (element ? setPricetag(element.value) : null)}
+                            />
+                        }
+                    />
                 </div>
             );
         });
