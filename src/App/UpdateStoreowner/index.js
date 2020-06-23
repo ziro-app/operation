@@ -704,7 +704,6 @@ const UpdateStoreowner = () => {
                                 }
                                 list={affiliates.map(affiliate => affiliate === 'NENHUM' ? 'NENHUM' : Object.values(affiliate)[1])}
                                 placeholder="Nome do(a) afiliado(a)"
-                                readOnly={true}
                             />
                         } />,
                         <FormInput name='advisor' label='Assessor(a)' input={
@@ -716,7 +715,6 @@ const UpdateStoreowner = () => {
                                 }
                                 list={advisors}
                                 placeholder="Nome do(a) assessor(a)"
-                                readOnly={true}
                             />
                         } />,
                         <FormInput name='salesman' label='Vendedor(a)' input={
@@ -728,7 +726,6 @@ const UpdateStoreowner = () => {
                                 }
                                 list={sellers}
                                 placeholder="Nome do(a) vendedor(a)"
-                                readOnly={true}
                             />
                         } />,
                         <FormInput name='link' label='Vínculo' input={
