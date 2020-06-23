@@ -1,27 +1,35 @@
 import React, { useEffect, useState } from 'react';
-import './index.css';
 import Icon from '@bit/vitorbarbosa19.ziro.icon';
 import FlipMove from 'react-flip-move';
 import InputText from '@bit/vitorbarbosa19.ziro.input-text';
 import FormInput from '@bit/vitorbarbosa19.ziro.form-input';
-//import Dropdown from '@bit/vitorbarbosa19.ziro.dropdown';
-import Dropdown from './Dropdown/index';
+import Dropdown from '@bit/vitorbarbosa19.ziro.dropdown';
+import EditCard from './editCard';
+import Button from '@bit/vitorbarbosa19.ziro.button';
 import fetch from './fetch';
-
-const styles = {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexWrap: 'wrap',
-    width: '100%',
-};
+import {
+    fileContainerClass,
+    fileContainerDeleteImageClass,
+    fileContainerUploadIconClass,
+    fileContainerUploadPictureContainerClass,
+    fileContainerUploadPictureContainerimgUploadPictureClass,
+    fileContainerUploadPicturesWrapperClass,
+    flipMoveClass,
+    inputImagesId,
+    phases,
+} from './styles';
+import isValidBrand from '../ImageUpload/isValidBrand';
+import { title } from '../ImageUpload/styles';
 
 const UploadImages = () => {
+    const [sizes, setSizes] = useState([]);
+    const [colors, setColors] = useState([]);
+    const [products, setProducts] = useState([{}]);
     const [isLoading, setIsLoading] = useState(true);
     const [isError, setIsError] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSubmitted, setIsSubmitted] = useState(false);
-    const [brands, setBrands] = useState('');
+    const [brands, setBrands] = useState([]);
     const [brandsAndTrends, setBrandsAndTrends] = useState('');
     const [brand, setBrand] = useState('');
     const [pricetag, setPricetag] = useState('');
@@ -29,9 +37,9 @@ const UploadImages = () => {
     const [pictures, setPictures] = React.useState([]);
     const [filesList, setFiles] = React.useState([]);
     const [errors, setErrors] = React.useState([]);
-    const [sizes, setSizes] = React.useState(['P,M,G']);
     const imgExtension = ['.jpg', '.jpeg', '.gif', '.png'];
     const maxFileSize = 5242880;
+
     useEffect(() => fetch(setIsLoading, setIsError, setBrands, setBrandsAndTrends), []);
 
     const onDrop = picture => {
@@ -91,7 +99,6 @@ const UploadImages = () => {
         }
 
         setErrors(fileErrors);
-        console.log(errors);
 
         Promise.all(allFilePromises).then(newFilesData => {
             const dataURLs = pictures.slice();
@@ -107,12 +114,11 @@ const UploadImages = () => {
         });
     }
 
-    console.log(pictures);
-    console.log(filesList);
+    //console.log(pictures);
+    //console.log(filesList);
     let inputElement = '';
 
     function onUploadClick(e) {
-        // Fixes https://github.com/JakeHartnell/react-images-upload/issues/55
         e.target.value = null;
     }
 
@@ -120,7 +126,9 @@ const UploadImages = () => {
         const removeIndex = pictures.findIndex(e => e === picture);
         const filteredPictures = pictures.filter((e, index) => index !== removeIndex);
         const filteredFiles = filesList.filter((e, index) => index !== removeIndex);
+        const listOfProducts = products.filter((e, index) => index !== removeIndex);
 
+        setProducts(listOfProducts);
         setPictures(filteredPictures);
         setFiles(filteredFiles);
     }
@@ -146,78 +154,26 @@ const UploadImages = () => {
     function renderPreviewPictures() {
         return pictures.map((picture, index) => {
             return (
-                <div key={index} className="uploadPictureContainer">
-                    <div className="deleteImage" onClick={() => removeImage(picture)}>
+                <div key={index} style={fileContainerUploadPictureContainerClass} className="uploadPictureContainer">
+                    <div style={fileContainerDeleteImageClass} className="deleteImage"
+                         onClick={() => removeImage(picture)}>
                         X
                     </div>
-                    <img src={picture} className="uploadPicture" alt="preview"/>
-                    <FormInput
-                        name="sizes"
-                        label="Tamanhos"
-                        input={
-                            <InputText
-                                placeholder="P,M,G"
-                                id="uploadPictureInput"
-                                value={(sizes && sizes.join(',')) || ''}
-                                onChange={({ target: { value } }) => setSizes(value ? value.split(',') : '')}
-                            />
-                        }
-                    />
-                    <FormInput
-                        name="sizes"
-                        label="Tamanhos"
-                        input={
-                            <InputText
-                                placeholder="P,M,G"
-                                id="uploadPictureInput"
-                                value={(sizes && sizes.join(',')) || ''}
-                                onChange={({ target: { value } }) => setSizes(value ? value.split(',') : '')}
-                            />
-                        }
-                    />
-                    <FormInput
-                        name="sizes"
-                        label="Tamanhos"
-                        input={
-                            <InputText
-                                placeholder="P,M,G"
-                                id="uploadPictureInput"
-                                value={(sizes && sizes.join(',')) || ''}
-                                onChange={({ target: { value } }) => setSizes(value ? value.split(',') : '')}
-                            />
-                        }
-                    />
-                    <FormInput
-                        name="brands"
-                        label="Marcas"
-                        input={
-                            <Dropdown
-                                id="uploadPictureInput"
-                                readOnly={false}
-                                submitting={isSubmitting}
-                                value={brand}
-                                onChange={({ target: { value } }) => setBrand(value)}
-                                list={brands}
-                                placeholder="Marcas"
-                                onChangeKeyboard={element => (element ? setBrand(element.value) : null)}
-                            />
-                        }
-                    />
-                    <FormInput
-                        name="brands"
-                        label="Preços"
-                        input={
-                            <Dropdown
-                                id="uploadPictureInput"
-                                readOnly={false}
-                                submitting={isSubmitting}
-                                value={pricetag}
-                                onChange={({ target: { value } }) => setPricetag(value)}
-                                list={['Sim', 'Não']}
-                                placeholder="Tem o preço na imagem?"
-                                onChangeKeyboard={element => (element ? setPricetag(element.value) : null)}
-                            />
-                        }
+                    <img src={picture} style={fileContainerUploadPictureContainerimgUploadPictureClass}
+                         className="uploadPicture" alt="preview"/>
+                    <EditCard
+                        index={index}
+                        image={picture}
+                        //product={product}
+                        //productRef={productRef}
+                        //setProduct={setProduct}
+                        setColors={setColors}
+                        setSizes={setSizes}
+                        colors={colors}
+                        sizes={sizes}
+                        //update={update}
+                        products={products}
+                        setProducts={setProducts}
                     />
                 </div>
             );
@@ -226,8 +182,8 @@ const UploadImages = () => {
 
     function renderPreview() {
         return (
-            <div className="uploadPicturesWrapper">
-                <FlipMove enterAnimation="fade" leaveAnimation="fade" style={styles}>
+            <div style={fileContainerUploadPicturesWrapperClass} className="uploadPicturesWrapper">
+                <FlipMove enterAnimation="fade" leaveAnimation="fade" style={flipMoveClass}>
                     {renderPreviewPictures()}
                 </FlipMove>
             </div>
@@ -240,14 +196,56 @@ const UploadImages = () => {
 
     return (
         <div>
-            <div className="fileContainer">
-                <Icon type="upload" size={50} strokeWidth={3} className="uploadIcon" alt="Upload Icon"/>
-                <button type="button" className={'chooseFileButton'} onClick={triggerFileUpload}>
-                    Escolha as imagens
-                </button>
-                <input ref={input => (inputElement = input)} type="file" multiple onChange={onDropFile}
-                       onClick={onUploadClick} accept="image/*"/>
+            <div style={fileContainerClass} className="fileContainer">
+                <input
+                    style={inputImagesId}
+                    id="inputImages"
+                    ref={input => (inputElement = input)}
+                    type="file"
+                    multiple
+                    onChange={onDropFile}
+                    onClick={onUploadClick}
+                    accept="image/*"
+                />
+                <div style={phases}>
+                    <label style={title}>Etapa 1</label>
+                    <Dropdown
+                        readOnly={false}
+                        submitting={isSubmitting}
+                        value={brand}
+                        onChange={({ target: { value } }) => setBrand(value)}
+                        list={brands}
+                        placeholder="Escolha uma marca"
+                        onChangeKeyboard={element => (element ? setBrand(element.value) : null)}
+                    />
+                </div>
+                <div style={phases}>
+                    <label style={title}>Etapa 2</label>
+                    <Dropdown
+                        readOnly
+                        submitting={isSubmitting}
+                        value={pricetag}
+                        onChange={({ target: { value } }) => setPricetag(value)}
+                        list={['Sim', 'Não']}
+                        placeholder="Tem o preço na imagem?"
+                        onChangeKeyboard={element => (element ? setPricetag(element.value) : null)}
+                    />
+                </div>
+                <label style={title}>Etapa 3</label>
+                <Icon style={fileContainerUploadIconClass} type="upload" size={50} strokeWidth={3}
+                      className="uploadIcon" alt="Upload Icon"/>
+                <Button
+                    submitting={!pricetag || !brand || !isValidBrand(brands, brand) || isSubmitting}
+                    cta={'Escolha as imagens'}
+                    type="button"
+                    click={triggerFileUpload}
+                />
+
                 {renderPreview()}
+                {pictures[1] && (
+                    <Button submitting={!pricetag || !brand || !isValidBrand(brands, brand) || isSubmitting}
+                            cta={'Enviar todas fotos'} type="button"/>
+                )}
             </div>
         </div>
     );

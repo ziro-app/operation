@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import currencyFormat from '@ziro/currency-format';
 import maskInput from '@ziro/mask-input';
 import Form from '@bit/vitorbarbosa19.ziro.form';
@@ -20,20 +20,13 @@ const INstatus = {
     Indisponível: 'soldOut',
 };
 
-export default ({ image, product, setProduct, sizes, setSizes, colors, setColors, update }) => {
-    console.log(
-        'image=',
-        image,
-        //'productRef=',productRef,
-    );
-    console.log('product=', product);
-    //console.log('setProduct=', setProduct);
-    //console.log('setColors=', setColors);
-    //console.log('setSizes=', setSizes);
-    console.log('colors=', colors);
-    console.log('sizes=', sizes);
-    console.log('update=', update);
-
+export default ({ index, image /*, product, setProduct*/, sizes, setSizes, colors, setColors, update, products, setProducts }) => {
+    const [product, setProduct] = useState({ index });
+    useEffect(() => {
+        const list = products;
+        list[index] = product;
+        setProducts(list);
+    }, [product]);
     const availabilityInput = useMemo(
         () => (
             <FormInput
@@ -81,23 +74,23 @@ export default ({ image, product, setProduct, sizes, setSizes, colors, setColors
         [product.status, product.price],
     );
 
-    const referenceIdInput = useMemo(
-        () =>
-            product.status === 'available' && (
-                <FormInput
-                    name="referenceId"
-                    label="Referência"
-                    input={
-                        <InputText
-                            value={product.referenceId || ''}
-                            onChange={({ target: { value } }) => setProduct(old => ({ ...old, referenceId: value }))}
-                            placeholder="Referência da loja"
-                        />
-                    }
-                />
-            ),
-        [product.status, product.referenceId],
-    );
+    /*const referenceIdInput = useMemo(
+      () =>
+        product.status === 'available' && (
+          <FormInput
+            name="referenceId"
+            label="Referência"
+            input={
+              <InputText
+                value={product.referenceId || ''}
+                onChange={({ target: { value } }) => setProduct(old => ({ ...old, referenceId: value }))}
+                placeholder="Referência da loja"
+              />
+            }
+          />
+        ),
+      [product.status, product.referenceId],
+    );*/
 
     const descriptionInput = useMemo(
         () =>
@@ -203,7 +196,7 @@ export default ({ image, product, setProduct, sizes, setSizes, colors, setColors
         [product.status, sizes, colors, product.availableQuantities],
     );
 
-    const _inputs = [availabilityInput, priceInput, referenceIdInput, descriptionInput, sizesInput, colorsInput, quantitiesInput];
+    const _inputs = [availabilityInput, priceInput, descriptionInput, sizesInput, colorsInput, quantitiesInput];
     const inputs = useMemo(() => _inputs.filter(input => !!input), _inputs);
 
     const validations = useMemo(
@@ -230,9 +223,9 @@ export default ({ image, product, setProduct, sizes, setSizes, colors, setColors
 
     return (
         <div style={{ display: 'grid', gridTemplateColumns: '1fr', boxShadow: card.boxShadow }}>
-            {image}
+            {/*image*/}
             <div style={{ padding: '10px 10px 30px' }}>
-                <Form buttonName="Atualizar" validations={validations} sendToBackend={update} inputs={inputs}/>
+                <Form validations={validations} sendToBackend inputs={inputs}/>
             </div>
         </div>
     );
