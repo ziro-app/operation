@@ -66,8 +66,8 @@ const CreatePayment = () => {
 
     useEffect(() => fetch(setIsLoading, setErrorLoading, setSuppliers, setFantasyNames, setCatalogBrands), []);
 
-    if (isLoading) return <SpinnerWithDiv size="5rem"/>;
-    if (errorLoading) return <Error/>;
+    if (isLoading) return <SpinnerWithDiv size="5rem" />;
+    if (errorLoading) return <Error />;
 
     return (
         <Menu title="Criar Cobrança">
@@ -132,7 +132,7 @@ const CreatePayment = () => {
                                                 if (catalogBrands.includes(value)) {
                                                     const selectedBrand = catalogBrands.filter(item => item.brand === value);
                                                     if (selectedBrand) {
-                                                        setBrand(selectedBrand[0].brand);
+                                                        setBrand(value);
                                                     } else setBrand('');
                                                 }
                                             } else null;
@@ -172,28 +172,17 @@ const CreatePayment = () => {
                         ]}
                     />
                 ) : (
-                    <Form
-                        validations={validations}
-                        sendToBackend={sendToBackend ? sendToBackend(state) : () => null}
-                        inputs={[
-                            <FormInput
-                                name="fantasy"
-                                label="Fabricante"
-                                input={
-                                    <Dropdown
-                                        value={fantasy}
-                                        onChange={({ target: { value } }) => {
-                                            setFantasy(value);
-                                            if (fantasyNames.includes(value)) {
-                                                const supplier = suppliers.filter(supplier => supplier.fantasia === value);
-                                                if (supplier) {
-                                                    setZoopId(supplier[0].zoopId);
-                                                }
-                                            }
-                                        }}
-                                        onChangeKeyboard={element => {
-                                            if (element) {
-                                                const value = element.value;
+                        <Form
+                            validations={validations}
+                            sendToBackend={sendToBackend ? sendToBackend(state) : () => null}
+                            inputs={[
+                                <FormInput
+                                    name="fantasy"
+                                    label="Fabricante"
+                                    input={
+                                        <Dropdown
+                                            value={fantasy}
+                                            onChange={({ target: { value } }) => {
                                                 setFantasy(value);
                                                 if (fantasyNames.includes(value)) {
                                                     const supplier = suppliers.filter(supplier => supplier.fantasia === value);
@@ -201,43 +190,54 @@ const CreatePayment = () => {
                                                         setZoopId(supplier[0].zoopId);
                                                     }
                                                 }
-                                            } else null;
-                                        }}
-                                        list={fantasyNames.sort()}
-                                        placeholder="Fabricante referido"
-                                    />
-                                }
-                            />,
-                            <FormInput
-                                name="charge"
-                                label="Valor a cobrar"
-                                input={
-                                    <InputText
-                                        value={currencyFormat(charge)}
-                                        onChange={({ target: { value } }) => {
-                                            const toInteger = parseInt(value.replace(/[R$\.,]/g, ''), 10);
-                                            return setCharge(maskInput(toInteger, '#######', true));
-                                        }}
-                                        placeholder="R$1.299,99"
-                                        inputMode="numeric"
-                                    />
-                                }
-                            />,
-                            <FormInput
-                                name="maxInstallments"
-                                label="Parcelamento máximo"
-                                input={
-                                    <InputText
-                                        value={maxInstallments}
-                                        onChange={({ target: { value } }) => setMaxInstallments(maskInput(value, '##', true))}
-                                        placeholder="10"
-                                        inputMode="numeric"
-                                    />
-                                }
-                            />,
-                        ]}
-                    />
-                )}
+                                            }}
+                                            onChangeKeyboard={element => {
+                                                if (element) {
+                                                    const value = element.value;
+                                                    setFantasy(value);
+                                                    if (fantasyNames.includes(value)) {
+                                                        const supplier = suppliers.filter(supplier => supplier.fantasia === value);
+                                                        if (supplier) {
+                                                            setZoopId(supplier[0].zoopId);
+                                                        }
+                                                    }
+                                                } else null;
+                                            }}
+                                            list={fantasyNames.sort()}
+                                            placeholder="Fabricante referido"
+                                        />
+                                    }
+                                />,
+                                <FormInput
+                                    name="charge"
+                                    label="Valor a cobrar"
+                                    input={
+                                        <InputText
+                                            value={currencyFormat(charge)}
+                                            onChange={({ target: { value } }) => {
+                                                const toInteger = parseInt(value.replace(/[R$\.,]/g, ''), 10);
+                                                return setCharge(maskInput(toInteger, '#######', true));
+                                            }}
+                                            placeholder="R$1.299,99"
+                                            inputMode="numeric"
+                                        />
+                                    }
+                                />,
+                                <FormInput
+                                    name="maxInstallments"
+                                    label="Parcelamento máximo"
+                                    input={
+                                        <InputText
+                                            value={maxInstallments}
+                                            onChange={({ target: { value } }) => setMaxInstallments(maskInput(value, '##', true))}
+                                            placeholder="10"
+                                            inputMode="numeric"
+                                        />
+                                    }
+                                />,
+                            ]}
+                        />
+                    )}
             </motion.div>
         </Menu>
     );
