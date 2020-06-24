@@ -1,25 +1,24 @@
-import React, { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
-import Spinner from '@bit/vitorbarbosa19.ziro.spinner'
-import Error from '@bit/vitorbarbosa19.ziro.error'
-import Dropdown from '@bit/vitorbarbosa19.ziro.dropdown'
-import ImageUpload from '@bit/vitorbarbosa19.ziro.image-upload'
-import SpinnerWithDiv from '@bit/vitorbarbosa19.ziro.spinner-with-div'
-import SubmitBlock from './SubmitBlock'
-import fetch from './fetch'
-import sendToBackend from './sendToBackend'
-import isValidBrand from './isValidBrand'
-import { container, block, title } from './styles'
+import React, { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
+import Error from '@bit/vitorbarbosa19.ziro.error';
+import Dropdown from '@bit/vitorbarbosa19.ziro.dropdown';
+import ImageUpload from '@bit/vitorbarbosa19.ziro.image-upload';
+import SpinnerWithDiv from '@bit/vitorbarbosa19.ziro.spinner-with-div';
+import SubmitBlock from './SubmitBlock';
+import fetch from './fetch';
+import sendToBackend from './sendToBackend';
+import isValidBrand from './isValidBrand';
+import { block, container, title } from './styles';
 
 export default () => {
-    const [isLoading, setIsLoading] = useState(true)
-    const [isError, setIsError] = useState(false)
-    const [isSubmitting, setIsSubmitting] = useState(false)
-    const [isSubmitted, setIsSubmitted] = useState(false)
-    const [brands, setBrands] = useState('')
-    const [brandsAndTrends, setBrandsAndTrends] = useState('')
-    const [brand, setBrand] = useState('')
-    const [pricetag, setPricetag] = useState('')
+    const [isLoading, setIsLoading] = useState(true);
+    const [isError, setIsError] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isSubmitted, setIsSubmitted] = useState(false);
+    const [brands, setBrands] = useState('');
+    const [brandsAndTrends, setBrandsAndTrends] = useState('');
+    const [brand, setBrand] = useState('');
+    const [pricetag, setPricetag] = useState('');
     const [photoPeriod, setPhotoPeriod] = useState('')
     useEffect(() => fetch(setIsLoading, setIsError, setBrands, setBrandsAndTrends), [])
     useEffect(() => {
