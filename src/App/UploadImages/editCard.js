@@ -20,13 +20,23 @@ const INstatus = {
     Indisponível: 'soldOut',
 };
 
-export default ({ index, image /*, product, setProduct*/, sizes, setSizes, colors, setColors, update, products, setProducts }) => {
-    const [product, setProduct] = useState({ index });
+export default ({ index, products, setProducts, filesList, setFiles }) => {
+    const [product, setProduct] = useState({});
+    const [sizes, setSizes] = useState([]);
+    const [colors, setColors] = useState([]);
     useEffect(() => {
         const list = products;
         list[index] = product;
         setProducts(list);
-    }, [product]);
+        console.log(filesList);
+        if (filesList[0] && products[0] && products[index]) {
+            const listForFiles = filesList;
+            listForFiles[index].product = products[index];
+            console.log(products[index]);
+            setFiles(listForFiles);
+            console.log(filesList);
+        }
+    }, [product, sizes, colors, filesList]);
     const availabilityInput = useMemo(
         () => (
             <FormInput
@@ -36,14 +46,19 @@ export default ({ index, image /*, product, setProduct*/, sizes, setSizes, color
                     <DropDown
                         list={['Disponível', 'Indisponível']}
                         value={PTstatus[product.status] || ''}
-                        onChange={({ target: { value } }) => setProduct(old => ({
-                            ...old,
-                            status: INstatus[value] || 'waitingInfo',
-                        }))}
-                        onChangeKeyboard={element => element && setProduct(old => ({
-                            ...old,
-                            status: INstatus[element.value] || 'waitingInfo',
-                        }))}
+                        onChange={({ target: { value } }) =>
+                            setProduct(old => ({
+                                ...old,
+                                status: INstatus[value] || 'waitingInfo',
+                            }))
+                        }
+                        onChangeKeyboard={element =>
+                            element &&
+                            setProduct(old => ({
+                                ...old,
+                                status: INstatus[element.value] || 'waitingInfo',
+                            }))
+                        }
                         placeholder="Está disponível em estoque?"
                     />
                 }
@@ -73,24 +88,6 @@ export default ({ index, image /*, product, setProduct*/, sizes, setSizes, color
             ),
         [product.status, product.price],
     );
-
-    /*const referenceIdInput = useMemo(
-      () =>
-        product.status === 'available' && (
-          <FormInput
-            name="referenceId"
-            label="Referência"
-            input={
-              <InputText
-                value={product.referenceId || ''}
-                onChange={({ target: { value } }) => setProduct(old => ({ ...old, referenceId: value }))}
-                placeholder="Referência da loja"
-              />
-            }
-          />
-        ),
-      [product.status, product.referenceId],
-    );*/
 
     const descriptionInput = useMemo(
         () =>
@@ -143,7 +140,7 @@ export default ({ index, image /*, product, setProduct*/, sizes, setSizes, color
                                 setProduct(old => {
                                     const newQuantities = Object.entries(old.availableQuantities || {}).reduce((prev, [key, value]) => {
                                         if (newColors.some(color => key.endsWith(color))) return { ...prev, [key]: value };
-                                        else return prev;
+                                        return prev;
                                     }, {});
                                     return { ...old, availableQuantities: newQuantities };
                                 });
@@ -167,11 +164,14 @@ export default ({ index, image /*, product, setProduct*/, sizes, setSizes, color
                         <div style={{ display: 'grid', gridGap: '10px', padding: '10px' }}>
                             {sizes.map(size =>
                                 (colors.length ? colors : ['']).map(color => (
-                                    <div key={`${size}-${color}`} style={{
-                                        display: 'grid',
-                                        gridTemplateColumns: '1fr 2fr 2fr',
-                                        alignItems: 'center',
-                                    }}>
+                                    <div
+                                        key={`${size}-${color}`}
+                                        style={{
+                                            display: 'grid',
+                                            gridTemplateColumns: '1fr 2fr 2fr',
+                                            alignItems: 'center',
+                                        }}
+                                    >
                                         <label>{size}</label>
                                         <label>{color}</label>
                                         <InputText

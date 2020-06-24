@@ -1,29 +1,26 @@
-import React, { useState, useEffect, useCallback, useMemo } from "react";
-import { get } from "axios";
-import { useRoute } from "wouter";
-import { db, fs } from "../../../Firebase";
-import JSZip from "jszip";
-import Header from "@bit/vitorbarbosa19.ziro.header";
-import Spinner from "@bit/vitorbarbosa19.ziro.spinner-with-div";
-import Button from "@bit/vitorbarbosa19.ziro.button";
-import { brandCart, brandName, buttonDownload } from "./styles";
-import Card from "./card";
-import currencyFormat from "@ziro/currency-format";
-import { summary, saleSummary, total, priceTotal } from "./styles_catalog";
-import { containerWithPadding } from "@ziro/theme";
-import { reduceTotal } from "./utils";
-import { useLocation } from "wouter";
+import React, { useCallback, useMemo, useState } from 'react';
+import { get } from 'axios';
+import { useLocation, useRoute } from 'wouter';
+import { db, fs } from '../../../Firebase';
+import JSZip from 'jszip';
+import Header from '@bit/vitorbarbosa19.ziro.header';
+import Button from '@bit/vitorbarbosa19.ziro.button';
+import { brandCart, brandName, buttonDownload } from './styles';
+import Card from './card';
+import currencyFormat from '@ziro/currency-format';
+import { priceTotal, saleSummary, summary, total } from './styles_catalog';
+import { containerWithPadding } from '@ziro/theme';
+import { reduceTotal } from './utils';
 
 export default ({
-    cart: { productIds, products, ...cart },
-    storeowner,
-    oldQuery,
-}) => {
+                    cart: { productIds, products, ...cart },
+                    storeowner,
+                    oldQuery,
+                }) => {
     const [prices, setPrices] = useState({});
     const [urls, setURLs] = useState({});
     const [location, setLocation] = useLocation();
-    const [match, params] = useRoute("/pedidos/:cartId?");
-    console.log(params);
+    const [match, params] = useRoute('/pedidos/:cartId?');
 
     const [totalItems, totalPrice] = useMemo(
         () =>

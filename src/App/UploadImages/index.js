@@ -20,10 +20,9 @@ import {
 } from './styles';
 import isValidBrand from '../ImageUpload/isValidBrand';
 import { title } from '../ImageUpload/styles';
+import sendToBackend from './sendToBackend';
 
 const UploadImages = () => {
-    const [sizes, setSizes] = useState([]);
-    const [colors, setColors] = useState([]);
     const [products, setProducts] = useState([{}]);
     const [isLoading, setIsLoading] = useState(true);
     const [isError, setIsError] = useState(false);
@@ -39,6 +38,9 @@ const UploadImages = () => {
     const [errors, setErrors] = React.useState([]);
     const imgExtension = ['.jpg', '.jpeg', '.gif', '.png'];
     const maxFileSize = 5242880;
+    useEffect(() => {
+        console.log(products);
+    }, [products]);
 
     useEffect(() => fetch(setIsLoading, setIsError, setBrands, setBrandsAndTrends), []);
 
@@ -68,7 +70,7 @@ const UploadImages = () => {
     }
 
     function onDropFile(e) {
-        const files = e.target.files;
+        const { files } = e.target;
         const allFilePromises = [];
         const fileErrors = [];
 
@@ -114,8 +116,6 @@ const UploadImages = () => {
         });
     }
 
-    //console.log(pictures);
-    //console.log(filesList);
     let inputElement = '';
 
     function onUploadClick(e) {
@@ -161,20 +161,8 @@ const UploadImages = () => {
                     </div>
                     <img src={picture} style={fileContainerUploadPictureContainerimgUploadPictureClass}
                          className="uploadPicture" alt="preview"/>
-                    <EditCard
-                        index={index}
-                        image={picture}
-                        //product={product}
-                        //productRef={productRef}
-                        //setProduct={setProduct}
-                        setColors={setColors}
-                        setSizes={setSizes}
-                        colors={colors}
-                        sizes={sizes}
-                        //update={update}
-                        products={products}
-                        setProducts={setProducts}
-                    />
+                    <EditCard index={index} products={products} setProducts={setProducts} filesList={filesList}
+                              setFiles={setFiles}/>
                 </div>
             );
         });
@@ -231,20 +219,54 @@ const UploadImages = () => {
                         onChangeKeyboard={element => (element ? setPricetag(element.value) : null)}
                     />
                 </div>
-                <label style={title}>Etapa 3</label>
+                <div style={phases}>
+                    <label style={title}>Etapa 3</label>
+                    <Dropdown
+                        readOnly
+                        submitting={isSubmitting}
+                        value={photoPeriod}
+                        onChange={({ target: { value } }) => setPhotoPeriod(value)}
+                        list={['Nova', 'Antiga']}
+                        placeholder="A imagem é nova ou antiga?"
+                        onChangeKeyboard={element => (element ? setPhotoPeriod(element.value) : null)}
+                    />
+                </div>
+
+                <label style={title}>Etapa 4</label>
                 <Icon style={fileContainerUploadIconClass} type="upload" size={50} strokeWidth={3}
                       className="uploadIcon" alt="Upload Icon"/>
+
                 <Button
-                    submitting={!pricetag || !brand || !isValidBrand(brands, brand) || isSubmitting}
-                    cta={'Escolha as imagens'}
+                    submitting={!pricetag || !photoPeriod || !brand || !isValidBrand(brands, brand) || isSubmitting}
+                    cta="Escolha as imagens"
                     type="button"
                     click={triggerFileUpload}
                 />
-
                 {renderPreview()}
                 {pictures[1] && (
-                    <Button submitting={!pricetag || !brand || !isValidBrand(brands, brand) || isSubmitting}
-                            cta={'Enviar todas fotos'} type="button"/>
+                    <Button
+                        click={() =>
+                            sendToBackend(
+                                setIsSubmitting,
+                                setIsSubmitted,
+                                setBrand,
+                                brand,
+                                brandsAndTrends,
+                                pricetag,
+                                setPricetag,
+                                photoPeriod,
+                                setPhotoPeriod,
+                                filesList,
+                                products,
+                                setProducts,
+                                setPictures,
+                                setFiles,
+                            )
+                        }
+                        submitting={!pricetag || !photoPeriod || !brand || !isValidBrand(brands, brand) || isSubmitting}
+                        cta={'Enviar todas fotos'}
+                        type="button"
+                    />
                 )}
             </div>
         </div>

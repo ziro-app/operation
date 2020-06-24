@@ -25,7 +25,7 @@ const fetch = (setIsLoading, setIsError, setBrands, setBrandsAndTrends) => {
 
             const brands = values.map(([name]) => name);
             const brandsAndTrends = values.map(([name, insta, ...trends]) => [name, trends]);
-            setBrands(['Bot', ...brands]);
+            setBrands(['TestNewUpload', 'Bot', ...brands]);
             setBrandsAndTrends(brandsAndTrends);
         } catch (error) {
             if (error.response) console.log(error.response);
