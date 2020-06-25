@@ -1,26 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import Icon from '@bit/vitorbarbosa19.ziro.icon';
-import FlipMove from 'react-flip-move';
-import InputText from '@bit/vitorbarbosa19.ziro.input-text';
-import FormInput from '@bit/vitorbarbosa19.ziro.form-input';
 import Dropdown from '@bit/vitorbarbosa19.ziro.dropdown';
-import EditCard from './editCard';
 import Button from '@bit/vitorbarbosa19.ziro.button';
 import fetch from './fetch';
-import {
-    fileContainerClass,
-    fileContainerDeleteImageClass,
-    fileContainerUploadIconClass,
-    fileContainerUploadPictureContainerClass,
-    fileContainerUploadPictureContainerimgUploadPictureClass,
-    fileContainerUploadPicturesWrapperClass,
-    flipMoveClass,
-    inputImagesId,
-    phases,
-} from './styles';
+import { fileContainerClass, fileContainerUploadIconClass, inputImagesId, phases } from './styles';
 import isValidBrand from '../ImageUpload/isValidBrand';
 import { title } from '../ImageUpload/styles';
 import sendToBackend from './sendToBackend';
+import { hasExtension, onDragOver, onUploadClick, readFile } from './functions';
+import PreviewPictures from './previewPictures';
 
 const UploadImages = () => {
     const [products, setProducts] = useState([{}]);
@@ -36,39 +24,12 @@ const UploadImages = () => {
     const [pictures, setPictures] = React.useState([]);
     const [filesList, setFiles] = React.useState([]);
     const [errors, setErrors] = React.useState([]);
-    const imgExtension = ['.jpg', '.jpeg', '.gif', '.png'];
     const maxFileSize = 5242880;
     useEffect(() => {
         console.log(products);
     }, [products]);
 
     useEffect(() => fetch(setIsLoading, setIsError, setBrands, setBrandsAndTrends), []);
-
-    function hasExtension(fileName) {
-        const pattern = '(' + imgExtension.join('|').replace(/\./g, '\\.') + ')$';
-        return new RegExp(pattern, 'i').test(fileName);
-    }
-
-    function readFile(file) {
-        return new Promise((resolve, reject) => {
-            const reader = new FileReader();
-
-            // Read the image via FileReader API and save image result in state.
-            reader.onload = function(e) {
-                // Add the file name to the data URL
-                let dataURL = e.target.result;
-                dataURL = dataURL.replace(';base64', `;name=${file.name};base64`);
-                resolve({ file, dataURL });
-            };
-
-            reader.readAsDataURL(file);
-        });
-    }
-
-    function onDragOver(e) {
-        e.stopPropagation();
-        e.preventDefault();
-    }
 
     function settingThePicturesAndFiles(files) {
         const allFilePromises = [];
@@ -134,66 +95,6 @@ const UploadImages = () => {
 
     let inputElement = '';
 
-    function onUploadClick(e) {
-        e.target.value = null;
-    }
-
-    function removeImage(picture) {
-        const removeIndex = pictures.findIndex(e => e === picture);
-        const filteredPictures = pictures.filter((e, index) => index !== removeIndex);
-        const filteredFiles = filesList.filter((e, index) => index !== removeIndex);
-        const listOfProducts = products.filter((e, index) => index !== removeIndex);
-
-        setProducts(listOfProducts);
-        setPictures(filteredPictures);
-        setFiles(filteredFiles);
-    }
-
-    function renderInputs() {
-        return pictures.map((picture, index) => {
-            return (
-                <FormInput
-                    name="sizes"
-                    label="Tamanhos"
-                    input={
-                        <InputText
-                            placeholder="P,M,G"
-                            value={(sizes && sizes.join(',')) || ''}
-                            onChange={({ target: { value } }) => setSizes(value ? value.split(',') : '')}
-                        />
-                    }
-                />
-            );
-        });
-    }
-
-    function renderPreviewPictures() {
-        return pictures.map((picture, index) => {
-            return (
-                <div key={index} style={fileContainerUploadPictureContainerClass} className="uploadPictureContainer">
-                    <div style={fileContainerDeleteImageClass} className="deleteImage"
-                         onClick={() => removeImage(picture)}>
-                        X
-                    </div>
-                    <img src={picture} style={fileContainerUploadPictureContainerimgUploadPictureClass}
-                         className="uploadPicture" alt="preview"/>
-                    <EditCard index={index} products={products} setProducts={setProducts} filesList={filesList}
-                              setFiles={setFiles}/>
-                </div>
-            );
-        });
-    }
-
-    function renderPreview() {
-        return (
-            <div style={fileContainerUploadPicturesWrapperClass} className="uploadPicturesWrapper">
-                <FlipMove enterAnimation="fade" leaveAnimation="fade" style={flipMoveClass}>
-                    {renderPreviewPictures()}
-                </FlipMove>
-            </div>
-        );
-    }
-
     function triggerFileUpload() {
         inputElement.click();
     }
@@ -258,7 +159,14 @@ const UploadImages = () => {
                     type="button"
                     click={triggerFileUpload}
                 />
-                {renderPreview()}
+                <PreviewPictures
+                    pictures={pictures}
+                    setPictures={setPictures}
+                    products={products}
+                    setProducts={setProducts}
+                    filesList={filesList}
+                    setFiles={setFiles}
+                />
                 {pictures[1] && (
                     <Button
                         click={() =>
