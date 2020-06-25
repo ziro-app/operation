@@ -44,10 +44,6 @@ const UploadImages = () => {
 
     useEffect(() => fetch(setIsLoading, setIsError, setBrands, setBrandsAndTrends), []);
 
-    const onDrop = picture => {
-        setPictures([...pictures, picture]);
-    };
-
     function hasExtension(fileName) {
         const pattern = '(' + imgExtension.join('|').replace(/\./g, '\\.') + ')$';
         return new RegExp(pattern, 'i').test(fileName);
@@ -69,8 +65,12 @@ const UploadImages = () => {
         });
     }
 
-    function onDropFile(e) {
-        const { files } = e.target;
+    function onDragOver(e) {
+        e.stopPropagation();
+        e.preventDefault();
+    }
+
+    function settingThePicturesAndFiles(files) {
         const allFilePromises = [];
         const fileErrors = [];
 
@@ -114,6 +114,22 @@ const UploadImages = () => {
             setPictures(dataURLs);
             setFiles(files);
         });
+    }
+
+    function onClickChoosePhotos(e) {
+        e.stopPropagation();
+        e.preventDefault();
+        console.log(e.dataTransfer);
+        const { files } = e.target;
+        settingThePicturesAndFiles(files);
+    }
+
+    function onDropFile(e) {
+        e.stopPropagation();
+        e.preventDefault();
+        console.log(e.dataTransfer);
+        const { files } = e.dataTransfer;
+        settingThePicturesAndFiles(files);
     }
 
     let inputElement = '';
@@ -184,14 +200,14 @@ const UploadImages = () => {
 
     return (
         <div>
-            <div style={fileContainerClass} className="fileContainer">
+            <div style={fileContainerClass} className="fileContainer" onDrop={onDropFile} onDragOver={onDragOver}>
                 <input
                     style={inputImagesId}
                     id="inputImages"
                     ref={input => (inputElement = input)}
                     type="file"
                     multiple
-                    onChange={onDropFile}
+                    onChange={onClickChoosePhotos}
                     onClick={onUploadClick}
                     accept="image/*"
                 />

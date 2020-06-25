@@ -4,7 +4,6 @@ import maskInput from '@ziro/mask-input';
 import Form from '@bit/vitorbarbosa19.ziro.form';
 import FormInput from '@bit/vitorbarbosa19.ziro.form-input';
 import InputText from '@bit/vitorbarbosa19.ziro.input-text';
-import DropDown from '@bit/vitorbarbosa19.ziro.dropdown';
 import { card } from './styles';
 
 const PTstatus = {
@@ -21,51 +20,51 @@ const INstatus = {
 };
 
 export default ({ index, products, setProducts, filesList, setFiles }) => {
-    const [product, setProduct] = useState({});
+    const [product, setProduct] = useState({ status: 'available' });
     const [sizes, setSizes] = useState([]);
     const [colors, setColors] = useState([]);
     useEffect(() => {
         const list = products;
         list[index] = product;
         setProducts(list);
-        console.log(filesList);
-        if (filesList[0] && products[0] && products[index]) {
+        if (filesList[0] && products[0] && products[index] && filesList[index]) {
             const listForFiles = filesList;
             listForFiles[index].product = products[index];
+
             console.log(products[index]);
             setFiles(listForFiles);
             console.log(filesList);
         }
     }, [product, sizes, colors, filesList]);
-    const availabilityInput = useMemo(
-        () => (
-            <FormInput
-                name="availability"
-                label="Disponibilidade"
-                input={
-                    <DropDown
-                        list={['Disponível', 'Indisponível']}
-                        value={PTstatus[product.status] || ''}
-                        onChange={({ target: { value } }) =>
-                            setProduct(old => ({
-                                ...old,
-                                status: INstatus[value] || 'waitingInfo',
-                            }))
-                        }
-                        onChangeKeyboard={element =>
-                            element &&
-                            setProduct(old => ({
-                                ...old,
-                                status: INstatus[element.value] || 'waitingInfo',
-                            }))
-                        }
-                        placeholder="Está disponível em estoque?"
-                    />
-                }
+    /*const availabilityInput = useMemo(
+      () => (
+        <FormInput
+          name="availability"
+          label="Disponibilidade"
+          input={
+            <DropDown
+              list={['Disponível', 'Indisponível']}
+              value={PTstatus[product.status] || ''}
+              onChange={({ target: { value } }) =>
+                setProduct(old => ({
+                  ...old,
+                  status: INstatus[value] || 'waitingInfo',
+                }))
+              }
+              onChangeKeyboard={element =>
+                element &&
+                setProduct(old => ({
+                  ...old,
+                  status: INstatus[element.value] || 'waitingInfo',
+                }))
+              }
+              placeholder="Está disponível em estoque?"
             />
-        ),
-        [product.status],
-    );
+          }
+        />
+      ),
+      [product.status],
+    );*/
 
     const priceInput = useMemo(
         () =>
@@ -196,7 +195,7 @@ export default ({ index, products, setProducts, filesList, setFiles }) => {
         [product.status, sizes, colors, product.availableQuantities],
     );
 
-    const _inputs = [availabilityInput, priceInput, descriptionInput, sizesInput, colorsInput, quantitiesInput];
+    const _inputs = [priceInput, descriptionInput, sizesInput, colorsInput, quantitiesInput];
     const inputs = useMemo(() => _inputs.filter(input => !!input), _inputs);
 
     const validations = useMemo(
