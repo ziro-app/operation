@@ -6,7 +6,7 @@ const sendToBackend = state => () => {
     const baseUrl = 'https://ziro.app/pagamento/';
     return new Promise(async (resolve, reject) => {
         try {
-            if (nome === 'Uiller' || nome === 'Vitor' || nome === 'Bruno' || nome === 'João' || nome === 'Cesar') {
+            if (nome === 'Uiller' || nome === 'Vitor' || nome === 'Bruno' || nome === 'João' || nome === 'Cesar' || nome === 'Ale') {
                 if (seller && sellerId) {
                     const docRef = await db.collection('credit-card-payments').add({
                         dateLinkCreated: new Date(),
@@ -29,16 +29,16 @@ const sendToBackend = state => () => {
                     setCharge('');
                     setMaxInstallments('');
                 } else {
-          throw { msg: 'Vendedor não encontrado', customError: true };
-        }
-      } else throw { msg: 'Permissão insuficiente', customError: true };
-    } catch (error) {
-      if (error.copyError) {
-        resolve('Link criado. Acesse na aba de vendas');
-        setFantasy('');
-        setBrand('')
-        setCharge('');
-        setMaxInstallments('');
+                    throw { msg: 'Vendedor não encontrado', customError: true };
+                }
+            } else throw { msg: 'Permissão insuficiente', customError: true };
+        } catch (error) {
+            if (error.copyError) {
+                resolve('Link criado. Acesse na aba de vendas');
+                setFantasy('');
+                setBrand('');
+                setCharge('');
+                setMaxInstallments('');
       }
       if (error.customError) reject(error);
       else {

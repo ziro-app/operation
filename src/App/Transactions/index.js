@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Spinner from '@bit/vitorbarbosa19.ziro.spinner';
 import Error from '@bit/vitorbarbosa19.ziro.error';
 import TransactionsList from './TransactionsList/index';
@@ -14,7 +14,7 @@ import { Menu } from '../Menu/index';
 const Transactions = ({ transactionId, receivableId, carts, storeowners, setQueryStr }) => {
     const [isLoading, setIsLoading] = useState(true);
     const [errorLoading, setErrorLoading] = useState(false);
-    const [loadingMore, setLoadingMore] = useState(false);
+    const [loadingMore, setLoadingMore] = useState(true);
     const [payments, setPayments] = useState([]);
     const [totalTransactions, setTotalTransactions] = useState(-1);
     const [lastDoc, setLastDoc] = useState(null);
@@ -23,16 +23,15 @@ const Transactions = ({ transactionId, receivableId, carts, storeowners, setQuer
     const useQuerySelector = useQuery();
     const [statusFilter, setStatusFilter] = useState('');
     const [sellerFilter, setSellerFilter] = useState('');
-    const [numberOfLoops, setNumberOfLoops] = useState(0);
     const [limitFetch, setLimitFetch] = useState(10);
-    const [isLoadingMore, setIsLoadingMore] = useState(false);
-
+    const [isLoadingMore, setIsLoadingMore] = useState(true);
+    const [transaction, setTransaction] = useState({});
     const [storeownerId, setStoreownerId] = useQuerySelector('storeownerId');
     const [seller, setSeller] = useQuerySelector('seller');
     const [status, setStatus] = useQuerySelector('status');
     const zoopId = '93fb596c44384485b7ece404de0e3584';
     useEffect(() => {
-        if (numberOfLoops < 1 || !payments.length) {
+        if (loadingMore) {
             fetch(
                 setIsLoading,
                 setErrorLoading,
@@ -48,26 +47,33 @@ const Transactions = ({ transactionId, receivableId, carts, storeowners, setQuer
                 statusFilter,
                 setSellerFilter,
                 sellerFilter,
-                setNumberOfLoops,
                 setIsLoadingResults,
                 limitFetch,
                 setIsLoadingMore,
             );
-
-            setNumberOfLoops(numberOfLoops + 1);
         }
     }, [statusFilter, sellerFilter, payments, limitFetch]);
 
     if (isLoading)
         return (
             <div style={spinner}>
-                <Spinner size="5.5rem" />
+                <Spinner size="5.5rem"/>
             </div>
         );
-
-    if (errorLoading) return <Error />;
-    if (transactionId && receivableId) return <ReceivableDetails transactions={payments} transactionId={transactionId} receivableId={receivableId} />;
-    if (transactionId) return <TransactionDetails transactions={payments} transactionId={transactionId} />;
+    if (errorLoading) return <Error/>;
+    if (transactionId && receivableId)
+        return (
+            <ReceivableDetails
+                transactions={payments}
+                transactionId={transactionId}
+                receivableId={receivableId}
+                transaction={transaction}
+                setTransaction={setTransaction}
+            />
+        );
+    if (transactionId)
+        return <TransactionDetails transactions={payments} transactionId={transactionId} transaction={transaction}
+                                   setTransaction={setTransaction}/>;
     const listStatus = listStatusForFilter;
     const listSellers = listSellersForFilter;
     return (
@@ -90,26 +96,20 @@ const Transactions = ({ transactionId, receivableId, carts, storeowners, setQuer
             </div>
             {isLoadingResults ? (
                 <div style={spinner}>
-                    <Spinner size="5.5rem" />
+                    <Spinner size="5.5rem"/>
                 </div>
             ) : (
-                    <TransactionsList
-                        transactions={payments}
-                        btnMoreClick={() => {
-                            setIsLoadingMore(true);
-
-                            setLimitFetch(limitFetch + 10);
-                        }}
-                        hasMore={!(payments.length === totalTransactions)}
-                        isSearching={isLoadingMore}
-                        loadingMore={isLoadingMore}
-                    />
-                )}
-            {/*isLoadingMore && (
-                <div style={spinner}>
-                    <Spinner size="5.5rem" />
-                </div>
-            )*/}
+                <TransactionsList
+                    transactions={payments}
+                    btnMoreClick={() => {
+                        setLoadingMore(true);
+                        setLimitFetch(limitFetch + 10);
+                    }}
+                    hasMore={!(payments.length === totalTransactions)}
+                    isSearching={isLoadingMore}
+                    loadingMore={isLoadingMore}
+                />
+            )}
         </Menu>
     );
 };

@@ -1,5 +1,5 @@
-import React, {useEffect, useRef, useState} from 'react';
-import {motion} from 'framer-motion';
+import React, { useEffect, useRef, useState } from 'react';
+import { motion } from 'framer-motion';
 import currencyFormat from '@ziro/currency-format';
 import maskInput from '@ziro/mask-input';
 import sendToBackend from './sendToBackend';
@@ -10,10 +10,10 @@ import SpinnerWithDiv from '@bit/vitorbarbosa19.ziro.spinner-with-div';
 import Dropdown from '@bit/vitorbarbosa19.ziro.dropdown';
 import fetch from './fetch';
 import Header from '@bit/vitorbarbosa19.ziro.header';
-import {containerWithPadding, fontTitle} from '@ziro/theme';
+import { containerWithPadding, fontTitle } from '@ziro/theme';
 import Button from '@bit/vitorbarbosa19.ziro.button';
 import axios from 'axios';
-import {db} from '../../Firebase';
+import { db } from '../../Firebase';
 
 function useIsMountedRef() {
   const isMountedRef = useRef(null);
@@ -24,19 +24,18 @@ function useIsMountedRef() {
   return isMountedRef;
 }
 
-const SplitPayment = ({ transactionId }) => {
-  const [on_behalf_of, setOn_behalf_of] = useState('');
-  const [amountTransaction, setAmountTransaction] = useState('');
-  const [amount, setAmount] = useState('');
-  const [error, setError] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-  const [errorLoading, setErrorLoading] = useState(false);
-  const [suppliers, setSuppliers] = useState([]);
-  const [chargeTypes, setChargeTypes] = useState([]);
-  const [chargeTypeInput, setChargeTypeInput] = useState('');
-  const [chargeType, setChargeType] = useState('');
+const SplitPayment = ({ transactionId, transaction, setTransaction }) => {
+    const [on_behalf_of, setOn_behalf_of] = useState('');
+    const [amountTransaction, setAmountTransaction] = useState('');
+    const [amount, setAmount] = useState('');
+    const [error, setError] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
+    const [errorLoading, setErrorLoading] = useState(false);
+    const [suppliers, setSuppliers] = useState([]);
+    const [chargeTypes, setChargeTypes] = useState([]);
+    const [chargeTypeInput, setChargeTypeInput] = useState('');
+    const [chargeType, setChargeType] = useState('');
   const [charge, setCharge] = useState('');
-  const [transaction, setTransaction] = useState({});
   const [maxInstallments, setMaxInstallments] = useState('');
   const [validationMessage, setValidationMessage] = useState('');
   const [cancelModal, setCancelModal] = useState(false);

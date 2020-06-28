@@ -8,6 +8,7 @@ import {
     fileContainerUploadPicturesWrapperClass,
     flipMoveClass,
 } from './styles';
+import RImg from 'react-image';
 
 export default ({ pictures, setPictures, products, setProducts, filesList, setFiles }) => {
     function removeImage(picture) {
@@ -32,8 +33,8 @@ export default ({ pictures, setPictures, products, setProducts, filesList, setFi
                                  onClick={() => removeImage(picture)}>
                                 X
                             </div>
-                            <img src={picture} style={fileContainerUploadPictureContainerimgUploadPictureClass}
-                                 className="uploadPicture" alt="preview"/>
+                            <RImg src={picture} style={fileContainerUploadPictureContainerimgUploadPictureClass}
+                                  className="uploadPicture" alt="preview"/>
                             <EditCard index={index} products={products} setProducts={setProducts} filesList={filesList}
                                       setFiles={setFiles}/>
                         </div>

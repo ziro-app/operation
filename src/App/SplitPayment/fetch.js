@@ -3,7 +3,6 @@ import { db } from '../../Firebase/index';
 import matchStatusColor from '../Transactions/matchStatusColor';
 import { dateFormat } from '../Transactions/utils';
 import axios from 'axios';
-import set from '@babel/runtime/helpers/esm/set';
 
 const getSplitRules = async (transaction_id, setTransaction, transaction, setList, setIsLoading) => {
   try {
@@ -92,7 +91,7 @@ const fetch = (transactionId, setTransaction, setError, transaction, setList, se
               receiptId,
               split_rules,
             });
-            setTransaction(paymentDoc[0]);
+              if (transaction !== paymentDoc[0]) setTransaction(paymentDoc[0]);
             setIsLoading(false);
             //setList(split_rules);
             //await getSplitRules(transactionZoopId, setTransaction, transaction, setList, setIsLoading);

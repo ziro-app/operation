@@ -1,201 +1,66 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import currencyFormat from '@ziro/currency-format';
-import maskInput from '@ziro/mask-input';
+import React, { useEffect, useMemo } from 'react';
 import Form from '@bit/vitorbarbosa19.ziro.form';
-import FormInput from '@bit/vitorbarbosa19.ziro.form-input';
-import InputText from '@bit/vitorbarbosa19.ziro.input-text';
 import { card } from './styles';
 
-const PTstatus = {
-    available: 'Disponível',
-    unavailable: 'Indisponível',
-    closed: 'Disponível',
-    waitingInfo: '',
-    soldOut: 'Indisponível',
-};
 
-const INstatus = {
-    Disponível: 'available',
-    Indisponível: 'soldOut',
-};
+export default ({
+                    index,
+                    product,
+                    setProduct,
+                    sizes,
+                    setSizes,
+                    colors,
+                    setColors,
+                    products,
+                    setProducts,
+                    filesList,
+                    setFiles,
+                    update,
+                    image,
+                    arrayOfInputs,
+                }) => {
+    if (filesList) {
+        useEffect(() => {
+            const list = products;
+            list[index] = product;
+            setProducts(list);
+            if (filesList[0] && products[0] && products[index] && filesList[index]) {
+                const listForFiles = filesList;
+                listForFiles[index].product = products[index];
 
-export default ({ index, products, setProducts, filesList, setFiles }) => {
-    const [product, setProduct] = useState({ status: 'available' });
-    const [sizes, setSizes] = useState([]);
-    const [colors, setColors] = useState([]);
+                console.log(products[index]);
+                setFiles(listForFiles);
+                console.log(filesList);
+            }
+        }, [product, sizes, colors, filesList]);
+    }
+
+    const _inputs = arrayOfInputs;
+    /* const selectedInputs = [];
+    //console.log(arrayOfInputs);
     useEffect(() => {
-        const list = products;
-        list[index] = product;
-        setProducts(list);
-        if (filesList[0] && products[0] && products[index] && filesList[index]) {
-            const listForFiles = filesList;
-            listForFiles[index].product = products[index];
-
-            console.log(products[index]);
-            setFiles(listForFiles);
-            console.log(filesList);
+      arrayOfInputs.map(input => {
+        //console.log('product', product);
+        if (input === 'availability') setProduct({ status: 'available' });
+        //console.log('product', product);
+        //console.log(_inputs);
+        index = _inputs.findIndex(x => x !== 0 && x.props.name === input);
+        // console.log(index);
+        // console.log(_inputs);
+        if (index !== -1) {
+          // console.log('teste');
+          selectedInputs.push(_inputs[index]);
+          //console.log(selectedInputs);
         }
-    }, [product, sizes, colors, filesList]);
-    /*const availabilityInput = useMemo(
-      () => (
-        <FormInput
-          name="availability"
-          label="Disponibilidade"
-          input={
-            <DropDown
-              list={['Disponível', 'Indisponível']}
-              value={PTstatus[product.status] || ''}
-              onChange={({ target: { value } }) =>
-                setProduct(old => ({
-                  ...old,
-                  status: INstatus[value] || 'waitingInfo',
-                }))
-              }
-              onChangeKeyboard={element =>
-                element &&
-                setProduct(old => ({
-                  ...old,
-                  status: INstatus[element.value] || 'waitingInfo',
-                }))
-              }
-              placeholder="Está disponível em estoque?"
-            />
-          }
-        />
-      ),
-      [product.status],
-    );*/
+        // console.log(_inputs);
+      });
+      //_inputs = selectedInputs;
+      setSelectedInput(selectedInputs);
+      console.log(_inputs);
+    }, []);*/
 
-    const priceInput = useMemo(
-        () =>
-            product.status === 'available' && (
-                <FormInput
-                    name="price"
-                    label="Preço"
-                    input={
-                        <InputText
-                            value={currencyFormat(product.price || '')}
-                            onChange={({ target: { value } }) => {
-                                const toInteger = parseInt(value.replace(/[R$\.,]/g, ''), 10);
-                                setProduct(old => ({ ...old, price: maskInput(toInteger, '#######', true) }));
-                            }}
-                            placeholder="R$ 100,00"
-                            inputMode="numeric"
-                        />
-                    }
-                />
-            ),
-        [product.status, product.price],
-    );
+    // index = a.findIndex(x => x.prop2 ==="yutu");  arrayOfInputs
 
-    const descriptionInput = useMemo(
-        () =>
-            product.status === 'available' && (
-                <FormInput
-                    name="description"
-                    label="Descrição"
-                    input={
-                        <InputText
-                            value={product.description || ''}
-                            onChange={({ target: { value } }) => setProduct(old => ({ ...old, description: value }))}
-                            placeholder="Descrição"
-                        />
-                    }
-                />
-            ),
-        [product.status, product.description],
-    );
-
-    const sizesInput = useMemo(
-        () =>
-            product.status === 'available' && (
-                <FormInput
-                    name="sizes"
-                    label="Tamanhos"
-                    input={
-                        <InputText
-                            placeholder="P,M,G"
-                            value={(sizes && sizes.join(',')) || ''}
-                            onChange={({ target: { value } }) => setSizes(value ? value.split(',') : '')}
-                        />
-                    }
-                />
-            ),
-        [product.status, sizes],
-    );
-
-    const colorsInput = useMemo(
-        () =>
-            product.status === 'available' && (
-                <FormInput
-                    name="colors"
-                    label="Cores"
-                    input={
-                        <InputText
-                            placeholder="Azul,Amarelo"
-                            value={(colors && colors.join(',')) || ''}
-                            onChange={({ target: { value } }) => {
-                                const newColors = value.split(',');
-                                setProduct(old => {
-                                    const newQuantities = Object.entries(old.availableQuantities || {}).reduce((prev, [key, value]) => {
-                                        if (newColors.some(color => key.endsWith(color))) return { ...prev, [key]: value };
-                                        return prev;
-                                    }, {});
-                                    return { ...old, availableQuantities: newQuantities };
-                                });
-                                setColors(value ? newColors : '');
-                            }}
-                        />
-                    }
-                />
-            ),
-        [product.status, colors],
-    );
-
-    const quantitiesInput = useMemo(
-        () =>
-            product.status === 'available' &&
-            sizes.length && (
-                <FormInput
-                    name="quantities"
-                    label="Quantidades"
-                    input={
-                        <div style={{ display: 'grid', gridGap: '10px', padding: '10px' }}>
-                            {sizes.map(size =>
-                                (colors.length ? colors : ['']).map(color => (
-                                    <div
-                                        key={`${size}-${color}`}
-                                        style={{
-                                            display: 'grid',
-                                            gridTemplateColumns: '1fr 2fr 2fr',
-                                            alignItems: 'center',
-                                        }}
-                                    >
-                                        <label>{size}</label>
-                                        <label>{color}</label>
-                                        <InputText
-                                            placeholder="1"
-                                            value={(product.availableQuantities && product.availableQuantities[`${size}-${color}`]) || ''}
-                                            onChange={({ target: { value } }) =>
-                                                /^[0-9]*$/gm.test(value) &&
-                                                setProduct(old => {
-                                                    const newQuantities = Object.assign({}, old.availableQuantities || {});
-                                                    newQuantities[`${size}-${color}`] = value;
-                                                    return { ...old, availableQuantities: newQuantities };
-                                                })
-                                            }
-                                        />
-                                    </div>
-                                )),
-                            )}
-                        </div>
-                    }
-                />
-            ),
-        [product.status, sizes, colors, product.availableQuantities],
-    );
-
-    const _inputs = [priceInput, descriptionInput, sizesInput, colorsInput, quantitiesInput];
     const inputs = useMemo(() => _inputs.filter(input => !!input), _inputs);
 
     const validations = useMemo(
@@ -219,12 +84,11 @@ export default ({ index, products, setProducts, filesList, setFiles }) => {
         ],
         [product],
     );
-
     return (
         <div style={{ display: 'grid', gridTemplateColumns: '1fr', boxShadow: card.boxShadow }}>
-            {/*image*/}
+            {image && image}
             <div style={{ padding: '10px 10px 30px' }}>
-                <Form validations={validations} sendToBackend inputs={inputs}/>
+                <Form validations={validations} sendToBackend={update || null} inputs={inputs}/>
             </div>
         </div>
     );

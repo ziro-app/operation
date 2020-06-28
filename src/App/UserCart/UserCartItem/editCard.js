@@ -21,19 +21,6 @@ const INstatus = {
 };
 
 export default ({ image, product, setProduct, sizes, setSizes, colors, setColors, update }) => {
-    console.log(
-        'image=',
-        image,
-        //'productRef=',productRef,
-    );
-    console.log('product=', product);
-    //console.log('setProduct=', setProduct);
-    //console.log('setColors=', setColors);
-    //console.log('setSizes=', setSizes);
-    console.log('colors=', colors);
-    console.log('sizes=', sizes);
-    console.log('update=', update);
-
     const availabilityInput = useMemo(
         () => (
             <FormInput
@@ -43,14 +30,19 @@ export default ({ image, product, setProduct, sizes, setSizes, colors, setColors
                     <DropDown
                         list={['Disponível', 'Indisponível']}
                         value={PTstatus[product.status] || ''}
-                        onChange={({ target: { value } }) => setProduct(old => ({
-                            ...old,
-                            status: INstatus[value] || 'waitingInfo',
-                        }))}
-                        onChangeKeyboard={element => element && setProduct(old => ({
-                            ...old,
-                            status: INstatus[element.value] || 'waitingInfo',
-                        }))}
+                        onChange={({ target: { value } }) =>
+                            setProduct(old => ({
+                                ...old,
+                                status: INstatus[value] || 'waitingInfo',
+                            }))
+                        }
+                        onChangeKeyboard={element =>
+                            element &&
+                            setProduct(old => ({
+                                ...old,
+                                status: INstatus[element.value] || 'waitingInfo',
+                            }))
+                        }
                         placeholder="Está disponível em estoque?"
                     />
                 }
@@ -174,11 +166,14 @@ export default ({ image, product, setProduct, sizes, setSizes, colors, setColors
                         <div style={{ display: 'grid', gridGap: '10px', padding: '10px' }}>
                             {sizes.map(size =>
                                 (colors.length ? colors : ['']).map(color => (
-                                    <div key={`${size}-${color}`} style={{
-                                        display: 'grid',
-                                        gridTemplateColumns: '1fr 2fr 2fr',
-                                        alignItems: 'center',
-                                    }}>
+                                    <div
+                                        key={`${size}-${color}`}
+                                        style={{
+                                            display: 'grid',
+                                            gridTemplateColumns: '1fr 2fr 2fr',
+                                            alignItems: 'center',
+                                        }}
+                                    >
                                         <label>{size}</label>
                                         <label>{color}</label>
                                         <InputText
@@ -227,7 +222,6 @@ export default ({ image, product, setProduct, sizes, setSizes, colors, setColors
         ],
         [product],
     );
-
     return (
         <div style={{ display: 'grid', gridTemplateColumns: '1fr', boxShadow: card.boxShadow }}>
             {image}

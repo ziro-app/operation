@@ -1,9 +1,9 @@
 import currencyFormat from '@ziro/currency-format';
-import {db} from '../../../Firebase/index';
+import { db } from '../../../Firebase/index';
 import matchStatusColor from '../matchStatusColor';
-import {dateFormat} from '../utils';
+import { dateFormat } from '../utils';
 
-const fetch = (transactionId, setTransaction, setError, setNumberOfLoops) => {
+const fetch = (transactionId, setTransaction, setError, transaction) => {
     const query = db.collection('credit-card-payments').doc(transactionId);
     const run = async () => {
         try {
@@ -14,12 +14,12 @@ const fetch = (transactionId, setTransaction, setError, setNumberOfLoops) => {
                         const {
                             charge,
                             date,
-              fees,
-              installments,
-              dateLinkCreated,
-              transactionZoopId,
-              maxInstallments,
-              sellerZoopId,
+                            fees,
+                            installments,
+                            dateLinkCreated,
+                            transactionZoopId,
+                            maxInstallments,
+                            sellerZoopId,
                             status,
                             buyerRazao,
                             receivables,
@@ -32,17 +32,9 @@ const fetch = (transactionId, setTransaction, setError, setNumberOfLoops) => {
                             receiptId,
                             onBehalfOfBrand,
                         } = snapshot.data();
-            const chargeFormatted = currencyFormat(charge);
+                        const chargeFormatted = currencyFormat(charge);
             const dateFormatted = date ? dateFormat(date) : '';
             const dateLinkCreatedFormatted = dateLinkCreated ? dateFormat(dateLinkCreated) : '';
-
-            /*const dateFormatted = new Date(date.seconds * 1000)
-                                .toLocaleDateString("pt-br", {
-                                    day: "2-digit",
-                                    month: "2-digit",
-                                    year: "2-digit",
-                                })
-                                .replace(" de ", "/");*/
             const statusColor = matchStatusColor(status);
             paymentDoc.push({
                 transactionZoopId: transactionZoopId ? transactionZoopId : '',
@@ -67,23 +59,24 @@ const fetch = (transactionId, setTransaction, setError, setNumberOfLoops) => {
                 receiptId,
                 onBehalfOfBrand,
             });
-            setNumberOfLoops(0);
-            setTransaction(paymentDoc[0]);
-          } else {
+                        if (transaction.status !== paymentDoc[0].status) {
+                            setTransaction(paymentDoc[0]);
+                        }
+                    } else {
             setError(true);
-            //setLastDoc(null);
-            //if (payments) setPayments([]);
-          }
-        },
-        error => {
-          console.log(error);
-        },
-      );
-    } catch (error) {
-      console.log(error);
+                    }
+                },
+                error => {
+                    console.log(error);
+                },
+            );
+        } catch (error) {
+            console.log(error);
+        }
+    };
+    if (Object.keys(transaction).length === 0 && transaction.constructor === Object) {
+        run();
     }
-  };
-  run();
 };
 
 export default fetch;
