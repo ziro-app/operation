@@ -120,22 +120,26 @@ const fetch = (
             });
             setLastDoc(snapshot.docs[snapshot.docs.length - 1]);
             setPayments([...paymentDoc]);
-            setIsLoadingMore(false);
+              setIsLoadingMore(false);
+              setIsLoadingResults(false);
           } else {
           }
           setIsLoading(false);
-          setLoadingMore(false);
+            setLoadingMore(false);
+            setIsLoadingResults(false);
         },
         error => {
           console.log(error);
           setIsLoading(false);
-          setLoadingMore(false);
+            setLoadingMore(false);
+            setIsLoadingResults(false);
         },
       );
     } catch (error) {
       setErrorLoading(true);
       setIsLoading(false);
-      setLoadingMore(false);
+        setLoadingMore(false);
+        setIsLoadingResults(false);
     }
   };
   run();

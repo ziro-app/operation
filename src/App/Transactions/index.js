@@ -31,7 +31,7 @@ const Transactions = ({ transactionId, receivableId, carts, storeowners, setQuer
     const [status, setStatus] = useQuerySelector('status');
     const zoopId = '93fb596c44384485b7ece404de0e3584';
     useEffect(() => {
-        if (loadingMore) {
+        if (loadingMore || isLoadingResults) {
             fetch(
                 setIsLoading,
                 setErrorLoading,
@@ -83,15 +83,21 @@ const Transactions = ({ transactionId, receivableId, carts, storeowners, setQuer
                     value={sellerFilter || ''}
                     list={listSellers}
                     placeholder="Filtrar fabricante"
-                    onChange={({ target: { value } }) => setSellerFilter(value)}
-                    onChangeKeyboard={e => e && setSellerFilter(e.value)}
+                    onChange={({ target: { value } }) => {
+                        setIsLoadingResults(true);
+                        setSellerFilter(value);
+                    }}
+                    onChangeKeyboard={e => e && setIsLoadingResults(true) && setSellerFilter(e.value)}
                 />
                 <Dropdown
                     value={statusFilter || ''}
                     list={listStatus}
                     placeholder="Filtrar status"
-                    onChange={({ target: { value } }) => setStatusFilter(value)}
-                    onChangeKeyboard={e => e && setStatusFilter(e.value)}
+                    onChange={({ target: { value } }) => {
+                        setIsLoadingResults(true);
+                        setStatusFilter(value);
+                    }}
+                    onChangeKeyboard={e => e && setIsLoadingResults(true) && setStatusFilter(e.value)}
                 />
             </div>
             {isLoadingResults ? (
