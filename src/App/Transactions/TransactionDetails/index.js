@@ -38,64 +38,67 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
     const [, setLocation] = useLocation();
     const [copyResultText, setCopyResultText] = useState('');
     const [copyResultStatus, setCopyResultStatus] = useState(true);
-  const [cancelModal, setCancelModal] = useState(false);
-  const [captureModal, setCaptureModal] = useState(false);
-  const [splitTransactionModal, setSplitTransactionModal] = useState(false);
-  const textAreaRef = useRef(null);
-  const paymentLink = `https://ziro.app/pagamento/${transactionId}/escolher-cartao?doc`;
-  const [blocksStoreowner, setBlocksStoreowner] = useState([]);
-  const [validationMessage, setValidationMessage] = useState('');
-  const [loadingButton, setLoadingButton] = useState(false);
-  const [remakeBlockTransaction, setRemakeBlockTransaction] = useState(false);
+    const [cancelModal, setCancelModal] = useState(false);
+    const [captureModal, setCaptureModal] = useState(false);
+    const [splitTransactionModal, setSplitTransactionModal] = useState(false);
+    const textAreaRef = useRef(null);
+    const paymentLink = `https://ziro.app/pagamento/${transactionId}/escolher-cartao?doc`;
+    const [blocksStoreowner, setBlocksStoreowner] = useState([]);
+    const [validationMessage, setValidationMessage] = useState('');
+    const [loadingButton, setLoadingButton] = useState(false);
+    const [remakeBlockTransaction, setRemakeBlockTransaction] = useState(false);
 
-  useEffect(() => {
-    setValidationMessage('');
-  }, [splitTransactionModal, captureModal, cancelModal]);
+    useEffect(() => {
+        setTransaction({});
+    }, []);
+    useEffect(() => {
+        setValidationMessage('');
+    }, [splitTransactionModal, captureModal, cancelModal]);
 
-  /* const splitTransaction = async (transaction_id, on_behalf_of, amountTransaction) => {
-    try {
-      if (validationMessage) return;
-      console.log(transaction_id, on_behalf_of, amount);
-      setLoadingButton(true);
-      //amountTransaction = amountTransaction.replace('R$', '').replace(',', '').replace('.', '')
+    /* const splitTransaction = async (transaction_id, on_behalf_of, amountTransaction) => {
+      try {
+        if (validationMessage) return;
+        console.log(transaction_id, on_behalf_of, amount);
+        setLoadingButton(true);
+        //amountTransaction = amountTransaction.replace('R$', '').replace(',', '').replace('.', '')
 
-      await axios
-        .post(
-          `${process.env.PAY}/split-rules-create?transaction_id=${transaction_id}`,
-          {
-            transaction_id,
-            recipient: on_behalf_of,
-            amount,
-          },
-          {
-            headers: {
-              Authorization: `Basic ${process.env.PAY_TOKEN}`,
+        await axios
+          .post(
+            `${process.env.PAY}/split-rules-create?transaction_id=${transaction_id}`,
+            {
+              transaction_id,
+              recipient: on_behalf_of,
+              amount,
             },
-          },
-        )
-        .then(result => {
-          const { data } = result;
-          console.log(data);
-          const { status } = data;
-          setLoadingButton(false);
-          setSplitTransactionModal(false);
-          if (status === 'succeeded') {
-            transaction.status = 'Aprovado'
-                        document.location.reload(true);
-          }
+            {
+              headers: {
+                Authorization: `Basic ${process.env.PAY_TOKEN}`,
+              },
+            },
+          )
+          .then(result => {
+            const { data } = result;
+            console.log(data);
+            const { status } = data;
+            setLoadingButton(false);
+            setSplitTransactionModal(false);
+            if (status === 'succeeded') {
+              transaction.status = 'Aprovado'
+                          document.location.reload(true);
+            }
 
-          // setError(true);
-          // setLocation('/recibo');
-        });
-      setSplitTransactionModal(false);
-    } catch (e) {
-      // console.log(e.response);
-      setValidationMessage('Ocorreu um erro, contate suporte');
-      console.log('erro na requisição para a divisão da zoop');
-      console.log(e.response.status);
-      setLoadingButton(false);
-    }
-  };*/
+            // setError(true);
+            // setLocation('/recibo');
+          });
+        setSplitTransactionModal(false);
+      } catch (e) {
+        // console.log(e.response);
+        setValidationMessage('Ocorreu um erro, contate suporte');
+        console.log('erro na requisição para a divisão da zoop');
+        console.log(e.response.status);
+        setLoadingButton(false);
+      }
+    };*/
   const postCapture = async (transaction_id, on_behalf_of, amount) => {
     try {
       const snapRef = db.collection('credit-card-payments').doc(transactionId);
