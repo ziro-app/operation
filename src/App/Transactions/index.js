@@ -84,20 +84,26 @@ const Transactions = ({ transactionId, receivableId, carts, storeowners, setQuer
                     list={listSellers}
                     placeholder="Filtrar fabricante"
                     onChange={({ target: { value } }) => {
-                        setIsLoadingResults(true);
+                        if (listSellers.includes(value) || value === '') setIsLoadingResults(true);
                         setSellerFilter(value);
                     }}
-                    onChangeKeyboard={e => e && setIsLoadingResults(true) && setSellerFilter(e.value)}
+                    onChangeKeyboard={e => {
+                        if (listSellers.includes(e.value) || e.value === '') setIsLoadingResults(true);
+                        setSellerFilter(e.value);
+                    }}
                 />
                 <Dropdown
                     value={statusFilter || ''}
                     list={listStatus}
                     placeholder="Filtrar status"
                     onChange={({ target: { value } }) => {
-                        setIsLoadingResults(true);
+                        if (listStatus.includes(value) || value === '') setIsLoadingResults(true);
                         setStatusFilter(value);
                     }}
-                    onChangeKeyboard={e => e && setIsLoadingResults(true) && setStatusFilter(e.value)}
+                    onChangeKeyboard={e => {
+                        if (listStatus.includes(e.value) || e.value === '') setIsLoadingResults(true);
+                        setStatusFilter(e.value);
+                    }}
                 />
             </div>
             {isLoadingResults ? (

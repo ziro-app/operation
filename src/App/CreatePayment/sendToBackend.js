@@ -39,15 +39,15 @@ const sendToBackend = state => () => {
                 setBrand('');
                 setCharge('');
                 setMaxInstallments('');
-      }
-      if (error.customError) reject(error);
-      else {
-        console.log(error);
-        if (error.response) console.log(error.response);
-        reject('Erro ao criar cobrança');
-      }
-    }
-  });
+            }
+            if (error.customError) reject(error);
+            else {
+                console.log(error);
+                if (error.response) console.log(error.response);
+                reject('Erro ao criar cobrança');
+            }
+        }
+    });
 };
 
 export default sendToBackend;
