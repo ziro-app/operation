@@ -54,7 +54,10 @@ module.exports = (env, { mode }) => {
             sheet_id_link_payments,
             sheet_id_fetch_link,
             cnpj_url,
-            cnpj_token
+            cnpj_token,
+            firebase_auth_url,
+            email_token,
+            api_email
         } = require('./credentials')
         config.devtool = 'cheap-module-eval-source-map'
         config.devServer = { historyApiFallback: true, hot: true }
@@ -81,7 +84,10 @@ module.exports = (env, { mode }) => {
                     SHEET_ID_FETCH_LINK: JSON.stringify(sheet_id_fetch_link),
                     SHEET_ID_LINK_PAYMENTS: JSON.stringify(sheet_id_link_payments),
                     CNPJ_URL: JSON.stringify(cnpj_url),
-                    CNPJ_TOKEN: JSON.stringify(cnpj_token)
+                    CNPJ_TOKEN: JSON.stringify(cnpj_token),
+                    FIREBASE_AUTH_URL: JSON.stringify(firebase_auth_url),
+                    EMAIL_TOKEN: JSON.stringify(email_token),
+                    API_EMAIL: JSON.stringify(api_email)
                 }
             })
         )
@@ -125,12 +131,13 @@ module.exports = (env, { mode }) => {
                     SHEET_ID_FETCH_LINK: JSON.stringify(process.env.SHEET_ID_FETCH_LINK),
                     SHEET_ID_LINK_PAYMENTS: JSON.stringify(process.env.SHEET_ID_LINK_PAYMENTS),
                     CNPJ_URL: JSON.stringify(process.env.CNPJ_URL),
-                    CNPJ_TOKEN: JSON.stringify(process.env.CNPJ_TOKEN)
+                    CNPJ_TOKEN: JSON.stringify(process.env.CNPJ_TOKEN),
+                    FIREBASE_AUTH_URL: JSON.stringify(process.env.FIREBASE_AUTH_URL),
+                    EMAIL_TOKEN: JSON.stringify(process.env.EMAIL_TOKEN),
+                    API_EMAIL: JSON.stringify(process.env.API_EMAIL)
                 }
             })
         )
     }
     return config
 }
-
-// tentar dar os bit remove e tals, dps o bit import
