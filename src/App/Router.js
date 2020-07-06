@@ -23,6 +23,7 @@ import ShowInfo from './ShowInfo/index';
 import RegisterExpenses from './RegisterExpenses/index';
 import ConsultShipping from './ConsultShipping/index';
 import CheckEmailVerified from './CheckEmailVerified/index';
+import ValidateEmail from './ValidateEmail/index';
 // import FirebaseMigration from './FirebaseMigration/index' -> Inacabado
 import ImageUpload from './ImageUpload/index';
 import UploadImages from './UploadImages/index';
@@ -120,6 +121,18 @@ const Router = ({ isLogged }) => {
                 </motion.div>
             </Menu>
         ),
+        '/suporte': (
+            <Menu title="Suporte">
+                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+                    <Submenu
+                        options={[
+                            ['Checar email', '/checar-email'],
+                            ['Validar email', '/validar-email'],
+                        ]}
+                    />
+                </motion.div>
+            </Menu>
+        ),
         '/upload-boleto': (
             <HeaderBack title="Upload de boleto" navigateTo="/assessoria">
                 <UploadBillet />
@@ -196,12 +209,21 @@ const Router = ({ isLogged }) => {
                 <LinkRequest />
             </HeaderBack>
         ),
+        '/checar-email': (
+            <HeaderBack title="Checar Email" navigateTo="/suporte">
+                <CheckEmailVerified />
+            </HeaderBack>
+        ),
+        '/validar-email': (
+            <HeaderBack title="Validar Email" navigateTo="/suporte">
+                <ValidateEmail />
+            </HeaderBack>
+        ),
         [match ? location : null]: <UserCart {...params} />,
         // [match && !params.userId ? location : null]: <HeaderBack title='Procurar pedidos' navigateTo='/assessoria'><SearchUserCart /></HeaderBack>,
         // [match && params.userId && !params.requestId ? location : null]: <UserCart />,
         // [match && params.userId && params.requestId ? location : null]: <UserCartItem />,
-        '/show-info': <ShowInfo internal={true} />,
-        '/suporte': <Menu title="Checar Usuário"><CheckEmailVerified /></Menu>,
+        '/show-info': <ShowInfo internal={true} />
     };
     return routeMatcher(isLogged, publicRoutes, privateRoutes, <Login />, <NotFound fallback="/" />);
 };
