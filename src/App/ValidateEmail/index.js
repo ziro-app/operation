@@ -18,7 +18,7 @@ const CheckEmailVerified = () => {
     const [resendingEmail, setResendingEmail] = useState(false);
     const [finished, setFinished] = useState(false);
     const [successEmail, setSuccessEmail] = useState(false);
-    const [resendStatus, setResendStatus] = useState('Usuário não confirmou seu email. Deseja reenviar o email de confirmação?');
+    const [resendStatus, setResendStatus] = useState('');
     const setState = { setEmail, setUid, setIsOpen, resendingEmail, setResendingEmail, setResendStatus, setFinished };
     const state = { email, uid, ...setState };
     const validations = [

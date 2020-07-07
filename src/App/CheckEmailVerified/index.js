@@ -24,9 +24,11 @@ const CheckEmailVerified = () => {
     const [resendingEmail, setResendingEmail] = useState(false);
     const [finished, setFinished] = useState(false);
     const [successEmail, setSuccessEmail] = useState(false);
-    const [resendStatus, setResendStatus] = useState('Usuário não confirmou seu email. Deseja reenviar o email de confirmação?');
-    const setState = { setCnpj, setEmail, setType, setApp, setIsOpen, resendingEmail, setResendingEmail, setResendStatus, setLink, setFinished };
-    const state = { cnpj, email, type, link, app, appList, ...setState };
+    const [resendStatus, setResendStatus] = useState('');
+    const [uid, setUid] = useState('');
+    const [appName, setAppName] = useState('');
+    const setState = { setCnpj, setEmail, setType, setApp, setIsOpen, resendingEmail, setResendingEmail, setResendStatus, setLink, setFinished, setUid, setAppName };
+    const state = { cnpj, email, type, link, app, appList, uid, appName, ...setState };
     const validations = [
         {
             name: 'cnpj',
@@ -51,6 +53,36 @@ const CheckEmailVerified = () => {
         }
     ];
 
+    const generateLink = async () => {
+        let body;
+        if (type === 'Email') {
+            body = {
+                email,
+                type
+            };
+        } else {
+            body = {
+                type,
+                uid,
+                app: appName
+            };
+        }
+        const url = `${process.env.FIREBASE_AUTH_URL}resendConfirmEmail`;
+        const config = {
+            headers: {
+                'Content-type': 'application/json'
+            }
+        };
+        try {
+            const { data: { link } } = await post(url, body, config);
+            return link;
+        } catch (error) {
+            clear();
+            setType('');
+            throw error;
+        }
+    }
+
     const apiResendEmail = async () => {
         const urlEmail = process.env.API_EMAIL;
         const configEmail = {
@@ -59,16 +91,19 @@ const CheckEmailVerified = () => {
                 'Authorization': process.env.EMAIL_TOKEN
             }
         };
-        const body = {
-            to: email,
-            customEmail: false,
-            confirmEmail: {
-                link
-            }
-        };
-        setCnpj('');
-        setEmail('');
         try {
+            const confirmLink = await generateLink();
+            const body = {
+                to: email,
+                customEmail: false,
+                confirmEmail: {
+                    link: confirmLink
+                }
+            };
+            setCnpj('');
+            setEmail('');
+            setApp('');
+            setType('');
             await post(urlEmail, body, configEmail);
             setSuccessEmail(true);
             setResendingEmail(false);
@@ -76,10 +111,11 @@ const CheckEmailVerified = () => {
             setResendStatus('Email de confirmação enviado com sucesso');
         } catch (error) {
             console.log(error);
+            if (error.response && error.response.data.erro) setResendStatus(error.response.data.erro);
+            else setResendStatus('Erro ao enviar email de confirmação. Tente novamente');
             setSuccessEmail(false);
             setResendingEmail(false);
             setFinished(true);
-            setResendStatus('Erro ao enviar email de confirmação. Tente novamente');
         }
     }
 

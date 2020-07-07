@@ -24,7 +24,7 @@ const sendToBackend = state => () => {
                     setResendingEmail(false);
                     setFinished(false);
                     setIsOpen(false);
-                    resolve('Email validado');
+                    resolve('Email já está validado');
                 } else {
                     resolve();
                     setUid(uid);

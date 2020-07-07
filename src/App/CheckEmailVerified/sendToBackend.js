@@ -8,8 +8,9 @@ const collectionsApp = {
 
 const sendToBackend = state => () => {
     const { cnpj, email, type, app, setCnpj, setEmail, setType, setApp,
-        setIsOpen, setResendingEmail, setResendStatus, setLink, setFinished } = state;
-    const url = `${process.env.FIREBASE_AUTH_URL}resendConfirmEmail`;
+        setIsOpen, setResendingEmail, setResendStatus, setFinished,
+        setUid, setAppName } = state;
+    const url = `${process.env.FIREBASE_AUTH_URL}checkEmail`;
     const config = {
         headers: {
             'Content-type': 'application/json'
@@ -26,30 +27,20 @@ const sendToBackend = state => () => {
                 };
             } else {
                 const collectionName = collectionsApp[app];
-                let uid = '';
                 let snap;
-                if (type === 'CNPJ') {
-                    snap = await db.collection(collectionName).where('cnpj', '==', cnpj).get();
-                    if (!snap.empty) {
-                        uid = snap.docs[0].data().uid;
-                        setEmail(snap.docs[0].data().email);
-                    }
-                    else throw { msg: 'Usuário não encontrado no app', customError: true };
-                } else {
-                    snap = await db.collection(collectionName).where('email', '==', cnpj).get();
-                    if (!snap.empty) uid = snap.docs[0].data().uid;
-                    else throw { msg: 'Usuário não encontrado no app', customError: true };
-                }
-                body = {
-                    type,
-                    uid,
-                    app: app === 'Catálogo' ? 'catalog' : 'suppliers'
-                };
+                snap = await db.collection(collectionName).where('cnpj', '==', cnpj).get();
+                if (!snap.empty) {
+                    setUid(snap.docs[0].data().uid);
+                    setEmail(snap.docs[0].data().email);
+                    setAppName(app === 'Catálogo' ? 'catalog' : 'suppliers');
+                    body = {
+                        email: snap.docs[0].data().email,
+                        type
+                    };
+                } else throw { msg: 'Usuário não encontrado no app', customError: true };
             }
-            const { data: { ok, link } } = await post(url, body, config);
+            const { data: { ok } } = await post(url, body, config);
             if (!ok) {
-                setLink(link);
-                setType('');
                 setIsOpen(true);
                 setResendingEmail(false);
                 setFinished(false);
@@ -60,13 +51,17 @@ const sendToBackend = state => () => {
                 setEmail('');
                 setCnpj('');
                 setApp('');
-                resolve('Usuário possui email validado');
+                resolve('Email já está validado');
             };
         } catch (error) {
             console.log(error);
             if (error.customError) reject(error);
-            if (error.response) reject({ msg: 'Não cadastrado no app', customError: true });
-            reject(error);
+            else if (error.response) {
+                const { erro, message } = error.response.data;
+                console.log(message);
+                reject({ msg: erro, customError: true });
+            }
+            else reject(error);
         }
     });
 }
