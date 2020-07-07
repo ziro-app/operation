@@ -2,7 +2,7 @@ import { post } from 'axios';
 import { db } from '../../Firebase/index';
 
 const sendToBackend = state => () => {
-    const { email, setEmail, setUid, setIsOpen, resendingEmail, setResendingEmail,
+    const { email, setEmail, setUid, setIsOpen, setResendingEmail,
         setResendStatus, setFinished } = state;
     const url = `${process.env.FIREBASE_AUTH_URL}checkEmail`;
     const config = {

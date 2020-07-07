@@ -64,6 +64,8 @@ const sendToBackend = state => () => {
             };
         } catch (error) {
             console.log(error);
+            if (error.customError) reject(error);
+            if (error.response) reject({ msg: 'Não cadastrado no app', customError: true });
             reject(error);
         }
     });
