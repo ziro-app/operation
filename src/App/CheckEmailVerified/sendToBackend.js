@@ -53,7 +53,7 @@ const sendToBackend = state => () => {
                 setIsOpen(true);
                 setResendingEmail(false);
                 setFinished(false);
-                setResendStatus('Usuário ainda não confirmou seu email. Deseja reenviar email de confirmação ?');
+                setResendStatus('Usuário não confirmou seu email. Deseja reenviar o email de confirmação?');
                 resolve('');
             } else {
                 setType('');

@@ -24,7 +24,7 @@ const CheckEmailVerified = () => {
     const [resendingEmail, setResendingEmail] = useState(false);
     const [finished, setFinished] = useState(false);
     const [successEmail, setSuccessEmail] = useState(false);
-    const [resendStatus, setResendStatus] = useState('Usuário ainda não confirmou seu email. Deseja reenviar email de confirmação ?');
+    const [resendStatus, setResendStatus] = useState('Usuário não confirmou seu email. Deseja reenviar o email de confirmação?');
     const setState = { setCnpj, setEmail, setType, setApp, setIsOpen, resendingEmail, setResendingEmail, setResendStatus, setLink, setFinished };
     const state = { cnpj, email, type, link, app, appList, ...setState };
     const validations = [
@@ -97,10 +97,10 @@ const CheckEmailVerified = () => {
     }
 
     const matchIllustration = () => {
-        if (isOpen && !resendingEmail && !finished) return <Illustration type="timelineStart" size={200} />;
-        if (isOpen && resendingEmail && !finished) return <Illustration type="waiting" size={200} />;
-        if (isOpen && !resendingEmail && finished && successEmail) return <Illustration type="paymentSuccess" size={200} />;
-        if (isOpen && !resendingEmail && finished && !successEmail) return <Illustration type="paymentError" size={200} />;
+        if (isOpen && !resendingEmail && !finished) return <Illustration type="timelineStart" size={150} />;
+        if (isOpen && resendingEmail && !finished) return <Illustration type="waiting" size={150} />;
+        if (isOpen && !resendingEmail && finished && successEmail) return <Illustration type="paymentSuccess" size={150} />;
+        if (isOpen && !resendingEmail && finished && !successEmail) return <Illustration type="paymentError" size={150} />;
     }
 
     const closeModal = () => {
@@ -167,7 +167,7 @@ const CheckEmailVerified = () => {
                                 }
                                 readOnly={true}
                                 list={typeList}
-                                placeholder="Campo da consulta"
+                                placeholder="Buscar por cnpj ou email"
                             />}
                         />,
                         ...matchForm(state)

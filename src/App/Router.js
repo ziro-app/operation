@@ -126,8 +126,8 @@ const Router = ({ isLogged }) => {
                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
                     <Submenu
                         options={[
-                            ['Checar email', '/checar-email'],
-                            ['Validar email', '/validar-email'],
+                            ['Reenviar confirmação de email', '/checar-email'],
+                            ['Aprovar confirmação de email', '/validar-email'],
                         ]}
                     />
                 </motion.div>
@@ -210,12 +210,12 @@ const Router = ({ isLogged }) => {
             </HeaderBack>
         ),
         '/checar-email': (
-            <HeaderBack title="Checar Email" navigateTo="/suporte">
+            <HeaderBack title="Reenviar Email" navigateTo="/suporte">
                 <CheckEmailVerified />
             </HeaderBack>
         ),
         '/validar-email': (
-            <HeaderBack title="Validar Email" navigateTo="/suporte">
+            <HeaderBack title="Aprovar Email" navigateTo="/suporte">
                 <ValidateEmail />
             </HeaderBack>
         ),
