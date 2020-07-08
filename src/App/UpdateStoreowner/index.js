@@ -10,12 +10,17 @@ import FormInput from '@bit/vitorbarbosa19.ziro.form-input'
 import Button from '@bit/vitorbarbosa19.ziro.button'
 import maskInput from '@ziro/mask-input'
 import capitalize from '@ziro/capitalize'
+import { alertColor, successColor } from '@ziro/theme'
+import Modal from '@bit/vitorbarbosa19.ziro.modal';
+import Illustration from '@bit/vitorbarbosa19.ziro.illustration'
 import fetch from './fetch'
 import { inputEditUpdate, formUpdate } from './sendToBackend'
-import { alertColor, successColor } from '@ziro/theme'
+import updateReceita from './updateReceita'
+import { modalBox, container, title, svg } from './styles'
 
 const UpdateStoreowner = () => {
     const [isLoading, setIsLoading] = useState(true)
+    const [loadCnpj, setLoadCnpj] = useState(false)
     const [isError, setIsError] = useState(false)
     const [foundStoreowner, setFoundStoreowner] = useState(false)
     const [searchedName, setSearchedName] = useState('')
@@ -339,6 +344,26 @@ const UpdateStoreowner = () => {
                         template="regular"
                         click={copyToClipboard}
                     />
+                </div>
+                <div style={{ padding: '10px 0 10px' }} >
+                    {
+                        loadCnpj && (
+                                <Modal boxStyle={modalBox} isOpen={loadCnpj} setIsOpen={() => { }}>
+                                <div style={container}>
+                                    <div style={svg} ><Illustration type="waiting" size={200} /></div>
+                                    <label style={title}>Aguarde a requisição terminar</label>
+                                    <Spinner size='3rem' />
+                                </div>
+                            </Modal>
+                        )
+                    }
+                    <Button
+                    type="button"
+                    cta="Update Receita"
+                    template="regular"
+                    click={() => updateReceita(storeowner.cnpj, setLoadCnpj)}
+                    />
+                
                 </div>
                 {copyResultText ?
                     <div style={{ padding: '5px 0 0', fontSize: '15px', color: copyResultStatus ? successColor : alertColor, textAlign: 'center' }} >
