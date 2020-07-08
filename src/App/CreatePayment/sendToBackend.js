@@ -4,9 +4,10 @@ const sendToBackend = state => () => {
     const { nickname, seller, onBehalfOfBrand, setBrand, sellerId, charge, maxInstallments, setFantasy, setCharge, setMaxInstallments } = state;
     const nome = nickname ? nickname.trim() : '';
     const baseUrl = 'https://ziro.app/pagamento/';
+    const allowedUsers = ['Uiller', 'Vitor', 'Bruno', 'João', 'Cesar', 'Ale'];
     return new Promise(async (resolve, reject) => {
         try {
-            if (nome === 'Uiller' || nome === 'Vitor' || nome === 'Bruno' || nome === 'João' || nome === 'Cesar' || nome === 'Ale') {
+            if (allowedUsers.includes(nome)) {
                 if (seller && sellerId) {
                     const docRef = await db.collection('credit-card-payments').add({
                         dateLinkCreated: new Date(),

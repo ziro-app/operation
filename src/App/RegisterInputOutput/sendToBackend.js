@@ -9,6 +9,7 @@ const sendToBackend = state => () => {
     const descricao = description ? description.trim() : ''
     const url = process.env.SHEET_URL
     const data = formatDateUTC3(new Date())
+    const allowedUsers = ['Claudia', 'Vitor']
 
     const body = {
         apiResource: 'values',
@@ -30,7 +31,7 @@ const sendToBackend = state => () => {
     }
     return new Promise(async (resolve, reject) => {
         try {
-            if (nome === 'Claudia' || nome === 'Vitor') {
+            if (allowedUsers.includes(nome)) {
                 await post(url, body, config)
                 setCategory('')
                 setValue('')

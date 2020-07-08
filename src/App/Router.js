@@ -24,6 +24,7 @@ import RegisterExpenses from './RegisterExpenses/index';
 import ConsultShipping from './ConsultShipping/index';
 import CheckEmailVerified from './CheckEmailVerified/index';
 import ValidateEmail from './ValidateEmail/index';
+import ChangeStoreownerEmail from './ChangeStoreownerEmail/index';
 // import FirebaseMigration from './FirebaseMigration/index' -> Inacabado
 import ImageUpload from './ImageUpload/index';
 import UploadImages from './UploadImages/index';
@@ -128,6 +129,7 @@ const Router = ({ isLogged }) => {
                         options={[
                             ['Reenviar confirmação de email', '/checar-email'],
                             ['Aprovar confirmação de email', '/validar-email'],
+                            ['Alterar email do usuário', '/alterar-email'],
                         ]}
                     />
                 </motion.div>
@@ -217,6 +219,11 @@ const Router = ({ isLogged }) => {
         '/validar-email': (
             <HeaderBack title="Aprovar Email" navigateTo="/suporte">
                 <ValidateEmail />
+            </HeaderBack>
+        ),
+        '/alterar-email': (
+            <HeaderBack title="Alterar Email" navigateTo="/suporte">
+                <ChangeStoreownerEmail />
             </HeaderBack>
         ),
         [match ? location : null]: <UserCart {...params} />,

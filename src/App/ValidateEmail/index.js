@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import { post } from 'axios'
 import { motion } from 'framer-motion'
 import Form from '@bit/vitorbarbosa19.ziro.form'
@@ -8,6 +8,7 @@ import Modal from '@bit/vitorbarbosa19.ziro.modal'
 import Illustration from '@bit/vitorbarbosa19.ziro.illustration'
 import Spinner from '@bit/vitorbarbosa19.ziro.spinner'
 import Button from '@bit/vitorbarbosa19.ziro.button'
+import { userContext } from '../appContext';
 import sendToBackend from './sendToBackend'
 import { modalBox, container, title, svg } from './styles'
 
@@ -19,8 +20,9 @@ const CheckEmailVerified = () => {
     const [finished, setFinished] = useState(false);
     const [successEmail, setSuccessEmail] = useState(false);
     const [resendStatus, setResendStatus] = useState('');
+    const { nickname } = useContext(userContext);
     const setState = { setEmail, setUid, setIsOpen, resendingEmail, setResendingEmail, setResendStatus, setFinished };
-    const state = { email, uid, ...setState };
+    const state = { email, uid, nickname, ...setState };
     const validations = [
         {
             name: 'email',
