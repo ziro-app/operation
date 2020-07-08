@@ -6,7 +6,7 @@ import JSZip from 'jszip';
 import Header from '@bit/vitorbarbosa19.ziro.header';
 import Button from '@bit/vitorbarbosa19.ziro.button';
 import { brandCart, brandName, buttonDownload } from './styles';
-import Card from './card';
+import CardForm from '@bit/vitorbarbosa19.ziro.card-form';
 import currencyFormat from '@ziro/currency-format';
 import { priceTotal, saleSummary, summary, total } from './styles_catalog';
 import { containerWithPadding } from '@ziro/theme';
@@ -100,7 +100,7 @@ export default ({
                     style={buttonDownload}
                 />
                 {productIds.map((productId) => (
-                    <Card
+                    <CardForm
                         key={productId}
                         productId={productId}
                         cartProduct={products[productId]}
@@ -111,6 +111,17 @@ export default ({
                             setURLs((old) => ({ ...old, [productId]: url }))
                         }
                     />
+                    /*<Card
+                        key={productId}
+                        productId={productId}
+                        cartProduct={products[productId]}
+                        setPrice={(price) =>
+                            setPrices((old) => ({ ...old, [productId]: price }))
+                        }
+                        setURL={(url) =>
+                            setURLs((old) => ({ ...old, [productId]: url }))
+                        }
+                    />*/
                 ))}
                 <div style={summary}>
                     <div style={saleSummary}>

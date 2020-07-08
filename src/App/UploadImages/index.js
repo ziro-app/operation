@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import Icon from '@bit/vitorbarbosa19.ziro.icon';
-import Dropdown from '@bit/vitorbarbosa19.ziro.dropdown';
 import DropDown from '@bit/vitorbarbosa19.ziro.dropdown';
+import Dropdown from '@bit/vitorbarbosa19.ziro.dropdown';
 import Button from '@bit/vitorbarbosa19.ziro.button';
 import fetch from './fetch';
 import { fileContainerClass, fileContainerUploadIconClass, inputImagesId, phases } from './styles';
@@ -10,6 +10,7 @@ import { title } from '../ImageUpload/styles';
 import sendToBackend from './sendToBackend';
 import { hasExtension, onDragOver, onUploadClick, readFile } from './functions';
 import Card from './card';
+//import Card from '@bit/vitorbarbosa19.ziro.card-form';
 import ImageUpload from '@bit/vitorbarbosa19.ziro.image-upload';
 import FormInput from '@bit/vitorbarbosa19.ziro.form-input';
 import InputText from '@bit/vitorbarbosa19.ziro.input-text';
