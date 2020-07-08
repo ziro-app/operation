@@ -56,7 +56,7 @@ const sendToBackend = state => () => {
         } catch (error) {
             console.log(error);
             if (error.customError) reject(error);
-            else if (error.response) {
+            else if (error.response && error.response.data && error.response.data.erro) {
                 const { erro, message } = error.response.data;
                 console.log(message);
                 reject({ msg: erro, customError: true });
