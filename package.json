@@ -44,6 +44,7 @@
         "@bit/vitorbarbosa19.ziro.about": "0.0.36",
         "@bit/vitorbarbosa19.ziro.button": "^0.1.6",
         "@bit/vitorbarbosa19.ziro.calendar": "0.0.14",
+        "@bit/vitorbarbosa19.ziro.card-form": "0.0.2",
         "@bit/vitorbarbosa19.ziro.confirm-email": "0.1.45",
         "@bit/vitorbarbosa19.ziro.delete-account": "0.1.63",
         "@bit/vitorbarbosa19.ziro.details": "0.0.11",
