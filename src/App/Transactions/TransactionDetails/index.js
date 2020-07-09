@@ -54,87 +54,33 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
     useEffect(() => {
         setValidationMessage('');
     }, [splitTransactionModal, captureModal, cancelModal]);
-
-    /* const splitTransaction = async (transaction_id, on_behalf_of, amountTransaction) => {
-      try {
-        if (validationMessage) return;
-        console.log(transaction_id, on_behalf_of, amount);
-        setLoadingButton(true);
-        //amountTransaction = amountTransaction.replace('R$', '').replace(',', '').replace('.', '')
-
-        await axios
-          .post(
-            `${process.env.PAY}/split-rules-create?transaction_id=${transaction_id}`,
-            {
-              transaction_id,
-              recipient: on_behalf_of,
-              amount,
-            },
-            {
-              headers: {
-                Authorization: `Basic ${process.env.PAY_TOKEN}`,
-              },
-            },
-          )
-          .then(result => {
-            const { data } = result;
-            console.log(data);
-            const { status } = data;
-            setLoadingButton(false);
-            setSplitTransactionModal(false);
-            if (status === 'succeeded') {
-              transaction.status = 'Aprovado'
-                          document.location.reload(true);
-            }
-
-            // setError(true);
-            // setLocation('/recibo');
-          });
-        setSplitTransactionModal(false);
-      } catch (e) {
-        // console.log(e.response);
-        setValidationMessage('Ocorreu um erro, contate suporte');
-        console.log('erro na requisição para a divisão da zoop');
-        console.log(e.response.status);
-        setLoadingButton(false);
-      }
-    };*/
-  const postCapture = async (transaction_id, on_behalf_of, amount) => {
-    try {
-      const snapRef = db.collection('credit-card-payments').doc(transactionId);
-      setLoadingButton(true);
-      amount = amount.replace('R$', '').replace(',', '').replace('.', '');
-      await axios
-        .post(
-          `${process.env.PAY}/payments-capture?transaction_id=${transaction_id}`,
-          {
-            transaction_id,
-            on_behalf_of,
-            amount,
-          },
-          {
-            headers: {
-              Authorization: `Basic ${process.env.PAY_TOKEN}`,
-            },
-          },
-        )
-        .then(result => {
-          setLoadingButton(false);
-          const { data } = result;
-          const { status } = data;
-          setCaptureModal(false);
-          if (status === 'succeeded') {
-            //transaction.status = 'Aprovado';
-            //document.location.reload(true);
-          }
-          snapRef.update({ status: 'Atualizando' });
-          // setError(true);
-          // setLocation('/recibo');
-        });
+    const postCapture = async (transaction_id, on_behalf_of, amount) => {
+        try {
+            const snapRef = db.collection('credit-card-payments').doc(transactionId);
+            setLoadingButton(true);
+            amount = amount.replace('R$', '').replace(',', '').replace('.', '');
+            await axios
+                .post(
+                    `${process.env.PAY}/payments-capture?transaction_id=${transaction_id}`,
+                    {
+                        transaction_id,
+                        on_behalf_of,
+                        amount,
+                    },
+                    {
+                        headers: {
+                            Authorization: `Basic ${process.env.PAY_TOKEN}`,
+                        },
+                    },
+                )
+                .then(() => {
+                    setLoadingButton(false);
+                    setCaptureModal(false);
+                    snapRef.update({ status: 'Atualizando' });
+                });
       setCancelModal(false);
     } catch (e) {
       setLoadingButton(false);
-      // console.log(e.response);
       setValidationMessage('Ocorreu um erro, contate suporte');
       console.log('erro na requisição para a captação da zoop');
       console.log(e.response.status);
@@ -169,14 +115,9 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
             transaction.status = 'Cancelado';
           }
           snapRef.update({ status: 'Atualizando' });
-          //document.location.reload(true);
-
-          // setError(true);
-          // setLocation('/recibo');
         });
     } catch (e) {
       setLoadingButton(false);
-      // console.log(e.response);
       console.log('erro na requisição para o cancelamento da zoop');
       console.log(e.response.status);
       if (e.response.status === 402) {
@@ -257,10 +198,6 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
                                     {
                                         title: 'Lojista',
                                         content: transaction.buyerRazao ? transaction.buyerRazao : '-',
-                                    },
-                                    {
-                                        title: 'Marca',
-                                        content: transaction.seller,
                                     },
                                     {
                                         title: 'Valor',
@@ -355,6 +292,16 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
                                 },
                             ];
                         }
+                        if (transaction.onBehalfOfBrand && transaction.seller.includes('Ziro')) {
+                            block[0].body.splice(1, 0, {
+                                title: 'Marca',
+                                content: transaction.onBehalfOfBrand,
+                            });
+                        } else
+                            block[0].body.splice(1, 0, {
+                                title: 'Marca',
+                                content: transaction.seller,
+                            });
 
                         setBlocks(block);
                         setData(dataTable ? dataTable : []);
