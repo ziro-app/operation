@@ -2,12 +2,12 @@ import consultCnpj from './utils/consultCnpj';
 import checkResult from './utils/checkResult';
 import updateReceita from './utils/updateReceita';
 
-const lastReq = async (config, state) => {
+const lastReq = async (config, cnpj) => {
     let result = {};
     try {
         const [status, result] = await consultCnpj(config)
         const objResult = checkResult(status, result, false)
-        updateReceita(state, objResult)
+        updateReceita(cnpj, objResult)
         result['ok'] = true
         result['error'] = false
         return result
@@ -42,7 +42,7 @@ const searchCnpj = state => () =>
                 setFirstLabel(false);
                 await setTimeout(async () => {
                     config['data']['ignore_db'] = false;
-                    let resultado = await lastReq(config, state);
+                    let resultado = await lastReq(config, cnpj);
                     setIsOpen(false);
                     setFirstLabel(true);
                     if (resultado.error) {
