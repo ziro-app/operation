@@ -10,25 +10,19 @@ import FormInput from '@bit/vitorbarbosa19.ziro.form-input'
 import Button from '@bit/vitorbarbosa19.ziro.button'
 import maskInput from '@ziro/mask-input'
 import capitalize from '@ziro/capitalize'
+import Modal from '@bit/vitorbarbosa19.ziro.modal'
+import Illustration from '@bit/vitorbarbosa19.ziro.illustration'
 import { alertColor, successColor } from '@ziro/theme'
+import { useLocation } from 'wouter'
 import fetch from './fetch'
-import { inputEditUpdate, formUpdate } from './sendToBackend'
 import GetCnpj from './GetCnpj'
+import { inputEditUpdate, formUpdate } from './sendToBackend'
+import { modalBox, container, titleError, svg } from './GetCnpj/styles'
+
 
 const UpdateStoreowner = () => {
     // SearchCnpjInfo
-    const [reason, setReason] = useState('')
-    const [fantasia, setFantasia] = useState('')
-    const [street, setStreet] = useState('')
-    const [number, setNumber] = useState('')
-    const [complement, setComplement] = useState('')
-    const [neighborhood, setNeighborhood] = useState('')
-    const [cep, setCep] = useState('')
-    const [city, setCity] = useState('')
-    const [cityState, setCityState] = useState('')
-    const [fone, setFone] = useState('')
-    const statesCnpj = {setReason, setFantasia, setStreet, setNumber, setComplement, setNeighborhood, setCep, setCity, setCityState, setFone}
-    console.log(reason, fantasia, street, number, complement)
+    const [errorMsg, setErrorMsg] = useState('')
     // Other Infos
     const [isLoading, setIsLoading] = useState(true)
     const [isError, setIsError] = useState(false)
@@ -216,7 +210,6 @@ const UpdateStoreowner = () => {
     }
 
     useEffect(() => fetch(setIsLoading, setIsError, setStoreowners, setAdvisors, setAffiliates, setSellers, setLinkList), [])
-
     const validateName = () => {
         if (newName !== '') {
             setErrorName('')
@@ -321,7 +314,6 @@ const UpdateStoreowner = () => {
 
     if (isLoading) return <div style={{ display: 'grid' }}><Spinner size='5rem' /></div>
     if (isError) return <Error />
-
     return (
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
             <Dropdown
@@ -355,7 +347,18 @@ const UpdateStoreowner = () => {
                         click={copyToClipboard}
                     />
                 </div>
-                <GetCnpj cnpj={storeowner.cnpj} setSate={statesCnpj}/>
+                {errorMsg ? (
+                        <Modal boxStyle={modalBox} isOpen={errorMsg} setIsOpen={() => { }}>
+                            <div style={container}>
+                                <div style={svg} ><Illustration type="paymentError" size={200} /></div>
+                                <label style={titleError}>{errorMsg || 'Erro ao tentar consultar a receita'}</label>
+                                <label>Solicite suporte se necessário</label>
+                                <Button type='link' cta='Tentar novamente' navigate={() => setErrorMsg(false)} />
+                            </div>
+                        </Modal>
+                    ): (
+                        <GetCnpj cnpj={storeowner.cnpj} setStoreowner={setStoreowner} setErrorMsg={setErrorMsg} objStoreowner={storeowner}/>
+                    )}
                 {copyResultText ?
                     <div style={{ padding: '5px 0 0', fontSize: '15px', color: copyResultStatus ? successColor : alertColor, textAlign: 'center' }} >
                         <span>{copyResultText}</span>

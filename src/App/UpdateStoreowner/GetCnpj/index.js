@@ -6,11 +6,11 @@ import Button from '@bit/vitorbarbosa19.ziro.button'
 import searchCnpj from './searchCnpj'
 import { modalBox, container, title, svg } from './styles'
 
-const GetCnpj = ({ cnpj, setState }) => {
+const GetCnpj = ({ cnpj, setStoreowner , setErrorMsg, objStoreowner}) => {
+    const validCnaes = ['47.81-4-00', '14.12-6-01', '14.12-6-03', '46.41-9-01', '46.42-7-01', '14.12-6-02'];
     const [isOpen, setIsOpen] = useState(false)
     const [firstLabel, setFirstLabel] = useState(true)
-    const {...rest} = setState
-    const state = { cnpj, setFirstLabel, setIsOpen, ...rest }
+    const state = { cnpj, setFirstLabel, setIsOpen, setErrorMsg,validCnaes, objStoreowner }
     return (
         <>
             <Modal boxStyle={modalBox} isOpen={isOpen} setIsOpen={() => { }}>
@@ -18,7 +18,7 @@ const GetCnpj = ({ cnpj, setState }) => {
                     <div style={svg} ><Illustration type="waiting" size={200} /></div>
                     <label style={title}>{firstLabel ? 'Aguarde...' : 'Só mais um momento...'}</label>
                     <label>{firstLabel
-                        ? 'Estamos validando seu CNPJ. Não saia da página'
+                        ? 'Estamos validando o CNPJ. Não saia da página'
                         : 'Estamos concluindo a validação. Não saia da página'}
                     </label>
                     <Spinner size='3rem' />
@@ -28,7 +28,7 @@ const GetCnpj = ({ cnpj, setState }) => {
                 type="button"
                 cta="Update Receita"
                 template="regular"
-                click={searchCnpj ? searchCnpj(state) : () => null}
+                click={searchCnpj ? searchCnpj(state, setStoreowner) : () => null}
             />
         </>
     )

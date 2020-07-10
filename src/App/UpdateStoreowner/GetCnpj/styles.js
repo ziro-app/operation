@@ -1,4 +1,4 @@
-import { fontTitle, primaryColor } from '@ziro/theme'
+import { fontTitle, primaryColor, alertColor } from '@ziro/theme'
 
 export const
 
@@ -32,4 +32,10 @@ export const
         marginTop: '-20px',
         fontFamily: fontTitle,
         textTransform: 'uppercase'
+    },
+
+    titleError = {
+        marginTop: '-20px',
+        fontFamily: fontTitle,
+        color: alertColor
     }
