@@ -70,10 +70,7 @@ const DeleteUser = () => {
                             setInputDate={setEndDate}
                             focused={focused}
                             setFocused={setFocused}
-                            placeholder='Data de saída do usuário'
-                            // Desativando datas passadas
-                            outsideRange={true}
-                            before={true} />
+                            placeholder='Data de saída do usuário' />
                     } />
                 ]}
             />
