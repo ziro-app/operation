@@ -114,7 +114,6 @@ const CreatePayment = () => {
                                 label="Pagamento em nome de:"
                                 input={
                                     <Dropdown
-                                        disabled={true}
                                         value={brand}
                                         onChange={({ target: { value } }) => {
                                             setBrand(value);
