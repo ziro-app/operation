@@ -6,7 +6,7 @@ const dataPostBatch = require('./dataPostBatch')
 const {db} = require('../../../../Firebase')
 
 const updateReceita = async (cnpj, obj, setErrorMsg, setState) => {
-    const {setRua} = setState
+    const {setRazao, setRua, setNumero, setComplemento, setCidade, setEstado,setBairro} = setState
     const {cep, city:cidade, complement:complemento,cityState:estado, reason: razao, neighborhood:bairro, number:numero, street:logradouro} = obj
     try {
         const endereco = complemento ? `${logradouro}, ${numero}, ${complemento}` : `${logradouro}, ${numero}`
@@ -17,7 +17,6 @@ const updateReceita = async (cnpj, obj, setErrorMsg, setState) => {
             endereco,
             bairro,
             estado,
-            cep,
             cidade
         }
         const arrayUpdate = dataPostBatch(objectSheet, 'cnpj', cnpj, updateObj, 'Base')
@@ -34,6 +33,12 @@ const updateReceita = async (cnpj, obj, setErrorMsg, setState) => {
             if(idFirebase[0]){
                 await db.collection('storeowners').doc(idFirebase[0]).update(updateObj)
                 try {
+                    await setRazao(razao)
+                    await setNumero(numero)
+                    await setComplemento(complemento)
+                    await setCidade(cidade)
+                    await setEstado(estado)
+                    await setBairro(bairro)
                     await setRua(logradouro)
                 } catch (error) {
                     setErrorMsg('Erro ao atualizar os parametros, favor recarregar a página')
