@@ -23,6 +23,15 @@ import { modalBox, container, titleError, svg } from './GetCnpj/styles'
 const UpdateStoreowner = () => {
     // SearchCnpjInfo
     const [errorMsg, setErrorMsg] = useState('')
+    const [razao, setRazao] = useState('')
+    const [rua, setRua] = useState('')
+    const [numero, setNumero] = useState('')
+    const [complemento, setComplemento] = useState('')
+    const [bairro, setBairro] = useState('')
+    const [estado, setEstado] = useState('')
+    const [cep, setCep] = useState('')
+    const [cidade, setCidade] = useState('')
+    const setCnpjInfo = {setRazao, setRua, setNumero, setComplemento, setCep, setCidade, setEstado,setBairro}
     // Other Infos
     const [isLoading, setIsLoading] = useState(true)
     const [isError, setIsError] = useState(false)
@@ -357,7 +366,7 @@ const UpdateStoreowner = () => {
                             </div>
                         </Modal>
                     ): (
-                        <GetCnpj cnpj={storeowner.cnpj} setStoreowner={setStoreowner} setErrorMsg={setErrorMsg} objStoreowner={storeowner}/>
+                        <GetCnpj cnpj={storeowner.cnpj} setState={setCnpjInfo} setErrorMsg={setErrorMsg}/>
                     )}
                 {copyResultText ?
                     <div style={{ padding: '5px 0 0', fontSize: '15px', color: copyResultStatus ? successColor : alertColor, textAlign: 'center' }} >
@@ -478,7 +487,7 @@ const UpdateStoreowner = () => {
                 />
                 <InputEdit
                     name="Razão Social"
-                    value={storeowner.razao}
+                    value={razao || storeowner.razao}
                     onChange={() => { }}
                     validateInput={() => { }}
                     submit={() => { }}
@@ -500,7 +509,7 @@ const UpdateStoreowner = () => {
                 />
                 <InputEdit
                     name="Rua"
-                    value={storeowner.endereco ? storeowner.endereco.split(', ')[0] : ''}
+                    value={rua || (storeowner.endereco ? storeowner.endereco.split(', ')[0] : '')}
                     onChange={() => { }}
                     validateInput={() => { }}
                     submit={() => { }}
@@ -511,7 +520,7 @@ const UpdateStoreowner = () => {
                 />
                 <InputEdit
                     name="Número"
-                    value={storeowner.endereco ? storeowner.endereco.split(', ')[1] : ''}
+                    value={numero || (storeowner.endereco ? storeowner.endereco.split(', ')[1] : '')}
                     onChange={() => { }}
                     validateInput={() => { }}
                     submit={() => { }}
@@ -522,7 +531,7 @@ const UpdateStoreowner = () => {
                 />
                 <InputEdit
                     name="Complemento"
-                    value={storeowner.endereco.split(', ')[2] ? storeowner.endereco.split(', ')[2] : ''}
+                    value={complemento || (storeowner.endereco.split(', ')[2] ? storeowner.endereco.split(', ')[2] : '')}
                     onChange={() => { }}
                     validateInput={() => { }}
                     submit={() => { }}
@@ -533,7 +542,7 @@ const UpdateStoreowner = () => {
                 />
                 <InputEdit
                     name="Bairro"
-                    value={storeowner.bairro}
+                    value={bairro || storeowner.bairro}
                     onChange={() => { }}
                     validateInput={() => { }}
                     submit={() => { }}
@@ -544,7 +553,7 @@ const UpdateStoreowner = () => {
                 />
                 <InputEdit
                     name="Cep"
-                    value={storeowner.cep}
+                    value={cep || storeowner.cep}
                     onChange={() => { }}
                     validateInput={() => { }}
                     submit={() => { }}
@@ -555,7 +564,7 @@ const UpdateStoreowner = () => {
                 />
                 <InputEdit
                     name="Cidade"
-                    value={storeowner.cidade}
+                    value={cidade || storeowner.cidade}
                     onChange={() => { }}
                     validateInput={() => { }}
                     submit={() => { }}
@@ -566,7 +575,7 @@ const UpdateStoreowner = () => {
                 />
                 <InputEdit
                     name="Estado"
-                    value={storeowner.estado}
+                    value={estado || storeowner.estado}
                     onChange={() => { }}
                     validateInput={() => { }}
                     submit={() => { }}

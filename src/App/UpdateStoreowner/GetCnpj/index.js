@@ -6,11 +6,11 @@ import Button from '@bit/vitorbarbosa19.ziro.button'
 import searchCnpj from './searchCnpj'
 import { modalBox, container, title, svg } from './styles'
 
-const GetCnpj = ({ cnpj, setStoreowner , setErrorMsg, objStoreowner}) => {
+const GetCnpj = ({ cnpj, setState , setErrorMsg}) => {
     const validCnaes = ['47.81-4-00', '14.12-6-01', '14.12-6-03', '46.41-9-01', '46.42-7-01', '14.12-6-02'];
     const [isOpen, setIsOpen] = useState(false)
     const [firstLabel, setFirstLabel] = useState(true)
-    const state = { cnpj, setFirstLabel, setIsOpen, setErrorMsg,validCnaes, objStoreowner }
+    const state = { cnpj, setFirstLabel, setIsOpen, setErrorMsg,validCnaes }
     return (
         <>
             <Modal boxStyle={modalBox} isOpen={isOpen} setIsOpen={() => { }}>
@@ -28,7 +28,7 @@ const GetCnpj = ({ cnpj, setStoreowner , setErrorMsg, objStoreowner}) => {
                 type="button"
                 cta="Update Receita"
                 template="regular"
-                click={searchCnpj ? searchCnpj(state, setStoreowner) : () => null}
+                click={searchCnpj ? searchCnpj(state, setState) : () => null}
             />
         </>
     )

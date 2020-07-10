@@ -2,12 +2,12 @@ import consultCnpj from './utils/consultCnpj';
 import checkResult from './utils/checkResult';
 import updateReceita from './utils/updateReceita';
 
-const lastReq = async (config, cnpj, setErrorMsg, validCnaes,setStoreowner, objStoreowner) => {
+const lastReq = async (config, cnpj, setErrorMsg, validCnaes,setStoreowner) => {
     let result = {};
     try {
         const [status, result] = await consultCnpj(config)
         const objResult = checkResult(status, result, false, validCnaes)
-        updateReceita(cnpj, objResult, setErrorMsg, setStoreowner, objStoreowner)
+        updateReceita(cnpj, objResult, setErrorMsg, setStoreowner)
         result['ok'] = true
         result['error'] = false
         return result
@@ -18,7 +18,7 @@ const lastReq = async (config, cnpj, setErrorMsg, validCnaes,setStoreowner, objS
 }
 const searchCnpj = (state,setStoreowner) => () =>
     new Promise(async (resolve, reject) => {
-        const { cnpj, setFirstLabel, setIsOpen, setErrorMsg,validCnaes, objStoreowner } = state;
+        const { cnpj, setFirstLabel, setIsOpen, setErrorMsg,validCnaes } = state;
         let config = {
             method: 'POST',
             url: process.env.CNPJ_URL,
@@ -36,7 +36,7 @@ const searchCnpj = (state,setStoreowner) => () =>
             const [status, result] = await consultCnpj(config)
             const objResult = checkResult(status, result, false, validCnaes);
             console.log('HERE')
-            updateReceita(cnpj, objResult, setErrorMsg, setStoreowner, objStoreowner)
+            updateReceita(cnpj, objResult, setErrorMsg, setStoreowner)
             setIsOpen(false);
             setFirstLabel(true);
             resolve('CNPJ válido');
@@ -45,7 +45,7 @@ const searchCnpj = (state,setStoreowner) => () =>
                 setFirstLabel(false);
                 await setTimeout(async () => {
                     config['data']['ignore_db'] = false;
-                    let resultado = await lastReq(config, cnpj, setErrorMsg, validCnaes, setStoreowner, objStoreowner);
+                    let resultado = await lastReq(config, cnpj, setErrorMsg, validCnaes, setStoreowner);
                     setIsOpen(false);
                     setFirstLabel(true);
                     if (resultado.error) {

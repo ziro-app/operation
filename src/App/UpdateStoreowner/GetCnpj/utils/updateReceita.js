@@ -5,7 +5,8 @@ const postSheet= require('./postSheet')
 const dataPostBatch = require('./dataPostBatch')
 const {db} = require('../../../../Firebase')
 
-const updateReceita = async (cnpj, obj, setErrorMsg, setState, objStoreowner) => {
+const updateReceita = async (cnpj, obj, setErrorMsg, setState) => {
+    const {setRua} = setState
     const {cep, city:cidade, complement:complemento,cityState:estado, reason: razao, neighborhood:bairro, number:numero, street:logradouro} = obj
     try {
         const endereco = complemento ? `${logradouro}, ${numero}, ${complemento}` : `${logradouro}, ${numero}`
@@ -33,13 +34,7 @@ const updateReceita = async (cnpj, obj, setErrorMsg, setState, objStoreowner) =>
             if(idFirebase[0]){
                 await db.collection('storeowners').doc(idFirebase[0]).update(updateObj)
                 try {
-                    objStoreowner.razao = updateObj.razao
-                    objStoreowner.endereco = updateObj.endereco
-                    objStoreowner.bairro = updateObj.bairro
-                    objStoreowner.estado = updateObj.estado
-                    objStoreowner.cep = updateObj.cep
-                    objStoreowner.cidade = updateObj.cidade
-                    await setState(objStoreowner)
+                    await setRua(logradouro)
                 } catch (error) {
                     setErrorMsg('Erro ao atualizar os parametros, favor recarregar a página')
                     throw({msg:'erro setState'}) 
