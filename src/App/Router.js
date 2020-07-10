@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { motion } from 'framer-motion';
 import { Router2 as routeMatcher } from '@ziro/router';
@@ -25,6 +25,7 @@ import ConsultShipping from './ConsultShipping/index';
 import CheckEmailVerified from './CheckEmailVerified/index';
 import ValidateEmail from './ValidateEmail/index';
 import ChangeStoreownerEmail from './ChangeStoreownerEmail/index';
+import DeleteUser from './DeleteUser/index';
 // import FirebaseMigration from './FirebaseMigration/index' -> Inacabado
 import ImageUpload from './ImageUpload/index';
 import UploadImages from './UploadImages/index';
@@ -41,11 +42,14 @@ import Transactions from './Transactions/index';
 import SplitPayment from './SplitPayment/index';
 import LinkRequest from './LinkRequest/index';
 import { useLocation, useRoute } from 'wouter';
+import { userContext } from './appContext';
 
 const Router = ({ isLogged }) => {
     const [match, params] = useRoute('/pedidos/:cartId?');
     const [matchTransactions, paramsTransactions] = useRoute('/transacoes/:transactionId?/:receivableId?');
     const [matchTransactionsSplit, paramsTransactionsSplit] = useRoute('/transacoes/:transactionId?/split');
+    const { nickname } = useContext(userContext);
+    const allowedUsers = ['Vitor'];
 
     const [location] = useLocation();
     const publicRoutes = {
@@ -232,6 +236,9 @@ const Router = ({ isLogged }) => {
         // [match && params.userId && params.requestId ? location : null]: <UserCartItem />,
         '/show-info': <ShowInfo internal={true} />
     };
+
+    if (allowedUsers.includes(nickname)) privateRoutes['/excluir-usuario'] = <Menu title="Excluir Usuário"><DeleteUser /></Menu>;
+
     return routeMatcher(isLogged, publicRoutes, privateRoutes, <Login />, <NotFound fallback="/" />);
 };
 
