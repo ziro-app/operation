@@ -5,11 +5,11 @@ const checkResult = (status, result, ignoreDb, validCnaes) => {
         const cnaes = [...result.atividades_secundarias, result.atividade_principal].map(({ code }) => code);
         const cnaeIsValid = !!cnaes.filter(code => validCnaes.includes(code)).pop();
         const isActive = result.situacao === 'ATIVA';
-        if(!cnaeIsValid){
-            throw { msg: 'CNAE inválido', finally: true }; 
-        }
         if (!isActive) {
             throw { msg: 'CNPJ não está ativo', finally: true };
+        }
+        if(!cnaeIsValid){
+            throw { msg: 'CNAE inválido', finally: true }; 
         }
         objResult.reason = result.nome;
         objResult.fantasia = result.fantasia;

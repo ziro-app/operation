@@ -362,7 +362,9 @@ const UpdateStoreowner = () => {
                                 <div style={svg} ><Illustration type="paymentError" size={200} /></div>
                                 <label style={titleError}>{errorMsg || 'Erro ao tentar consultar a receita'}</label>
                                 <label>Solicite suporte se necessário</label>
-                                <Button type='link' cta='Tentar novamente' navigate={() => setErrorMsg(false)} />
+                                <div style={{marginBottom:'15px'}}>
+                                    <Button type='link' cta='Tentar novamente' navigate={() => setErrorMsg(false)} />
+                                </div>
                             </div>
                         </Modal>
                     ): (
