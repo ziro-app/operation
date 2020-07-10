@@ -9,7 +9,7 @@ const updateReceita = async (cnpj, obj, setErrorMsg, setState, objStoreowner) =>
     const {cep, city:cidade, complement:complemento,cityState:estado, reason: razao, neighborhood:bairro, number:numero, street:logradouro} = obj
     try {
         const endereco = complemento ? `${logradouro}, ${numero}, ${complemento}` : `${logradouro}, ${numero}`
-        const requestSheet = await axios(getSheet(['BaseTeste!A:W']))
+        const requestSheet = await axios(getSheet(['Base!A:W']))
         const objectSheet = await arrayObject(requestSheet.data.valueRanges[0])
         const updateObj = {
             razao,
@@ -19,7 +19,7 @@ const updateReceita = async (cnpj, obj, setErrorMsg, setState, objStoreowner) =>
             cep,
             cidade
         }
-        const arrayUpdate = dataPostBatch(objectSheet, 'cnpj', cnpj, updateObj, 'BaseTeste')
+        const arrayUpdate = dataPostBatch(objectSheet, 'cnpj', cnpj, updateObj, 'Base')
         await axios(postSheet(arrayUpdate))
         try {
             const query = db.collection('storeowners').where('cnpj', '==', cnpj)
