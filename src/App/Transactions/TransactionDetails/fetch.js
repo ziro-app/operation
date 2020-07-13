@@ -31,39 +31,43 @@ const fetch = (transactionId, setTransaction, setError, transaction) => {
                             cardholder,
                             receiptId,
                             onBehalfOfBrand,
+                            collaboratorName,
+                            observations,
                         } = snapshot.data();
                         const chargeFormatted = currencyFormat(charge);
-            const dateFormatted = date ? dateFormat(date) : '';
-            const dateLinkCreatedFormatted = dateLinkCreated ? dateFormat(dateLinkCreated) : '';
-            const statusColor = matchStatusColor(status);
-            paymentDoc.push({
-                transactionZoopId: transactionZoopId ? transactionZoopId : '',
-                transactionId: snapshot.id,
-                charge: chargeFormatted,
-                dateLinkCreated: dateLinkCreatedFormatted,
-                date: dateFormatted,
-                fees: fees ? fees : '',
-                installments: installments ? installments : '',
-                maxInstallments: maxInstallments ? maxInstallments : '',
-                seller: seller === 'Ziro' && onBehalfOfBrand ? `${onBehalfOfBrand} - Ziro` : seller,
-                sellerZoopId: sellerZoopId ? sellerZoopId : '',
-                status: status ? status : '',
-                statusColor: matchStatusColor(status),
-                buyerRazao,
-                receivables: receivables ? receivables : [],
-                receivement,
-                brand,
-                firstFour,
-                lastFour,
-                cardholder,
-                receiptId,
-                onBehalfOfBrand,
-            });
+                        const dateFormatted = date ? dateFormat(date) : '';
+                        const dateLinkCreatedFormatted = dateLinkCreated ? dateFormat(dateLinkCreated) : '';
+                        const statusColor = matchStatusColor(status);
+                        paymentDoc.push({
+                            transactionZoopId: transactionZoopId ? transactionZoopId : '',
+                            transactionId: snapshot.id,
+                            charge: chargeFormatted,
+                            dateLinkCreated: dateLinkCreatedFormatted,
+                            date: dateFormatted,
+                            fees: fees ? fees : '',
+                            installments: installments ? installments : '',
+                            maxInstallments: maxInstallments ? maxInstallments : '',
+                            seller: seller === 'Ziro' && onBehalfOfBrand ? `${onBehalfOfBrand} - Ziro` : seller,
+                            sellerZoopId: sellerZoopId ? sellerZoopId : '',
+                            status: status ? status : '',
+                            statusColor: matchStatusColor(status),
+                            buyerRazao,
+                            receivables: receivables ? receivables : [],
+                            receivement,
+                            brand,
+                            firstFour,
+                            lastFour,
+                            cardholder,
+                            receiptId,
+                            onBehalfOfBrand,
+                            collaboratorName: collaboratorName || '',
+                            observations: observations || '',
+                        });
                         if (transaction.status !== paymentDoc[0].status) {
                             setTransaction(paymentDoc[0]);
                         }
                     } else {
-            setError(true);
+                        setError(true);
                     }
                 },
                 error => {

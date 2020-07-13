@@ -24,6 +24,7 @@ const CreatePayment = () => {
     const [zoopId, setZoopId] = useState('');
     const [charge, setCharge] = useState('');
     const [maxInstallments, setMaxInstallments] = useState('');
+    const [observations, setObservations] = useState('');
     const { nickname } = useContext(userContext);
     const state = {
         nickname,
@@ -36,6 +37,8 @@ const CreatePayment = () => {
         setFantasy,
         setCharge,
         setMaxInstallments,
+        observations,
+        setObservations,
     };
     const validations = [
         {
@@ -171,6 +174,17 @@ const CreatePayment = () => {
                                     />
                                 }
                             />,
+                            <FormInput
+                                name="observation"
+                                label="Observações (opcional)"
+                                input={
+                                    <InputText
+                                        value={observations}
+                                        onChange={({ target: { value } }) => setObservations(value)}
+                                        placeholder="Romaneio, nome do cliente, etc"
+                                    />
+                                }
+                            />,
                         ]}
                     />
                 ) : (
@@ -237,6 +251,18 @@ const CreatePayment = () => {
                                         }}
                                         placeholder="10"
                                         inputMode="numeric"
+                                    />
+                                }
+                            />,
+
+                            <FormInput
+                                name="observation"
+                                label="Observações(opcional)"
+                                input={
+                                    <InputText
+                                        value={observations}
+                                        onChange={({ target: { value } }) => setObservations(value)}
+                                        placeholder="Romaneio, nome do cliente, etc"
                                     />
                                 }
                             />,

@@ -1,10 +1,23 @@
 import { db } from '../../Firebase/index';
 
 const sendToBackend = state => () => {
-    const { nickname, seller, onBehalfOfBrand, setBrand, sellerId, charge, maxInstallments, setFantasy, setCharge, setMaxInstallments } = state;
+    const {
+        nickname,
+        seller,
+        onBehalfOfBrand,
+        setBrand,
+        sellerId,
+        charge,
+        maxInstallments,
+        setFantasy,
+        setCharge,
+        setMaxInstallments,
+        observations,
+        setObservations,
+    } = state;
     const nome = nickname ? nickname.trim() : '';
     const baseUrl = 'https://ziro.app/pagamento/';
-    const allowedUsers = ['Uiller', 'Vitor', 'Bruno', 'João', 'Cesar', 'Ale'];
+    const allowedUsers = ['Uiller', 'Vitor', 'Bruno', 'João', 'Cesar', 'Ale', 'Vivian', 'Elisa', 'Paulo'];
     return new Promise(async (resolve, reject) => {
         try {
             if (allowedUsers.includes(nome)) {
@@ -17,6 +30,7 @@ const sendToBackend = state => () => {
                         charge,
                         maxInstallments,
                         status: 'Aguardando Pagamento',
+                        observations,
                     });
                     try {
                         const doc = await docRef.get();
@@ -29,6 +43,7 @@ const sendToBackend = state => () => {
                     setBrand('');
                     setCharge('');
                     setMaxInstallments('');
+                    setObservations('');
                 } else {
                     throw { msg: 'Vendedor não encontrado', customError: true };
                 }
@@ -40,6 +55,7 @@ const sendToBackend = state => () => {
                 setBrand('');
                 setCharge('');
                 setMaxInstallments('');
+                setObservations('');
             }
             if (error.customError) reject(error);
             else {

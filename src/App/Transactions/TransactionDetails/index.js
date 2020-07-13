@@ -78,16 +78,16 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
                     setCaptureModal(false);
                     snapRef.update({ status: 'Atualizando' });
                 });
-      setCancelModal(false);
-    } catch (e) {
-      setLoadingButton(false);
-      setValidationMessage('Ocorreu um erro, contate suporte');
-      console.log('erro na requisição para a captação da zoop');
-      console.log(e.response.status);
-    }
-  };
+            setCancelModal(false);
+        } catch (e) {
+            setLoadingButton(false);
+            setValidationMessage('Ocorreu um erro, contate suporte');
+            console.log('erro na requisição para a captação da zoop');
+            console.log(e.response.status);
+        }
+    };
 
-  const cancelTransaction = async (transaction_id, on_behalf_of, amountBeforeConvert) => {
+    const cancelTransaction = async (transaction_id, on_behalf_of, amountBeforeConvert) => {
     try {
       const snapRef = db.collection('credit-card-payments').doc(transactionId);
       const amount = amountBeforeConvert.replace('R$', '').replace(',', '').replace('.', '');
@@ -235,6 +235,18 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
                                 ],
                             },
                         ];
+                        if (transaction.collaboratorName) {
+                            block[0].body.splice(8, 0, {
+                                title: 'Link criado por',
+                                content: transaction.collaboratorName,
+                            });
+                        }
+                        if (transaction.observations) {
+                            block[0].body.splice(transaction.collaboratorName ? 9 : 8, 0, {
+                                title: 'Observações',
+                                content: transaction.observations,
+                            });
+                        }
 
                         if (typeof transaction.receivables !== 'undefined' && transaction.receivables.length) {
                             const sortedTransactions = transaction.receivables.sort((a, b) => b.installment - a.installment);

@@ -219,7 +219,6 @@ export default ({
                             placeholder="P,M,G"
                             value={(state.sizes && state.sizes.join(',')) || ''}
                             onChange={({ target: { value } }) => {
-                                //setSizes(value ? value.split(',') : '');
                                 updateSizes(value ? value.split(',') : '');
                             }}
                         />
