@@ -73,8 +73,8 @@ const sendToBackend = state => () => {
                     resource: {
                         values: [
                             [formatDateUTC3(new Date()), storeownerName, supplierName, linkValue, total,
-                                installment, discount, paymentType, imgUrl, beneficiary, bankName, agencia,
-                                conta, doc, obs]
+                                installment, discount, paymentType, imgUrl, paymentType === 'TED' ? beneficiary : '', paymentType === 'TED' ? bankName : '', paymentType === 'TED' ? agencia : '',
+                            paymentType === 'TED' ? conta : '', paymentType === 'TED' ? doc : '', obs]
                         ]
                     },
                     valueInputOption: 'user_entered'
@@ -88,7 +88,7 @@ const sendToBackend = state => () => {
                     resource: {
                         values: [
                             [formatDateUTC3(new Date()), storeownerName, supplierName, total, linkValue,
-                                imgUrl, beneficiary, bankName, agencia, conta, doc, obs]
+                                imgUrl, paymentType === 'TED' ? beneficiary : '', paymentType === 'TED' ? bankName : '', paymentType === 'TED' ? agencia : '', paymentType === 'TED' ? conta : '', paymentType === 'TED' ? doc : '', obs, paymentType]
                         ]
                     },
                     valueInputOption: 'user_entered'

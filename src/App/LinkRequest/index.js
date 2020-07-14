@@ -92,37 +92,32 @@ const LinkRequest = () => {
             message: 'Campo obrigatório'
         }, {
             name: 'paymentType',
-            validation: value => type === 'Cartão de Crédito' ? ['TED', 'Cheque'].includes(value) : true,
-            value: paymentType,
-            message: 'Meio de pagamento inválido'
-        }, {
-            name: 'paymentType',
-            validation: value => type === 'Cartão de Crédito' ? ['TED', 'Cheque'].includes(value) : true,
+            validation: value => ['TED', 'Cheque'].includes(value),
             value: paymentType,
             message: 'Meio de pagamento inválido'
         }, {
             name: 'beneficiary',
-            validation: value => (type === 'TED' || paymentType === 'TED') ? !!value : true,
+            validation: value => paymentType === 'TED' ? !!value : true,
             value: beneficiary,
             message: 'Campo obrigatório'
         }, {
             name: 'beneficiaryDocument',
-            validation: value => (type === 'TED' || paymentType === 'TED') ? /(^\d{3}\.\d{3}\.\d{3}\-\d{2}$)|(^\d{2}\.\d{3}\.\d{3}\/\d{4}\-\d{2}$)/.test(value) : true,
+            validation: value => paymentType === 'TED' ? /(^\d{3}\.\d{3}\.\d{3}\-\d{2}$)|(^\d{2}\.\d{3}\.\d{3}\/\d{4}\-\d{2}$)/.test(value) : true,
             value: beneficiaryDocument,
             message: 'Documento inválido'
         }, {
             name: 'bankName',
-            validation: value => (type === 'TED' || paymentType === 'TED') ? bank.banco ? true : banksList.find(bank => bank.split(' - ')[1] === value) !== undefined : true,
+            validation: value => paymentType === 'TED' ? bank.banco ? true : banksList.find(bank => bank.split(' - ')[1] === value) !== undefined : true,
             value: bankName,
             message: 'Banco inválido'
         }, {
             name: 'accountNumber',
-            validation: value => (type === 'TED' || paymentType === 'TED') ? !!value : true,
+            validation: value => paymentType === 'TED' ? !!value : true,
             value: accountNumber,
             message: 'Campo obrigatório'
         }, {
             name: 'agency',
-            validation: value => (type === 'TED' || paymentType === 'TED') ? !!value : true,
+            validation: value => paymentType === 'TED' ? !!value : true,
             value: agency,
             message: 'Campo obrigatório'
         }, {

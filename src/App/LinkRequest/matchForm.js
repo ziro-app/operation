@@ -97,17 +97,52 @@ const cardForm = ({ installment, setInstallment, installments, discount, setDisc
     return fields
 }
 
-const tedForm = ({ hasCommission, setHasCommission, commissionValue, setCommissionValue, bank, bankName, setBankName, accountNumber, setAccountNumber, agency, setAgency, beneficiary, setBeneficiary, beneficiaryDocument, setBeneficiaryDocument }) => {
+const tedForm = ({ paymentType, setPaymentType, hasCommission, setHasCommission, commissionValue, setCommissionValue, bank, bankName, setBankName, accountNumber, setAccountNumber, agency, setAgency, beneficiary, setBeneficiary, beneficiaryDocument, setBeneficiaryDocument }) => {
     const fields = [
-        <FormInput name='beneficiary' label='Beneficiário' input={
+        <FormInput name='hasCommission' label='Descontado comissão?' input={
+            <Dropdown
+                value={hasCommission}
+                onChange={({ target: { value } }) => setHasCommission(value)}
+                onChangeKeyboard={element =>
+                    element ? setHasCommission(element.value) : null
+                }
+                list={['Sim', 'Não']}
+                placeholder="Sim ou Não"
+                readOnly={true}
+            />
+        } />,
+        hasCommission === 'Sim' ? <FormInput name='commissionValue' label='Valor da comissão' input={
+            <InputText
+                value={commissionValue ? `% ${commissionValue}` : ''}
+                onChange={({ target: { value } }) => {
+                    let newPrctg = value.replace(/\s/g, '').replace('%', '').replace(',', '.')
+                    setCommissionValue(newPrctg)
+                }}
+                placeholder='% 0.00'
+                inputMode='numeric'
+            />
+        } /> : <FormInput name='' label='' input={<></>} />,
+        <FormInput name='paymentType' label='Tipo de Pagamento' input={
+            <Dropdown
+                value={paymentType}
+                readOnly={true}
+                onChange={({ target: { value } }) => setPaymentType(value)}
+                onChangeKeyboard={element =>
+                    element ? setPaymentType(element.value) : null
+                }
+                list={['TED', 'Cheque']}
+                placeholder="TED ou Cheque"
+            />
+        } />,
+        paymentType === 'TED' ? <FormInput name='beneficiary' label='Beneficiário' input={
             <InputText
                 value={beneficiary}
                 onChange={({ target: { value } }) => bank.razao ? () => null : setBeneficiary(capitalize(value))}
                 placeholder='Nome do beneficiário'
                 disabled={bank.razao ? true : false}
             />
-        } />,
-        <FormInput name='beneficiaryDocument' label='Documento' input={
+        } /> : <FormInput name='' label='' input={<></>} />,
+        paymentType === 'TED' ? <FormInput name='beneficiaryDocument' label='Documento' input={
             <InputText
                 value={beneficiaryDocument}
                 onChange={({ target: { value } }) => {
@@ -121,8 +156,8 @@ const tedForm = ({ hasCommission, setHasCommission, commissionValue, setCommissi
                 inputMode='numeric'
                 disabled={bank.cnpj ? true : false}
             />
-        } />,
-        <FormInput name='bankName' label='Banco' input={
+        } /> : <FormInput name='' label='' input={<></>} />,
+        paymentType === 'TED' ? <FormInput name='bankName' label='Banco' input={
             <Dropdown
                 value={bankName}
                 onChange={({ target: { value } }) => bank.banco ? () => null : setBankName(value)}
@@ -131,8 +166,8 @@ const tedForm = ({ hasCommission, setHasCommission, commissionValue, setCommissi
                 list={banksList.map(bank => bank.split(' - ')[1])}
                 placeholder='Ex.: Banco do Brasil'
             />
-        } />,
-        <FormInput name='agency' label='Número da Agência' input={
+        } /> : <FormInput name='' label='' input={<></>} />,
+        paymentType === 'TED' ? <FormInput name='agency' label='Número da Agência' input={
             <InputText
                 value={agency}
                 onChange={({ target: { value } }) => bank.agencia ? () => null : setAgency(value)}
@@ -140,36 +175,14 @@ const tedForm = ({ hasCommission, setHasCommission, commissionValue, setCommissi
                 inputMode='numeric'
                 disabled={bank.agencia ? true : false}
             />
-        } />,
-        <FormInput name='accountNumber' label='Número da Conta' input={
+        } /> : <FormInput name='' label='' input={<></>} />,
+        paymentType === 'TED' ? <FormInput name='accountNumber' label='Número da Conta' input={
             <InputText
                 value={accountNumber}
                 onChange={({ target: { value } }) => bank.conta ? () => null : setAccountNumber(value)}
                 placeholder='Ex.: 14637-8'
                 inputMode='numeric'
                 disabled={bank.conta ? true : false}
-            />
-        } />,
-        <FormInput name='hasCommission' label='Descontado comissão?' input={
-            <Dropdown
-                value={hasCommission}
-                onChange={({ target: { value } }) => setHasCommission(value)}
-                onChangeKeyboard={element =>
-                    element ? setHasCommission(element.value) : null
-                }
-                list={['Sim', 'Não']}
-                placeholder="Sim ou Não"
-            />
-        } />,
-        hasCommission === 'Sim' ? <FormInput name='commissionValue' label='Valor da comissão' input={
-            <InputText
-                value={commissionValue ? `% ${commissionValue}` : ''}
-                onChange={({ target: { value } }) => {
-                    let newPrctg = value.replace(/\s/g, '').replace('%', '').replace(',', '.')
-                    setCommissionValue(newPrctg)
-                }}
-                placeholder='% 0.00'
-                inputMode='numeric'
             />
         } /> : <FormInput name='' label='' input={<></>} />
     ]
