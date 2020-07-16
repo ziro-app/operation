@@ -6,6 +6,7 @@ export default ({ update, image, arrayOfInputs, validations }) => {
     const _inputs = arrayOfInputs;
 
     const inputs = useMemo(() => _inputs.filter(input => !!input), _inputs);
+    //const inputs = useMemo(() => _inputs.map(input => input(index)), _inputs);
 
     return (
         <div style={{ display: 'grid', gridTemplateColumns: '1fr', boxShadow: card.boxShadow }}>

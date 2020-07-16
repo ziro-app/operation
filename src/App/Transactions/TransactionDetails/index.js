@@ -88,26 +88,26 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
     };
 
     const cancelTransaction = async (transaction_id, on_behalf_of, amountBeforeConvert) => {
-    try {
-      const snapRef = db.collection('credit-card-payments').doc(transactionId);
-      const amount = amountBeforeConvert.replace('R$', '').replace(',', '').replace('.', '');
-      setLoadingButton(true);
-      await axios
-        .post(
-          `${process.env.PAY}/payments-void`,
-          {
-            transaction_id,
-            on_behalf_of,
-            amount,
-          },
-          {
-            headers: {
-              Authorization: `Basic ${process.env.PAY_TOKEN}`,
-            },
-          },
-        )
-        .then(result => {
-          setLoadingButton(false);
+        try {
+            const snapRef = db.collection('credit-card-payments').doc(transactionId);
+            const amount = amountBeforeConvert.replace('R$', '').replace(',', '').replace('.', '');
+            setLoadingButton(true);
+            await axios
+                .post(
+                    `${process.env.PAY}/payments-void`,
+                    {
+                        transaction_id,
+                        on_behalf_of,
+                        amount,
+                    },
+                    {
+                        headers: {
+                            Authorization: `Basic ${process.env.PAY_TOKEN}`,
+                        },
+                    },
+                )
+                .then(result => {
+                    setLoadingButton(false);
           const { data } = result;
           const { status } = data;
           setCancelModal(false);
