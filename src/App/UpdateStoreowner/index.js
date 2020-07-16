@@ -21,27 +21,8 @@ import { modalBox, container, titleError, svg } from './GetCnpj/styles'
 const UpdateStoreowner = () => {
     // SearchCnpjInfo
     const [errorMsg, setErrorMsg] = useState('')
-    const [razao, setRazao] = useState('')
-    const [rua, setRua] = useState('')
-    const [numero, setNumero] = useState('')
-    const [complemento, setComplemento] = useState('')
-    const [bairro, setBairro] = useState('')
-    const [estado, setEstado] = useState('')
-    const [cep, setCep] = useState('')
-    const [cidade, setCidade] = useState('')
-    const setCnpjInfo = {setRazao, setRua, setNumero, setComplemento, setCep, setCidade, setEstado,setBairro}
     const [storeowner, setStoreowner] = useState({ 'cadastro': '', 'afiliado': '', 'afiliado_cpf': '', 'lojista': '', 'rg': '', 'cpf': '', 'nascimento': '', 'instagram': '', 'cnpj': '', 'ie': '', 'razao': '', 'fantasia': '', 'endereco': '', 'bairro': '', 'cep': '', 'cidade': '', 'estado': '', 'fone': '', 'email': '', 'assessor': '', 'vendedor': '', 'whats': '', 'entrega': '', 'bairroEntrega': '', 'cepEntrega': '', 'cidadeEntrega': '', 'estadoEntrega': '', vinculo: '' })
-    useEffect(() => {
-        const {setRazao, setRua, setNumero, setComplemento, setCep, setCidade, setEstado,setBairro} = setCnpjInfo
-        setRazao('')
-        setRua('')
-        setNumero('')
-        setComplemento('')
-        setCep('')
-        setCidade('')
-        setEstado('')
-        setBairro('')
-    },[storeowner])
+    const setCnpjInfo = {setStoreowner, storeowner}
     // Other Infos
     const [isLoading, setIsLoading] = useState(true)
     const [isError, setIsError] = useState(false)
@@ -110,7 +91,7 @@ const UpdateStoreowner = () => {
     const [copyResultStatus, setCopyResultStatus] = useState(true)
     const [link, setLink] = useState('')
     const [linkList, setLinkList] = useState([])
-    const setState = { setAffiliateName, setAffiliateCpf, setAdvisor, setSalesman, setStoreowner, setLink }
+    const setState = { setAffiliateName, setAffiliateCpf, setAdvisor, setSalesman, setStoreowner, setLink, storeowner }
     const state = { affiliateName, affiliateCpf, advisor, salesman, storeowner, link, ...setState }
     const statesList = ['AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA', 'MT', 'MS', 'MG', 'PA', 'PB', 'PR', 'PE', 'PI', 'RJ', 'RN', 'RS', 'RO', 'RR', 'SC', 'SP', 'SE', 'TO']
     const validations = [
@@ -333,7 +314,6 @@ const UpdateStoreowner = () => {
 
     if (isLoading) return <div style={{ display: 'grid' }}><Spinner size='5rem' /></div>
     if (isError) return <Error />
-
     return (
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
             <Dropdown
@@ -500,7 +480,7 @@ const UpdateStoreowner = () => {
                 />
                 <InputEdit
                     name="Razão Social"
-                    value={razao || storeowner.razao}
+                    value={storeowner.razao}
                     onChange={() => { }}
                     validateInput={() => { }}
                     submit={() => { }}
@@ -522,7 +502,7 @@ const UpdateStoreowner = () => {
                 />
                 <InputEdit
                     name="Rua"
-                    value={rua || (storeowner.endereco ? storeowner.endereco.split(', ')[0] : '')}
+                    value={storeowner.endereco ? storeowner.endereco.split(', ')[0] : ''}
                     onChange={() => { }}
                     validateInput={() => { }}
                     submit={() => { }}
@@ -533,7 +513,7 @@ const UpdateStoreowner = () => {
                 />
                 <InputEdit
                     name="Número"
-                    value={numero || (storeowner.endereco ? storeowner.endereco.split(', ')[1] : '')}
+                    value={storeowner.endereco ? storeowner.endereco.split(', ')[1] : ''}
                     onChange={() => { }}
                     validateInput={() => { }}
                     submit={() => { }}
@@ -544,7 +524,7 @@ const UpdateStoreowner = () => {
                 />
                 <InputEdit
                     name="Complemento"
-                    value={complemento || (storeowner.endereco.split(', ')[2] ? storeowner.endereco.split(', ')[2] : '')}
+                    value={storeowner.endereco.split(', ')[2] ? storeowner.endereco.split(', ')[2] : ''}
                     onChange={() => { }}
                     validateInput={() => { }}
                     submit={() => { }}
@@ -555,7 +535,7 @@ const UpdateStoreowner = () => {
                 />
                 <InputEdit
                     name="Bairro"
-                    value={bairro || storeowner.bairro}
+                    value={storeowner.bairro}
                     onChange={() => { }}
                     validateInput={() => { }}
                     submit={() => { }}
@@ -566,7 +546,7 @@ const UpdateStoreowner = () => {
                 />
                 <InputEdit
                     name="Cep"
-                    value={cep || storeowner.cep}
+                    value={storeowner.cep}
                     onChange={() => { }}
                     validateInput={() => { }}
                     submit={() => { }}
@@ -577,7 +557,7 @@ const UpdateStoreowner = () => {
                 />
                 <InputEdit
                     name="Cidade"
-                    value={cidade || storeowner.cidade}
+                    value={storeowner.cidade}
                     onChange={() => { }}
                     validateInput={() => { }}
                     submit={() => { }}
@@ -588,7 +568,7 @@ const UpdateStoreowner = () => {
                 />
                 <InputEdit
                     name="Estado"
-                    value={estado || storeowner.estado}
+                    value={storeowner.estado}
                     onChange={() => { }}
                     validateInput={() => { }}
                     submit={() => { }}
