@@ -61,13 +61,13 @@ const reducer = (state, action) => {
         const objIndex = state.findIndex(obj => obj.name === payload.state.name);
         state[objIndex].price = payload.price;
         /*const newObject = state[objIndex];
-        newObject.price = price;
-        state[objIndex] = newObject;
-        const newArray = state;
-        console.log('updated state:', state[objIndex]);
+            newObject.price = price;
+            state[objIndex] = newObject;
+            const newArray = state;
+            console.log('updated state:', state[objIndex]);
 
-        return [newArray];*/
-        return [...state];
+            return [newArray];*/
+        return [...state, state];
     }
     if (action.type === 'referenceId') {
         const { payload } = action;
@@ -75,11 +75,13 @@ const reducer = (state, action) => {
     }
     if (action.type === 'description') {
         const { payload } = action;
-        console.log('payload:', payload);
-        const objIndex = state.findIndex(obj => obj.name === payload.state.name);
-        state[objIndex].description = payload.description;
-
-        console.log('updated state:', state[objIndex]);
+        const { description } = payload;
+        console.log('payload description:', payload);
+        const objIndex = state.findIndex(obj => obj === payload.state);
+        const statesCopy = [...state];
+        statesCopy[objIndex].description = description;
+        state[objIndex].description = description;
+        console.log('updated state:', statesCopy[objIndex]);
 
         return [...state];
     }
@@ -120,7 +122,7 @@ const UploadImages = () => {
     useEffect(() => fetch(setIsLoading, setIsError, setBrands, setBrandsAndTrends), []);
 
     useEffect(() => {
-        console.log('teste');
+        console.log('teste', states);
     }, [states]);
 
     function updateInitialState(value) {
@@ -156,173 +158,174 @@ const UploadImages = () => {
     }
 
     /*const memoizedInputs = useMemo(() => {
-      states.forEach(state => {
-        const index = states.findIndex(e => e === state);
-        const stateWithIndex = { state, index };
-        console.log(stateWithIndex);
-        //if (filesList) updateIndex(stateWithIndex);
-        const availabilityInput = (
-          <FormInput
-            name="availability"
-            label="Disponibilidade"
-            input={
-              <Dropdown
-                list={['Disponível', 'Indisponível']}
-                value={PTstatus[state.status] || ''}
-                onChange={({ target: { value } }) => {
-                  updateStatus(old => ({
-                    ...old,
-                    status: INstatus[value] || 'waitingInfo',
-                  }));
-                }}
-                onChangeKeyboard={element =>
-                  element &&
-                  updateStatus(old => ({
-                    ...old,
-                    status: INstatus[element.value] || 'waitingInfo',
-                  }))
-                }
-                placeholder="Está disponível em estoque?"
-              />
-            }
-          />
-        );
+        states.forEach(state => {
+          const index = states.findIndex(e => e === state);
+          const stateWithIndex = { state, index };
+          console.log(stateWithIndex);
+          //if (filesList) updateIndex(stateWithIndex);
+          const availabilityInput = (
+            <FormInput
+              name="availability"
+              label="Disponibilidade"
+              input={
+                <Dropdown
+                  list={['Disponível', 'Indisponível']}
+                  value={PTstatus[state.status] || ''}
+                  onChange={({ target: { value } }) => {
+                    updateStatus(old => ({
+                      ...old,
+                      status: INstatus[value] || 'waitingInfo',
+                    }));
+                  }}
+                  onChangeKeyboard={element =>
+                    element &&
+                    updateStatus(old => ({
+                      ...old,
+                      status: INstatus[element.value] || 'waitingInfo',
+                    }))
+                  }
+                  placeholder="Está disponível em estoque?"
+                />
+              }
+            />
+          );
 
-        const priceInput = (state.status === undefined || state.status === 'available') && (
-          <FormInput
-            name="price"
-            label="Preço"
-            input={
-              <InputText
-                value={currencyFormat(state.price || '')}
-                onChange={({ target: { value } }) => {
-                  const toInteger = parseInt(value.replace(/[R$\.,]/g, ''), 10);
-                  const payload = { price: maskInput(toInteger, '#######', true), state };
-                  updatePrice(payload);
-                }}
-                placeholder="R$ 100,00"
-                inputMode="numeric"
-              />
-            }
-          />
-        );
-        const referenceIdInput = state.status === 'available' && (
-          <FormInput
-            name="referenceId"
-            label="Referência"
-            input={
-              <InputText
-                value={state.referenceId || ''}
-                onChange={({ target: { value } }) => {
-                  updateReference(old => ({ ...old, referenceId: value }));
-                }}
-                placeholder="Referência da loja"
-              />
-            }
-          />
-        );
+          const priceInput = (state.status === undefined || state.status === 'available') && (
+            <FormInput
+              name="price"
+              label="Preço"
+              input={
+                <InputText
+                  value={currencyFormat(state.price || '')}
+                  onChange={({ target: { value } }) => {
+                    const toInteger = parseInt(value.replace(/[R$\.,]/g, ''), 10);
+                    const payload = { price: maskInput(toInteger, '#######', true), state };
+                    updatePrice(payload);
+                  }}
+                  placeholder="R$ 100,00"
+                  inputMode="numeric"
+                />
+              }
+            />
+          );
+          const referenceIdInput = state.status === 'available' && (
+            <FormInput
+              name="referenceId"
+              label="Referência"
+              input={
+                <InputText
+                  value={state.referenceId || ''}
+                  onChange={({ target: { value } }) => {
+                    updateReference(old => ({ ...old, referenceId: value }));
+                  }}
+                  placeholder="Referência da loja"
+                />
+              }
+            />
+          );
 
-        const descriptionInput = (state.status === undefined || state.status === 'available') && (
-          <FormInput
-            name="description"
-            label="Descrição"
-            input={
-              <InputText
-                value={state.description || ''}
-                onChange={({ target: { value } }) => {
-                  updateDescription(value);
-                  //updateDescription(old => ({ ...old, description: value }));
-                }}
-                placeholder="Descrição"
-              />
-            }
-          />
-        );
+          const descriptionInput = (state.status === undefined || state.status === 'available') && (
+            <FormInput
+              name="description"
+              label="Descrição"
+              input={
+                <InputText
+                  value={state.description || ''}
+                  onChange={({ target: { value } }) => {
+                    updateDescription(value);
+                    //updateDescription(old => ({ ...old, description: value }));
+                  }}
+                  placeholder="Descrição"
+                />
+              }
+            />
+          );
 
-        const sizesInput = (state.status === undefined || state.status === 'available') && (
-          <FormInput
-            name="sizes"
-            label="Tamanhos"
-            input={
-              <InputText
-                placeholder="P,M,G"
-                value={(state.sizes && state.sizes.join(',')) || ''}
-                onChange={({ target: { value } }) => {
-                  updateSizes(value ? value.split(',') : '');
-                }}
-              />
-            }
-          />
-        );
+          const sizesInput = (state.status === undefined || state.status === 'available') && (
+            <FormInput
+              name="sizes"
+              label="Tamanhos"
+              input={
+                <InputText
+                  placeholder="P,M,G"
+                  value={(state.sizes && state.sizes.join(',')) || ''}
+                  onChange={({ target: { value } }) => {
+                    updateSizes(value ? value.split(',') : '');
+                  }}
+                />
+              }
+            />
+          );
 
-        const colorsInput = (state.status === undefined || state.status === 'available') && (
-          <FormInput
-            name="colors"
-            label="Cores"
-            input={
-              <InputText
-                placeholder="Azul,Amarelo"
-                value={(state.colors && state.colors.join(',')) || ''}
-                onChange={({ target: { value } }) => {
-                  const newColors = value.split(',');
-                  updateAvailableQuantities(old => {
-                    const newQuantities = Object.entries(old.availableQuantities || {}).reduce((prev, [key, value]) => {
-                      if (newColors.some(color => key.endsWith(color))) return { ...prev, [key]: value };
-                      return prev;
-                    }, {});
-                    return { ...old, availableQuantities: newQuantities };
-                  });
-                  updateColors(value ? newColors : '');
-                }}
-              />
-            }
-          />
-        );
+          const colorsInput = (state.status === undefined || state.status === 'available') && (
+            <FormInput
+              name="colors"
+              label="Cores"
+              input={
+                <InputText
+                  placeholder="Azul,Amarelo"
+                  value={(state.colors && state.colors.join(',')) || ''}
+                  onChange={({ target: { value } }) => {
+                    const newColors = value.split(',');
+                    updateAvailableQuantities(old => {
+                      const newQuantities = Object.entries(old.availableQuantities || {}).reduce((prev, [key, value]) => {
+                        if (newColors.some(color => key.endsWith(color))) return { ...prev, [key]: value };
+                        return prev;
+                      }, {});
+                      return { ...old, availableQuantities: newQuantities };
+                    });
+                    updateColors(value ? newColors : '');
+                  }}
+                />
+              }
+            />
+          );
 
-        const quantitiesInput = (state.status === undefined || state.status === 'available') && state.sizes && (
-          <FormInput
-            name="quantities"
-            label="Quantidades"
-            input={
-              <div style={{ display: 'grid', gridGap: '10px', padding: '10px' }}>
-                {state.sizes.map(size =>
-                  (state.colors.length ? state.colors : ['']).map(color => (
-                    <div
-                      key={`${size}-${color}`}
-                      style={{
-                        display: 'grid',
-                        gridTemplateColumns: '1fr 2fr 2fr',
-                        alignItems: 'center',
-                      }}
-                    >
-                      <label>{size}</label>
-                      <label>{color}</label>
-                      <InputText
-                        placeholder="1"
-                        value={(state.availableQuantities && state.availableQuantities[`${size}-${color}`]) || ''}
-                        onChange={({ target: { value } }) =>
-                          /^[0-9]*$/gm.test(value) &&
-                          updateAvailableQuantities(old => {
-                            const newQuantities = { ...(old.availableQuantities || {}) };
-                            newQuantities[`${size}-${color}`] = value;
-                            return { ...old, availableQuantities: newQuantities };
-                          })
-                        }
-                      />
-                    </div>
-                  )),
-                )}
-              </div>
-            }
-          />
-        );
-        const updateArray = arrayInputs;
-        updateArray[index] = [priceInput, descriptionInput, sizesInput, colorsInput, quantitiesInput];
+          const quantitiesInput = (state.status === undefined || state.status === 'available') && state.sizes && (
+            <FormInput
+              name="quantities"
+              label="Quantidades"
+              input={
+                <div style={{ display: 'grid', gridGap: '10px', padding: '10px' }}>
+                  {state.sizes.map(size =>
+                    (state.colors.length ? state.colors : ['']).map(color => (
+                      <div
+                        key={`${size}-${color}`}
+                        style={{
+                          display: 'grid',
+                          gridTemplateColumns: '1fr 2fr 2fr',
+                          alignItems: 'center',
+                        }}
+                      >
+                        <label>{size}</label>
+                        <label>{color}</label>
+                        <InputText
+                          placeholder="1"
+                          value={(state.availableQuantities && state.availableQuantities[`${size}-${color}`]) || ''}
+                          onChange={({ target: { value } }) =>
+                            /^[0-9]*$/gm.test(value) &&
+                            updateAvailableQuantities(old => {
+                              const newQuantities = { ...(old.availableQuantities || {}) };
+                              newQuantities[`${size}-${color}`] = value;
+                              return { ...old, availableQuantities: newQuantities };
+                            })
+                          }
+                        />
+                      </div>
+                    )),
+                  )}
+                </div>
+              }
+            />
+          );
+          const updateArray = arrayInputs;
+          updateArray[index] = [priceInput, descriptionInput, sizesInput, colorsInput, quantitiesInput];
 
-        setArrayInputs(updateArray);
-      });
-    }, [filesList]);*/
+          setArrayInputs(updateArray);
+        });
+      }, [filesList]);*/
     useEffect(() => {
+        console.log('into useEffect');
         states.forEach(state => {
             const availabilityInput = (
                 <FormInput
@@ -431,10 +434,11 @@ const UploadImages = () => {
                                 const newColors = value.split(',');
                                 updateAvailableQuantities(old => {
                                     const newQuantities = Object.entries(old.availableQuantities || {}).reduce((prev, [key, value]) => {
-                                        if (newColors.some(color => key.endsWith(color))) return {
-                                            ...prev,
-                                            [key]: value,
-                                        };
+                                        if (newColors.some(color => key.endsWith(color)))
+                                            return {
+                                                ...prev,
+                                                [key]: value,
+                                            };
                                         return prev;
                                     }, {});
                                     return { ...old, availableQuantities: newQuantities };
@@ -654,8 +658,10 @@ const UploadImages = () => {
                 <label style={title}>Etapa 4</label>
                 <Icon style={fileContainerUploadIconClass} type="upload" size={50} strokeWidth={3}
                       className="uploadIcon" alt="Upload Icon"/>
-                <ImageUpload sendToBackend={data => settingThePicturesAndFiles(data)}
-                             isDisabled={!isValidBrand(brands, brand) || isSubmitting}/>
+                <ImageUpload
+                    sendToBackend={data => settingThePicturesAndFiles(data)}
+                    //isDisabled={!isValidBrand(brands, brand) || isSubmitting}
+                />
                 {pictures[1] && (
                     <>
                         <div style={{ marginTop: '10px' }}/>
