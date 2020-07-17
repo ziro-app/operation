@@ -359,7 +359,9 @@ const UpdateStoreowner = () => {
                             </div>
                         </Modal>
                     ): (
-                        <GetCnpj cnpj={storeowner.cnpj} setState={setCnpjInfo} setErrorMsg={setErrorMsg}/>
+                        <div style={{marginBottom:'20px'}}>
+                            <GetCnpj cnpj={storeowner.cnpj} setState={setCnpjInfo} setErrorMsg={setErrorMsg}/>
+                        </div>
                     )}
                 {copyResultText ?
                     <div style={{ padding: '5px 0 0', fontSize: '15px', color: copyResultStatus ? successColor : alertColor, textAlign: 'center' }} >

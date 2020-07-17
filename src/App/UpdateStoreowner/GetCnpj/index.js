@@ -18,8 +18,8 @@ const GetCnpj = ({ cnpj, setState , setErrorMsg}) => {
                     <div style={svg} ><Illustration type="waiting" size={200} /></div>
                     <label style={title}>{firstLabel ? 'Aguarde...' : 'Só mais um momento...'}</label>
                     <label>{firstLabel
-                        ? 'Estamos validando o CNPJ. Não saia da página'
-                        : 'Estamos concluindo a validação. Não saia da página'}
+                        ? 'Estamos atualizando o CNPJ. Não saia da página'
+                        : 'Estamos concluindo a atualização. Não saia da página'}
                     </label>
                     <Spinner size='3rem' />
                 </div>
