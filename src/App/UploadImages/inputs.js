@@ -1,203 +1,126 @@
-import React, { useMemo, useState } from 'react';
+import React from 'react';
 import FormInput from '@bit/vitorbarbosa19.ziro.form-input';
-import Dropdown from '@bit/vitorbarbosa19.ziro.dropdown';
 import InputText from '@bit/vitorbarbosa19.ziro.input-text';
-import currencyFormat from '@ziro/currency-format';
-import maskInput from '@ziro/mask-input';
 
-const PTstatus = {
-    available: 'Disponível',
-    unavailable: 'Indisponível',
-    closed: 'Disponível',
-    waitingInfo: '',
-    soldOut: 'Indisponível',
-};
-
-const INstatus = {
-    Disponível: 'available',
-    Indisponível: 'soldOut',
-};
-export default (product, setProduct) => {
-    const [sizes, setSizes] = useState([]);
-    const [colors, setColors] = useState([]);
-    const availabilityInput = useMemo(
-        () => (
-            <FormInput
-                name="availability"
-                label="Disponibilidade"
-                input={
-                    <Dropdown
-                        list={['Disponível', 'Indisponível']}
-                        value={PTstatus[product.status] || ''}
-                        onChange={({ target: { value } }) =>
-                            setProduct(old => ({
-                                ...old,
-                                status: INstatus[value] || 'waitingInfo',
-                            }))
-                        }
-                        onChangeKeyboard={element =>
-                            element &&
-                            setProduct(old => ({
-                                ...old,
-                                status: INstatus[element.value] || 'waitingInfo',
-                            }))
-                        }
-                        placeholder="Está disponível em estoque?"
-                    />
-                }
-            />
-        ),
-        [product.status],
-    );
-
-    const priceInput = useMemo(
-        () =>
-            (product.status === undefined || product.status === 'available') && (
-                <FormInput
-                    name="price"
-                    label="Preço"
-                    input={
-                        <InputText
-                            value={currencyFormat(product.price || '')}
-                            onChange={({ target: { value } }) => {
-                                const toInteger = parseInt(value.replace(/[R$\.,]/g, ''), 10);
-                                setProduct(old => ({ ...old, price: maskInput(toInteger, '#######', true) }));
-                            }}
-                            placeholder="R$ 100,00"
-                            inputMode="numeric"
-                        />
-                    }
+export default (states, index, dispatch) => {
+    console.log(states);
+    const descriptionInput = ( //(states[index].status === undefined || states[index].status === 'available') &&
+        <FormInput
+            name="description"
+            label="Descrição"
+            input={
+                <InputText
+                    value={states.description0 || ''}
+                    onChange={({ target: { value } }) => {
+                        const payload = { userValue: value, index };
+                        dispatch(payload);
+                    }}
+                    placeholder="Descrição"
                 />
-            ),
-        [product.status, product.price],
+            }
+        />
     );
-    const referenceIdInput = useMemo(
-        () =>
-            product.status === 'available' && (
-                <FormInput
-                    name="referenceId"
-                    label="Referência"
-                    input={
-                        <InputText
-                            value={product.referenceId || ''}
-                            onChange={({ target: { value } }) => setProduct(old => ({ ...old, referenceId: value }))}
-                            placeholder="Referência da loja"
-                        />
-                    }
-                />
-            ),
-        [product.status, product.referenceId],
-    );
-
-    const descriptionInput = useMemo(
-        () =>
-            (product.status === undefined || product.status === 'available') && (
-                <FormInput
-                    name="description"
-                    label="Descrição"
-                    input={
-                        <InputText
-                            value={product.description || ''}
-                            onChange={({ target: { value } }) => setProduct(old => ({ ...old, description: value }))}
-                            placeholder="Descrição"
-                        />
-                    }
-                />
-            ),
-        [product.status, product.description],
+    /*const priceInput = (state.status === undefined || state.status === 'available') && (
+      <FormInput
+        name="price"
+        label="Preço"
+        input={
+          <InputText
+            value={currencyFormat(state.price || '')}
+            onChange={({ target: { value } }) => {
+              const toInteger = parseInt(value.replace(/[R$\.,]/g, ''), 10);
+              dispatch.bind(null, maskInput(toInteger, '#######', true));
+            }}
+            placeholder="R$ 100,00"
+            inputMode="numeric"
+          />
+        }
+      />
     );
 
-    const sizesInput = useMemo(
-        () =>
-            (product.status === undefined || product.status === 'available') && (
-                <FormInput
-                    name="sizes"
-                    label="Tamanhos"
-                    input={
-                        <InputText
-                            placeholder="P,M,G"
-                            value={(sizes && sizes.join(',')) || ''}
-                            onChange={({ target: { value } }) => {
-                                product.setSizes(value ? value.split(',') : '');
-                            }}
-                        />
-                    }
-                />
-            ),
-        [product.status, sizes],
+    const sizesInput = (state.status === undefined || state.status === 'available') && (
+      <FormInput
+        name="sizes"
+        label="Tamanhos"
+        input={
+          <InputText
+            placeholder="P,M,G"
+            value={(state.sizes && state.sizes.join(',')) || ''}
+            onChange={({ target: { value } }) => {
+              updateSizes(value ? value.split(',') : '');
+            }}
+          />
+        }
+      />
     );
 
-    const colorsInput = useMemo(
-        () =>
-            (product.status === undefined || product.status === 'available') && (
-                <FormInput
-                    name="colors"
-                    label="Cores"
-                    input={
-                        <InputText
-                            placeholder="Azul,Amarelo"
-                            value={(colors && colors.join(',')) || ''}
-                            onChange={({ target: { value } }) => {
-                                const newColors = value.split(',');
-                                setProduct(old => {
-                                    const newQuantities = Object.entries(old.availableQuantities || {}).reduce((prev, [key, value]) => {
-                                        if (newColors.some(color => key.endsWith(color))) return { ...prev, [key]: value };
-                                        return prev;
-                                    }, {});
-                                    return { ...old, availableQuantities: newQuantities };
-                                });
-                                setColors(value ? newColors : '');
-                            }}
-                        />
-                    }
-                />
-            ),
-        [product.status, colors],
+    const colorsInput = (state.status === undefined || state.status === 'available') && (
+      <FormInput
+        name="colors"
+        label="Cores"
+        input={
+          <InputText
+            placeholder="Azul,Amarelo"
+            value={(state.colors && state.colors.join(',')) || ''}
+            onChange={({ target: { value } }) => {
+              const newColors = value.split(',');
+              updateAvailableQuantities(old => {
+                const newQuantities = Object.entries(old.availableQuantities || {}).reduce((prev, [key, value]) => {
+                  if (newColors.some(color => key.endsWith(color)))
+                    return {
+                      ...prev,
+                      [key]: value,
+                    };
+                  return prev;
+                }, {});
+                return { ...old, availableQuantities: newQuantities };
+              });
+              updateColors(value ? newColors : '');
+            }}
+          />
+        }
+      />
     );
 
-    const quantitiesInput = useMemo(
-        () =>
-            (product.status === undefined || product.status === 'available') &&
-            sizes.length && (
-                <FormInput
-                    name="quantities"
-                    label="Quantidades"
-                    input={
-                        <div style={{ display: 'grid', gridGap: '10px', padding: '10px' }}>
-                            {sizes.map(size =>
-                                (colors.length ? colors : ['']).map(color => (
-                                    <div
-                                        key={`${size}-${color}`}
-                                        style={{
-                                            display: 'grid',
-                                            gridTemplateColumns: '1fr 2fr 2fr',
-                                            alignItems: 'center',
-                                        }}
-                                    >
-                                        <label>{size}</label>
-                                        <label>{color}</label>
-                                        <InputText
-                                            placeholder="1"
-                                            value={(product.availableQuantities && product.availableQuantities[`${size}-${color}`]) || ''}
-                                            onChange={({ target: { value } }) =>
-                                                /^[0-9]*$/gm.test(value) &&
-                                                setProduct(old => {
-                                                    const newQuantities = { ...(old.availableQuantities || {}) };
-                                                    newQuantities[`${size}-${color}`] = value;
-                                                    return { ...old, availableQuantities: newQuantities };
-                                                })
-                                            }
-                                        />
-                                    </div>
-                                )),
-                            )}
-                        </div>
+    const quantitiesInput = (state.status === undefined || state.status === 'available') && state.sizes && (
+      <FormInput
+        name="quantities"
+        label="Quantidades"
+        input={
+          <div style={{ display: 'grid', gridGap: '10px', padding: '10px' }}>
+            {state.sizes.map(size =>
+              (state.colors.length ? state.colors : ['']).map(color => (
+                <div
+                  key={`${size}-${color}`}
+                  style={{
+                    display: 'grid',
+                    gridTemplateColumns: '1fr 2fr 2fr',
+                    alignItems: 'center',
+                  }}
+                >
+                  <label>{size}</label>
+                  <label>{color}</label>
+                  <InputText
+                    placeholder="1"
+                    value={(state.availableQuantities && state.availableQuantities[`${size}-${color}`]) || ''}
+                    onChange={({ target: { value } }) =>
+                      /^[0-9]*$/gm.test(value) &&
+                      updateAvailableQuantities(old => {
+                        const newQuantities = { ...(old.availableQuantities || {}) };
+                        newQuantities[`${size}-${color}`] = value;
+                        return { ...old, availableQuantities: newQuantities };
+                      })
                     }
-                />
-            ),
-        [product.status, sizes, colors, product.availableQuantities],
-    );
-
-    const arrayInputs = [priceInput, descriptionInput, sizesInput, colorsInput, quantitiesInput];
+                  />
+                </div>
+              )),
+            )}
+          </div>
+        }
+      />
+    );*/
+    // const index = states.findIndex(e => e === state);
+    const arrayInputs = [descriptionInput];
+    //console.log(arrayInputs);
     return arrayInputs;
 };

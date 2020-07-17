@@ -40,14 +40,20 @@ export default ({
                     setEditing,
                     validations,
                     state,
-                    arrayInputs,
+                    arrayOfInputs,
+                    pictures,
+                    setPictures,
                 }) => {
+    //console.log('cardForm', arrayOfInputs);
     return (
         <div style={fileContainerUploadPicturesWrapperClass} className="uploadPicturesWrapper">
             <div key={index} style={fileContainerUploadPictureContainerClass} className="uploadPictureContainer">
                 {removeImage && (
-                    <div style={fileContainerDeleteImageClass} className="deleteImage"
-                         onClick={() => removeImage(picture)}>
+                    <div
+                        style={fileContainerDeleteImageClass}
+                        className="deleteImage"
+                        onClick={() => removeImage(filesList, pictures, picture, setPictures, setFiles)}
+                    >
                         X
                     </div>
                 )}
@@ -58,7 +64,7 @@ export default ({
                         container={children =>
                             !initialStatus || initialStatus === 'waitingInfo' || editing ? (
                                 <CardInputs image={children || null} update={update || null} index={index}
-                                            arrayOfInputs={arrayInputs} validations={validations}/>
+                                            arrayOfInputs={arrayOfInputs} validations={validations}/>
                             ) : initialStatus === 'unavailable' && cartProduct.status !== 'closed' ? (
                                 <InfoCard product={{ requestedQuantities: {}, ...state, ...cartProduct }}
                                           image={children} setEditing={setEditing}/>
@@ -80,8 +86,8 @@ export default ({
                                 image={children || null}
                                 setFiles={setFiles}
                                 update={update || null}
-                                arrayOfInputs={arrayInputs}
-                                validations={validations}
+                                arrayOfInputs={arrayOfInputs}
+                                validations={[]}
                                 index={index}
                             />
                         )}

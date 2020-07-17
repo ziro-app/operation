@@ -28,3 +28,84 @@ export function onDragOver(e) {
 export function onUploadClick(e) {
     e.target.value = null;
 }
+
+export function removeImage({ filesList, pictures, picture, setPictures, setFiles }) {
+    const removeIndex = pictures.findIndex(e => e === picture);
+    const filteredPictures = pictures.filter((e, index) => index !== removeIndex);
+    const filteredFiles = filesList.filter((e, index) => index !== removeIndex);
+
+    setPictures(filteredPictures);
+    setFiles(filteredFiles);
+}
+
+export function settingThePicturesAndFiles(
+    files,
+    maxFileSize,
+    setErrors,
+    pictures,
+    filesList,
+    setPictures,
+    setFiles,
+    itemsWithState,
+    setItemsWithState,
+) {
+    const allFilePromises = [];
+    const fileErrors = [];
+
+    // Iterate over all uploaded files
+    for (let i = 0; i < files.length; i++) {
+        let file = files[i];
+        let fileError = {
+            name: file.name,
+        };
+        // Check for file extension
+        if (!hasExtension(file.name)) {
+            fileError = Object.assign(fileError, {
+                type: 'Extensão não permitida',
+            });
+            fileErrors.push(fileError);
+            continue;
+        }
+        // Check for file size
+        if (file.size > maxFileSize) {
+            fileError = Object.assign(fileError, {
+                type: 'Imagem grande demais',
+            });
+            fileErrors.push(fileError);
+            continue;
+        }
+        file.sizes = [];
+        file.colors = [];
+        file.status = 'available';
+        file.price = '';
+        file.referenceId = '';
+        file.description = '';
+        file.availableQuantities = '';
+
+        allFilePromises.push(readFile(file));
+    }
+
+    setErrors(fileErrors);
+
+    Promise.all(allFilePromises).then(newFilesData => {
+        const dataURLs = pictures.slice();
+        const files = filesList.slice();
+
+        newFilesData.forEach(newFileData => {
+            dataURLs.push(newFileData.dataURL);
+            files.push(newFileData.file);
+            let oldItems = itemsWithState || [];
+            console.log('oldItems', oldItems, 'itemsWithState', itemsWithState);
+            oldItems.push(newFileData.file.name);
+            setItemsWithState(oldItems);
+            console.log('itemsWithState', itemsWithState);
+            //updateInitialState(newFileData.file);
+        });
+        setPictures(dataURLs);
+        setFiles(files);
+    });
+}
+
+export function getMostRecentImage(uploadResult) {
+    uploadResult.reduce(([prevUrl, prevTime], [currentUrl, currentTime]) => (prevTime > currentTime ? [prevUrl, prevTime] : [currentUrl, currentTime]));
+}

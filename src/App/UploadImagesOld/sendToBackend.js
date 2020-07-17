@@ -1,6 +1,6 @@
 import { readAndCompressImage } from 'browser-image-resizer';
 import { db, storage } from '../../Firebase/index';
-import { getMostRecentImage } from './functions';
+import getMostRecentImage from './getMostRecentImage';
 
 const sendToBackend = async (
     setIsSubmitting,
