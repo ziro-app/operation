@@ -95,10 +95,8 @@ export function settingThePicturesAndFiles(
             dataURLs.push(newFileData.dataURL);
             files.push(newFileData.file);
             let oldItems = itemsWithState || [];
-            console.log('oldItems', oldItems, 'itemsWithState', itemsWithState);
             oldItems.push(newFileData.file.name);
             setItemsWithState(oldItems);
-            console.log('itemsWithState', itemsWithState);
             //updateInitialState(newFileData.file);
         });
         setPictures(dataURLs);

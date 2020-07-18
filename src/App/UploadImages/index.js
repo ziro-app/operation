@@ -1,11 +1,9 @@
 import React, { useEffect, useReducer, useState } from 'react';
 import Icon from '@bit/vitorbarbosa19.ziro.icon';
-import Dropdown from '@bit/vitorbarbosa19.ziro.dropdown';
 import Button from '@bit/vitorbarbosa19.ziro.button';
 import fetch from './fetch';
-import { fileContainerClass, fileContainerUploadIconClass, inputImagesId, phases } from './styles';
+import { fileContainerClass, fileContainerUploadIconClass, inputImagesId } from './styles';
 import isValidBrand from '../ImageUpload/isValidBrand';
-import { title } from '../ImageUpload/styles';
 import sendToBackend from './sendToBackend';
 import { onDragOver, onUploadClick, removeImage, settingThePicturesAndFiles } from './functions';
 import Card from '../CardForm';
@@ -33,18 +31,24 @@ const UploadImages = () => {
     const [itemsWithState, setItemsWithState] = useState([]);
 
     const [states, dispatch] = useReducer((state, payload) => {
-        //console.log('state', state);
-        //console.log('payload', payload);
-        const { userValue, index } = payload;
-        const newState = { [`description${index}`]: userValue };
-        console.log('newState', newState);
-        return newState;
+        const { userValue, index, inputType } = payload;
+        switch (inputType) {
+            case 'description':
+                return { ...state, [`description${index}`]: userValue };
+            case 'price':
+                return { ...state, [`price${index}`]: userValue };
+            case 'sizes':
+                return { ...state, [`sizes${index}`]: userValue };
+            case 'colors':
+                return { ...state, [`colors${index}`]: userValue };
+            case 'availableQuantities':
+                return { ...state, [`availableQuantities${index}`]: userValue };
+            default:
+            // code block
+        }
     }, {});
 
     useEffect(() => fetch(setIsLoading, setIsError, setBrands, setBrandsAndTrends), []);
-    useEffect(() => {
-        console.log('teste', states);
-    }, [states]);
 
     function onClickChoosePhotos(e) {
         e.stopPropagation();
@@ -58,44 +62,7 @@ const UploadImages = () => {
             <div style={fileContainerClass} className="fileContainer" onDragOver={onDragOver}>
                 <input style={inputImagesId} id="inputImages" type="file" multiple onChange={onClickChoosePhotos}
                        onClick={onUploadClick} accept="image/*"/>
-                <div style={phases}>
-                    <label style={title}>Etapa 1</label>
-                    <Dropdown
-                        readOnly={false}
-                        submitting={isSubmitting}
-                        value={brand}
-                        onChange={({ target: { value } }) => setBrand(value)}
-                        list={brands}
-                        placeholder="Escolha uma marca"
-                        onChangeKeyboard={element => (element ? setBrand(element.value) : null)}
-                    />
-                </div>
-                <div style={phases}>
-                    <label style={title}>Etapa 2</label>
-                    <Dropdown
-                        readOnly
-                        submitting={isSubmitting}
-                        value={pricetag}
-                        onChange={({ target: { value } }) => setPricetag(value)}
-                        list={['Sim', 'Não']}
-                        placeholder="Tem o preço na imagem?"
-                        onChangeKeyboard={element => (element ? setPricetag(element.value) : null)}
-                    />
-                </div>
-                <div style={phases}>
-                    <label style={title}>Etapa 3</label>
-                    <Dropdown
-                        readOnly
-                        submitting={isSubmitting}
-                        value={photoPeriod}
-                        onChange={({ target: { value } }) => setPhotoPeriod(value)}
-                        list={['Nova', 'Antiga']}
-                        placeholder="A imagem é nova ou antiga?"
-                        onChangeKeyboard={element => (element ? setPhotoPeriod(element.value) : null)}
-                    />
-                </div>
 
-                <label style={title}>Etapa 4</label>
                 <Icon style={fileContainerUploadIconClass} type="upload" size={50} strokeWidth={3}
                       className="uploadIcon" alt="Upload Icon"/>
                 <ImageUpload
@@ -129,7 +96,7 @@ const UploadImages = () => {
                             index={index}
                             picture={picture}
                             removeImage={removeImage}
-                            arrayOfInputs={inputs(filesList, index, dispatch)}
+                            arrayOfInputs={inputs(states, index, dispatch)}
                             pictures={pictures}
                             setPictures={setPictures}
                         />
