@@ -89,7 +89,7 @@ export default (states, index, dispatch) => {
                 <div style={{ display: 'grid', gridGap: '10px', padding: '10px' }}>
                     {states[`sizes${index}`] &&
                     states[`sizes${index}`].map(size =>
-                        (states[`colors${index}`].length ? states[`colors${index}`] : ['']).map(color => (
+                        (states[`colors${index}`] ? (states[`colors${index}`].length ? states[`colors${index}`] : ['']) : ['']).map(color => (
                             <div
                                 key={`${size}-${color}`}
                                 style={{
