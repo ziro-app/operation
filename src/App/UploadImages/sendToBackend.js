@@ -17,6 +17,7 @@ const sendToBackend = async (
     setProducts,
     setPictures,
     setFiles,
+    dispatch,
 ) => {
     setIsSubmitting(true);
     const uploadImages = await Promise.all(
@@ -146,6 +147,8 @@ const sendToBackend = async (
     setProducts([{}]);
     setPictures([]);
     setFiles([]);
+    const payload = { userValue: '', identifierOfPicture: '', inputType: 'clear' };
+    dispatch(payload);
 };
 
 export default sendToBackend;

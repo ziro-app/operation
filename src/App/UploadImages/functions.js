@@ -1,4 +1,7 @@
 const imgExtension = ['.jpg', '.jpeg', '.gif', '.png'];
+
+const maxFileSize = 5242880;
+
 export function hasExtension(fileName) {
     const pattern = '(' + imgExtension.join('|').replace(/\./g, '\\.') + ')$';
     return new RegExp(pattern, 'i').test(fileName);
@@ -29,7 +32,7 @@ export function onUploadClick(e) {
     e.target.value = null;
 }
 
-export function removeImage({ filesList, pictures, picture, setPictures, setFiles }) {
+export function removeImage(filesList, pictures, picture, setPictures, setFiles) {
     const removeIndex = pictures.findIndex(e => e === picture);
     const filteredPictures = pictures.filter((e, index) => index !== removeIndex);
     const filteredFiles = filesList.filter((e, index) => index !== removeIndex);
@@ -38,17 +41,7 @@ export function removeImage({ filesList, pictures, picture, setPictures, setFile
     setFiles(filteredFiles);
 }
 
-export function settingThePicturesAndFiles(
-    files,
-    maxFileSize,
-    setErrors,
-    pictures,
-    filesList,
-    setPictures,
-    setFiles,
-    itemsWithState,
-    setItemsWithState,
-) {
+export function settingThePicturesAndFiles(files, setErrors, pictures, filesList, setPictures, setFiles) {
     const allFilePromises = [];
     const fileErrors = [];
 
@@ -74,13 +67,6 @@ export function settingThePicturesAndFiles(
             fileErrors.push(fileError);
             continue;
         }
-        file.sizes = [];
-        file.colors = [];
-        file.status = 'available';
-        file.price = '';
-        file.referenceId = '';
-        file.description = '';
-        file.availableQuantities = '';
 
         allFilePromises.push(readFile(file));
     }
@@ -94,10 +80,6 @@ export function settingThePicturesAndFiles(
         newFilesData.forEach(newFileData => {
             dataURLs.push(newFileData.dataURL);
             files.push(newFileData.file);
-            let oldItems = itemsWithState || [];
-            oldItems.push(newFileData.file.name);
-            setItemsWithState(oldItems);
-            //updateInitialState(newFileData.file);
         });
         setPictures(dataURLs);
         setFiles(files);

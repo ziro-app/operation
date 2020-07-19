@@ -1,22 +1,19 @@
 import React, { useEffect, useReducer, useState } from 'react';
 import Icon from '@bit/vitorbarbosa19.ziro.icon';
 import Button from '@bit/vitorbarbosa19.ziro.button';
+import ImageUpload from '@bit/vitorbarbosa19.ziro.image-upload';
 import fetch from './fetch';
 import { fileContainerClass, fileContainerUploadIconClass, inputImagesId } from './styles';
 import isValidBrand from '../ImageUpload/isValidBrand';
 import sendToBackend from './sendToBackend';
 import { onDragOver, onUploadClick, removeImage, settingThePicturesAndFiles } from './functions';
 import Card from '../CardForm';
-import ImageUpload from '@bit/vitorbarbosa19.ziro.image-upload';
 import inputs from './inputs';
 
 const UploadImages = () => {
-    const [product, setProduct] = useState({ status: 'available' });
-    const [products, setProducts] = useState([{}]);
     const [isLoading, setIsLoading] = useState(true);
     const [isError, setIsError] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [isSubmitted, setIsSubmitted] = useState(false);
     const [brands, setBrands] = useState([]);
     const [brandsAndTrends, setBrandsAndTrends] = useState('');
     const [brand, setBrand] = useState('');
@@ -26,23 +23,26 @@ const UploadImages = () => {
     const [filesList, setFiles] = useState([]);
     const [errors, setErrors] = useState([]);
     const initialValue = { status: 'available' };
-    const maxFileSize = 5242880;
-    const desiredStates = ['sizes', 'colors', 'status', 'price', 'description', 'availableQuantitiesTest'];
-    const [itemsWithState, setItemsWithState] = useState([]);
 
     const [states, dispatch] = useReducer((state, payload) => {
-        const { userValue, index, inputType } = payload;
+        const { userValue, identifierOfPicture, inputType } = payload;
         switch (inputType) {
             case 'description':
-                return { ...state, [`description${index}`]: userValue };
+                return { ...state, [`description${identifierOfPicture}`]: userValue };
             case 'price':
-                return { ...state, [`price${index}`]: userValue };
+                return { ...state, [`price${identifierOfPicture}`]: userValue };
             case 'sizes':
-                return { ...state, [`sizes${index}`]: userValue };
+                return { ...state, [`sizes${identifierOfPicture}`]: userValue };
             case 'colors':
-                return { ...state, [`colors${index}`]: userValue };
+                return { ...state, [`colors${identifierOfPicture}`]: userValue };
             case 'availableQuantities':
-                return { ...state, [`availableQuantities${index}`]: userValue };
+                if (/^[0-9]*$/gm.test(userValue)) return {
+                    ...state,
+                    [`availableQuantities${identifierOfPicture}`]: userValue,
+                };
+                break;
+            case 'clear':
+                return {};
             default:
             // code block
         }
@@ -54,7 +54,7 @@ const UploadImages = () => {
         e.stopPropagation();
         e.preventDefault();
         const { files } = e.target;
-        settingThePicturesAndFiles(files, maxFileSize, setErrors, pictures, filesList, setPictures, setFiles, itemsWithState, setItemsWithState);
+        settingThePicturesAndFiles(files, setErrors, pictures, filesList, setPictures, setFiles);
     }
 
     return (
@@ -66,9 +66,7 @@ const UploadImages = () => {
                 <Icon style={fileContainerUploadIconClass} type="upload" size={50} strokeWidth={3}
                       className="uploadIcon" alt="Upload Icon"/>
                 <ImageUpload
-                    sendToBackend={data =>
-                        settingThePicturesAndFiles(data, maxFileSize, setErrors, pictures, filesList, setPictures, setFiles, itemsWithState, setItemsWithState)
-                    }
+                    sendToBackend={data => settingThePicturesAndFiles(data, setErrors, pictures, filesList, setPictures, setFiles)}
                     //isDisabled={!isValidBrand(brands, brand) || isSubmitting}
                 />
                 {pictures[1] && (
@@ -83,20 +81,20 @@ const UploadImages = () => {
                     </>
                 )}
                 {pictures.map((picture, index) => {
+                    const identifierOfPicture = picture.slice(5, 60);
+                    console.log(picture);
                     return (
                         <Card
                             key={index}
-                            products={products}
-                            setProducts={setProducts}
+                            identifierOfPicture={identifierOfPicture}
+                            states={states}
                             filesList={filesList}
                             setFiles={setFiles}
-                            product={product}
                             initialValue={initialValue}
-                            setProduct={setProduct}
                             index={index}
                             picture={picture}
                             removeImage={removeImage}
-                            arrayOfInputs={inputs(states, index, dispatch)}
+                            arrayOfInputs={inputs(states, identifierOfPicture, dispatch)}
                             pictures={pictures}
                             setPictures={setPictures}
                         />

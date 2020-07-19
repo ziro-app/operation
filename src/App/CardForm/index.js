@@ -31,7 +31,7 @@ export default ({
                     setFiles,
                     index,
                     picture,
-                    removeImage = null,
+                    removeImage,
                     update,
                     cardInfo = false,
                     productRef,
@@ -43,6 +43,7 @@ export default ({
                     arrayOfInputs,
                     pictures,
                     setPictures,
+                    initialStatus,
                 }) => {
     //console.log('cardForm', arrayOfInputs);
     return (
