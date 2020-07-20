@@ -22,13 +22,13 @@ const UpdateStoreowner = () => {
     // SearchCnpjInfo
     const [errorMsg, setErrorMsg] = useState('')
     const [storeowner, setStoreowner] = useState({ 'cadastro': '', 'afiliado': '', 'afiliado_cpf': '', 'lojista': '', 'rg': '', 'cpf': '', 'nascimento': '', 'instagram': '', 'cnpj': '', 'ie': '', 'razao': '', 'fantasia': '', 'endereco': '', 'bairro': '', 'cep': '', 'cidade': '', 'estado': '', 'fone': '', 'email': '', 'assessor': '', 'vendedor': '', 'whats': '', 'entrega': '', 'bairroEntrega': '', 'cepEntrega': '', 'cidadeEntrega': '', 'estadoEntrega': '', vinculo: '' })
-    const setCnpjInfo = {setStoreowner, storeowner}
+    const [storeowners, setStoreowners] = useState([])
+    const setCnpjInfo = {setStoreowner, storeowner, setStoreowners}
     // Other Infos
     const [isLoading, setIsLoading] = useState(true)
     const [isError, setIsError] = useState(false)
     const [foundStoreowner, setFoundStoreowner] = useState(false)
     const [searchedName, setSearchedName] = useState('')
-    const [storeowners, setStoreowners] = useState([])
     const [newName, setNewName] = useState('')
     const [errorName, setErrorName] = useState('')
     const [loadingName, setLoadingName] = useState(false)
