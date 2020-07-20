@@ -24,12 +24,14 @@ const GetCnpj = ({ cnpj, setState , setErrorMsg}) => {
                     <Spinner size='3rem' />
                 </div>
             </Modal>
-            <Button
-                type="button"
-                cta="Atualizar Receita F."
-                template="regular"
-                click={searchCnpj ? searchCnpj(state, setState) : () => null}
-            />
+            <div style={{marginTop:'5px'}}>
+                <Button
+                    type="button"
+                    cta="Atualizar Receita F."
+                    template="regular"
+                    click={searchCnpj ? searchCnpj(state, setState) : () => null}
+                />
+            </div>
         </>
     )
 }
