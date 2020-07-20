@@ -130,6 +130,7 @@ export default (states, identifierOfPicture, dispatch) => {
                                         };
                                         dispatch(payload);
                                     }}
+                                    inputMode="numeric"
                                 />
                             </div>
                         )),

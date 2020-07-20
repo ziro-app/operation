@@ -4,13 +4,11 @@ import { card } from './styles';
 
 export default ({ update, image, arrayOfInputs, validations }) => {
     const _inputs = arrayOfInputs;
-    //console.log(arrayOfInputs)
 
     const inputs = useMemo(() => _inputs.filter(input => !!input), _inputs);
-    //const inputs = useMemo(() => _inputs.map(input => input(index)), _inputs);
 
     return (
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr', boxShadow: card.boxShadow }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr', boxShadow: card.boxShadow, borderRadius: '10px' }}>
             {image && image}
             <div style={{ padding: '10px 10px 30px' }}>
                 <Form validations={[]} sendToBackend={update || null} inputs={inputs}/>

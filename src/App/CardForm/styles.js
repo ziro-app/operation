@@ -47,6 +47,7 @@ export const brandName = {
         boxShadow: `0px 3px 12px -3px rgba(34,34,34,0.65)`,
     },
     card = {
+        borderRadius: '20px',
         display: 'grid',
         padding: '10px',
         background: 'white',
@@ -103,8 +104,8 @@ export const brandName = {
     //.fileContainer .uploadPictureContainer
     fileContainerUploadPictureContainerClass = {
         width: '100%',
-        margin: '5%',
-        padding: '10px',
+        //margin: '5%',
+        paddingTop: '10px',
         //background: '#edf2f6',
         Display: 'flex',
         AlignItems: 'center',
@@ -116,6 +117,8 @@ export const brandName = {
     },
     //.fileContainer .uploadPictureContainer img.uploadPicture
     fileContainerUploadPictureContainerimgUploadPictureClass = {
+        borderTopLeftRadius: '10px',
+        borderTopRightRadius: '10px',
         width: '100%',
     },
     //.fileContainer .deleteImage

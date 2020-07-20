@@ -36,10 +36,17 @@ const UploadImages = () => {
             case 'colors':
                 return { ...state, [`colors${identifierOfPicture}`]: userValue };
             case 'availableQuantities':
-                if (/^[0-9]*$/gm.test(userValue)) return {
+                if (/^[0-9]*$/gm.test(userValue)) {
+                    return {
+                        ...state,
+                        [`availableQuantities${identifierOfPicture}`]: userValue,
+                    };
+                }
+                return {
                     ...state,
-                    [`availableQuantities${identifierOfPicture}`]: userValue,
+                    [`availableQuantities${identifierOfPicture}`]: '',
                 };
+
                 break;
             case 'clear':
                 return {};
@@ -82,7 +89,7 @@ const UploadImages = () => {
                 )}
                 {pictures.map((picture, index) => {
                     const identifierOfPicture = picture.slice(5, 60);
-                    console.log(picture);
+                    //console.log(picture);
                     return (
                         <Card
                             key={index}

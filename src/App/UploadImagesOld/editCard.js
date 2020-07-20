@@ -2,7 +2,6 @@ import React, { useEffect, useMemo } from 'react';
 import Form from '@bit/vitorbarbosa19.ziro.form';
 import { card } from './styles';
 
-
 export default ({
                     index,
                     product,
@@ -37,27 +36,27 @@ export default ({
 
     const _inputs = arrayOfInputs;
     /* const selectedInputs = [];
-    //console.log(arrayOfInputs);
-    useEffect(() => {
-      arrayOfInputs.map(input => {
-        //console.log('product', product);
-        if (input === 'availability') setProduct({ status: 'available' });
-        //console.log('product', product);
-        //console.log(_inputs);
-        index = _inputs.findIndex(x => x !== 0 && x.props.name === input);
-        // console.log(index);
-        // console.log(_inputs);
-        if (index !== -1) {
-          // console.log('teste');
-          selectedInputs.push(_inputs[index]);
-          //console.log(selectedInputs);
-        }
-        // console.log(_inputs);
-      });
-      //_inputs = selectedInputs;
-      setSelectedInput(selectedInputs);
-      console.log(_inputs);
-    }, []);*/
+      //console.log(arrayOfInputs);
+      useEffect(() => {
+        arrayOfInputs.map(input => {
+          //console.log('product', product);
+          if (input === 'availability') setProduct({ status: 'available' });
+          //console.log('product', product);
+          //console.log(_inputs);
+          index = _inputs.findIndex(x => x !== 0 && x.props.name === input);
+          // console.log(index);
+          // console.log(_inputs);
+          if (index !== -1) {
+            // console.log('teste');
+            selectedInputs.push(_inputs[index]);
+            //console.log(selectedInputs);
+          }
+          // console.log(_inputs);
+        });
+        //_inputs = selectedInputs;
+        setSelectedInput(selectedInputs);
+        console.log(_inputs);
+      }, []);*/
 
     // index = a.findIndex(x => x.prop2 ==="yutu");  arrayOfInputs
 

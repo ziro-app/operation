@@ -45,7 +45,6 @@ export default ({
                     setPictures,
                     initialStatus,
                 }) => {
-    //console.log('cardForm', arrayOfInputs);
     return (
         <div style={fileContainerUploadPicturesWrapperClass} className="uploadPicturesWrapper">
             <div key={index} style={fileContainerUploadPictureContainerClass} className="uploadPictureContainer">
