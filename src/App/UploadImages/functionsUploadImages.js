@@ -103,8 +103,6 @@ export function inputStateControl(state, payload) {
                 ...state,
                 [`availableQuantities${identifierOfPicture}`]: userValue,
             };
-
-            break;
         case 'clear':
             return {};
         default:

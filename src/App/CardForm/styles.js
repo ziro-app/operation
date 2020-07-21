@@ -47,7 +47,7 @@ export const brandName = {
         boxShadow: `0px 3px 12px -3px rgba(34,34,34,0.65)`,
     },
     card = {
-        borderRadius: '20px',
+        borderRadius: '5px',
         display: 'grid',
         padding: '10px',
         background: 'white',
@@ -74,7 +74,7 @@ export const brandName = {
         background: '#fff',
         boxShadow: '2px 2px 3px 0 rgba(0, 0, 0, 0.05)',
         position: 'relative',
-        borderRadius: '10px',
+        borderRadius: '5px',
         padding: '20px 0',
         display: 'flex',
         alignItems: 'center',
@@ -117,24 +117,21 @@ export const brandName = {
     },
     //.fileContainer .uploadPictureContainer img.uploadPicture
     fileContainerUploadPictureContainerimgUploadPictureClass = {
-        borderTopLeftRadius: '10px',
-        borderTopRightRadius: '10px',
+        borderTopLeftRadius: '5px',
+        borderTopRightRadius: '5px',
         width: '100%',
     },
     //.fileContainer .deleteImage
     fileContainerDeleteImageClass = {
         position: 'absolute',
         right: '5px',
-        top: '30px',
+        top: '15px',
         background: '#fff',
         borderRadius: '50%',
-        textAlign: 'center',
         cursor: 'pointer',
-        fontSize: '26px',
-        fontWeight: 'bold',
-        lineHeight: '30px',
         width: '20px',
         height: '20px',
+        padding: '6px',
     },
     //.flipMove
     flipMoveClass = {

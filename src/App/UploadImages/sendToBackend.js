@@ -1,25 +1,25 @@
 import { readAndCompressImage } from 'browser-image-resizer';
 import { db, storage } from '../../Firebase/index';
-import { getMostRecentImage } from './functions';
+import { getMostRecentImage } from './functionsUploadImages';
 
-const sendToBackend = async (
-    setIsSubmitting,
-    setIsSubmitted,
-    setBrand,
-    states,
-    brand,
-    brandsAndTrends,
-    pricetag,
-    setPricetag,
-    photoPeriod,
-    setPhotoPeriod,
-    filesList,
-    products,
-    setProducts,
-    setPictures,
-    setFiles,
-    dispatch,
-) => {
+const sendToBackend = async ({
+                                 setIsSubmitting,
+                                 setIsSubmitted,
+                                 setBrand,
+                                 states,
+                                 brand,
+                                 brandsAndTrends,
+                                 pricetag,
+                                 setPricetag,
+                                 photoPeriod,
+                                 setPhotoPeriod,
+                                 filesList,
+                                 products,
+                                 setProducts,
+                                 setPictures,
+                                 setFiles,
+                                 dispatch,
+                             }) => {
     setIsSubmitting(true);
     const uploadImages = await Promise.all(
         filesList.map(async file => {
@@ -36,8 +36,8 @@ const sendToBackend = async (
                         brandName,
                         url,
                         timestamp,
-                        pricetag,
-                        photoPeriod,
+                        pricetag: 'Não',
+                        photoPeriod: 'Nova',
                         bucket: `${Math.floor(Math.random() * (20 - Number.MIN_VALUE))}`, //will be used to fetch random images on front-end
                     });
                     console.log(url);
@@ -54,14 +54,15 @@ const sendToBackend = async (
                         status: 'available',
                         url,
                         timestamp,
-                        pricetag,
+                        pricetag: 'Não',
                         photoPeriod: 'Nova',
                         bucket: `${Math.floor(Math.random() * (20 - Number.MIN_VALUE))}`, //will be used to fetch random images on front-end
                     });
                     return [url, timestamp];
                 }
             } catch (error) {
-                return error;
+                console.log(error);
+                setIsSubmitting(false);
             }
         }),
     );
@@ -139,6 +140,7 @@ const sendToBackend = async (
         }
     } catch (error) {
         console.log(error);
+        setIsSubmitting(false);
     }
     setIsSubmitting(false);
     setIsSubmitted(true);

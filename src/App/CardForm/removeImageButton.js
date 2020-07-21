@@ -11,8 +11,8 @@ export default ({ removeImage, filesList, pictures, picture, setPictures, setFil
                 strokeWidth={2}
                 style={fileContainerDeleteImageClass}
                 onClick={() => removeImage(filesList, pictures, picture, setPictures, setFiles)}
+                color={'red'}
             />
-            ,
         </>
     );
 };

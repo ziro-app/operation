@@ -119,13 +119,13 @@ export default (states, identifierOfPicture, dispatch) => {
                                     }
                                     onChange={({ target: { value } }) => {
                                         if (/^[0-9]*$/gm.test(value)) {
-                                            console.log('entrou?');
+                                            const result = old => {
+                                                const newQuantities = { ...(states[`availableQuantities${identifierOfPicture}`] || {}) };
+                                                newQuantities[`${size}-${color}`] = value;
+                                                return { ...old, availableQuantities: newQuantities };
+                                            };
                                             const payload = {
-                                                userValue: old => {
-                                                    const newQuantities = { ...(old.availableQuantities || {}) };
-                                                    newQuantities[`${size}-${color}`] = value;
-                                                    return { ...old, availableQuantities: newQuantities };
-                                                },
+                                                userValue: result().availableQuantities,
                                                 identifierOfPicture,
                                                 inputType: 'availableQuantities',
                                             };

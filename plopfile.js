@@ -256,10 +256,10 @@ module.exports = plop => {
 				templateFile: 'node_modules/@ziro/generator/templates/lambda-netlify/package.json'
 			},
 			{
-				type: 'add',
-				path: 'webpack.functions.js',
-				templateFile: 'node_modules/@ziro/generator/templates/lambda-netlify/webpack.functions.js'
-			},
+                type: 'add',
+                path: 'webpack.functionsUploadImages.js',
+                templateFile: 'node_modules/@ziro/generator/templates/lambda-netlify/webpack.functionsUploadImages.js',
+            },
 			{
 				type: 'add',
 				path: 'src/templates/main.js',
