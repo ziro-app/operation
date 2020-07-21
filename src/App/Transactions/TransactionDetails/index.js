@@ -13,7 +13,7 @@ import Modal from '@bit/vitorbarbosa19.ziro.modal';
 import Spinner from '@bit/vitorbarbosa19.ziro.spinner';
 import currencyFormat from '@ziro/currency-format';
 import { alertColor, containerWithPadding, successColor } from '@ziro/theme';
-import { db } from '../../../Firebase/index';
+import { db, fs } from '../../../Firebase/index';
 import { dateFormat, parcelFormat, round, stringToFloat } from '../utils';
 import {
     btn,
@@ -54,6 +54,7 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
     useEffect(() => {
         setValidationMessage('');
     }, [splitTransactionModal, captureModal, cancelModal]);
+    const nowDate = fs.FieldValue.serverTimestamp()
     const postCapture = async (transaction_id, on_behalf_of, amount) => {
         try {
             const snapRef = db.collection('credit-card-payments').doc(transactionId);
@@ -76,7 +77,7 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
                 .then(() => {
                     setLoadingButton(false);
                     setCaptureModal(false);
-                    snapRef.update({ status: 'Atualizando' });
+                    snapRef.update({ status: 'Atualizando', dateLastUpdate: nowDate});
                 });
             setCancelModal(false);
         } catch (e) {
@@ -114,7 +115,7 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
           if (status === 'succeeded') {
             transaction.status = 'Cancelado';
           }
-          snapRef.update({ status: 'Atualizando' });
+          snapRef.update({ status: 'Atualizando' , dateLastUpdate: nowDate });
         });
     } catch (e) {
       setLoadingButton(false);

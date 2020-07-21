@@ -1,4 +1,4 @@
-import { db } from '../../Firebase/index';
+import { db, fs } from '../../Firebase/index';
 
 const sendToBackend = state => () => {
     const {
@@ -17,13 +17,14 @@ const sendToBackend = state => () => {
     } = state;
     const nome = nickname ? nickname.trim() : '';
     const baseUrl = 'https://ziro.app/pagamento/';
-    const allowedUsers = ['Uiller', 'Vitor', 'Bruno', 'João', 'Cesar', 'Ale', 'Vivian', 'Elisa', 'Paulo'];
+    const nowDate = fs.FieldValue.serverTimestamp()
     return new Promise(async (resolve, reject) => {
         try {
             if (allowedUsers.includes(nome)) {
                 if (seller && sellerId) {
                     const docRef = await db.collection('credit-card-payments').add({
-                        dateLinkCreated: new Date(),
+                        dateLinkCreated: nowDate,
+                        dateLastUpdate: nowDate,
                         seller,
                         onBehalfOfBrand,
                         sellerZoopId: sellerId,
