@@ -18,6 +18,7 @@ const sendToBackend = state => () => {
     const nome = nickname ? nickname.trim() : '';
     const baseUrl = 'https://ziro.app/pagamento/';
     const nowDate = fs.FieldValue.serverTimestamp()
+    const allowedUsers = ['Uiller', 'Vitor', 'Bruno', 'João', 'Cesar', 'Ale', 'Vivian', 'Elisa', 'Paulo'];
     return new Promise(async (resolve, reject) => {
         try {
             if (allowedUsers.includes(nome)) {
