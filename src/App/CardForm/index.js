@@ -1,7 +1,6 @@
 import React from 'react';
 import CardInputs from './cardInputs';
 import {
-    fileContainerDeleteImageClass,
     fileContainerUploadPictureContainerClass,
     fileContainerUploadPictureContainerimgUploadPictureClass,
     fileContainerUploadPicturesWrapperClass,
@@ -10,6 +9,7 @@ import RImg from 'react-image';
 import SpinnerWithDiv from '@bit/vitorbarbosa19.ziro.spinner-with-div';
 import InfoCard from './infoCard';
 import SummaryCard from './summaryCard';
+import RemoveImageButton from './removeImageButton';
 
 const PTstatus = {
     available: 'Disponível',
@@ -49,13 +49,14 @@ export default ({
         <div style={fileContainerUploadPicturesWrapperClass} className="uploadPicturesWrapper">
             <div key={index} style={fileContainerUploadPictureContainerClass} className="uploadPictureContainer">
                 {removeImage && (
-                    <div
-                        style={fileContainerDeleteImageClass}
-                        className="deleteImage"
-                        onClick={() => removeImage(filesList, pictures, picture, setPictures, setFiles)}
-                    >
-                        X
-                    </div>
+                    <RemoveImageButton
+                        removeImage={removeImage}
+                        filesList={filesList}
+                        pictures={pictures}
+                        picture={picture}
+                        setPictures={setPictures}
+                        setFiles={setFiles}
+                    />
                 )}
                 {cardInfo ? (
                     <RImg

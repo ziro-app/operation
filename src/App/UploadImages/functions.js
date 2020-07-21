@@ -41,10 +41,9 @@ export function removeImage(filesList, pictures, picture, setPictures, setFiles)
     setFiles(filteredFiles);
 }
 
-export function settingThePicturesAndFiles(files, setErrors, pictures, filesList, setPictures, setFiles) {
+export function settingThePicturesAndFiles(files, setIsError, pictures, filesList, setPictures, setFiles) {
     const allFilePromises = [];
     const fileErrors = [];
-
     // Iterate over all uploaded files
     for (let i = 0; i < files.length; i++) {
         let file = files[i];
@@ -68,10 +67,12 @@ export function settingThePicturesAndFiles(files, setErrors, pictures, filesList
             continue;
         }
 
+        file.identifierOfPicture = file.name;
+
         allFilePromises.push(readFile(file));
     }
 
-    setErrors(fileErrors);
+    setIsError(fileErrors);
 
     Promise.all(allFilePromises).then(newFilesData => {
         const dataURLs = pictures.slice();
@@ -84,6 +85,38 @@ export function settingThePicturesAndFiles(files, setErrors, pictures, filesList
         setPictures(dataURLs);
         setFiles(files);
     });
+}
+
+export function inputStateControl(state, payload) {
+    const { userValue, identifierOfPicture, inputType } = payload;
+    switch (inputType) {
+        case 'description':
+            return { ...state, [`description${identifierOfPicture}`]: userValue };
+        case 'price':
+            return { ...state, [`price${identifierOfPicture}`]: userValue };
+        case 'sizes':
+            return { ...state, [`sizes${identifierOfPicture}`]: userValue };
+        case 'colors':
+            return { ...state, [`colors${identifierOfPicture}`]: userValue };
+        case 'availableQuantities':
+            return {
+                ...state,
+                [`availableQuantities${identifierOfPicture}`]: userValue,
+            };
+
+            break;
+        case 'clear':
+            return {};
+        default:
+        // code block
+    }
+}
+
+export function onClickChoosePhotos(e, setIsError, pictures, filesList, setPictures, setFiles) {
+    e.stopPropagation();
+    e.preventDefault();
+    const { files } = e.target;
+    settingThePicturesAndFiles(files, setIsError, pictures, filesList, setPictures, setFiles);
 }
 
 export function getMostRecentImage(uploadResult) {

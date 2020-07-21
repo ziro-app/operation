@@ -70,17 +70,17 @@ export const brandName = {
   },
   //.fileContainer
   fileContainerClass = {
-    background: '#fff',
-    boxShadow: '2px 2px 3px 0 rgba(0, 0, 0, 0.05)',
-    position: 'relative',
-    borderRadius: '10px',
-    padding: '20px 0',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexDirection: 'column',
-    margin: '10px auto',
-    transition: 'all 0.3s ease-in',
+      background: '#fff',
+      //boxShadow: '2px 2px 3px 0 rgba(0, 0, 0, 0.05)',
+      position: 'relative',
+      borderRadius: '10px',
+      padding: '10px 0',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      flexDirection: 'column',
+      margin: '5px auto',
+      transition: 'all 0.3s ease-in',
   },
   //#inputImages
   inputImagesId = {

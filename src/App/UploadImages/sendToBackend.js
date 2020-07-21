@@ -6,13 +6,14 @@ const sendToBackend = async (
     setIsSubmitting,
     setIsSubmitted,
     setBrand,
+    states,
     brand,
     brandsAndTrends,
     pricetag,
     setPricetag,
     photoPeriod,
     setPhotoPeriod,
-    files,
+    filesList,
     products,
     setProducts,
     setPictures,
@@ -21,7 +22,7 @@ const sendToBackend = async (
 ) => {
     setIsSubmitting(true);
     const uploadImages = await Promise.all(
-        files.map(async file => {
+        filesList.map(async file => {
             try {
                 if (file.size === 0) throw 'Empty sized image';
                 const timestamp = Date.now();
@@ -46,15 +47,15 @@ const sendToBackend = async (
                     const uploadTask = await image.put(compressed);
                     const url = await uploadTask.ref.getDownloadURL();
                     await db.collection('catalog-images').add({
-                        availableQuantities: file.product.availableQuantities,
-                        status: file.product.status,
-                        price: file.product.price,
-                        description: file.product.description,
+                        availableQuantities: states[`availableQuantities${file.identifierOfPicture}`],
+                        price: states[`price${file.identifierOfPicture}`],
+                        description: states[`description${file.identifierOfPicture}`],
                         brandName: brand,
+                        status: 'available',
                         url,
                         timestamp,
                         pricetag,
-                        photoPeriod,
+                        photoPeriod: 'Nova',
                         bucket: `${Math.floor(Math.random() * (20 - Number.MIN_VALUE))}`, //will be used to fetch random images on front-end
                     });
                     return [url, timestamp];

@@ -5,7 +5,7 @@ import currencyFormat from '@ziro/currency-format';
 import maskInput from '@ziro/mask-input';
 
 export default (states, identifierOfPicture, dispatch) => {
-    const descriptionInput = ( //(states[index].status === undefined || states[index].status === 'available') &&
+    const descriptionInput = (
         <FormInput
             name="description"
             label="Descrição"
@@ -21,7 +21,7 @@ export default (states, identifierOfPicture, dispatch) => {
             }
         />
     );
-    const priceInput = ( //(state.status === undefined || state.status === 'available') &&
+    const priceInput = (
         <FormInput
             name="price"
             label="Preço"
@@ -44,7 +44,7 @@ export default (states, identifierOfPicture, dispatch) => {
         />
     );
 
-    const sizesInput = ( //(state.status === undefined || state.status === 'available') &&
+    const sizesInput = (
         <FormInput
             name="sizes"
             label="Tamanhos"
@@ -65,7 +65,7 @@ export default (states, identifierOfPicture, dispatch) => {
         />
     );
 
-    const colorsInput = ( //(state.status === undefined || state.status === 'available') &&
+    const colorsInput = (
         <FormInput
             name="colors"
             label="Cores"
@@ -87,8 +87,7 @@ export default (states, identifierOfPicture, dispatch) => {
         />
     );
 
-    const quantitiesInput = states[ //(state.status === undefined || state.status === 'available') && state.sizes &&
-        `sizes${identifierOfPicture}`] && (
+    const quantitiesInput = states[`sizes${identifierOfPicture}`] && (
         <FormInput
             name="quantities"
             label="Quantidades"
@@ -119,16 +118,19 @@ export default (states, identifierOfPicture, dispatch) => {
                                         (states[`availableQuantities${identifierOfPicture}`] && states[`availableQuantities${identifierOfPicture}`][`${size}-${color}`])
                                     }
                                     onChange={({ target: { value } }) => {
-                                        const payload = {
-                                            userValue: old => {
-                                                const newQuantities = { ...(old.availableQuantities || {}) };
-                                                newQuantities[`${size}-${color}`] = value;
-                                                return { ...old, availableQuantities: newQuantities };
-                                            },
-                                            identifierOfPicture,
-                                            inputType: 'availableQuantities',
-                                        };
-                                        dispatch(payload);
+                                        if (/^[0-9]*$/gm.test(value)) {
+                                            console.log('entrou?');
+                                            const payload = {
+                                                userValue: old => {
+                                                    const newQuantities = { ...(old.availableQuantities || {}) };
+                                                    newQuantities[`${size}-${color}`] = value;
+                                                    return { ...old, availableQuantities: newQuantities };
+                                                },
+                                                identifierOfPicture,
+                                                inputType: 'availableQuantities',
+                                            };
+                                            dispatch(payload);
+                                        }
                                     }}
                                     inputMode="numeric"
                                 />

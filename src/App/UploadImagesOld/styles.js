@@ -62,7 +62,7 @@ export const brandName = {
     },
     phases = {
         flexFlow: 'column wrap',
-        width: '80%',
+        width: '90%',
         height: '100px',
         position: 'relative',
         margin: '0 auto',

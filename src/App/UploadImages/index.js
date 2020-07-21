@@ -2,12 +2,14 @@ import React, { useEffect, useReducer, useState } from 'react';
 import Icon from '@bit/vitorbarbosa19.ziro.icon';
 import Button from '@bit/vitorbarbosa19.ziro.button';
 import ImageUpload from '@bit/vitorbarbosa19.ziro.image-upload';
+import Spinner from '@bit/vitorbarbosa19.ziro.spinner-with-div';
 import fetch from './fetch';
-import { fileContainerClass, fileContainerUploadIconClass, inputImagesId } from './styles';
+import { fileContainerClass, fileContainerUploadIconClass } from './styles';
 import isValidBrand from '../ImageUpload/isValidBrand';
 import sendToBackend from './sendToBackend';
-import { onDragOver, onUploadClick, removeImage, settingThePicturesAndFiles } from './functions';
+import { inputStateControl, onDragOver, removeImage, settingThePicturesAndFiles } from './functions';
 import Card from '../CardForm';
+import BrandChoose from './BrandChoose';
 import inputs from './inputs';
 
 const UploadImages = () => {
@@ -17,79 +19,45 @@ const UploadImages = () => {
     const [brands, setBrands] = useState([]);
     const [brandsAndTrends, setBrandsAndTrends] = useState('');
     const [brand, setBrand] = useState('');
-    const [pricetag, setPricetag] = useState('');
-    const [photoPeriod, setPhotoPeriod] = useState('');
     const [pictures, setPictures] = useState([]);
     const [filesList, setFiles] = useState([]);
-    const [errors, setErrors] = useState([]);
-    const initialValue = { status: 'available' };
+    const [showButtonTop, setShowButtonTop] = useState(false);
+    const [showButtonBot, setShowButtonBot] = useState(false);
 
-    const [states, dispatch] = useReducer((state, payload) => {
-        const { userValue, identifierOfPicture, inputType } = payload;
-        switch (inputType) {
-            case 'description':
-                return { ...state, [`description${identifierOfPicture}`]: userValue };
-            case 'price':
-                return { ...state, [`price${identifierOfPicture}`]: userValue };
-            case 'sizes':
-                return { ...state, [`sizes${identifierOfPicture}`]: userValue };
-            case 'colors':
-                return { ...state, [`colors${identifierOfPicture}`]: userValue };
-            case 'availableQuantities':
-                if (/^[0-9]*$/gm.test(userValue)) {
-                    return {
-                        ...state,
-                        [`availableQuantities${identifierOfPicture}`]: userValue,
-                    };
-                }
-                return {
-                    ...state,
-                    [`availableQuantities${identifierOfPicture}`]: '',
-                };
-
-                break;
-            case 'clear':
-                return {};
-            default:
-            // code block
-        }
-    }, {});
+    const [states, dispatch] = useReducer((state, payload) => inputStateControl(state, payload), {});
 
     useEffect(() => fetch(setIsLoading, setIsError, setBrands, setBrandsAndTrends), []);
 
-    function onClickChoosePhotos(e) {
-        e.stopPropagation();
-        e.preventDefault();
-        const { files } = e.target;
-        settingThePicturesAndFiles(files, setErrors, pictures, filesList, setPictures, setFiles);
-    }
+    useEffect(() => {
+        if (pictures[0]) setShowButtonBot(true);
+        else setShowButtonBot(false);
+        if (pictures[1]) setShowButtonTop(true);
+        else setShowButtonTop(false);
+    }, [pictures]);
+
+    if (isLoading) return <Spinner size="5rem"/>;
+
+    //if (isError) return <Error />;
 
     return (
         <div>
+            <BrandChoose isSubmitting={isSubmitting} brand={brand} setBrand={setBrand} brands={brands}/>
             <div style={fileContainerClass} className="fileContainer" onDragOver={onDragOver}>
-                <input style={inputImagesId} id="inputImages" type="file" multiple onChange={onClickChoosePhotos}
-                       onClick={onUploadClick} accept="image/*"/>
-
                 <Icon style={fileContainerUploadIconClass} type="upload" size={50} strokeWidth={3}
                       className="uploadIcon" alt="Upload Icon"/>
                 <ImageUpload
-                    sendToBackend={data => settingThePicturesAndFiles(data, setErrors, pictures, filesList, setPictures, setFiles)}
-                    //isDisabled={!isValidBrand(brands, brand) || isSubmitting}
+                    sendToBackend={data => settingThePicturesAndFiles(data, setIsError, pictures, filesList, setPictures, setFiles)}
+                    isDisabled={!isValidBrand(brands, brand) || isSubmitting}
                 />
-                {pictures[1] && (
+                {showButtonTop && (
                     <>
                         <div style={{ marginTop: '10px' }}/>
-                        <Button
-                            click={() => sendToBackend(setIsSubmitting)}
-                            submitting={!pricetag || !photoPeriod || !brand || !isValidBrand(brands, brand) || isSubmitting}
-                            cta={'Enviar todas fotos'}
-                            type="button"
-                        />
+                        <Button click={() => sendToBackend(setIsSubmitting)} submitting={isSubmitting}
+                                cta="Enviar todas fotos" type="button"/>
                     </>
                 )}
                 {pictures.map((picture, index) => {
-                    const identifierOfPicture = picture.slice(5, 60);
-                    //console.log(picture);
+                    const identifierOfPicture = picture.split(';')[1].split('=')[1];
                     return (
                         <Card
                             key={index}
@@ -97,7 +65,6 @@ const UploadImages = () => {
                             states={states}
                             filesList={filesList}
                             setFiles={setFiles}
-                            initialValue={initialValue}
                             index={index}
                             picture={picture}
                             removeImage={removeImage}
@@ -108,12 +75,8 @@ const UploadImages = () => {
                     );
                 })}
                 <div style={{ marginTop: '10px' }}/>
-                <Button
-                    click={() => sendToBackend(setIsSubmitting)}
-                    submitting={!pricetag || !photoPeriod || !brand || !isValidBrand(brands, brand) || isSubmitting}
-                    cta={'Enviar todas fotos'}
-                    type="button"
-                />
+                <Button click={() => sendToBackend(setIsSubmitting)} submitting={!showButtonBot || isSubmitting}
+                        cta="Enviar todas fotos" type="button"/>
             </div>
         </div>
     );

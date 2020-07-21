@@ -124,17 +124,17 @@ export const brandName = {
     //.fileContainer .deleteImage
     fileContainerDeleteImageClass = {
         position: 'absolute',
-        right: '9px',
-        color: '#fff',
-        background: '#ff4081',
+        right: '5px',
+        top: '30px',
+        background: '#fff',
         borderRadius: '50%',
         textAlign: 'center',
         cursor: 'pointer',
         fontSize: '26px',
         fontWeight: 'bold',
         lineHeight: '30px',
-        width: '30px',
-        height: '30px',
+        width: '20px',
+        height: '20px',
     },
     //.flipMove
     flipMoveClass = {
