@@ -4,13 +4,20 @@ import ImageUpload from '@bit/vitorbarbosa19.ziro.image-upload';
 import Spinner from '@bit/vitorbarbosa19.ziro.spinner-with-div';
 import fetch from './fetch';
 import { fileContainerClass } from './styles';
-import isValidBrand from '../ImageUpload/isValidBrand';
 import sendToBackend from './sendToBackend';
-import { inputStateControl, onDragOver, removeImage, settingThePicturesAndFiles } from './functionsUploadImages';
+import {
+    duplicateImage,
+    inputStateControl,
+    isValidBrand,
+    onDragOver,
+    removeImage,
+    settingThePicturesAndFiles,
+} from './functionsUploadImages';
 import Card from '../CardForm';
 import BrandChoose from './BrandChoose';
 import inputs from './inputs';
 import SubmitBlock from './SubmitBlock';
+import { v4 as uuid } from 'uuid';
 
 const UploadImages = () => {
     const [isLoading, setIsLoading] = useState(true);
@@ -59,15 +66,14 @@ const UploadImages = () => {
         setFiles,
         dispatch,
     };
-
     return (
-        <div>
+        <>
             <BrandChoose isSubmitting={isSubmitting} brand={brand} setBrand={setBrand} brands={brands}/>
             <div style={fileContainerClass} className="fileContainer" onDragOver={onDragOver}>
                 {showUpload && (
                     <>
                         <ImageUpload
-                            sendToBackend={data => settingThePicturesAndFiles(data, setIsError, pictures, filesList, setPictures, setFiles)}
+                            sendToBackend={data => settingThePicturesAndFiles(data, setIsError, pictures, filesList, setPictures, setFiles, uuid)}
                             isDisabled={!isValidBrand(brands, brand) || isSubmitting}
                         />
                         {showButtonTop && (
@@ -78,21 +84,22 @@ const UploadImages = () => {
                             </>
                         )}
                         {pictures.map((picture, index) => {
-                            const identifierOfPicture = picture.split(';')[1].split('=')[1];
-                            console.log(states[`availableQuantities${identifierOfPicture}`]);
                             return (
                                 <Card
                                     key={index}
-                                    identifierOfPicture={identifierOfPicture}
+                                    identifierOfPicture={picture.identifier}
                                     states={states}
                                     filesList={filesList}
                                     setFiles={setFiles}
                                     index={index}
-                                    picture={picture}
+                                    picture={picture.urlImage}
                                     removeImage={removeImage}
-                                    arrayOfInputs={inputs(states, identifierOfPicture, dispatch)}
+                                    duplicateImage={duplicateImage}
+                                    arrayOfInputs={inputs(states, picture.identifier, dispatch)}
                                     pictures={pictures}
                                     setPictures={setPictures}
+                                    dispatch={dispatch}
+                                    uuid={uuid}
                                 />
                             );
                         })}
@@ -103,7 +110,7 @@ const UploadImages = () => {
                 )}
             </div>
             <SubmitBlock isSubmitting={isSubmitting} isSubmitted={isSubmitted}/>
-        </div>
+        </>
     );
 };
 export default UploadImages;

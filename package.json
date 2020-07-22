@@ -106,6 +106,7 @@
         "react-flip-move": "^3.0.4",
         "react-hot-loader": "^4.12.20",
         "react-image": "^2.4.0",
+        "react-uid": "^2.3.0",
         "uuid": "^8.2.0",
         "webfontloader": "^1.6.28",
         "wouter": "^2.4.0"

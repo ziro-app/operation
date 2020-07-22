@@ -74,7 +74,7 @@ export default (states, identifierOfPicture, dispatch) => {
                     placeholder="Azul,Amarelo"
                     value={'' || (states[`colors${identifierOfPicture}`] && states[`colors${identifierOfPicture}`].join(','))}
                     onChange={({ target: { value } }) => {
-                        const newColors = value.split(',');
+                        const newColors = value ? value.split(',') : '';
                         const payload = {
                             userValue: newColors,
                             identifierOfPicture,
@@ -87,41 +87,41 @@ export default (states, identifierOfPicture, dispatch) => {
         />
     );
 
-    const quantitiesInput = states[`sizes${identifierOfPicture}`] && (
+    const quantitiesInput = states[`colors${identifierOfPicture}`] && (
         <FormInput
             name="quantities"
             label="Quantidades"
             input={
                 <div style={{ display: 'grid', gridGap: '10px', padding: '10px' }}>
-                    {states[`sizes${identifierOfPicture}`] &&
-                    states[`sizes${identifierOfPicture}`].map(size =>
-                        (states[`colors${identifierOfPicture}`]
-                                ? states[`colors${identifierOfPicture}`].length
-                                    ? states[`colors${identifierOfPicture}`]
+                    {states[`colors${identifierOfPicture}`] &&
+                    states[`colors${identifierOfPicture}`].map(color =>
+                        (states[`sizes${identifierOfPicture}`]
+                                ? states[`sizes${identifierOfPicture}`].length
+                                    ? states[`sizes${identifierOfPicture}`]
                                     : ['']
                                 : ['']
-                        ).map(color => (
+                        ).map(size => (
                             <div
-                                key={`${size}-${color}`}
+                                key={`${color}-${size}`}
                                 style={{
                                     display: 'grid',
                                     gridTemplateColumns: '1fr 2fr 2fr',
                                     alignItems: 'center',
                                 }}
                             >
-                                <label>{size}</label>
                                 <label>{color}</label>
+                                <label>{size}</label>
                                 <InputText
                                     placeholder="1"
                                     value={
                                         '' ||
-                                        (states[`availableQuantities${identifierOfPicture}`] && states[`availableQuantities${identifierOfPicture}`][`${size}-${color}`])
+                                        (states[`availableQuantities${identifierOfPicture}`] && states[`availableQuantities${identifierOfPicture}`][`${color}-${size}`])
                                     }
                                     onChange={({ target: { value } }) => {
                                         if (/^[0-9]*$/gm.test(value)) {
                                             const result = old => {
                                                 const newQuantities = { ...(states[`availableQuantities${identifierOfPicture}`] || {}) };
-                                                newQuantities[`${size}-${color}`] = value;
+                                                newQuantities[`${color}-${size}`] = value;
                                                 return { ...old, availableQuantities: newQuantities };
                                             };
                                             const payload = {
@@ -141,6 +141,6 @@ export default (states, identifierOfPicture, dispatch) => {
             }
         />
     );
-    const arrayInputs = [descriptionInput, priceInput, sizesInput, colorsInput, quantitiesInput];
+    const arrayInputs = [descriptionInput, priceInput, colorsInput, sizesInput, quantitiesInput];
     return arrayInputs;
 };

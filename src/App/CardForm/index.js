@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import CardInputs from './cardInputs';
 import {
     fileContainerUploadPictureContainerClass,
@@ -9,7 +9,11 @@ import RImg from 'react-image';
 import SpinnerWithDiv from '@bit/vitorbarbosa19.ziro.spinner-with-div';
 import InfoCard from './infoCard';
 import SummaryCard from './summaryCard';
-import RemoveImageButton from './removeImageButton';
+import RemoveImageButton from './RemoveImageButton';
+import DuplicateImageButton from './DuplicateImageButton';
+import Modal from '@bit/vitorbarbosa19.ziro.modal';
+import { modalContainer, modalLabel } from '../Transactions/TransactionDetails/styles';
+import Button from '@bit/vitorbarbosa19.ziro.button';
 
 const PTstatus = {
     available: 'Disponível',
@@ -44,19 +48,57 @@ export default ({
                     pictures,
                     setPictures,
                     initialStatus,
+                    dispatch,
+                    duplicateImage,
+                    //removeImageModal,
+                    //setRemoveImageModal,
+                    //duplicateImageModal,
+                    //setDuplicateImageModal,
+                    identifierOfPicture,
+                    uuid,
                 }) => {
+    const [removeImageModal, setRemoveImageModal] = useState(false);
+    const [duplicateImageModal, setDuplicateImageModal] = useState(false);
     return (
         <div style={fileContainerUploadPicturesWrapperClass} className="uploadPicturesWrapper">
             <div key={index} style={fileContainerUploadPictureContainerClass} className="uploadPictureContainer">
+                <DuplicateImageButton setDuplicateImageModal={setDuplicateImageModal}/>
+                <Modal boxStyle={modalContainer} isOpen={duplicateImageModal}
+                       setIsOpen={() => setDuplicateImageModal(false)}>
+                    <div style={{ display: 'grid', gridTemplateRows: '1fr auto', gridRowGap: '20px' }}>
+                        <label style={modalLabel}>Deseja realmente duplicar a imagem?</label>
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gridColumnGap: '20px' }}>
+                            <Button
+                                type="button"
+                                cta="Sim"
+                                click={() => duplicateImage(filesList, pictures, picture, setPictures, setFiles, setDuplicateImageModal, identifierOfPicture, uuid)}
+                                template="regular"
+                            />
+                            <Button type="button" cta="Não" click={() => setDuplicateImageModal(false)}
+                                    template="light"/>
+                        </div>
+                    </div>
+                </Modal>
                 {removeImage && (
-                    <RemoveImageButton
-                        removeImage={removeImage}
-                        filesList={filesList}
-                        pictures={pictures}
-                        picture={picture}
-                        setPictures={setPictures}
-                        setFiles={setFiles}
-                    />
+                    <>
+                        <RemoveImageButton setRemoveImageModal={setRemoveImageModal}/>
+                        <Modal boxStyle={modalContainer} isOpen={removeImageModal}
+                               setIsOpen={() => setRemoveImageModal(false)}>
+                            <div style={{ display: 'grid', gridTemplateRows: '1fr auto', gridRowGap: '20px' }}>
+                                <label style={modalLabel}>Deseja realmente excluir a imagem ?</label>
+                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gridColumnGap: '20px' }}>
+                                    <Button
+                                        type="button"
+                                        cta="Sim"
+                                        click={() => removeImage(filesList, pictures, picture, setPictures, setFiles, setRemoveImageModal, identifierOfPicture)}
+                                        template="regular"
+                                    />
+                                    <Button type="button" cta="Não" click={() => setRemoveImageModal(false)}
+                                            template="light"/>
+                                </div>
+                            </div>
+                        </Modal>
+                    </>
                 )}
                 {cardInfo ? (
                     <RImg

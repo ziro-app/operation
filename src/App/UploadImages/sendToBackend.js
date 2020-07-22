@@ -9,12 +9,8 @@ const sendToBackend = async ({
                                  states,
                                  brand,
                                  brandsAndTrends,
-                                 pricetag,
-                                 setPricetag,
-                                 photoPeriod,
                                  setPhotoPeriod,
                                  filesList,
-                                 products,
                                  setProducts,
                                  setPictures,
                                  setFiles,
@@ -47,9 +43,9 @@ const sendToBackend = async ({
                     const uploadTask = await image.put(compressed);
                     const url = await uploadTask.ref.getDownloadURL();
                     await db.collection('catalog-images').add({
-                        availableQuantities: states[`availableQuantities${file.identifierOfPicture}`],
-                        price: states[`price${file.identifierOfPicture}`],
-                        description: states[`description${file.identifierOfPicture}`],
+                        availableQuantities: states[`availableQuantities${file.identifierOfPicture}`] ? states[`availableQuantities${file.identifierOfPicture}`] : '',
+                        price: states[`price${file.identifierOfPicture}`] ? states[`price${file.identifierOfPicture}`] : '',
+                        description: states[`description${file.identifierOfPicture}`] ? states[`description${file.identifierOfPicture}`] : '',
                         brandName: brand,
                         status: 'available',
                         url,
@@ -145,9 +141,6 @@ const sendToBackend = async ({
     setIsSubmitting(false);
     setIsSubmitted(true);
     setBrand('');
-    setPricetag('');
-    setPhotoPeriod('');
-    setProducts([{}]);
     setPictures([]);
     setFiles([]);
     const payload = { userValue: '', identifierOfPicture: '', inputType: 'clear' };

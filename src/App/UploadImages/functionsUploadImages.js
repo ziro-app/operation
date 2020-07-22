@@ -32,18 +32,33 @@ export function onUploadClick(e) {
     e.target.value = null;
 }
 
-export function removeImage(filesList, pictures, picture, setPictures, setFiles) {
-    const removeIndex = pictures.findIndex(e => e === picture);
-    const filteredPictures = pictures.filter((e, index) => index !== removeIndex);
-    const filteredFiles = filesList.filter((e, index) => index !== removeIndex);
-
+export function removeImage(filesList, pictures, picture, setPictures, setFiles, setRemoveImageModal, identifierOfPicture) {
+    const filteredPictures = pictures.filter(e => e.identifier !== identifierOfPicture);
+    const filteredFiles = filesList.filter(e => e.identifierOfPicture !== identifierOfPicture);
     setPictures(filteredPictures);
     setFiles(filteredFiles);
+    setRemoveImageModal(false);
 }
 
-export function settingThePicturesAndFiles(files, setIsError, pictures, filesList, setPictures, setFiles) {
+export function duplicateImage(filesList, pictures, picture, setPictures, setFiles, setDuplicateImageModal, identifierOfPicture, uuid) {
+    const filteredPicture = pictures.filter(e => e.identifier === identifierOfPicture);
+    const filteredFile = filesList.filter(e => e.identifierOfPicture === identifierOfPicture);
+    console.log('pictures', pictures);
+    filteredFile.identifierOfPicture = uuid();
+    console.log(filteredFile.identifierOfPicture);
+    filteredPicture.identifier = filteredFile.identifierOfPicture;
+    console.log('filteredPicture', filteredPicture);
+    console.log(...pictures, ...filteredPicture);
+    //file.identifierOfPicture = uuid();
+    //setPictures(filteredPictures);
+    //setFiles(...filesList, ...filteredFile);
+    setDuplicateImageModal(false);
+}
+
+export function settingThePicturesAndFiles(files, setIsError, pictures, filesList, setPictures, setFiles, uuid) {
     const allFilePromises = [];
     const fileErrors = [];
+    console.log(files);
     // Iterate over all uploaded files
     for (let i = 0; i < files.length; i++) {
         let file = files[i];
@@ -67,7 +82,7 @@ export function settingThePicturesAndFiles(files, setIsError, pictures, filesLis
             continue;
         }
 
-        file.identifierOfPicture = file.name;
+        file.identifierOfPicture = uuid();
 
         allFilePromises.push(readFile(file));
     }
@@ -79,7 +94,10 @@ export function settingThePicturesAndFiles(files, setIsError, pictures, filesLis
         const files = filesList.slice();
 
         newFilesData.forEach(newFileData => {
-            dataURLs.push(newFileData.dataURL);
+            const data = {};
+            data.urlImage = newFileData.dataURL;
+            data.identifier = newFileData.file.identifierOfPicture;
+            dataURLs.push(data);
             files.push(newFileData.file);
         });
         setPictures(dataURLs);
@@ -90,6 +108,8 @@ export function settingThePicturesAndFiles(files, setIsError, pictures, filesLis
 export function inputStateControl(state, payload) {
     const { userValue, identifierOfPicture, inputType } = payload;
     switch (inputType) {
+        case 'identifier':
+            return { ...state, [`identifier${identifierOfPicture}`]: userValue };
         case 'description':
             return { ...state, [`description${identifierOfPicture}`]: userValue };
         case 'price':
@@ -103,8 +123,13 @@ export function inputStateControl(state, payload) {
                 ...state,
                 [`availableQuantities${identifierOfPicture}`]: userValue,
             };
+        case 'discount':
+            return {
+                ...state,
+                [`discount${identifierOfPicture}`]: userValue,
+            };
         case 'clear':
-            return {};
+            return { ...(state = {}) };
         default:
         // code block
     }
@@ -119,4 +144,10 @@ export function onClickChoosePhotos(e, setIsError, pictures, filesList, setPictu
 
 export function getMostRecentImage(uploadResult) {
     uploadResult.reduce(([prevUrl, prevTime], [currentUrl, currentTime]) => (prevTime > currentTime ? [prevUrl, prevTime] : [currentUrl, currentTime]));
+}
+
+export function isValidBrand(brands, brand) {
+    if (!(brands instanceof Array)) return false;
+    if (brands.length === 0) return false;
+    return brands.includes(brand);
 }

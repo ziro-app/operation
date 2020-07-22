@@ -1,7 +1,6 @@
 import React from 'react';
 import Dropdown from '@bit/vitorbarbosa19.ziro.dropdown';
-import { phases } from '../UploadImagesOld/styles';
-import { title } from '../ImageUpload/styles';
+import { phases, title } from './styles';
 
 export default ({ isSubmitting, brand, setBrand, brands }) => {
     return (

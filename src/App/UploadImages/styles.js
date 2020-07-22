@@ -61,12 +61,12 @@ export const brandName = {
     borderTop: '1px solid #F0F0F0',
   },
   phases = {
-    flexFlow: 'column wrap',
-    width: '80%',
-    height: '100px',
-    position: 'relative',
-    margin: '0 auto',
-    transition: 'all 0.3s ease-in',
+      flexFlow: 'column wrap',
+      width: '100%',
+      height: '100px',
+      position: 'relative',
+      margin: '0 auto',
+      transition: 'all 0.3s ease-in',
   },
   //.fileContainer
   fileContainerClass = {
@@ -127,14 +127,20 @@ export const brandName = {
     fontSize: '26px',
     fontWeight: 'bold',
     lineHeight: '30px',
-    width: '30px',
-    height: '30px',
+      width: '30px',
+      height: '30px',
   },
-  //.flipMove
-  flipMoveClass = {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexWrap: 'wrap',
-    width: '100%',
-  };
+    //.flipMove
+    flipMoveClass = {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexWrap: 'wrap',
+        width: '100%',
+    },
+    title = {
+        fontFamily: fontTitle,
+    },
+    container = {
+        display: 'grid',
+    };

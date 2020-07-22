@@ -23,7 +23,7 @@ export const container = {
         justifyContent: 'center',
         gridTemplateRows: '1fr auto',
         textAlign: 'center',
-        padding: '20px',
+        padding: '10px',
         gridRowGap: '20px',
     },
     infoCardLabel = {

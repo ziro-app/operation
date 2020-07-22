@@ -133,6 +133,17 @@ export const brandName = {
         height: '20px',
         padding: '6px',
     },
+    fileContainerDuplicateImageClass = {
+        position: 'absolute',
+        right: '50px',
+        top: '15px',
+        background: '#fff',
+        borderRadius: '50%',
+        cursor: 'pointer',
+        width: '20px',
+        height: '20px',
+        padding: '6px',
+    },
     //.flipMove
     flipMoveClass = {
         display: 'flex',
