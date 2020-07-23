@@ -1,39 +1,22 @@
-import React, { useEffect, useState, useMemo } from "react";
-import { db } from "../../Firebase";
+import React, { useState, useMemo } from "react";
+import { useFirestore, useFirestoreCollection } from 'reactfire'
 import { toCartArray, toStoreownerData } from "./utils";
 import SearchCart from "./SearchCart";
 import CartItem from "./UserCartItem";
-import SpinnerWithDiv from "@bit/vitorbarbosa19.ziro.spinner-with-div";
 
 export default ({ cartId }) => {
-    const [carts, setCarts] = useState([]);
-    const [fecthingCarts, setFetchingCarts] = useState(true);
-    const [storeowners, setStoreowners] = useState({});
-    const [fetchingStoreowners, setFetchingStoreowners] = useState(true);
-    const [queryStr, setQueryStr] = useState();
-
-    useEffect(() => {
-        const cartObserver = db
-            .collectionGroup("cart")
-            .orderBy("added", "asc")
-            .onSnapshot(
-                ({ docs }) =>
-                    setCarts(docs.reduce(toCartArray, [])) ||
-                    setFetchingCarts(false)
-            );
-        const storeownersObserver = db
-            .collection("storeowners")
-            .onSnapshot(
-                ({ docs }) =>
-                    setStoreowners(docs.reduce(toStoreownerData, {})) ||
-                    setFetchingStoreowners(false)
-            );
-        return () => {
-            cartObserver();
-            storeownersObserver();
-        };
-    }, []);
-
+    const [queryStr, setQueryStr] = useState()
+    const last7days = new Date(`${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate() - 7}`)
+    console.log(last7days)
+    const allCarts = useFirestoreCollection(
+        useFirestore()
+        .collectionGroup('cart')
+        .where('lastUpdate', '>=', last7days)
+        .orderBy('lastUpdate', 'desc')
+    )
+    const carts = allCarts.docs.reduce(toCartArray, [])
+    const allStoreowners = useFirestoreCollection(useFirestore().collection('storeowners'))
+    const storeowners = allStoreowners.docs.reduce(toStoreownerData, [])
     const selectedCart = useMemo(
         () => (cartId ? carts.find(({ id }) => id === cartId) : undefined),
         [cartId, carts]
@@ -43,8 +26,6 @@ export default ({ cartId }) => {
             selectedCart ? storeowners[selectedCart.storeownerId] : undefined,
         [selectedCart, storeowners]
     );
-
-    if (fecthingCarts || fetchingStoreowners) return <SpinnerWithDiv />;
     if (cartId && selectedCart && selectedStoreowner)
         return (
             <CartItem

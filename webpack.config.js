@@ -25,12 +25,7 @@ module.exports = (env, { mode }) => {
                 }
             ]
         },
-        plugins: [new HtmlWebpackPlugin({ template: './src/index.html' })],
-        resolve: {
-            alias: {
-                'react-dom': '@hot-loader/react-dom'
-            }
-        }
+        plugins: [new HtmlWebpackPlugin({ template: './src/index.html' })]
     }
     if (mode === 'development') {
         const {
