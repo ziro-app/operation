@@ -1,7 +1,8 @@
-import React, { useContext } from 'react';
+import React, { useContext, Suspense } from 'react';
 import PropTypes from 'prop-types';
 import { motion } from 'framer-motion';
 import { Router2 as routeMatcher } from '@ziro/router';
+import SpinnerWithDiv from "@bit/vitorbarbosa19.ziro.spinner-with-div"
 import Login from './Login/index';
 import Register from './Register/index';
 import LoginTrouble from '@bit/vitorbarbosa19.ziro.login-trouble';
@@ -230,7 +231,7 @@ const Router = ({ isLogged }) => {
                 <ChangeStoreownerEmail />
             </HeaderBack>
         ),
-        [match ? location : null]: <UserCart {...params} />,
+        [match ? location : null]: <Suspense fallback={<SpinnerWithDiv />}><UserCart {...params} /></Suspense>,
         // [match && !params.userId ? location : null]: <HeaderBack title='Procurar pedidos' navigateTo='/assessoria'><SearchUserCart /></HeaderBack>,
         // [match && params.userId && !params.requestId ? location : null]: <UserCart />,
         // [match && params.userId && params.requestId ? location : null]: <UserCartItem />,

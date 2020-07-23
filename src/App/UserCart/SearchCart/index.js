@@ -45,9 +45,9 @@ export default ({ carts, storeowners, setQueryStr }) => {
     setBufferRazao(storeownerId && _storeowners.convert.IdToRazao[storeownerId]);
   }, [storeownerId]);
 
-  useEffect(() => {
-    setQueryStr(location.search);
-  }, [storeownerId, seller, status]);
+  // useEffect(() => {
+  //   setQueryStr(location.search);
+  // }, [storeownerId, seller, status]);
 
   return (
     <Menu title="Pedidos">

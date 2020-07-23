@@ -13,7 +13,7 @@
   "proseWrap": "preserve",
   "quoteProps": "as-needed",
   "requirePragma": false,
-  "semi": true,
+  "semi": false,
   "useTabs": false,
   "vueIndentScriptAndStyle": false,
   "parser": "babel"
