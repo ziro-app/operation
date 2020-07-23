@@ -6,7 +6,7 @@ export default ({ setDuplicateImageModal }) => {
     return (
         <>
             <Icon
-                type="plusCircle"
+                type="copy"
                 size={15}
                 strokeWidth={2}
                 style={fileContainerDuplicateImageClass}

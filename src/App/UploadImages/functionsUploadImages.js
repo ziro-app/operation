@@ -41,24 +41,42 @@ export function removeImage(filesList, pictures, picture, setPictures, setFiles,
 }
 
 export function duplicateImage(filesList, pictures, picture, setPictures, setFiles, setDuplicateImageModal, identifierOfPicture, uuid) {
-    const filteredPicture = pictures.filter(e => e.identifier === identifierOfPicture);
-    const filteredFile = filesList.filter(e => e.identifierOfPicture === identifierOfPicture);
-    console.log('pictures', pictures);
-    filteredFile.identifierOfPicture = uuid();
-    console.log(filteredFile.identifierOfPicture);
-    filteredPicture.identifier = filteredFile.identifierOfPicture;
+    const filteredPicture = pictures.find(e => e.identifier === identifierOfPicture);
+    const filteredFile = filesList.find(e => e.identifierOfPicture === identifierOfPicture);
+    console.log(filteredPicture);
+    console.log(filteredFile);
+    const uid = uuid();
+    //filteredPicture.identifier = uid;
+    setPictures([...pictures, { urlImage: filteredPicture.urlImage, identifier: uid }]);
+    setFiles([
+        ...filesList,
+        {
+            identifierOfPicture: uid,
+            lastModified: filteredFile.lastModified,
+            lastModifiedDate: filteredFile.lastModifiedDate,
+            name: filteredFile.name,
+            size: filteredFile.size,
+            type: filteredFile.type,
+            webkitRelativePath: filteredFile.webkitRelativePath,
+        },
+    ]);
+    console.log(filesList);
+    console.log(pictures);
+    //const newPictures = { ...pictures,{urlImage:filteredPicture.urlImage,identifierOfPicture:filteredPicture.identifierOfPicture} };
+
+    /*console.log(newPictures[0]);
     console.log('filteredPicture', filteredPicture);
-    console.log(...pictures, ...filteredPicture);
-    //file.identifierOfPicture = uuid();
-    //setPictures(filteredPictures);
-    //setFiles(...filesList, ...filteredFile);
+    filteredPicture.identifier = uid;
+    console.log('filteredPicture', filteredPicture);
+    console.log(pictures);
+    console.log(newPictures);*/
     setDuplicateImageModal(false);
 }
 
 export function settingThePicturesAndFiles(files, setIsError, pictures, filesList, setPictures, setFiles, uuid) {
     const allFilePromises = [];
     const fileErrors = [];
-    console.log(files);
+    console.log('functions', files);
     // Iterate over all uploaded files
     for (let i = 0; i < files.length; i++) {
         let file = files[i];
@@ -133,13 +151,6 @@ export function inputStateControl(state, payload) {
         default:
         // code block
     }
-}
-
-export function onClickChoosePhotos(e, setIsError, pictures, filesList, setPictures, setFiles) {
-    e.stopPropagation();
-    e.preventDefault();
-    const { files } = e.target;
-    settingThePicturesAndFiles(files, setIsError, pictures, filesList, setPictures, setFiles);
 }
 
 export function getMostRecentImage(uploadResult) {

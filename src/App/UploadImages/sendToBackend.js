@@ -13,7 +13,7 @@ const sendToBackend = async ({
                                  filesList,
                                  setProducts,
                                  setPictures,
-                                 setFiles,
+                                 /* setFiles,*/
                                  dispatch,
                              }) => {
     setIsSubmitting(true);
@@ -142,7 +142,7 @@ const sendToBackend = async ({
     setIsSubmitted(true);
     setBrand('');
     setPictures([]);
-    setFiles([]);
+    /* setFiles,*/
     const payload = { userValue: '', identifierOfPicture: '', inputType: 'clear' };
     dispatch(payload);
 };

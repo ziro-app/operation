@@ -66,6 +66,9 @@ const UploadImages = () => {
         setFiles,
         dispatch,
     };
+
+    console.log('index filesList', filesList);
+    console.log('index pictures', pictures);
     return (
         <>
             <BrandChoose isSubmitting={isSubmitting} brand={brand} setBrand={setBrand} brands={brands}/>
