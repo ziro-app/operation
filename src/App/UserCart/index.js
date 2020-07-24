@@ -7,7 +7,6 @@ import CartItem from "./UserCartItem";
 export default ({ cartId }) => {
     const [queryStr, setQueryStr] = useState()
     const last7days = new Date(`${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate() - 7}`)
-    console.log(last7days)
     const allCarts = useFirestoreCollection(
         useFirestore()
         .collectionGroup('cart')
