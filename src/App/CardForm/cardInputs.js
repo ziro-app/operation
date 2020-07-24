@@ -10,9 +10,9 @@ export default ({ update, image, arrayOfInputs, validations }) => {
     return (
         <div style={{ display: 'grid', gridTemplateColumns: '1fr', boxShadow: card.boxShadow, borderRadius: '5px' }}>
             {image && image}
-            <div style={{ padding: '10px 10px 30px' }}>
+            <div style={{ padding: '5px 10px 0px' }}>
                 <Form validations={[]} sendToBackend={update || null} inputs={inputs}/>
             </div>
         </div>
     );
-};
+}

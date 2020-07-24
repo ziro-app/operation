@@ -2,8 +2,6 @@ import React from 'react';
 import { checkBoxClass } from './styles';
 
 export default ({ setThumbPhoto, thumbPhoto, identifierOfPicture }) => {
-    //console.log('checkbox', 'thumbPhoto', thumbPhoto)
-    //console.log('checkbox', 'identifierOfPicture', identifierOfPicture)
     return (
         <>
             <input

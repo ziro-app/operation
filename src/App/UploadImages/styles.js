@@ -57,28 +57,32 @@ export const brandName = {
     display: 'grid',
     gridTemplateColumns: '1fr 1fr',
     gridGap: '10px',
-    alignItems: 'center',
-    borderTop: '1px solid #F0F0F0',
-  },
-  phases = {
-      flexFlow: 'column wrap',
-      width: '100%',
-      height: '100px',
-      position: 'relative',
-      margin: '0 auto',
-      transition: 'all 0.3s ease-in',
-  },
-  //.fileContainer
-  fileContainerClass = {
-      background: '#fff',
-      borderRadius: '5px',
-      padding: '10px 0',
-      display: 'flex',
       alignItems: 'center',
-      flexDirection: 'column',
-      margin: '5px auto',
-      transition: 'all 0.3s ease-in',
+      borderTop: '1px solid #F0F0F0',
   },
+    phases = {
+        flexFlow: 'column wrap',
+        width: '100%',
+        position: 'relative',
+        margin: '0 auto',
+        transition: 'all 0.3s ease-in',
+    },
+    cardContainerClass = {
+        marginTop: '20px',
+        display: 'grid',
+        rowGap: '20px',
+    },
+    //.fileContainer
+    fileContainerClass = {
+        background: '#fff',
+        borderRadius: '5px',
+        padding: '10px 0',
+        display: 'flex',
+        alignItems: 'center',
+        flexDirection: 'column',
+        margin: '5px auto',
+        transition: 'all 0.3s ease-in',
+    },
   //#inputImages
   inputImagesId = {
     opacity: '0',
@@ -117,16 +121,16 @@ export const brandName = {
   },
   //.fileContainer .deleteImage
   fileContainerDeleteImageClass = {
-    position: 'absolute',
-    right: '9px',
-    color: '#fff',
-    background: '#ff4081',
-    borderRadius: '50%',
-    textAlign: 'center',
-    cursor: 'pointer',
-    fontSize: '26px',
-    fontWeight: 'bold',
-    lineHeight: '30px',
+      position: 'absolute',
+      right: '9px',
+      color: '#fff',
+      background: '#ff4081',
+      borderRadius: '50%',
+      textAlign: 'center',
+      cursor: 'pointer',
+      fontSize: '26px',
+      fontWeight: 'bold',
+      lineHeight: '30px',
       width: '30px',
       height: '30px',
   },
@@ -143,4 +147,4 @@ export const brandName = {
     },
     container = {
         display: 'grid',
-    };
+    }

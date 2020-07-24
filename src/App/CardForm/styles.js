@@ -47,6 +47,7 @@ export const brandName = {
         boxShadow: `0px 3px 12px -3px rgba(34,34,34,0.65)`,
     },
     card = {
+        marginTop: '50px',
         borderRadius: '5px',
         display: 'grid',
         padding: '10px',

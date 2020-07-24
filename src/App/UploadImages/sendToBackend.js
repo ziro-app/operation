@@ -9,20 +9,24 @@ const sendToBackend = async ({
                                  states,
                                  brand,
                                  brandsAndTrends,
-                                 setPhotoPeriod,
                                  filesList,
-                                 setProducts,
                                  setPictures,
-                                 /* setFiles,*/
+                                 setFiles,
                                  dispatch,
+                                 thumbPhoto,
+                                 setThumbPhoto,
+                                 priceTag = 'Não',
                              }) => {
     setIsSubmitting(true);
+    console.log('filesList inside sendToBackend', filesList);
     const uploadImages = await Promise.all(
         filesList.map(async file => {
+            console.log('file inside sendToBackend', file);
             try {
                 if (file.size === 0) throw 'Empty sized image';
                 const timestamp = Date.now();
                 const compressed = await readAndCompressImage(file, { quality: 0.65 });
+                console.log('compressed', compressed);
                 if (brand === 'Bot') {
                     const [brandName, index] = file.name.split('-');
                     const image = storage.child(`${brandName}/${brandName}-${timestamp}-${index}`);
@@ -86,7 +90,7 @@ const sendToBackend = async ({
                 slicedByBrand.map(async ({ brand, images }) => {
                     const [url, timestamp] = getMostRecentImage(images);
                     const [, trends] = brandsAndTrends.filter(([brandName]) => brandName === brand).flat();
-                    if (pricetag === 'Sim') {
+                    if (priceTag === 'Sim') {
                         await db.collection('catalog-brands').doc(brand).set(
                             {
                                 brand,
@@ -112,17 +116,16 @@ const sendToBackend = async ({
                 }),
             );
         } else {
-            console.log(uploadImages);
-            const [url, timestamp] = getMostRecentImage(uploadImages);
-            console.log(url, timestamp);
-            const [, trends] = brandsAndTrends.filter(([brandName]) => brandName === brand).flat();
-            if (pricetag === 'Sim') {
+            const [url, timestamp] = uploadImages.find(([, , uid]) => uid === thumbPhoto.identifierOfPicture);
+
+            //const [, trends] = brandsAndTrends.filter(([brandName]) => brandName === brand).flat()
+            if (priceTag === 'Sim') {
                 await db.collection('catalog-brands').doc(brand).set(
                     {
                         brand,
                         updatedAt: timestamp,
                         updatedLoggedThumb: url,
-                        trends,
+                        trends: [],
                     },
                     { merge: true },
                 );
@@ -133,7 +136,7 @@ const sendToBackend = async ({
                         updatedThumb: url,
                         updatedAt: timestamp,
                         updatedLoggedThumb: url,
-                        trends,
+                        trends: [],
                     },
                     { merge: true },
                 );
@@ -147,7 +150,8 @@ const sendToBackend = async ({
     setIsSubmitted(true);
     setBrand('');
     setPictures([]);
-    /* setFiles,*/
+    setFiles([]);
+    setThumbPhoto('');
     const payload = { userValue: '', identifierOfPicture: '', inputType: 'clear' };
     dispatch(payload);
 }

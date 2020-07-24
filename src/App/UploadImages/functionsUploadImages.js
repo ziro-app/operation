@@ -46,17 +46,46 @@ export function duplicateImage(filesList, pictures, picture, setPictures, setFil
     const uid = uuid();
     //filteredPicture.identifier = uid;
     setPictures([...pictures, { urlImage: filteredPicture.urlImage, identifier: uid }]);
+    let file = filteredFile;
+    let data = new FormData();
+    data.append('file', file, file.name);
+    let _file = data.get('file');
+    _file.identifierOfPicture = uid;
+    console.log(_file);
     setFiles([
         ...filesList,
-        {
-            identifierOfPicture: uid,
-            lastModified: filteredFile.lastModified,
-            lastModifiedDate: filteredFile.lastModifiedDate,
-            name: filteredFile.name,
-            size: filteredFile.size,
-            type: filteredFile.type,
-            webkitRelativePath: filteredFile.webkitRelativePath,
-        },
+        _file,
+        /*{
+          identifierOfPicture: uid,
+          lastModified: filteredFile.lastModified,
+          lastModifiedDate: filteredFile.lastModifiedDate,
+          name: filteredFile.name,
+          size: filteredFile.size,
+          type: filteredFile.type,
+          webkitRelativePath: filteredFile.webkitRelativePath,
+        },*/
+        /*new File(
+          //[
+           new Blob(
+              [
+          [
+            JSON.stringify({
+              identifierOfPicture: uid,
+              lastModified: filteredFile.lastModified,
+              lastModifiedDate: filteredFile.lastModifiedDate,
+              name: filteredFile.name,
+              size: filteredFile.size,
+              type: filteredFile.type,
+              webkitRelativePath: filteredFile.webkitRelativePath,
+            }),
+          ],
+          //],
+          filteredFile.name,
+        ),*/
+        //],
+        /*filteredFile.name,
+          { type: filteredFile.type },
+        ),*/
     ]);
     setDuplicateImageModal(false);
 }
@@ -138,6 +167,15 @@ export function inputStateControl(state, payload) {
 
 export function getMostRecentImage(uploadResult) {
     uploadResult.reduce(([prevUrl, prevTime], [currentUrl, currentTime]) => (prevTime > currentTime ? [prevUrl, prevTime] : [currentUrl, currentTime]));
+}
+
+export function getThumbImage(uploadResult) {
+    uploadResult.reduce(([prevUrl, prevTime, prevIdentifierOfPicture], [currentUrl, currentTime, currentIdentifierOfPicture]) =>
+        prevIdentifierOfPicture === currentIdentifierOfPicture
+            ? [prevUrl, prevTime, prevIdentifierOfPicture]
+            : [currentUrl, currentTime, currentIdentifierOfPicture],
+    );
+    console.log('uploadResult', uploadResult);
 }
 
 export function isValidBrand(brands, brand) {

@@ -3,7 +3,7 @@ import Button from '@bit/vitorbarbosa19.ziro.button';
 import ImageUpload from '@bit/vitorbarbosa19.ziro.image-upload';
 import Spinner from '@bit/vitorbarbosa19.ziro.spinner-with-div';
 import fetch from './fetch';
-import { fileContainerClass } from './styles';
+import { cardContainerClass, fileContainerClass } from './styles';
 import sendToBackend from './sendToBackend';
 import {
     duplicateImage,
@@ -36,13 +36,6 @@ const UploadImages = () => {
     const [states, dispatch] = useReducer((state, payload) => inputStateControl(state, payload), {});
 
     useEffect(() => fetch(setIsLoading, setIsError, setBrands, setBrandsAndTrends), []);
-    /* useEffect(() => {
-      console.log('index thumbPhoto', thumbPhoto)
-    }, [thumbPhoto])*/
-
-    useEffect(() => {
-        console.log(filesList);
-    }, [filesList]);
 
     useEffect(() => {
         if (pictures[0]) setShowButtonBot(true);
@@ -72,6 +65,8 @@ const UploadImages = () => {
         setPictures,
         setFiles,
         dispatch,
+        thumbPhoto,
+        setThumbPhoto,
     };
     return (
         <>
@@ -83,38 +78,40 @@ const UploadImages = () => {
                             sendToBackend={data => settingThePicturesAndFiles(data, setIsError, pictures, filesList, setPictures, setFiles, uuid)}
                             isDisabled={!isValidBrand(brands, brand) || isSubmitting}
                         />
-                        {showButtonTop && (
-                            <>
-                                <div style={{ marginTop: '10px' }}/>
-                                <Button click={() => sendToBackend(state)} submitting={isSubmitting}
+                        <div style={cardContainerClass}>
+                            {showButtonTop && (
+                                <>
+                                    <Button click={() => sendToBackend(state)} submitting={isSubmitting}
+                                            cta="Enviar todas fotos" type="button"/>
+                                </>
+                            )}
+                            {pictures.map((picture, index) => {
+                                return (
+                                    <Card
+                                        key={index}
+                                        identifierOfPicture={picture.identifier}
+                                        states={states}
+                                        filesList={filesList}
+                                        setFiles={setFiles}
+                                        index={index}
+                                        picture={picture.urlImage}
+                                        removeImage={removeImage}
+                                        duplicateImage={duplicateImage}
+                                        arrayOfInputs={inputs(states, picture.identifier, dispatch)}
+                                        pictures={pictures}
+                                        setPictures={setPictures}
+                                        dispatch={dispatch}
+                                        uuid={uuid}
+                                        thumbPhoto={thumbPhoto}
+                                        setThumbPhoto={setThumbPhoto}
+                                    />
+                                );
+                            })}
+                            {showButtonBot && (
+                                <Button click={() => sendToBackend(state)} submitting={!showButtonBot || isSubmitting}
                                         cta="Enviar todas fotos" type="button"/>
-                            </>
-                        )}
-                        {pictures.map((picture, index) => {
-                            return (
-                                <Card
-                                    key={index}
-                                    identifierOfPicture={picture.identifier}
-                                    states={states}
-                                    filesList={filesList}
-                                    setFiles={setFiles}
-                                    index={index}
-                                    picture={picture.urlImage}
-                                    removeImage={removeImage}
-                                    duplicateImage={duplicateImage}
-                                    arrayOfInputs={inputs(states, picture.identifier, dispatch)}
-                                    pictures={pictures}
-                                    setPictures={setPictures}
-                                    dispatch={dispatch}
-                                    uuid={uuid}
-                                    thumbPhoto={thumbPhoto}
-                                    setThumbPhoto={setThumbPhoto}
-                                />
-                            );
-                        })}
-                        <div style={{ marginTop: '10px' }}/>
-                        <Button click={() => sendToBackend(state)} submitting={!showButtonBot || isSubmitting}
-                                cta="Enviar todas fotos" type="button"/>
+                            )}
+                        </div>
                     </>
                 )}
             </div>
