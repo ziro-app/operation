@@ -5,9 +5,8 @@ import sendToBackend from './sendToBackend'
 import Form from '@bit/vitorbarbosa19.ziro.form'
 import FormInput from '@bit/vitorbarbosa19.ziro.form-input'
 import InputText from '@bit/vitorbarbosa19.ziro.input-text'
+import InputMoney from '@bit/vitorbarbosa19.ziro.input-money'
 import Dropdown from '@bit/vitorbarbosa19.ziro.dropdown'
-import currencyFormat from '@ziro/currency-format'
-import maskInput from '@ziro/mask-input'
 
 const InputOutput = () => {
     const { nickname } = useContext(userContext)
@@ -54,14 +53,9 @@ const InputOutput = () => {
                         />
                     } />,
                     <FormInput name='value' label='Valor' input={
-                        <InputText
-                            value={currencyFormat(value)}
-                            onChange={({ target: { value } }) => {
-                                const toInteger = parseInt(value.replace(/[R$\.,]/g, ''), 10)
-                                setValue(maskInput(toInteger, '#######', true))
-                            }}
-                            placeholder='R$ 00,00'
-                            inputMode='numeric'
+                        <InputMoney
+                            value={value}
+                            setValue={setValue}
                         />
                     } />,
                     <FormInput name='description' label='Descrição' input={

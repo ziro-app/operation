@@ -5,9 +5,7 @@ import Error from '@bit/vitorbarbosa19.ziro.error'
 import Dropdown from '@bit/vitorbarbosa19.ziro.dropdown'
 import Form from '@bit/vitorbarbosa19.ziro.form'
 import FormInput from '@bit/vitorbarbosa19.ziro.form-input'
-import InputText from '@bit/vitorbarbosa19.ziro.input-text'
-import maskInput from '@ziro/mask-input'
-import currencyFormat from '@ziro/currency-format'
+import InputMoney from '@bit/vitorbarbosa19.ziro.input-money'
 import fetch from './fetch'
 import sendToBackend from './sendToBackend'
 import { userContext } from '../appContext'
@@ -167,14 +165,9 @@ const RegisterExpenses = () => {
                 sendToBackend={sendToBackend ? sendToBackend(state) : () => null}
                 inputs={[
                     <FormInput name='expenseAmount' label='Valor' input={
-                        <InputText
-                            value={currencyFormat(expenseAmount)}
-                            onChange={({ target: { value } }) => {
-                                const toInteger = parseInt(value.replace(/[R$\.,]/g, ''), 10)
-                                setExpenseAmount(maskInput(toInteger, '#######', true))
-                            }}
-                            placeholder='R$ 100,00'
-                            inputMode='numeric'
+                        <InputMoney
+                            value={expenseAmount}
+                            setValue={setExpenseAmount}
                         />
                     } />,
                     <FormInput name='type' label='Tipo' input={

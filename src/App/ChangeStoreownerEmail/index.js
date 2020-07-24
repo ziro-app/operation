@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { motion } from 'framer-motion'
 import Form from '@bit/vitorbarbosa19.ziro.form'
 import FormInput from '@bit/vitorbarbosa19.ziro.form-input'
-import InputText from '@bit/vitorbarbosa19.ziro.input-text'
+import InputEmail from '@bit/vitorbarbosa19.ziro.input-email'
 import sendToBackend from './sendToBackend'
 
 const ChangeStoreownerEmail = () => {
@@ -29,21 +29,17 @@ const ChangeStoreownerEmail = () => {
                 sendToBackend={sendToBackend ? sendToBackend(state) : () => null}
                 inputs={[
                     <FormInput name='email' label='Email atual' input={
-                        <InputText
+                        <InputEmail
                             value={email}
-                            onChange={({ target: { value } }) => setEmail(value ? value.toLowerCase() : '')}
+                            setValue={setEmail}
                             placeholder='Email atual do usuário'
-                            inputMode='email'
-                            autoComplete='email'
                         />
                     } />,
                     <FormInput name='newEmail' label='Novo email' input={
-                        <InputText
+                        <InputEmail
                             value={newEmail}
-                            onChange={({ target: { value } }) => setNewEmail(value ? value.toLowerCase() : '')}
+                            setValue={setNewEmail}
                             placeholder='Novo email do usuário'
-                            inputMode='email'
-                            autoComplete='email'
                         />
                     } />
                 ]}

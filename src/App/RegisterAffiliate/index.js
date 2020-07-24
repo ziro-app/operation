@@ -9,6 +9,7 @@ import Form from '@bit/vitorbarbosa19.ziro.form'
 import FormInput from '@bit/vitorbarbosa19.ziro.form-input'
 import Dropdown from '@bit/vitorbarbosa19.ziro.dropdown'
 import InputText from '@bit/vitorbarbosa19.ziro.input-text'
+import InputPhone from '@bit/vitorbarbosa19.ziro.input-phone'
 
 const RegisterAffiliate = () => {
     const [isLoading, setIsLoading] = useState(true)
@@ -122,11 +123,9 @@ const RegisterAffiliate = () => {
                         />
                     } />,
                     <FormInput name='whats' label='Whatsapp' input={
-                        <InputText
+                        <InputPhone
                             value={whats}
-                            onChange={({ target: { value } }) => setWhats(maskInput(value, '(##) #####-####', true))}
-                            placeholder='(11) 91122-3344'
-                            inputMode='tel'
+                            setValue={setWhats}
                         />
                     } />
                 ]}

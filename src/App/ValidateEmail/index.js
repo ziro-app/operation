@@ -3,7 +3,7 @@ import { post } from 'axios'
 import { motion } from 'framer-motion'
 import Form from '@bit/vitorbarbosa19.ziro.form'
 import FormInput from '@bit/vitorbarbosa19.ziro.form-input'
-import InputText from '@bit/vitorbarbosa19.ziro.input-text'
+import InputEmail from '@bit/vitorbarbosa19.ziro.input-email'
 import Modal from '@bit/vitorbarbosa19.ziro.modal'
 import Illustration from '@bit/vitorbarbosa19.ziro.illustration'
 import Spinner from '@bit/vitorbarbosa19.ziro.spinner'
@@ -123,12 +123,10 @@ const CheckEmailVerified = () => {
                     sendToBackend={sendToBackend ? sendToBackend(state) : () => null}
                     inputs={[
                         <FormInput name='email' label='Email' input={
-                            <InputText
+                            <InputEmail
                                 value={email}
-                                onChange={({ target: { value } }) => setEmail(value ? value.toLowerCase() : '')}
+                                setValue={setEmail}
                                 placeholder='Email do usuário referido'
-                                inputMode='email'
-                                autoComplete='email'
                             />
                         } />
                     ]}

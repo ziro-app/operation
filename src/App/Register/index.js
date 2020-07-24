@@ -10,6 +10,9 @@ import HeaderHome from '@bit/vitorbarbosa19.ziro.header-home'
 import Form from '@bit/vitorbarbosa19.ziro.form'
 import FormInput from '@bit/vitorbarbosa19.ziro.form-input'
 import InputText from '@bit/vitorbarbosa19.ziro.input-text'
+import InputPhone from '@bit/vitorbarbosa19.ziro.input-phone'
+import InputEmail from '@bit/vitorbarbosa19.ziro.input-email'
+import InputMoney from '@bit/vitorbarbosa19.ziro.input-money'
 import Dropdown from '@bit/vitorbarbosa19.ziro.dropdown'
 import Calendar from '@bit/vitorbarbosa19.ziro.calendar'
 import { containerWithPadding } from '@ziro/theme'
@@ -337,11 +340,9 @@ const Register = () => {
                         />
                     } />,
                     <FormInput name='personalPhone' label='Telefone Pessoal' input={
-                        <InputText
+                        <InputPhone
                             value={personalPhone}
-                            onChange={({ target: { value } }) => setPersonalPhone(maskInput(value, '(##) #####-####', true))}
-                            placeholder='(86) 99743-6822'
-                            inputMode='tel'
+                            setValue={setPersonalPhone}
                         />
                     } />,
                     <FormInput name='github' label='Github' input={
@@ -419,14 +420,10 @@ const Register = () => {
                         />
                     } />,
                     <FormInput name='amountCharged' label='Valor Cobrado' input={
-                        <InputText
-                            value={currencyFormat(amountCharged)}
-                            onChange={({ target: { value } }) => {
-                                const toInteger = parseInt(value.replace(/[R$\.,]/g, ''), 10)
-                                setAmountCharged(maskInput(toInteger, '#######', true))
-                            }}
+                        <InputMoney
+                            value={amountCharged}
+                            setValue={setAmountCharged}
                             placeholder='Valor cobrado pelo trabalho'
-                            inputMode='numeric'
                         />
                     } />,
                     <FormInput name='paymentModel' label='Modelo de Pagamento' input={
@@ -471,11 +468,9 @@ const Register = () => {
                         />
                     } />,
                     <FormInput name='emergencyContact' label='Contato de Emergência' input={
-                        <InputText
+                        <InputPhone
                             value={emergencyContact}
-                            onChange={({ target: { value } }) => setEmergencyContact(maskInput(value, '(##) #####-####', true))}
-                            placeholder='(86) 99743-6822'
-                            inputMode='tel'
+                            setValue={setEmergencyContact}
                         />
                     } />,
                     <FormInput name='bankNumber' label='Número do Banco' input={
@@ -503,12 +498,10 @@ const Register = () => {
                         />
                     } />,
                     <FormInput name='email' label='Email' input={
-                        <InputText
+                        <InputEmail
                             value={email}
-                            onChange={({ target: { value } }) => setEmail(value.toLowerCase())}
+                            setValue={setEmail}
                             placeholder='Para acesso ao app'
-                            inputMode='email'
-                            autoComplete='email'
                         />
                     } />,
                     <FormInput name='pass' label='Senha' input={

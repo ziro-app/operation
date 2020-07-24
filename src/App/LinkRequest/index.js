@@ -6,6 +6,7 @@ import Dropdown from '@bit/vitorbarbosa19.ziro.dropdown'
 import Form from '@bit/vitorbarbosa19.ziro.form'
 import FormInput from '@bit/vitorbarbosa19.ziro.form-input'
 import InputText from '@bit/vitorbarbosa19.ziro.input-text'
+import InputMoney from '@bit/vitorbarbosa19.ziro.input-money'
 import maskInput from '@ziro/mask-input'
 import currencyFormat from '@ziro/currency-format'
 import SingleImageUpload from '../SingleImageUpload/index'
@@ -191,14 +192,9 @@ const LinkRequest = () => {
                         />}
                     />,
                     <FormInput name='totalAmount' label={(type === 'Cartão de Crédito' || type === '') ? 'Valor sem desconto' : 'Valor do TED Recebido'} input={
-                        <InputText
-                            value={currencyFormat(totalAmount)}
-                            onChange={({ target: { value } }) => {
-                                const toInteger = parseInt(value.replace(/[R$\.,]/g, ''), 10)
-                                setTotalAmount(maskInput(toInteger, '#######', true))
-                            }}
-                            placeholder='R$ 100,00'
-                            inputMode='numeric'
+                        <InputMoney
+                            value={totalAmount}
+                            setValue={setTotalAmount}
                         />
                     } />,
                     <FormInput name='storeowner' label='Lojista' input={

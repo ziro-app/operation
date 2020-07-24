@@ -1,6 +1,7 @@
 import React from 'react'
 import FormInput from '@bit/vitorbarbosa19.ziro.form-input'
 import InputText from '@bit/vitorbarbosa19.ziro.input-text'
+import InputEmail from '@bit/vitorbarbosa19.ziro.input-email'
 import Dropdown from '@bit/vitorbarbosa19.ziro.dropdown'
 import maskInput from '@ziro/mask-input'
 
@@ -31,12 +32,10 @@ const documentForm = ({ app, setApp, appList, cnpj, setCnpj }) => {
 const emailForm = ({ email, setEmail }) => {
     const fields = [
         <FormInput name='email' label='Email' input={
-            <InputText
+            <InputEmail
                 value={email}
-                onChange={({ target: { value } }) => setEmail(value ? value.toLowerCase() : '')}
+                setValue={setEmail}
                 placeholder='Email do usuário referido'
-                inputMode='email'
-                autoComplete='email'
             />
         } />
     ]
