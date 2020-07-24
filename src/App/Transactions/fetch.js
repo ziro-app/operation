@@ -26,18 +26,18 @@ const fetch = (
   else setIsLoadingMore(false);
   let query = '';
   if (!sellerFilter && !statusFilter) {
-    query = db.collection('credit-card-payments').orderBy('dateLinkCreated', 'desc').limit(limitFetch);
+    query = db.collection('credit-card-payments').orderBy('dateLastUpdate', 'desc').limit(limitFetch);
   }
   if (sellerFilter && !statusFilter) {
-    query = db.collection('credit-card-payments').orderBy('dateLinkCreated', 'desc').where('seller', '==', `${sellerFilter}`).limit(limitFetch);
+    query = db.collection('credit-card-payments').orderBy('dateLastUpdate', 'desc').where('seller', '==', `${sellerFilter}`).limit(limitFetch);
   }
   if (!sellerFilter && statusFilter) {
-    query = db.collection('credit-card-payments').orderBy('dateLinkCreated', 'desc').where('status', '==', `${statusFilter}`).limit(limitFetch);
+    query = db.collection('credit-card-payments').orderBy('dateLastUpdate', 'desc').where('status', '==', `${statusFilter}`).limit(limitFetch);
   }
   if (sellerFilter && statusFilter) {
     query = db
       .collection('credit-card-payments')
-      .orderBy('dateLinkCreated', 'desc')
+      .orderBy('dateLastUpdate', 'desc')
       .where('seller', '==', `${sellerFilter}`)
       .where('status', '==', `${statusFilter}`)
       .limit(limitFetch);
@@ -78,6 +78,7 @@ const fetch = (
                   fees,
                   installments,
                   dateLinkCreated,
+                  dateLastUpdate,
                   transactionZoopId,
                   maxInstallments,
                   sellerZoopId,
@@ -95,11 +96,13 @@ const fetch = (
               } = doc.data();
               const chargeFormatted = currencyFormat(charge);
               const dateFormatted = date ? dateFormat(date) : '';
+              const lastDateFormatted = dateLastUpdate ? dateFormat(dateLastUpdate) : '';
               paymentDoc.push({
                   transactionZoopId: transactionZoopId ? transactionZoopId : '',
                   transactionId: doc.id,
                   charge: chargeFormatted,
                   dateLinkCreated,
+                  dateLastUpdate: lastDateFormatted,
                   date: dateFormatted,
                   fees: fees ? fees : '',
                   installments: installments ? installments : '',

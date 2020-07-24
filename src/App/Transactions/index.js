@@ -112,7 +112,17 @@ const Transactions = ({ transactionId, receivableId, carts, storeowners, setQuer
                 </div>
             ) : (
                 <TransactionsList
-                    transactions={payments}
+                    transactions={payments.map(payment => {
+                        const {dateLastUpdate, date, seller, status, charge, statusColor, transactionId} = payment
+                        return {
+                            date: dateLastUpdate || date,
+                            seller,
+                            status,
+                            charge,
+                            statusColor,
+                            transactionId
+                        }
+                    })}
                     btnMoreClick={() => {
                         setLoadingMore(true);
                         setLimitFetch(limitFetch + 10);
