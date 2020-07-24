@@ -132,6 +132,7 @@ export const brandName = {
         width: '20px',
         height: '20px',
         padding: '6px',
+        boxShadow: '0px 2px 10px -4px #222',
     },
     fileContainerDuplicateImageClass = {
         position: 'absolute',
@@ -143,6 +144,15 @@ export const brandName = {
         width: '20px',
         height: '20px',
         padding: '6px',
+        boxShadow: '0px 2px 10px -4px #222',
+    },
+    checkBoxClass = {
+        position: 'absolute',
+        display: 'block',
+        paddingLeft: '35px',
+        marginBottom: '12px',
+        cursor: 'pointer',
+        fontSize: '22px',
     },
     //.flipMove
     flipMoveClass = {

@@ -43,10 +43,13 @@ const sendToBackend = async ({
                     const uploadTask = await image.put(compressed);
                     const url = await uploadTask.ref.getDownloadURL();
                     await db.collection('catalog-images').add({
-                        availableQuantities: states[`availableQuantities${file.identifierOfPicture}`] ? states[`availableQuantities${file.identifierOfPicture}`] : '',
+                        availableQuantities: states[`availableQuantities${file.identifierOfPicture}`]
+                            ? states[`availableQuantities${file.identifierOfPicture}`]
+                            : '',
                         price: states[`price${file.identifierOfPicture}`] ? states[`price${file.identifierOfPicture}`] : '',
                         description: states[`description${file.identifierOfPicture}`] ? states[`description${file.identifierOfPicture}`] : '',
                         brandName: brand,
+                        discount: states[`discount${file.identifierOfPicture}`] ? states[`discount${file.identifierOfPicture}`] : '',
                         status: 'available',
                         url,
                         timestamp,
@@ -54,7 +57,7 @@ const sendToBackend = async ({
                         photoPeriod: 'Nova',
                         bucket: `${Math.floor(Math.random() * (20 - Number.MIN_VALUE))}`, //will be used to fetch random images on front-end
                     });
-                    return [url, timestamp];
+                    return [url, timestamp, file.identifierOfPicture];
                 }
             } catch (error) {
                 console.log(error);
@@ -109,7 +112,9 @@ const sendToBackend = async ({
                 }),
             );
         } else {
+            console.log(uploadImages);
             const [url, timestamp] = getMostRecentImage(uploadImages);
+            console.log(url, timestamp);
             const [, trends] = brandsAndTrends.filter(([brandName]) => brandName === brand).flat();
             if (pricetag === 'Sim') {
                 await db.collection('catalog-brands').doc(brand).set(
@@ -145,6 +150,6 @@ const sendToBackend = async ({
     /* setFiles,*/
     const payload = { userValue: '', identifierOfPicture: '', inputType: 'clear' };
     dispatch(payload);
-};
+}
 
 export default sendToBackend;

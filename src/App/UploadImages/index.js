@@ -32,10 +32,17 @@ const UploadImages = () => {
     const [showUpload, setShowUpload] = useState(false);
     const [showButtonTop, setShowButtonTop] = useState(false);
     const [showButtonBot, setShowButtonBot] = useState(false);
-
+    const [thumbPhoto, setThumbPhoto] = useState('');
     const [states, dispatch] = useReducer((state, payload) => inputStateControl(state, payload), {});
 
     useEffect(() => fetch(setIsLoading, setIsError, setBrands, setBrandsAndTrends), []);
+    /* useEffect(() => {
+      console.log('index thumbPhoto', thumbPhoto)
+    }, [thumbPhoto])*/
+
+    useEffect(() => {
+        console.log(filesList);
+    }, [filesList]);
 
     useEffect(() => {
         if (pictures[0]) setShowButtonBot(true);
@@ -66,9 +73,6 @@ const UploadImages = () => {
         setFiles,
         dispatch,
     };
-
-    console.log('index filesList', filesList);
-    console.log('index pictures', pictures);
     return (
         <>
             <BrandChoose isSubmitting={isSubmitting} brand={brand} setBrand={setBrand} brands={brands}/>
@@ -103,6 +107,8 @@ const UploadImages = () => {
                                     setPictures={setPictures}
                                     dispatch={dispatch}
                                     uuid={uuid}
+                                    thumbPhoto={thumbPhoto}
+                                    setThumbPhoto={setThumbPhoto}
                                 />
                             );
                         })}
@@ -115,5 +121,5 @@ const UploadImages = () => {
             <SubmitBlock isSubmitting={isSubmitting} isSubmitted={isSubmitted}/>
         </>
     );
-};
+}
 export default UploadImages;

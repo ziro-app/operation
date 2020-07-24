@@ -43,8 +43,6 @@ export function removeImage(filesList, pictures, picture, setPictures, setFiles,
 export function duplicateImage(filesList, pictures, picture, setPictures, setFiles, setDuplicateImageModal, identifierOfPicture, uuid) {
     const filteredPicture = pictures.find(e => e.identifier === identifierOfPicture);
     const filteredFile = filesList.find(e => e.identifierOfPicture === identifierOfPicture);
-    console.log(filteredPicture);
-    console.log(filteredFile);
     const uid = uuid();
     //filteredPicture.identifier = uid;
     setPictures([...pictures, { urlImage: filteredPicture.urlImage, identifier: uid }]);
@@ -60,23 +58,12 @@ export function duplicateImage(filesList, pictures, picture, setPictures, setFil
             webkitRelativePath: filteredFile.webkitRelativePath,
         },
     ]);
-    console.log(filesList);
-    console.log(pictures);
-    //const newPictures = { ...pictures,{urlImage:filteredPicture.urlImage,identifierOfPicture:filteredPicture.identifierOfPicture} };
-
-    /*console.log(newPictures[0]);
-    console.log('filteredPicture', filteredPicture);
-    filteredPicture.identifier = uid;
-    console.log('filteredPicture', filteredPicture);
-    console.log(pictures);
-    console.log(newPictures);*/
     setDuplicateImageModal(false);
 }
 
 export function settingThePicturesAndFiles(files, setIsError, pictures, filesList, setPictures, setFiles, uuid) {
     const allFilePromises = [];
     const fileErrors = [];
-    console.log('functions', files);
     // Iterate over all uploaded files
     for (let i = 0; i < files.length; i++) {
         let file = files[i];
@@ -101,7 +88,6 @@ export function settingThePicturesAndFiles(files, setIsError, pictures, filesLis
         }
 
         file.identifierOfPicture = uuid();
-
         allFilePromises.push(readFile(file));
     }
 
@@ -132,6 +118,8 @@ export function inputStateControl(state, payload) {
             return { ...state, [`description${identifierOfPicture}`]: userValue };
         case 'price':
             return { ...state, [`price${identifierOfPicture}`]: userValue };
+        case 'discount':
+            return { ...state, [`discount${identifierOfPicture}`]: userValue };
         case 'sizes':
             return { ...state, [`sizes${identifierOfPicture}`]: userValue };
         case 'colors':
@@ -140,11 +128,6 @@ export function inputStateControl(state, payload) {
             return {
                 ...state,
                 [`availableQuantities${identifierOfPicture}`]: userValue,
-            };
-        case 'discount':
-            return {
-                ...state,
-                [`discount${identifierOfPicture}`]: userValue,
             };
         case 'clear':
             return { ...(state = {}) };

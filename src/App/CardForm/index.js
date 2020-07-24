@@ -11,6 +11,7 @@ import InfoCard from './infoCard';
 import SummaryCard from './summaryCard';
 import RemoveImageButton from './RemoveImageButton';
 import DuplicateImageButton from './DuplicateImageButton';
+import CheckBoxThumbPhoto from './CheckBoxThumbPhoto';
 import Modal from '@bit/vitorbarbosa19.ziro.modal';
 import { modalContainer, modalLabel } from '../Transactions/TransactionDetails/styles';
 import Button from '@bit/vitorbarbosa19.ziro.button';
@@ -21,12 +22,12 @@ const PTstatus = {
     closed: 'Disponível',
     waitingInfo: '',
     soldOut: 'Indisponível',
-};
+}
 
 const INstatus = {
     Disponível: 'available',
     Indisponível: 'soldOut',
-};
+}
 
 export default ({
                     products,
@@ -56,6 +57,8 @@ export default ({
                     //setDuplicateImageModal,
                     identifierOfPicture,
                     uuid,
+                    thumbPhoto,
+                    setThumbPhoto,
                 }) => {
     const [removeImageModal, setRemoveImageModal] = useState(false);
     const [duplicateImageModal, setDuplicateImageModal] = useState(false);
@@ -100,6 +103,8 @@ export default ({
                         </Modal>
                     </>
                 )}
+                <CheckBoxThumbPhoto thumbPhoto={thumbPhoto} setThumbPhoto={setThumbPhoto}
+                                    identifierOfPicture={identifierOfPicture}/>
                 {cardInfo ? (
                     <RImg
                         src={state.url}
@@ -133,4 +138,4 @@ export default ({
             </div>
         </div>
     );
-};
+}

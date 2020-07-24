@@ -44,6 +44,32 @@ export default (states, identifierOfPicture, dispatch) => {
         />
     );
 
+    const discountPercentage = (
+        <FormInput
+            name="discount"
+            label="Desconto"
+            input={
+                <InputText
+                    value={
+                        !states[`discount${identifierOfPicture}`] ? '' : `% ${currencyFormat(states[`discount${identifierOfPicture}`]).replace(/[R$]/g, '')}`
+                    }
+                    onChange={({ target: { value } }) => {
+                        const toInteger = parseInt(value.replace(/[\.,\s%]/g, ''), 10);
+
+                        const payload = {
+                            userValue: toInteger <= 10000 ? maskInput(toInteger, '#######', true) : maskInput(10000, '#######', true),
+                            identifierOfPicture,
+                            inputType: 'discount',
+                        };
+                        dispatch(payload);
+                    }}
+                    placeholder="% 20"
+                    inputMode="numeric"
+                />
+            }
+        />
+    );
+
     const sizesInput = (
         <FormInput
             name="sizes"
@@ -141,6 +167,6 @@ export default (states, identifierOfPicture, dispatch) => {
             }
         />
     );
-    const arrayInputs = [descriptionInput, priceInput, colorsInput, sizesInput, quantitiesInput];
+    const arrayInputs = [descriptionInput, priceInput, discountPercentage, colorsInput, sizesInput, quantitiesInput];
     return arrayInputs;
-};
+}
