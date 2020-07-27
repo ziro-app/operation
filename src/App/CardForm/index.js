@@ -74,7 +74,9 @@ export default ({
                             <Button
                                 type="button"
                                 cta="Sim"
-                                click={() => duplicateImage(filesList, pictures, picture, setPictures, setFiles, setDuplicateImageModal, identifierOfPicture, uuid)}
+                                click={() =>
+                                    duplicateImage(filesList, pictures, picture, setPictures, setFiles, setDuplicateImageModal, identifierOfPicture, uuid, index)
+                                }
                                 template="regular"
                             />
                             <Button type="button" cta="Não" click={() => setDuplicateImageModal(false)}

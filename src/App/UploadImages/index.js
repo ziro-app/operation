@@ -18,6 +18,7 @@ import BrandChoose from './BrandChoose';
 import inputs from './inputs';
 import SubmitBlock from './SubmitBlock';
 import { v4 as uuid } from 'uuid';
+import { AnimatePresence, motion } from 'framer-motion';
 
 const UploadImages = () => {
     const [isLoading, setIsLoading] = useState(true);
@@ -85,28 +86,34 @@ const UploadImages = () => {
                                             cta="Enviar todas fotos" type="button"/>
                                 </>
                             )}
-                            {pictures.map((picture, index) => {
-                                return (
-                                    <Card
-                                        key={index}
-                                        identifierOfPicture={picture.identifier}
-                                        states={states}
-                                        filesList={filesList}
-                                        setFiles={setFiles}
-                                        index={index}
-                                        picture={picture.urlImage}
-                                        removeImage={removeImage}
-                                        duplicateImage={duplicateImage}
-                                        arrayOfInputs={inputs(states, picture.identifier, dispatch)}
-                                        pictures={pictures}
-                                        setPictures={setPictures}
-                                        dispatch={dispatch}
-                                        uuid={uuid}
-                                        thumbPhoto={thumbPhoto}
-                                        setThumbPhoto={setThumbPhoto}
-                                    />
-                                );
-                            })}
+
+                            <AnimatePresence>
+                                {pictures.map((picture, index) => {
+                                    return (
+                                        <motion.div key={index} initial={{ scale: 0.5 }} animate={{ scale: 1 }}
+                                                    transition={{ duration: 0.5 }} exit={{ opacity: 0 }}>
+                                            <Card
+                                                key={index}
+                                                identifierOfPicture={picture.identifier}
+                                                states={states}
+                                                filesList={filesList}
+                                                setFiles={setFiles}
+                                                index={index}
+                                                picture={picture.urlImage}
+                                                removeImage={removeImage}
+                                                duplicateImage={duplicateImage}
+                                                arrayOfInputs={inputs(states, picture.identifier, dispatch)}
+                                                pictures={pictures}
+                                                setPictures={setPictures}
+                                                dispatch={dispatch}
+                                                uuid={uuid}
+                                                thumbPhoto={thumbPhoto}
+                                                setThumbPhoto={setThumbPhoto}
+                                            />
+                                        </motion.div>
+                                    );
+                                })}
+                            </AnimatePresence>
                             {showButtonBot && (
                                 <Button click={() => sendToBackend(state)} submitting={!showButtonBot || isSubmitting}
                                         cta="Enviar todas fotos" type="button"/>
