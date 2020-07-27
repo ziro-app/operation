@@ -1,4 +1,4 @@
-import { fontTitle, gradient } from '@ziro/theme';
+import { fontBody, fontSizeSmall, fontTitle, gradient } from '@ziro/theme';
 
 export const brandName = {
     marginBottom: '-20px',
@@ -57,32 +57,32 @@ export const brandName = {
     display: 'grid',
     gridTemplateColumns: '1fr 1fr',
     gridGap: '10px',
-      alignItems: 'center',
-      borderTop: '1px solid #F0F0F0',
+    alignItems: 'center',
+    borderTop: '1px solid #F0F0F0',
   },
-    phases = {
-        flexFlow: 'column wrap',
-        width: '100%',
-        position: 'relative',
-        margin: '0 auto',
-        transition: 'all 0.3s ease-in',
-    },
-    cardContainerClass = {
-        marginTop: '20px',
-        display: 'grid',
-        rowGap: '20px',
-    },
-    //.fileContainer
-    fileContainerClass = {
-        background: '#fff',
-        borderRadius: '5px',
-        padding: '10px 0',
-        display: 'flex',
-        alignItems: 'center',
-        flexDirection: 'column',
-        margin: '5px auto',
-        transition: 'all 0.3s ease-in',
-    },
+  phases = {
+    flexFlow: 'column wrap',
+    width: '100%',
+    position: 'relative',
+    margin: '0 auto',
+    transition: 'all 0.3s ease-in',
+  },
+  cardContainerClass = {
+    marginTop: '20px',
+    display: 'grid',
+    rowGap: '20px',
+  },
+  //.fileContainer
+  fileContainerClass = {
+    background: '#fff',
+    borderRadius: '5px',
+    padding: '10px 0',
+    display: 'flex',
+    alignItems: 'center',
+    flexDirection: 'column',
+    margin: '5px auto',
+    transition: 'all 0.3s ease-in',
+  },
   //#inputImages
   inputImagesId = {
     opacity: '0',
@@ -121,30 +121,65 @@ export const brandName = {
   },
   //.fileContainer .deleteImage
   fileContainerDeleteImageClass = {
-      position: 'absolute',
-      right: '9px',
-      color: '#fff',
-      background: '#ff4081',
-      borderRadius: '50%',
-      textAlign: 'center',
-      cursor: 'pointer',
-      fontSize: '26px',
-      fontWeight: 'bold',
-      lineHeight: '30px',
-      width: '30px',
-      height: '30px',
+    position: 'absolute',
+    right: '9px',
+    color: '#fff',
+    background: '#ff4081',
+    borderRadius: '50%',
+    textAlign: 'center',
+    cursor: 'pointer',
+    fontSize: '26px',
+    fontWeight: 'bold',
+    lineHeight: '30px',
+    width: '30px',
+    height: '30px',
   },
-    //.flipMove
-    flipMoveClass = {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        flexWrap: 'wrap',
-        width: '100%',
-    },
-    title = {
-        fontFamily: fontTitle,
-    },
-    container = {
-        display: 'grid',
-    }
+  //.flipMove
+  flipMoveClass = {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexWrap: 'wrap',
+    width: '100%',
+  },
+  title = {
+    fontFamily: fontTitle,
+  },
+  container = {
+    display: 'grid',
+  },
+  labelRadioButton = {
+    fontSize: fontSizeSmall,
+    fontFamily: fontBody,
+    marginLeft: '12px',
+    marginBottom: '12px',
+    cursor: 'pointer',
+  },
+  radioButton = { cursor: 'pointer' },
+  radioButtonContainer = {
+    display: 'flex',
+    position: 'relative',
+    bottom: '85px',
+    left: '70px',
+    //top: '-200%',
+    //left: '30%',
+  },
+  checkmark = {
+    display: 'flex',
+    position: 'relative',
+    top: '-45%',
+    left: '5%',
+    height: '25px',
+    width: '25px',
+    backgroundColor: '#eee',
+    borderRadius: '50%',
+  },
+  checkmarkChecked = {
+    position: 'absolute',
+    top: '0',
+    left: '0',
+    height: '25px',
+    width: '25px',
+    backgroundColor: '#2196F3',
+    borderRadius: '50%',
+  }

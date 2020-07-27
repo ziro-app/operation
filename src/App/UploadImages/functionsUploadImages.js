@@ -40,53 +40,28 @@ export function removeImage(filesList, pictures, picture, setPictures, setFiles,
     setRemoveImageModal(false);
 }
 
-export function duplicateImage(filesList, pictures, picture, setPictures, setFiles, setDuplicateImageModal, identifierOfPicture, uuid) {
+export function duplicateImage(filesList, pictures, picture, setPictures, setFiles, setDuplicateImageModal, identifierOfPicture, uuid, index) {
     const filteredPicture = pictures.find(e => e.identifier === identifierOfPicture);
     const filteredFile = filesList.find(e => e.identifierOfPicture === identifierOfPicture);
     const uid = uuid();
-    //filteredPicture.identifier = uid;
-    setPictures([...pictures, { urlImage: filteredPicture.urlImage, identifier: uid }]);
+
     let file = filteredFile;
     let data = new FormData();
     data.append('file', file, file.name);
     let _file = data.get('file');
     _file.identifierOfPicture = uid;
-    console.log(_file);
-    setFiles([
-        ...filesList,
-        _file,
-        /*{
-          identifierOfPicture: uid,
-          lastModified: filteredFile.lastModified,
-          lastModifiedDate: filteredFile.lastModifiedDate,
-          name: filteredFile.name,
-          size: filteredFile.size,
-          type: filteredFile.type,
-          webkitRelativePath: filteredFile.webkitRelativePath,
-        },*/
-        /*new File(
-          //[
-           new Blob(
-              [
-          [
-            JSON.stringify({
-              identifierOfPicture: uid,
-              lastModified: filteredFile.lastModified,
-              lastModifiedDate: filteredFile.lastModifiedDate,
-              name: filteredFile.name,
-              size: filteredFile.size,
-              type: filteredFile.type,
-              webkitRelativePath: filteredFile.webkitRelativePath,
-            }),
-          ],
-          //],
-          filteredFile.name,
-        ),*/
-        //],
-        /*filteredFile.name,
-          { type: filteredFile.type },
-        ),*/
-    ]);
+
+    const newIndex = index + 1;
+
+    const newArrayFiles = filesList.slice();
+    newArrayFiles.splice(newIndex, 0, _file);
+    setFiles(newArrayFiles);
+
+    const newArrayPictures = pictures.slice();
+    const newPicture = { urlImage: filteredPicture.urlImage, identifier: uid };
+    newArrayPictures.splice(newIndex, 0, newPicture);
+    setPictures(newArrayPictures);
+
     setDuplicateImageModal(false);
 }
 
@@ -153,6 +128,8 @@ export function inputStateControl(state, payload) {
             return { ...state, [`sizes${identifierOfPicture}`]: userValue };
         case 'colors':
             return { ...state, [`colors${identifierOfPicture}`]: userValue };
+        case 'typeSize':
+            return { [`typeSize${identifierOfPicture}`]: userValue };
         case 'availableQuantities':
             return {
                 ...state,

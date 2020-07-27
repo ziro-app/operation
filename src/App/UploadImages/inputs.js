@@ -3,6 +3,7 @@ import FormInput from '@bit/vitorbarbosa19.ziro.form-input';
 import InputText from '@bit/vitorbarbosa19.ziro.input-text';
 import currencyFormat from '@ziro/currency-format';
 import maskInput from '@ziro/mask-input';
+import { labelRadioButton, radioButton, radioButtonContainer } from './styles';
 
 export default (states, identifierOfPicture, dispatch) => {
     const descriptionInput = (
@@ -66,6 +67,64 @@ export default (states, identifierOfPicture, dispatch) => {
                     placeholder="% 20"
                     inputMode="numeric"
                 />
+            }
+        />
+    );
+    const typeSizeRadio = (
+        <FormInput
+            name="typeSize"
+            label=""
+            input={
+                <div style={radioButtonContainer}>
+                    <div>
+                        <label style={labelRadioButton}>
+                            <input
+                                type="radio"
+                                style={radioButton}
+                                checked={states[`typeSize${identifierOfPicture}`] === 'number'}
+                                onChange={() => {
+                                    let payload = {
+                                        userValue: 'number',
+                                        identifierOfPicture,
+                                        inputType: 'typeSize',
+                                    };
+                                    dispatch(payload);
+                                    payload = {
+                                        userValue: ['36,38,40,42,44'],
+                                        identifierOfPicture,
+                                        inputType: 'sizes',
+                                    };
+                                    dispatch(payload);
+                                }}
+                            />
+                            Numero
+                        </label>
+                    </div>
+                    <div>
+                        <label style={labelRadioButton}>
+                            <input
+                                type="radio"
+                                style={radioButton}
+                                checked={states[`typeSize${identifierOfPicture}`] === 'letter'}
+                                onChange={() => {
+                                    let payload = {
+                                        userValue: 'letter',
+                                        identifierOfPicture,
+                                        inputType: 'typeSize',
+                                    };
+                                    dispatch(payload);
+                                    payload = {
+                                        userValue: ['PP,P,M,G,GG'],
+                                        identifierOfPicture,
+                                        inputType: 'sizes',
+                                    };
+                                    dispatch(payload);
+                                }}
+                            />
+                            Letra
+                        </label>
+                    </div>
+                </div>
             }
         />
     );
@@ -167,6 +226,6 @@ export default (states, identifierOfPicture, dispatch) => {
             }
         />
     );
-    const arrayInputs = [descriptionInput, priceInput, discountPercentage, colorsInput, sizesInput, quantitiesInput];
+    const arrayInputs = [descriptionInput, priceInput, discountPercentage, colorsInput, sizesInput, typeSizeRadio, quantitiesInput];
     return arrayInputs;
 }

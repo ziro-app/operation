@@ -119,7 +119,7 @@ const sendToBackend = async ({
             const [url, timestamp] = uploadImages.find(([, , uid]) => uid === thumbPhoto.identifierOfPicture);
 
             //const [, trends] = brandsAndTrends.filter(([brandName]) => brandName === brand).flat()
-            if (priceTag === 'Sim') {
+            if (priceTag === 'Sim' && url && timestamp) {
                 await db.collection('catalog-brands').doc(brand).set(
                     {
                         brand,
@@ -129,7 +129,7 @@ const sendToBackend = async ({
                     },
                     { merge: true },
                 );
-            } else {
+            } else if (url && timestamp) {
                 await db.collection('catalog-brands').doc(brand).set(
                     {
                         brand,
