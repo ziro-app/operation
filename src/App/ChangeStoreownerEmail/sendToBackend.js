@@ -111,13 +111,13 @@ const sendToBackend = state => () => {
                                     }
                                 }
                             } else {
-                                const supplierRow = await findSupplierRow(email);
+                                const [supplierRow, collaborator] = await findSupplierRow(email);
                                 if (supplierRow && supplierRow !== 0) {
                                     try {
                                         const bodySupplier = {
                                             apiResource: 'values',
                                             apiMethod: 'update',
-                                            range: `Base!F${supplierRow}`,
+                                            range: collaborator ? `Colaboradores!C${supplierRow}` : `Base!F${supplierRow}`,
                                             valueInputOption: 'raw',
                                             spreadsheetId: process.env.SHEET_ID_SUPPLIERS,
                                             resource: {
