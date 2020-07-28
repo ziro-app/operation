@@ -45,6 +45,7 @@ export const findLeadRow = async email => {
 
 export const findSupplierRow = async email => {
     let pos;
+    let collaborator = false;
     const body = {
         "apiResource": "values",
         "apiMethod": "get",
@@ -54,8 +55,23 @@ export const findSupplierRow = async email => {
     const { data: { values } } = await post(url, body, config);
     values.map((user, index) => {
         if (user[5] === email) {
-            pos = index
+            pos = index;
         }
     });
-    return pos + 1;
+    if (!pos) {
+        collaborator = true;
+        const collaboratorsBody = {
+            "apiResource": "values",
+            "apiMethod": "get",
+            "range": "Colaboradores",
+            "spreadsheetId": process.env.SHEET_ID_SUPPLIERS
+        };
+        const { data: { values } } = await post(url, collaboratorsBody, config);
+        values.map((user, index) => {
+            if (user[2] === email) {
+                pos = index;
+            }
+        });
+    }
+    return [pos + 1, collaborator];
 }
