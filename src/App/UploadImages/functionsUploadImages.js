@@ -40,7 +40,18 @@ export function removeImage(filesList, pictures, picture, setPictures, setFiles,
     setRemoveImageModal(false);
 }
 
-export function duplicateImage(filesList, pictures, picture, setPictures, setFiles, setDuplicateImageModal, identifierOfPicture, uuid, index) {
+export function duplicateImage(
+    filesList,
+    pictures,
+    picture,
+    setPictures,
+    setFiles,
+    setDuplicateImageModal,
+    identifierOfPicture,
+    uuid,
+    index,
+    dispatch,
+) {
     const filteredPicture = pictures.find(e => e.identifier === identifierOfPicture);
     const filteredFile = filesList.find(e => e.identifierOfPicture === identifierOfPicture);
     const uid = uuid();
@@ -61,6 +72,14 @@ export function duplicateImage(filesList, pictures, picture, setPictures, setFil
     const newPicture = { urlImage: filteredPicture.urlImage, identifier: uid };
     newArrayPictures.splice(newIndex, 0, newPicture);
     setPictures(newArrayPictures);
+
+    const payload = {
+        userValue: '',
+        identifierOfPicture,
+        inputType: 'duplicate',
+        newIdentifier: uid,
+    };
+    dispatch(payload);
 
     setDuplicateImageModal(false);
 }
@@ -114,7 +133,7 @@ export function settingThePicturesAndFiles(files, setIsError, pictures, filesLis
 }
 
 export function inputStateControl(state, payload) {
-    const { userValue, identifierOfPicture, inputType } = payload;
+    const { userValue, identifierOfPicture, inputType, newIdentifier } = payload;
     switch (inputType) {
         case 'identifier':
             return { ...state, [`identifier${identifierOfPicture}`]: userValue };
@@ -129,7 +148,7 @@ export function inputStateControl(state, payload) {
         case 'colors':
             return { ...state, [`colors${identifierOfPicture}`]: userValue };
         case 'typeSize':
-            return { [`typeSize${identifierOfPicture}`]: userValue };
+            return { ...state, [`typeSize${identifierOfPicture}`]: userValue };
         case 'availableQuantities':
             return {
                 ...state,
@@ -137,6 +156,19 @@ export function inputStateControl(state, payload) {
             };
         case 'clear':
             return { ...(state = {}) };
+
+        case 'duplicate':
+            return {
+                ...state,
+                [`identifier${newIdentifier}`]: newIdentifier,
+                [`availableQuantities${newIdentifier}`]: state[`availableQuantities${identifierOfPicture}`],
+                [`colors${newIdentifier}`]: state[`colors${identifierOfPicture}`],
+                [`sizes${newIdentifier}`]: state[`sizes${identifierOfPicture}`],
+                [`typeSize${newIdentifier}`]: state[`typeSize${identifierOfPicture}`],
+                [`discount${newIdentifier}`]: state[`discount${identifierOfPicture}`],
+                [`price${newIdentifier}`]: state[`price${identifierOfPicture}`],
+                [`description${newIdentifier}`]: state[`description${identifierOfPicture}`],
+            };
         default:
         // code block
     }

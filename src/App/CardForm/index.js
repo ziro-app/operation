@@ -75,7 +75,7 @@ export default ({
                                 type="button"
                                 cta="Sim"
                                 click={() =>
-                                    duplicateImage(filesList, pictures, picture, setPictures, setFiles, setDuplicateImageModal, identifierOfPicture, uuid, index)
+                                    duplicateImage(filesList, pictures, picture, setPictures, setFiles, setDuplicateImageModal, identifierOfPicture, uuid, index, dispatch)
                                 }
                                 template="regular"
                             />

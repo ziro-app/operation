@@ -90,7 +90,13 @@ export default (states, identifierOfPicture, dispatch) => {
                                     };
                                     dispatch(payload);
                                     payload = {
-                                        userValue: ['36,38,40,42,44'],
+                                        userValue: states[`colors${identifierOfPicture}`],
+                                        identifierOfPicture,
+                                        inputType: 'colors',
+                                    };
+                                    dispatch(payload);
+                                    payload = {
+                                        userValue: '36,38,40,42,44'.split(','),
                                         identifierOfPicture,
                                         inputType: 'sizes',
                                     };
@@ -114,7 +120,13 @@ export default (states, identifierOfPicture, dispatch) => {
                                     };
                                     dispatch(payload);
                                     payload = {
-                                        userValue: ['PP,P,M,G,GG'],
+                                        userValue: states[`colors${identifierOfPicture}`],
+                                        identifierOfPicture,
+                                        inputType: 'colors',
+                                    };
+                                    dispatch(payload);
+                                    payload = {
+                                        userValue: 'PP,P,M,G,GG'.split(','),
                                         identifierOfPicture,
                                         inputType: 'sizes',
                                     };

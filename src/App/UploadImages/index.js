@@ -2,6 +2,9 @@ import React, { useEffect, useReducer, useState } from 'react';
 import Button from '@bit/vitorbarbosa19.ziro.button';
 import ImageUpload from '@bit/vitorbarbosa19.ziro.image-upload';
 import Spinner from '@bit/vitorbarbosa19.ziro.spinner-with-div';
+import { v4 as uuid } from 'uuid';
+import { AnimatePresence, motion } from 'framer-motion';
+import { toast, ToastContainer } from 'react-toastify';
 import fetch from './fetch';
 import { cardContainerClass, fileContainerClass } from './styles';
 import sendToBackend from './sendToBackend';
@@ -17,8 +20,7 @@ import Card from '../CardForm';
 import BrandChoose from './BrandChoose';
 import inputs from './inputs';
 import SubmitBlock from './SubmitBlock';
-import { v4 as uuid } from 'uuid';
-import { AnimatePresence, motion } from 'framer-motion';
+import 'react-toastify/dist/ReactToastify.css';
 
 const UploadImages = () => {
     const [isLoading, setIsLoading] = useState(true);
@@ -53,7 +55,7 @@ const UploadImages = () => {
 
     if (isLoading) return <Spinner size="5rem"/>;
 
-    //if (isError) return <Error />;
+    // if (isError) return <Error />;
 
     const state = {
         setIsSubmitting,
@@ -68,9 +70,21 @@ const UploadImages = () => {
         dispatch,
         thumbPhoto,
         setThumbPhoto,
+        toast,
     };
     return (
         <>
+            <ToastContainer
+                position="top-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnVisibilityChange
+                draggable
+                pauseOnHover
+            />
             <BrandChoose isSubmitting={isSubmitting} brand={brand} setBrand={setBrand} brands={brands}/>
             <div style={fileContainerClass} className="fileContainer" onDragOver={onDragOver}>
                 {showUpload && (
