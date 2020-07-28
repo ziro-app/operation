@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import Form from '@bit/vitorbarbosa19.ziro.form';
 import { card } from './styles';
 
-export default ({ update, image, arrayOfInputs, validations }) => {
+export default ({ update, image, arrayOfInputs, validations, isSubmitting }) => {
     const _inputs = arrayOfInputs;
 
     const inputs = useMemo(() => _inputs.filter(input => !!input), _inputs);

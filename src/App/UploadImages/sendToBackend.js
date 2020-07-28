@@ -18,15 +18,12 @@ const sendToBackend = async ({
                                  priceTag = 'Não',
                              }) => {
     setIsSubmitting(true);
-    console.log('filesList inside sendToBackend', filesList);
     const uploadImages = await Promise.all(
         filesList.map(async file => {
-            console.log('file inside sendToBackend', file);
             try {
                 if (file.size === 0) throw 'Empty sized image';
                 const timestamp = Date.now();
                 const compressed = await readAndCompressImage(file, { quality: 0.65 });
-                console.log('compressed', compressed);
                 if (brand === 'Bot') {
                     const [brandName, index] = file.name.split('-');
                     const image = storage.child(`${brandName}/${brandName}-${timestamp}-${index}`);
@@ -40,7 +37,6 @@ const sendToBackend = async ({
                         photoPeriod: 'Nova',
                         bucket: `${Math.floor(Math.random() * (20 - Number.MIN_VALUE))}`, //will be used to fetch random images on front-end
                     });
-                    console.log(url);
                     return [url, timestamp, brandName];
                 } else {
                     const image = storage.child(`${brand}/${brand}-${timestamp}-${file.name}`);
@@ -116,30 +112,31 @@ const sendToBackend = async ({
                 }),
             );
         } else {
-            const [url, timestamp] = uploadImages.find(([, , uid]) => uid === thumbPhoto.identifierOfPicture);
-
-            //const [, trends] = brandsAndTrends.filter(([brandName]) => brandName === brand).flat()
-            if (priceTag === 'Sim' && url && timestamp) {
-                await db.collection('catalog-brands').doc(brand).set(
-                    {
-                        brand,
-                        updatedAt: timestamp,
-                        updatedLoggedThumb: url,
-                        trends: [],
-                    },
-                    { merge: true },
-                );
-            } else if (url && timestamp) {
-                await db.collection('catalog-brands').doc(brand).set(
-                    {
-                        brand,
-                        updatedThumb: url,
-                        updatedAt: timestamp,
-                        updatedLoggedThumb: url,
-                        trends: [],
-                    },
-                    { merge: true },
-                );
+            if (thumbPhoto) {
+                const [url, timestamp] = uploadImages.find(([, , uid]) => uid === thumbPhoto.identifierOfPicture);
+                //const [, trends] = brandsAndTrends.filter(([brandName]) => brandName === brand).flat()
+                if (priceTag === 'Sim') {
+                    await db.collection('catalog-brands').doc(brand).set(
+                        {
+                            brand,
+                            updatedAt: timestamp,
+                            updatedLoggedThumb: url,
+                            trends: [],
+                        },
+                        { merge: true },
+                    );
+                } else if (url && timestamp) {
+                    await db.collection('catalog-brands').doc(brand).set(
+                        {
+                            brand,
+                            updatedThumb: url,
+                            updatedAt: timestamp,
+                            updatedLoggedThumb: url,
+                            trends: [],
+                        },
+                        { merge: true },
+                    );
+                }
             }
         }
     } catch (error) {

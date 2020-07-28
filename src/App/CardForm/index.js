@@ -132,8 +132,14 @@ export default ({
                         className="uploadPicture"
                         alt="preview"
                         container={children => (
-                            <CardInputs image={children || null} update={update || null} arrayOfInputs={arrayOfInputs}
-                                        validations={[]} index={index}/>
+                            <CardInputs
+                                disabled={true}
+                                image={children || null}
+                                update={update || null}
+                                arrayOfInputs={arrayOfInputs}
+                                validations={[]}
+                                index={index}
+                            />
                         )}
                     />
                 )}
