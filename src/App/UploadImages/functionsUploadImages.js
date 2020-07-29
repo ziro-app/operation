@@ -3,7 +3,7 @@ const imgExtension = ['.jpg', '.jpeg', '.gif', '.png'];
 const maxFileSize = 5242880;
 
 export function hasExtension(fileName) {
-    const pattern = '(' + imgExtension.join('|').replace(/\./g, '\\.') + ')$';
+    const pattern = `(${imgExtension.join('|').replace(/\./g, '\\.')})$`;
     return new RegExp(pattern, 'i').test(fileName);
 }
 
@@ -56,10 +56,10 @@ export function duplicateImage(
     const filteredFile = filesList.find(e => e.identifierOfPicture === identifierOfPicture);
     const uid = uuid();
 
-    let file = filteredFile;
-    let data = new FormData();
+    const file = filteredFile;
+    const data = new FormData();
     data.append('file', file, file.name);
-    let _file = data.get('file');
+    const _file = data.get('file');
     _file.identifierOfPicture = uid;
 
     const newIndex = index + 1;
@@ -84,12 +84,24 @@ export function duplicateImage(
     setDuplicateImageModal(false);
 }
 
-export function settingThePicturesAndFiles(files, setIsError, pictures, filesList, setPictures, setFiles, uuid) {
+export function settingThePicturesAndFiles(
+    files,
+    setIsError,
+    pictures,
+    filesList,
+    setPictures,
+    setFiles,
+    uuid,
+    states,
+    dispatch,
+    thumbPhoto,
+    setThumbPhoto,
+) {
     const allFilePromises = [];
     const fileErrors = [];
     // Iterate over all uploaded files
     for (let i = 0; i < files.length; i++) {
-        let file = files[i];
+        const file = files[i];
         let fileError = {
             name: file.name,
         };
@@ -111,6 +123,10 @@ export function settingThePicturesAndFiles(files, setIsError, pictures, filesLis
         }
 
         file.identifierOfPicture = uuid();
+        if (i === 0 && !thumbPhoto) {
+            const firstUid = file.identifierOfPicture;
+            setThumbPhoto({ ...thumbPhoto, identifierOfPicture: firstUid });
+        }
         allFilePromises.push(readFile(file));
     }
 
@@ -126,6 +142,13 @@ export function settingThePicturesAndFiles(files, setIsError, pictures, filesLis
             data.identifier = newFileData.file.identifierOfPicture;
             dataURLs.push(data);
             files.push(newFileData.file);
+
+            const payload = {
+                userValue: '',
+                identifierOfPicture: data.identifier,
+                inputType: 'initial',
+            };
+            dispatch(payload);
         });
         setPictures(dataURLs);
         setFiles(files);
@@ -137,6 +160,17 @@ export function inputStateControl(state, payload) {
     switch (inputType) {
         case 'identifier':
             return { ...state, [`identifier${identifierOfPicture}`]: userValue };
+        case 'initial':
+            return {
+                ...state,
+                [`sizes${identifierOfPicture}`]: ['PP', 'P', 'M', 'G', 'GG'],
+                [`colors${identifierOfPicture}`]: [''],
+                [`typeSize${identifierOfPicture}`]: 'letter',
+                [`discount${identifierOfPicture}`]: '',
+                [`price${identifierOfPicture}`]: '',
+                [`description${identifierOfPicture}`]: '',
+                [`availableQuantities${identifierOfPicture}`]: 1,
+            };
         case 'description':
             return { ...state, [`description${identifierOfPicture}`]: userValue };
         case 'price':

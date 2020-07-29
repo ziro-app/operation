@@ -3,7 +3,7 @@ import FormInput from '@bit/vitorbarbosa19.ziro.form-input';
 import InputText from '@bit/vitorbarbosa19.ziro.input-text';
 import currencyFormat from '@ziro/currency-format';
 import maskInput from '@ziro/mask-input';
-import { labelRadioButton, radioButton, radioButtonContainer } from './styles';
+import { checkmark, labelRadioButton, radioButton, radioButtonContainer } from './styles';
 
 export default (states, identifierOfPicture, dispatch) => {
     const descriptionInput = (
@@ -76,10 +76,12 @@ export default (states, identifierOfPicture, dispatch) => {
             label=""
             input={
                 <div style={radioButtonContainer}>
+                    <style>{checkmark}</style>
                     <div>
-                        <label style={labelRadioButton}>
-                            <input
+                        <label style={labelRadioButton} className="container">
+                            <InputText
                                 type="radio"
+                                name="radio"
                                 style={radioButton}
                                 checked={states[`typeSize${identifierOfPicture}`] === 'number'}
                                 onChange={() => {
@@ -103,13 +105,15 @@ export default (states, identifierOfPicture, dispatch) => {
                                     dispatch(payload);
                                 }}
                             />
+                            <span className="checkmark"/>
                             Numero
                         </label>
                     </div>
                     <div>
-                        <label style={labelRadioButton}>
-                            <input
+                        <label style={labelRadioButton} className="container">
+                            <InputText
                                 type="radio"
+                                name="radio"
                                 style={radioButton}
                                 checked={states[`typeSize${identifierOfPicture}`] === 'letter'}
                                 onChange={() => {
@@ -133,6 +137,7 @@ export default (states, identifierOfPicture, dispatch) => {
                                     dispatch(payload);
                                 }}
                             />
+                            <span className="checkmark"/>
                             Letra
                         </label>
                     </div>
@@ -169,9 +174,13 @@ export default (states, identifierOfPicture, dispatch) => {
             input={
                 <InputText
                     placeholder="Azul,Amarelo"
-                    value={'' || (states[`colors${identifierOfPicture}`] && states[`colors${identifierOfPicture}`].join(','))}
+                    value={
+                        '' ||
+                        (states[`colors${identifierOfPicture}`] && states[`colors${identifierOfPicture}`].join('')) ||
+                        states[`colors${identifierOfPicture}`].join(',')
+                    }
                     onChange={({ target: { value } }) => {
-                        const newColors = value ? value.split(',') : '';
+                        const newColors = value ? value.split(',') : [''];
                         const payload = {
                             userValue: newColors,
                             identifierOfPicture,
@@ -184,14 +193,13 @@ export default (states, identifierOfPicture, dispatch) => {
         />
     );
 
-    const quantitiesInput = states[`colors${identifierOfPicture}`] && (
+    const quantitiesInput = (states[`sizes${identifierOfPicture}`] !== '' || states[`colors${identifierOfPicture}`][0] !== '') && (
         <FormInput
             name="quantities"
             label="Quantidades"
             input={
                 <div style={{ display: 'grid', gridGap: '10px', padding: '10px' }}>
-                    {states[`colors${identifierOfPicture}`] &&
-                    states[`colors${identifierOfPicture}`].map(color =>
+                    {states[`colors${identifierOfPicture}`].map(color =>
                         (states[`sizes${identifierOfPicture}`]
                                 ? states[`sizes${identifierOfPicture}`].length
                                     ? states[`sizes${identifierOfPicture}`]
@@ -211,7 +219,7 @@ export default (states, identifierOfPicture, dispatch) => {
                                 <InputText
                                     placeholder="1"
                                     value={
-                                        '' ||
+                                        '1' ||
                                         (states[`availableQuantities${identifierOfPicture}`] && states[`availableQuantities${identifierOfPicture}`][`${color}-${size}`])
                                     }
                                     onChange={({ target: { value } }) => {

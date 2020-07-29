@@ -1,20 +1,20 @@
 import React, { useState } from 'react';
+import RImg from 'react-image';
+import SpinnerWithDiv from '@bit/vitorbarbosa19.ziro.spinner-with-div';
+import Modal from '@bit/vitorbarbosa19.ziro.modal';
+import Button from '@bit/vitorbarbosa19.ziro.button';
 import CardInputs from './cardInputs';
 import {
     fileContainerUploadPictureContainerClass,
     fileContainerUploadPictureContainerimgUploadPictureClass,
     fileContainerUploadPicturesWrapperClass,
 } from './styles';
-import RImg from 'react-image';
-import SpinnerWithDiv from '@bit/vitorbarbosa19.ziro.spinner-with-div';
 import InfoCard from './infoCard';
 import SummaryCard from './summaryCard';
 import RemoveImageButton from './RemoveImageButton';
 import DuplicateImageButton from './DuplicateImageButton';
 import CheckBoxThumbPhoto from './CheckBoxThumbPhoto';
-import Modal from '@bit/vitorbarbosa19.ziro.modal';
 import { modalContainer, modalLabel } from '../Transactions/TransactionDetails/styles';
-import Button from '@bit/vitorbarbosa19.ziro.button';
 
 const PTstatus = {
     available: 'Disponível',
@@ -51,10 +51,10 @@ export default ({
                     initialStatus,
                     dispatch,
                     duplicateImage,
-                    //removeImageModal,
-                    //setRemoveImageModal,
-                    //duplicateImageModal,
-                    //setDuplicateImageModal,
+                    // removeImageModal,
+                    // setRemoveImageModal,
+                    // duplicateImageModal,
+                    // setDuplicateImageModal,
                     identifierOfPicture,
                     uuid,
                     thumbPhoto,
@@ -133,7 +133,7 @@ export default ({
                         alt="preview"
                         container={children => (
                             <CardInputs
-                                disabled={true}
+                                disabled
                                 image={children || null}
                                 update={update || null}
                                 arrayOfInputs={arrayOfInputs}

@@ -70,7 +70,7 @@ export const brandName = {
         margin: '0 auto',
         transition: 'all 0.3s ease-in',
     },
-    //.fileContainer
+    // .fileContainer
     fileContainerClass = {
         background: '#fff',
         boxShadow: '2px 2px 3px 0 rgba(0, 0, 0, 0.05)',
@@ -84,45 +84,45 @@ export const brandName = {
         margin: '10px auto',
         transition: 'all 0.3s ease-in',
     },
-    //#inputImages
+    // #inputImages
     inputImagesId = {
         opacity: '0',
         position: 'absolute',
         zIndex: '-1',
     },
-    //.fileContainer .uploadIcon
+    // .fileContainer .uploadIcon
     fileContainerUploadIconClass = {
         width: '50px',
         height: '50px',
     },
-    //.fileContainer .uploadPicturesWrapper
+    // .fileContainer .uploadPicturesWrapper
     fileContainerUploadPicturesWrapperClass = {
         display: 'flex',
         flexWrap: 'wrap',
         justifyContent: 'center',
         width: '100%',
     },
-    //.fileContainer .uploadPictureContainer
+    // .fileContainer .uploadPictureContainer
     fileContainerUploadPictureContainerClass = {
         width: '100%',
-        //margin: '5%',
+        // margin: '5%',
         paddingTop: '10px',
-        //background: '#edf2f6',
+        // background: '#edf2f6',
         Display: 'flex',
         AlignItems: 'center',
         justifyContent: 'center',
         height: 'inherit',
-        //boxShadow: '0 0 8px 2px rgba(0, 0, 0, 0.1)',
-        //border: '1px solid #d0dbe4',
+        // boxShadow: '0 0 8px 2px rgba(0, 0, 0, 0.1)',
+        // border: '1px solid #d0dbe4',
         position: 'relative',
     },
-    //.fileContainer .uploadPictureContainer img.uploadPicture
+    // .fileContainer .uploadPictureContainer img.uploadPicture
     fileContainerUploadPictureContainerimgUploadPictureClass = {
         borderTopLeftRadius: '5px',
         borderTopRightRadius: '5px',
         width: '100%',
     },
-    //.fileContainer .deleteImage
+    // .fileContainer .deleteImage
     fileContainerDeleteImageClass = {
         position: 'absolute',
         right: '5px',
@@ -155,11 +155,58 @@ export const brandName = {
         cursor: 'pointer',
         fontSize: '22px',
     },
-    //.flipMove
-    flipMoveClass = {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        flexWrap: 'wrap',
-        width: '100%',
-    };
+    checkBox = `
+.containerCheckBox {
+  display: block;
+  position: relative;
+  padding-left: 30px;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.containerCheckBox input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.checkmarkCheckBox {
+  position: absolute;
+  top: 5px;
+  left: 3px;
+  height: 25px;
+  width: 25px;
+  background-color: #eee;
+  border-radius: 50%;
+}
+
+.containerCheckBox:hover input ~ .checkmarkCheckBox {
+  background-color: #ccc;
+}
+
+.containerCheckBox input:checked ~ .checkmarkCheckBox {
+  background-color: #2196F3;
+}
+
+.checkmarkCheckBox:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+.containerCheckBox input:checked ~ .checkmarkCheckBox:after {
+  display: block;
+}
+
+.containerCheckBox .checkmarkCheckBox:after {
+top: 9px;
+left: 9px;
+width: 8px;
+height: 8px;
+border-radius: 50%;
+background: white;
+}
+`;

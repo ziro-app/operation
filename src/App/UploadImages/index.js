@@ -37,6 +37,7 @@ const UploadImages = () => {
     const [showButtonBot, setShowButtonBot] = useState(false);
     const [thumbPhoto, setThumbPhoto] = useState('');
     const [states, dispatch] = useReducer((state, payload) => inputStateControl(state, payload), {});
+    console.log(thumbPhoto);
 
     useEffect(() => fetch(setIsLoading, setIsError, setBrands, setBrandsAndTrends), []);
 
@@ -90,7 +91,21 @@ const UploadImages = () => {
                 {showUpload && (
                     <>
                         <ImageUpload
-                            sendToBackend={data => settingThePicturesAndFiles(data, setIsError, pictures, filesList, setPictures, setFiles, uuid)}
+                            sendToBackend={data =>
+                                settingThePicturesAndFiles(
+                                    data,
+                                    setIsError,
+                                    pictures,
+                                    filesList,
+                                    setPictures,
+                                    setFiles,
+                                    uuid,
+                                    states,
+                                    dispatch,
+                                    thumbPhoto,
+                                    setThumbPhoto,
+                                )
+                            }
                             isDisabled={!isValidBrand(brands, brand) || isSubmitting}
                         />
                         <div style={cardContainerClass}>

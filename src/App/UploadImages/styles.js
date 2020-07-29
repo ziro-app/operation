@@ -72,7 +72,7 @@ export const brandName = {
     display: 'grid',
     rowGap: '20px',
   },
-  //.fileContainer
+  // .fileContainer
   fileContainerClass = {
     background: '#fff',
     borderRadius: '5px',
@@ -83,43 +83,43 @@ export const brandName = {
     margin: '5px auto',
     transition: 'all 0.3s ease-in',
   },
-  //#inputImages
+  // #inputImages
   inputImagesId = {
     opacity: '0',
     position: 'absolute',
     zIndex: '-1',
   },
-  //.fileContainer .uploadIcon
+  // .fileContainer .uploadIcon
   fileContainerUploadIconClass = {
     width: '50px',
     height: '50px',
   },
-  //.fileContainer .uploadPicturesWrapper
+  // .fileContainer .uploadPicturesWrapper
   fileContainerUploadPicturesWrapperClass = {
     display: 'flex',
     flexWrap: 'wrap',
     justifyContent: 'center',
     width: '100%',
   },
-  //.fileContainer .uploadPictureContainer
+  // .fileContainer .uploadPictureContainer
   fileContainerUploadPictureContainerClass = {
     width: '100%',
     margin: '5%',
     padding: '10px',
-    //background: '#edf2f6',
+    // background: '#edf2f6',
     Display: 'flex',
     AlignItems: 'center',
     justifyContent: 'center',
     height: 'inherit',
-    //boxShadow: '0 0 8px 2px rgba(0, 0, 0, 0.1)',
-    //border: '1px solid #d0dbe4',
+    // boxShadow: '0 0 8px 2px rgba(0, 0, 0, 0.1)',
+    // border: '1px solid #d0dbe4',
     position: 'relative',
   },
-  //.fileContainer .uploadPictureContainer img.uploadPicture
+  // .fileContainer .uploadPictureContainer img.uploadPicture
   fileContainerUploadPictureContainerimgUploadPictureClass = {
     width: '100%',
   },
-  //.fileContainer .deleteImage
+  // .fileContainer .deleteImage
   fileContainerDeleteImageClass = {
     position: 'absolute',
     right: '9px',
@@ -134,7 +134,7 @@ export const brandName = {
     width: '30px',
     height: '30px',
   },
-  //.flipMove
+  // .flipMove
   flipMoveClass = {
     display: 'flex',
     alignItems: 'center',
@@ -161,25 +161,65 @@ export const brandName = {
     position: 'relative',
     bottom: '85px',
     left: '70px',
-    //top: '-200%',
-    //left: '30%',
+    // top: '-200%',
+    // left: '30%',
   },
-  checkmark = {
-    display: 'flex',
-    position: 'relative',
-    top: '-45%',
-    left: '5%',
-    height: '25px',
-    width: '25px',
-    backgroundColor: '#eee',
-    borderRadius: '50%',
-  },
-  checkmarkChecked = {
-    position: 'absolute',
-    top: '0',
-    left: '0',
-    height: '25px',
-    width: '25px',
-    backgroundColor: '#2196F3',
-    borderRadius: '50%',
-  }
+  checkmark = `
+.container {
+  display: block;
+  position: relative;
+  padding-left: 30px;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* hide the browser default radio */
+.container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.checkmark {
+  position: absolute;
+  top: -3px;
+  left: 0;
+  height: 25px;
+  width: 25px;
+  background-color: #eee;
+  border-radius: 50%;
+}
+
+.container:hover input ~ .checkmark {
+  background-color: #ccc;
+}
+
+.container input:checked ~ .checkmark {
+  background-color: #2196F3;
+}
+
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the indicator (dot/circle) when checked */
+.container input:checked ~ .checkmark:after {
+  display: block;
+}
+
+/* Style the indicator (dot/circle) */
+.container .checkmark:after {
+top: 9px;
+left: 9px;
+width: 8px;
+height: 8px;
+border-radius: 50%;
+background: white;
+}
+`
+
