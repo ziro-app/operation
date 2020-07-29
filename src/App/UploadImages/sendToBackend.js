@@ -16,7 +16,9 @@ const sendToBackend = async ({
                                  thumbPhoto,
                                  setThumbPhoto,
                                  priceTag = 'Não',
-                                 toast,
+                                 setOpenToast,
+                                 setMessageToast,
+                                 setTypeOfToast,
                              }) => {
     setIsSubmitting(true);
     const uploadImages = await Promise.all(
@@ -59,7 +61,6 @@ const sendToBackend = async ({
                     bucket: `${Math.floor(Math.random() * (20 - Number.MIN_VALUE))}`, // will be used to fetch random images on front-end
                 });
                 return [url, timestamp, file.identifierOfPicture];
-
             } catch (error) {
                 console.log(error);
                 setIsSubmitting(false);
@@ -141,6 +142,9 @@ const sendToBackend = async ({
     } catch (error) {
         console.log(error);
         setIsSubmitting(false);
+        setTypeOfToast('warning');
+        setMessageToast('Erro no envio das fotos');
+        setOpenToast(true);
     }
     setIsSubmitting(false);
     setIsSubmitted(true);
@@ -150,14 +154,9 @@ const sendToBackend = async ({
     setThumbPhoto('');
     const payload = { userValue: '', identifierOfPicture: '', inputType: 'clear' };
     dispatch(payload);
-    toast.success('Teste', {
-        position: 'top-right',
-        autoClose: '5000',
-        hideProgressBar: 'false',
-        closeOnClick: 'true',
-        pauseOnHover: 'true',
-        draggable: 'true',
-    });
+    setTypeOfToast('alert');
+    setMessageToast('Enviado com sucesso');
+    setOpenToast(true);
 }
 
 export default sendToBackend;

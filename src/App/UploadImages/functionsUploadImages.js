@@ -169,7 +169,6 @@ export function inputStateControl(state, payload) {
                 [`discount${identifierOfPicture}`]: '',
                 [`price${identifierOfPicture}`]: '',
                 [`description${identifierOfPicture}`]: '',
-                [`availableQuantities${identifierOfPicture}`]: 1,
             };
         case 'description':
             return { ...state, [`description${identifierOfPicture}`]: userValue };
