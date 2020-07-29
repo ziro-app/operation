@@ -198,7 +198,7 @@ export default (states, identifierOfPicture, dispatch) => {
             name="quantities"
             label="Quantidades"
             input={
-                <div style={{ display: 'grid', gridGap: '10px', padding: '10px' }}>
+                <div style={{ display: 'grid', gridRowGap: '10px', padding: '0 0 0 5px' }}>
                     {states[`colors${identifierOfPicture}`].map(color =>
                         (states[`sizes${identifierOfPicture}`]
                                 ? states[`sizes${identifierOfPicture}`].length
@@ -210,7 +210,7 @@ export default (states, identifierOfPicture, dispatch) => {
                                 key={`${color}-${size}`}
                                 style={{
                                     display: 'grid',
-                                    gridTemplateColumns: '1fr 2fr 2fr',
+                                    gridTemplateColumns: '2fr 1fr 2fr',
                                     alignItems: 'center',
                                 }}
                             >
