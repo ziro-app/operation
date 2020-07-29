@@ -176,8 +176,8 @@ export default (states, identifierOfPicture, dispatch) => {
                     placeholder="Azul,Amarelo"
                     value={
                         '' ||
-                        (states[`colors${identifierOfPicture}`] && states[`colors${identifierOfPicture}`].join('')) ||
-                        states[`colors${identifierOfPicture}`].join(',')
+                        states[`colors${identifierOfPicture}`].join(',') ||
+                        (states[`colors${identifierOfPicture}`] && states[`colors${identifierOfPicture}`].join(''))
                     }
                     onChange={({ target: { value } }) => {
                         const newColors = value ? value.split(',') : [''];
