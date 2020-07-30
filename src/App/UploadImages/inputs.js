@@ -5,7 +5,7 @@ import currencyFormat from '@ziro/currency-format';
 import maskInput from '@ziro/mask-input';
 import { checkmark, labelRadioButton, radioButton, radioButtonContainer } from './styles';
 
-export default (states, identifierOfPicture, dispatch) => {
+export default (states, identifierOfPicture, dispatch, defaultQuantityValue) => {
     const descriptionInput = (
         <FormInput
             name="description"
@@ -218,8 +218,9 @@ export default (states, identifierOfPicture, dispatch) => {
                                 <label>{size}</label>
                                 <InputText
                                     placeholder="1"
+                                    defaultValue={defaultQuantityValue}
                                     value={
-                                        '1' ||
+                                        '' ||
                                         (states[`availableQuantities${identifierOfPicture}`] && states[`availableQuantities${identifierOfPicture}`][`${color}-${size}`])
                                     }
                                     onChange={({ target: { value } }) => {

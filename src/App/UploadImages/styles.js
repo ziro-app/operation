@@ -159,10 +159,6 @@ export const brandName = {
   radioButtonContainer = {
     display: 'flex',
     position: 'relative',
-    bottom: '85px',
-    left: '70px',
-    // top: '-200%',
-    // left: '30%',
   },
   checkmark = `
 .container {
@@ -222,4 +218,3 @@ border-radius: 50%;
 background: white;
 }
 `
-

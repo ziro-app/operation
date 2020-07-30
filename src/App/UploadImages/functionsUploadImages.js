@@ -163,7 +163,7 @@ export function inputStateControl(state, payload) {
         case 'initial':
             return {
                 ...state,
-                [`sizes${identifierOfPicture}`]: ['PP', 'P', 'M', 'G', 'GG'],
+                [`sizes${identifierOfPicture}`]: ['P', 'M', 'G'],
                 [`colors${identifierOfPicture}`]: [''],
                 [`typeSize${identifierOfPicture}`]: 'letter',
                 [`discount${identifierOfPicture}`]: '',

@@ -3,7 +3,6 @@ import Button from '@bit/vitorbarbosa19.ziro.button';
 import ImageUpload from '@bit/vitorbarbosa19.ziro.image-upload';
 import Spinner from '@bit/vitorbarbosa19.ziro.spinner-with-div';
 import { v4 as uuid } from 'uuid';
-import { AnimatePresence, motion } from 'framer-motion';
 import fetch from './fetch';
 import { cardContainerClass, fileContainerClass } from './styles';
 import sendToBackend from './sendToBackend';
@@ -38,8 +37,12 @@ const UploadImages = () => {
     const [messageToast, setMessageToast] = useState('');
     const [thumbPhoto, setThumbPhoto] = useState('');
     const [states, dispatch] = useReducer((state, payload) => inputStateControl(state, payload), {});
-
+    const defaultQuantityValue = 2;
     useEffect(() => fetch(setIsLoading, setIsError, setBrands, setBrandsAndTrends), []);
+
+    useEffect(() => {
+        if (filesList.length === 0) setThumbPhoto('');
+    }, [filesList]);
 
     useEffect(() => {
         if (pictures[0]) setShowButtonBot(true);
@@ -109,33 +112,31 @@ const UploadImages = () => {
                                 </>
                             )}
 
-                            <AnimatePresence>
-                                {pictures.map((picture, index) => {
-                                    return (
-                                        <motion.div key={index} initial={{ scale: 0.5 }} animate={{ scale: 1 }}
-                                                    transition={{ duration: 0.5 }} exit={{ opacity: 0 }}>
-                                            <Card
-                                                key={index}
-                                                identifierOfPicture={picture.identifier}
-                                                states={states}
-                                                filesList={filesList}
-                                                setFiles={setFiles}
-                                                index={index}
-                                                picture={picture.urlImage}
-                                                removeImage={removeImage}
-                                                duplicateImage={duplicateImage}
-                                                arrayOfInputs={inputs(states, picture.identifier, dispatch)}
-                                                pictures={pictures}
-                                                setPictures={setPictures}
-                                                dispatch={dispatch}
-                                                uuid={uuid}
-                                                thumbPhoto={thumbPhoto}
-                                                setThumbPhoto={setThumbPhoto}
-                                            />
-                                        </motion.div>
-                                    );
-                                })}
-                            </AnimatePresence>
+                            {pictures.map((picture, index) => {
+                                return (
+                                    <div key={index} initial={{ scale: 0.5 }} animate={{ scale: 1 }}
+                                         transition={{ duration: 0.5 }} exit={{ opacity: 0 }}>
+                                        <Card
+                                            key={index}
+                                            identifierOfPicture={picture.identifier}
+                                            states={states}
+                                            filesList={filesList}
+                                            setFiles={setFiles}
+                                            index={index}
+                                            picture={picture.urlImage}
+                                            removeImage={removeImage}
+                                            duplicateImage={duplicateImage}
+                                            arrayOfInputs={inputs(states, picture.identifier, dispatch, defaultQuantityValue)}
+                                            pictures={pictures}
+                                            setPictures={setPictures}
+                                            dispatch={dispatch}
+                                            uuid={uuid}
+                                            thumbPhoto={thumbPhoto}
+                                            setThumbPhoto={setThumbPhoto}
+                                        />
+                                    </div>
+                                );
+                            })}
                             {showButtonBot && (
                                 <Button click={() => sendToBackend(state)} submitting={!showButtonBot || isSubmitting}
                                         cta="Enviar todas fotos" type="button"/>
