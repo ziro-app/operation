@@ -66,6 +66,7 @@
         "@bit/vitorbarbosa19.ziro.input-edit": "0.1.44",
         "@bit/vitorbarbosa19.ziro.input-email": "0.0.1",
         "@bit/vitorbarbosa19.ziro.input-money": "0.0.1",
+        "@bit/vitorbarbosa19.ziro.input-percentage": "0.0.1",
         "@bit/vitorbarbosa19.ziro.input-phone": "0.0.1",
         "@bit/vitorbarbosa19.ziro.input-text": "0.1.2",
         "@bit/vitorbarbosa19.ziro.login-form": "0.1.62",

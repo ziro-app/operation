@@ -1,12 +1,12 @@
-import { hot } from "react-hot-loader/root";
-import React, { useState, useEffect } from "react";
-import { post } from "axios";
-import { auth, db } from "../Firebase/index";
-import { userContext } from "./appContext";
-import InitialLoader from "@bit/vitorbarbosa19.ziro.initial-loader";
-import Error from "@bit/vitorbarbosa19.ziro.error";
-import ErrorBoundary from "@bit/vitorbarbosa19.ziro.error-boundary";
-import Router from "./Router";
+import { hot } from 'react-hot-loader/root';
+import React, { useEffect, useState } from 'react';
+import { post } from 'axios';
+import InitialLoader from '@bit/vitorbarbosa19.ziro.initial-loader';
+import Error from '@bit/vitorbarbosa19.ziro.error';
+import ErrorBoundary from '@bit/vitorbarbosa19.ziro.error-boundary';
+import { userContext } from './appContext';
+import { auth, db } from '../Firebase/index';
+import Router from './Router';
 
 const App = () => {
     const [loading, setLoading] = useState(true);
@@ -41,30 +41,58 @@ const App = () => {
     const [agency, setAgency] = useState(null);
     const [listStatusForFilter, setListStatusForFilter] = useState([]);
     const [listSellersForFilter, setListSellersForFilter] = useState([]);
+    const [device, setDevice] = useState('phone');
 
     const url = process.env.SHEET_URL;
     const config = {
         headers: {
-            "Content-type": "application/json",
+            'Content-type': 'application/json',
             Authorization: process.env.SHEET_TOKEN,
         },
     };
     const body = {
-        apiResource: "values",
-        apiMethod: "get",
-        range: "Base",
+        apiResource: 'values',
+        apiMethod: 'get',
+        range: 'Base',
         spreadsheetId: process.env.SHEET_ID,
     };
     useEffect(() => {
+        const smallMobile = window.matchMedia('(max-width: 399px)');
+        const mobile = window.matchMedia('(min-width: 400px) and (max-width: 1199px)');
+        const desktop = window.matchMedia('(min-width: 1200px)');
+        // define user device
+        if (smallMobile.matches) setDevice('smallMobile');
+        if (mobile.matches) setDevice('mobile');
+        if (desktop.matches) setDevice('desktop');
+        // define listeners
+        const listenerSmallMobile = ({ matches }) => {
+            if (matches) setDevice('smallMobile');
+        };
+        const listenerMobile = ({ matches }) => {
+            if (matches) setDevice('mobile');
+        };
+        const listenerDesktop = ({ matches }) => {
+            if (matches) setDevice('desktop');
+        };
+        // add listeners
+        smallMobile.addListener(listenerSmallMobile);
+        mobile.addListener(listenerMobile);
+        desktop.addListener(listenerDesktop);
+        // cleanup
+        return () => smallMobile.removeListener(listenerSmallMobile);
+        return () => mobile.removeListener(listenerMobile);
+        return () => desktop.removeListener(listenerDesktop);
+    }, []);
+    useEffect(() => {
         let unsubscribe = () => null;
-        return auth.onAuthStateChanged(async (user) => {
+        return auth.onAuthStateChanged(async user => {
             if (user && user.emailVerified) {
                 setUid(user.uid);
                 // Adding event listener
                 unsubscribe = db
-                    .collection("team")
-                    .where("uid", "==", user.uid)
-                    .onSnapshot((snapshot) => {
+                    .collection('team')
+                    .where('uid', '==', user.uid)
+                    .onSnapshot(snapshot => {
                         if (!snapshot.empty) {
                             const {
                                 nome,
@@ -94,68 +122,62 @@ const App = () => {
                                 conta,
                                 agencia,
                             } = snapshot.docs[0].data();
-                            setName(nome ? nome : "");
-                            setNickname(apelido ? apelido : "");
-                            setCpf(cpf ? cpf : "");
-                            setHeight(altura ? altura : "");
-                            setCep(cep ? cep : "");
-                            setCity(cidade ? cidade : "");
-                            setEmergencyContact(
-                                contatoEmergencia ? contatoEmergencia : ""
-                            );
-                            setInitialDate(dataInicio ? dataInicio : "");
-                            setAddress(endereco ? endereco : "");
-                            setCityState(estado ? estado : "");
-                            setScope(escopo ? escopo : "");
-                            setMaritalStatus(estadoCivil ? estadoCivil : "");
-                            setGithub(github ? github : "");
-                            setPaymentModel(
-                                modeloPagamento ? modeloPagamento : ""
-                            );
-                            setBirthDate(nascimento ? nascimento : "");
-                            setEmergencyName(
-                                nomeEmergencia ? nomeEmergencia : ""
-                            );
-                            setIssuingBody(orgExp ? orgExp : "");
-                            setKinship(parentesco ? parentesco : "");
-                            setWeight(peso ? peso : "");
-                            setRg(rg ? rg : "");
-                            setShippingDate(shippingDate ? shippingDate : "");
-                            setPersonalPhone(telefone ? telefone : "");
-                            setAmountCharged(valorCobrado ? valorCobrado : "");
-                            setBankNumber(banco ? banco : "");
-                            setAccountNumber(conta ? conta : "");
-                            setAgency(agencia ? agencia : "");
+                            setName(nome || '');
+                            setNickname(apelido || '');
+                            setCpf(cpf || '');
+                            setHeight(altura || '');
+                            setCep(cep || '');
+                            setCity(cidade || '');
+                            setEmergencyContact(contatoEmergencia || '');
+                            setInitialDate(dataInicio || '');
+                            setAddress(endereco || '');
+                            setCityState(estado || '');
+                            setScope(escopo || '');
+                            setMaritalStatus(estadoCivil || '');
+                            setGithub(github || '');
+                            setPaymentModel(modeloPagamento || '');
+                            setBirthDate(nascimento || '');
+                            setEmergencyName(nomeEmergencia || '');
+                            setIssuingBody(orgExp || '');
+                            setKinship(parentesco || '');
+                            setWeight(peso || '');
+                            setRg(rg || '');
+                            setShippingDate(shippingDate || '');
+                            setPersonalPhone(telefone || '');
+                            setAmountCharged(valorCobrado || '');
+                            setBankNumber(banco || '');
+                            setAccountNumber(conta || '');
+                            setAgency(agencia || '');
                         }
                     });
             } else {
                 unsubscribe();
-                setUid("");
-                setName("");
-                setNickname("");
-                setCpf("");
-                setHeight("");
-                setCep("");
-                setCity("");
-                setEmergencyContact("");
-                setInitialDate("");
-                setAddress("");
-                setCityState("");
-                setScope("");
-                setMaritalStatus("");
-                setGithub("");
-                setPaymentModel("");
-                setEmergencyName("");
-                setIssuingBody("");
-                setKinship("");
-                setWeight("");
-                setRg("");
-                setShippingDate("");
-                setPersonalPhone("");
-                setAmountCharged("");
-                setBankNumber("");
-                setAccountNumber("");
-                setAgency("");
+                setUid('');
+                setName('');
+                setNickname('');
+                setCpf('');
+                setHeight('');
+                setCep('');
+                setCity('');
+                setEmergencyContact('');
+                setInitialDate('');
+                setAddress('');
+                setCityState('');
+                setScope('');
+                setMaritalStatus('');
+                setGithub('');
+                setPaymentModel('');
+                setEmergencyName('');
+                setIssuingBody('');
+                setKinship('');
+                setWeight('');
+                setRg('');
+                setShippingDate('');
+                setPersonalPhone('');
+                setAmountCharged('');
+                setBankNumber('');
+                setAccountNumber('');
+                setAgency('');
             }
         });
     }, []);
@@ -163,12 +185,9 @@ const App = () => {
         const getUserData = async () => {
             if (uid) {
                 try {
-                    const docRef = await db
-                        .collection("team")
-                        .where("uid", "==", uid)
-                        .get();
+                    const docRef = await db.collection('team').where('uid', '==', uid).get();
                     if (!docRef.empty) {
-                        docRef.forEach(async (doc) => {
+                        docRef.forEach(async doc => {
                             const data = doc.data();
                             setName(data.nome);
                             setNickname(data.apelido);
@@ -196,7 +215,7 @@ const App = () => {
                             setBankNumber(data.banco);
                             setAccountNumber(data.conta);
                             setAgency(data.agencia);
-                            if (userPos === null || userPos === "") {
+                            if (userPos === null || userPos === '') {
                                 const {
                                     data: { values },
                                 } = await post(url, body, config);
@@ -208,13 +227,11 @@ const App = () => {
                             }
                         });
                     }
-                    const docRefCreditCardPayments = await db
-                        .collection("credit-card-payments")
-                        .get();
-                    let StatusDocuments = [];
-                    let SellersDocuments = [];
+                    const docRefCreditCardPayments = await db.collection('credit-card-payments').get();
+                    const StatusDocuments = [];
+                    const SellersDocuments = [];
                     if (!docRefCreditCardPayments.empty) {
-                        docRefCreditCardPayments.forEach(async (doc) => {
+                        docRefCreditCardPayments.forEach(async doc => {
                             const data = doc.data();
                             StatusDocuments.push(data.status);
                             SellersDocuments.push(data.seller);
@@ -264,13 +281,14 @@ const App = () => {
         agency,
         listStatusForFilter,
         listSellersForFilter,
+        device,
     };
-    if (loading) return <InitialLoader />;
-    if (errorLoading) return <Error />;
+    if (loading) return <InitialLoader/>;
+    if (errorLoading) return <Error/>;
     return (
         <ErrorBoundary>
             <userContext.Provider value={userData}>
-                <Router isLogged={!!uid} />
+                <Router isLogged={!!uid}/>
             </userContext.Provider>
         </ErrorBoundary>
     );

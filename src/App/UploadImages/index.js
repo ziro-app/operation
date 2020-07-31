@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useState } from 'react';
+import React, { useContext, useEffect, useReducer, useState } from 'react';
 import Button from '@bit/vitorbarbosa19.ziro.button';
 import ImageUpload from '@bit/vitorbarbosa19.ziro.image-upload';
 import Spinner from '@bit/vitorbarbosa19.ziro.spinner-with-div';
@@ -18,6 +18,7 @@ import Card from '../CardForm';
 import BrandChoose from './BrandChoose';
 import inputs from './inputs';
 import ToastNotification from '../ToastNotification';
+import { userContext } from '../appContext';
 
 const UploadImages = () => {
     const [isLoading, setIsLoading] = useState(true);
@@ -38,6 +39,7 @@ const UploadImages = () => {
     const [thumbPhoto, setThumbPhoto] = useState('');
     const [states, dispatch] = useReducer((state, payload) => inputStateControl(state, payload), {});
     const defaultQuantityValue = 2;
+    const { device } = useContext(userContext);
     useEffect(() => fetch(setIsLoading, setIsError, setBrands, setBrandsAndTrends), []);
 
     useEffect(() => {
@@ -126,7 +128,7 @@ const UploadImages = () => {
                                             picture={picture.urlImage}
                                             removeImage={removeImage}
                                             duplicateImage={duplicateImage}
-                                            arrayOfInputs={inputs(states, picture.identifier, dispatch, defaultQuantityValue)}
+                                            arrayOfInputs={inputs(states, picture.identifier, dispatch, defaultQuantityValue, device, isSubmitting)}
                                             pictures={pictures}
                                             setPictures={setPictures}
                                             dispatch={dispatch}

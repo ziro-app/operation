@@ -5,13 +5,14 @@ import currencyFormat from '@ziro/currency-format';
 import maskInput from '@ziro/mask-input';
 import { checkmark, labelRadioButton, radioButton, radioButtonContainer } from './styles';
 
-export default (states, identifierOfPicture, dispatch, defaultQuantityValue) => {
+export default (states, identifierOfPicture, dispatch, defaultQuantityValue, device, isSubmitting) => {
     const descriptionInput = (
         <FormInput
             name="description"
             label="Descrição"
             input={
                 <InputText
+                    disabled={isSubmitting}
                     value={'' || states[`description${identifierOfPicture}`]}
                     onChange={({ target: { value } }) => {
                         const payload = { userValue: value, identifierOfPicture, inputType: 'description' };
@@ -28,6 +29,7 @@ export default (states, identifierOfPicture, dispatch, defaultQuantityValue) => 
             label="Preço"
             input={
                 <InputText
+                    disabled={isSubmitting}
                     value={'' || currencyFormat(states[`price${identifierOfPicture}`])}
                     onChange={({ target: { value } }) => {
                         const toInteger = parseInt(value.replace(/[R$\.,]/g, ''), 10);
@@ -51,6 +53,7 @@ export default (states, identifierOfPicture, dispatch, defaultQuantityValue) => 
             label="Desconto"
             input={
                 <InputText
+                    disabled={isSubmitting}
                     value={
                         !states[`discount${identifierOfPicture}`] ? '' : `% ${currencyFormat(states[`discount${identifierOfPicture}`]).replace(/[R$]/g, '')}`
                     }
@@ -80,6 +83,7 @@ export default (states, identifierOfPicture, dispatch, defaultQuantityValue) => 
                     <div>
                         <label style={labelRadioButton} className="container">
                             <InputText
+                                disabled={isSubmitting}
                                 type="radio"
                                 name="radio"
                                 style={radioButton}
@@ -112,6 +116,7 @@ export default (states, identifierOfPicture, dispatch, defaultQuantityValue) => 
                     <div>
                         <label style={labelRadioButton} className="container">
                             <InputText
+                                disabled={isSubmitting}
                                 type="radio"
                                 name="radio"
                                 style={radioButton}
@@ -152,6 +157,7 @@ export default (states, identifierOfPicture, dispatch, defaultQuantityValue) => 
             label="Tamanhos"
             input={
                 <InputText
+                    disabled={isSubmitting}
                     placeholder="P,M,G"
                     value={'' || (states[`sizes${identifierOfPicture}`] && states[`sizes${identifierOfPicture}`].join(','))}
                     onChange={({ target: { value } }) => {
@@ -173,6 +179,7 @@ export default (states, identifierOfPicture, dispatch, defaultQuantityValue) => 
             label="Cores"
             input={
                 <InputText
+                    disabled={isSubmitting}
                     placeholder="Azul,Amarelo"
                     value={
                         '' ||
@@ -210,13 +217,14 @@ export default (states, identifierOfPicture, dispatch, defaultQuantityValue) => 
                                 key={`${color}-${size}`}
                                 style={{
                                     display: 'grid',
-                                    gridTemplateColumns: '2fr 1fr 2fr',
+                                    gridTemplateColumns: device === 'smallMobile' ? '2fr 1fr 2fr' : '2fr 1fr 1fr',
                                     alignItems: 'center',
                                 }}
                             >
                                 <label>{color}</label>
                                 <label>{size}</label>
                                 <InputText
+                                    disabled={isSubmitting}
                                     placeholder="1"
                                     defaultValue={defaultQuantityValue}
                                     value={
