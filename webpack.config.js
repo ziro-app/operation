@@ -15,18 +15,18 @@ module.exports = (env, { mode }) => {
                         loader: 'babel-loader',
                         options: {
                             presets: ['@babel/preset-env', '@babel/preset-react'],
-                            plugins: ['@babel/plugin-transform-runtime', 'react-hot-loader/babel']
-                        }
-                    }
+                            plugins: ['@babel/plugin-transform-runtime', 'react-hot-loader/babel'],
+                        },
+                    },
                 },
                 {
                     test: /\.css$/,
-                    use: ['style-loader', 'raw-loader']
-                }
-            ]
+                    use: ['style-loader', 'raw-loader'],
+                },
+            ],
         },
-        plugins: [new HtmlWebpackPlugin({ template: './src/index.html' })]
-    }
+        plugins: [new HtmlWebpackPlugin({ template: './src/index.html' })],
+    };
     if (mode === 'development') {
         const {
             sheet_url,
@@ -53,10 +53,10 @@ module.exports = (env, { mode }) => {
             firebase_auth_url,
             email_token,
             api_email,
-            sheet_leads_pre_id
-        } = require('./credentials')
-        config.devtool = 'cheap-module-eval-source-map'
-        config.devServer = { historyApiFallback: true, hot: true }
+            sheet_leads_pre_id,
+        } = require('./credentials');
+        config.devtool = 'cheap-module-eval-source-map';
+        config.devServer = { historyApiFallback: true, hot: true };
         config.plugins.push(
             new webpack.DefinePlugin({
                 'process.env': {
@@ -84,18 +84,18 @@ module.exports = (env, { mode }) => {
                     FIREBASE_AUTH_URL: JSON.stringify(firebase_auth_url),
                     EMAIL_TOKEN: JSON.stringify(email_token),
                     API_EMAIL: JSON.stringify(api_email),
-                    SHEET_LEADS_PRE_ID: JSON.stringify(sheet_leads_pre_id)
-                }
-            })
-        )
+                    SHEET_LEADS_PRE_ID: JSON.stringify(sheet_leads_pre_id),
+                },
+            }),
+        );
     }
     if (mode === 'production') {
-        config.devtool = 'cheap-module-source-map'
+        config.devtool = 'cheap-module-source-map';
         config.plugins.push(
             new CompressionPlugin(),
             new CopyWebpackPlugin([
                 { from: './_redirects', to: '_redirects', toType: 'file' },
-                { from: './src/sw.js', to: 'sw.js', toType: 'file' }
+                { from: './src/sw.js', to: 'sw.js', toType: 'file' },
             ]),
             new WebpackPwaManifest({
                 name: 'Interno',
@@ -104,7 +104,7 @@ module.exports = (env, { mode }) => {
                 background_color: '#FFF',
                 theme_color: '#FFF',
                 display: 'standalone',
-                icons: [{ src: './logo.png', sizes: [96, 128, 192, 256, 384, 512] }]
+                icons: [{ src: './logo.png', sizes: [96, 128, 192, 256, 384, 512] }],
             }),
             new webpack.DefinePlugin({
                 'process.env': {
@@ -132,10 +132,10 @@ module.exports = (env, { mode }) => {
                     FIREBASE_AUTH_URL: JSON.stringify(process.env.FIREBASE_AUTH_URL),
                     EMAIL_TOKEN: JSON.stringify(process.env.EMAIL_TOKEN),
                     API_EMAIL: JSON.stringify(process.env.API_EMAIL),
-                    SHEET_LEADS_PRE_ID: JSON.stringify(process.env.SHEET_LEADS_PRE_ID)
-                }
-            })
-        )
+                    SHEET_LEADS_PRE_ID: JSON.stringify(process.env.SHEET_LEADS_PRE_ID),
+                },
+            }),
+        );
     }
-    return config
+    return config;
 }

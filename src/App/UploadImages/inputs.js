@@ -135,7 +135,7 @@ export default (states, identifierOfPicture, dispatch, defaultQuantityValue, dev
                                     };
                                     dispatch(payload);
                                     payload = {
-                                        userValue: 'PP,P,M,G,GG'.split(','),
+                                        userValue: 'P,M,G'.split(','),
                                         identifierOfPicture,
                                         inputType: 'sizes',
                                     };
@@ -235,7 +235,7 @@ export default (states, identifierOfPicture, dispatch, defaultQuantityValue, dev
                                         if (/^[0-9]*$/gm.test(value)) {
                                             const result = old => {
                                                 const newQuantities = { ...(states[`availableQuantities${identifierOfPicture}`] || {}) };
-                                                newQuantities[`${color}-${size}`] = value;
+                                                newQuantities[`${color}-${size}`] = maskInput(value, '##', true);
                                                 return { ...old, availableQuantities: newQuantities };
                                             };
                                             const payload = {
