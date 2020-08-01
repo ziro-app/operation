@@ -100,7 +100,6 @@ export function settingThePicturesAndFiles(
     const allFilePromises = [];
     const fileErrors = [];
     // Iterate over all uploaded files
-    console.log(files);
     for (let i = 0; i < files.length; i++) {
         const file = files[i];
         let fileError = {
