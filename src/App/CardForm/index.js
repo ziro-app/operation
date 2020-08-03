@@ -14,6 +14,7 @@ import SummaryCard from './summaryCard';
 import RemoveImageButton from './RemoveImageButton';
 import DuplicateImageButton from './DuplicateImageButton';
 import CheckBoxThumbPhoto from './CheckBoxThumbPhoto';
+import CardControls from './CardControls'
 import { modalContainer, modalLabel } from '../Transactions/TransactionDetails/styles';
 
 const PTstatus = {
@@ -65,6 +66,7 @@ export default ({
     return (
         <div style={fileContainerUploadPicturesWrapperClass} className="uploadPicturesWrapper">
             <div key={index} style={fileContainerUploadPictureContainerClass} className="uploadPictureContainer">
+                <CardControls />
                 <DuplicateImageButton setDuplicateImageModal={setDuplicateImageModal}/>
                 <Modal boxStyle={modalContainer} isOpen={duplicateImageModal}
                        setIsOpen={() => setDuplicateImageModal(false)}>
