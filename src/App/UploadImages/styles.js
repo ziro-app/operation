@@ -138,28 +138,30 @@ export const brandName = {
   flipMoveClass = {
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'center',
-    flexWrap: 'wrap',
-    width: '100%',
+      justifyContent: 'center',
+      flexWrap: 'wrap',
+      width: '100%',
   },
-  title = {
-    fontFamily: fontTitle,
-  },
-  container = {
-    display: 'grid',
-  },
-  labelRadioButton = {
-    fontSize: fontSizeSmall,
-    fontFamily: fontBody,
-    marginLeft: '12px',
-    marginBottom: '12px',
-    cursor: 'pointer',
-  },
-  radioButton = { cursor: 'pointer' },
-  radioButtonContainer = {
-    display: 'flex',
-    position: 'relative',
-  },
+    title = {
+        fontFamily: fontTitle,
+    },
+    container = {
+        display: 'grid',
+    },
+    quantitiesStyle = { display: 'grid', gridRowGap: '10px', padding: '0 0 0 5px', position: 'relative' },
+    labelRadioButton = {
+        fontSize: fontSizeSmall,
+        fontFamily: fontBody,
+        marginLeft: '12px',
+        marginBottom: '12px',
+        cursor: 'pointer',
+    },
+    radioButton = { cursor: 'pointer' },
+    radioButtonContainer = {
+        display: 'flex',
+        position: 'relative',
+        top: '-10px',
+    },
   checkmark = `
 .container {
   display: block;

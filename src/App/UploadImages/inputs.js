@@ -3,7 +3,7 @@ import FormInput from '@bit/vitorbarbosa19.ziro.form-input';
 import InputText from '@bit/vitorbarbosa19.ziro.input-text';
 import currencyFormat from '@ziro/currency-format';
 import maskInput from '@ziro/mask-input';
-import { checkmark, labelRadioButton, radioButton, radioButtonContainer } from './styles';
+import { checkmark, labelRadioButton, quantitiesStyle, radioButton, radioButtonContainer } from './styles';
 
 export default (states, identifierOfPicture, dispatch, defaultQuantityValue, device, isSubmitting) => {
     const descriptionInput = (
@@ -200,12 +200,33 @@ export default (states, identifierOfPicture, dispatch, defaultQuantityValue, dev
         />
     );
 
+    const referenceIdInput = (
+        <FormInput
+            name="referenceId"
+            label="Referência"
+            input={
+                <InputText
+                    value={'' || states[`referenceId${identifierOfPicture}`]}
+                    onChange={({ target: { value } }) => {
+                        const payload = {
+                            userValue: value.toUpperCase(),
+                            identifierOfPicture,
+                            inputType: 'referenceId',
+                        };
+                        dispatch(payload);
+                    }}
+                    placeholder="Referência da loja"
+                />
+            }
+        />
+    );
+
     const quantitiesInput = (states[`sizes${identifierOfPicture}`] !== '' || states[`colors${identifierOfPicture}`][0] !== '') && (
         <FormInput
             name="quantities"
             label="Quantidades"
             input={
-                <div style={{ display: 'grid', gridRowGap: '10px', padding: '0 0 0 5px' }}>
+                <div style={quantitiesStyle}>
                     {states[`colors${identifierOfPicture}`].map(color =>
                         (states[`sizes${identifierOfPicture}`]
                                 ? states[`sizes${identifierOfPicture}`].length
@@ -255,6 +276,6 @@ export default (states, identifierOfPicture, dispatch, defaultQuantityValue, dev
             }
         />
     );
-    const arrayInputs = [descriptionInput, priceInput, discountPercentage, colorsInput, sizesInput, typeSizeRadio, quantitiesInput];
+    const arrayInputs = [descriptionInput, referenceIdInput, priceInput, discountPercentage, colorsInput, sizesInput, typeSizeRadio, quantitiesInput];
     return arrayInputs;
 }

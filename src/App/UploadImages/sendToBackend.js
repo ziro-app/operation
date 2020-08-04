@@ -51,6 +51,7 @@ const sendToBackend = async ({
                         : '',
                     price: states[`price${file.identifierOfPicture}`] ? states[`price${file.identifierOfPicture}`] : '',
                     description: states[`description${file.identifierOfPicture}`] ? states[`description${file.identifierOfPicture}`] : '',
+                    referenceId: states[`referenceId${file.identifierOfPicture}`] ? states[`referenceId${file.identifierOfPicture}`] : '',
                     brandName: brand,
                     discount: states[`discount${file.identifierOfPicture}`] ? states[`discount${file.identifierOfPicture}`] : '',
                     status: 'available',
@@ -113,9 +114,8 @@ const sendToBackend = async ({
                     return 'ok';
                 }),
             );
-        } else if (thumbPhoto) {
-            const [url, timestamp] = uploadImages.find(([, , uid]) => uid === thumbPhoto.identifierOfPicture);
-            // const [, trends] = brandsAndTrends.filter(([brandName]) => brandName === brand).flat()
+        } else {
+            const [url, timestamp] = thumbPhoto ? uploadImages.find(([, , uid]) => uid === thumbPhoto.identifierOfPicture) : uploadImages[0];
             if (priceTag === 'Sim') {
                 await db.collection('catalog-brands').doc(brand).set(
                     {

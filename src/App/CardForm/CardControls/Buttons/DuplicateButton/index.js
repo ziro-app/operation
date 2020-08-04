@@ -1,6 +1,6 @@
 import React from 'react';
 import Icon from '@bit/vitorbarbosa19.ziro.icon';
-import { fileContainerDuplicateImageClass } from './styles';
+import { containerDuplicateImageClass } from './styles';
 
 export default ({ setDuplicateImageModal }) => {
     return (
@@ -10,7 +10,7 @@ export default ({ setDuplicateImageModal }) => {
                 size={15}
                 className="btn"
                 strokeWidth={2}
-                style={fileContainerDuplicateImageClass}
+                style={containerDuplicateImageClass}
                 onClick={() => setDuplicateImageModal(true)}
                 color="blue"
             />

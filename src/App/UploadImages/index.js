@@ -41,7 +41,6 @@ const UploadImages = () => {
     const defaultQuantityValue = 2;
     const { device } = useContext(userContext);
     useEffect(() => fetch(setIsLoading, setIsError, setBrands, setBrandsAndTrends), []);
-
     useEffect(() => {
         if (filesList.length === 0) setThumbPhoto('');
     }, [filesList]);
@@ -116,8 +115,7 @@ const UploadImages = () => {
 
                             {pictures.map((picture, index) => {
                                 return (
-                                    <div key={index} initial={{ scale: 0.5 }} animate={{ scale: 1 }}
-                                         transition={{ duration: 0.5 }} exit={{ opacity: 0 }}>
+                                    <div key={index}>
                                         <Card
                                             key={index}
                                             identifierOfPicture={picture.identifier}

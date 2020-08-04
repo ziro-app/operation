@@ -1,38 +1,55 @@
-import { fontTitle } from '@ziro/theme'
+import { fontTitle } from '@ziro/theme';
 
-export const
-
-container = {
-	position: 'absolute',
-	display: 'grid',
-	gridTemplateColumns: '1fr 1fr 1fr',
-	boxSizing: 'border-box',
-	width: '100%',
-	padding: '10px 0px',
-	borderTopLeftRadius: '5px',
-	borderTopRightRadius: '5px',
-	background: 'rgba(0,0,0,0.6)'
-},
-
-checkboxContainer = {
-	display: 'grid',
-	gridTemplateColumns: 'auto auto',
-	alignItems: 'center',
-	justifyItems: 'center'
-},
-
-checkbox = {
-    cursor: 'pointer',
-    borderRadius: '50%',
-    width: '20px',
-    height: '20px',
-    padding: '6px',
-    background: '#fff',
-    boxShadow: '0px 2px 10px -4px #222'
-},
-
-caption = {
-	fontFamily: fontTitle,
-	fontSize: '1.5rem',
-	color: 'white'
-}
+export const container = {
+        position: 'relative',
+        top: '1px',
+        boxSizing: 'border-box',
+        width: '100%',
+        padding: '5px 0px',
+        borderTopLeftRadius: '5px',
+        borderTopRightRadius: '5px',
+        background: 'rgba(0,0,0,0.6)',
+    },
+    checkboxContainer = {
+        display: 'grid',
+        gridTemplateColumns: '1fr 2fr 1fr 1fr',
+        alignItems: 'center',
+        justifyItems: 'center',
+    },
+    checkbox = {
+        cursor: 'pointer',
+        borderRadius: '50%',
+        width: '20px',
+        height: '20px',
+        padding: '6px',
+        background: '#fff',
+        boxShadow: '0px 2px 10px -4px #222',
+    },
+    caption = {
+        position: 'relative',
+        left: '-15px',
+        fontFamily: fontTitle,
+        padding: '0px 10px',
+        fontSize: '1.5rem',
+        color: 'white',
+    },
+    modalContainer = {
+        zIndex: '999',
+        maxWidth: '350px',
+        width: '90%',
+        margin: '0 auto',
+        padding: '30px',
+        boxSizing: 'border-box',
+        textAlign: 'center',
+        borderRadius: '3px',
+        background: 'white',
+        boxShadow: `1px 0px 8px 0px rgba(34,34,34,0.15), 1px 0px 8px 0px rgba(34,34,34,0.10),
+1px 0px 8px 0px rgba(34,34,34,0.05)`,
+    },
+    modalLabel = {
+        display: 'flex',
+        justifyContent: 'center',
+        fontFamily: fontTitle,
+        fontSize: '1.4rem',
+        textTransform: 'uppercase',
+    };

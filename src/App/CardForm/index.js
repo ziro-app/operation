@@ -1,21 +1,16 @@
 import React, { useState } from 'react';
 import RImg from 'react-image';
 import SpinnerWithDiv from '@bit/vitorbarbosa19.ziro.spinner-with-div';
-import Modal from '@bit/vitorbarbosa19.ziro.modal';
-import Button from '@bit/vitorbarbosa19.ziro.button';
 import CardInputs from './cardInputs';
 import {
     fileContainerUploadPictureContainerClass,
     fileContainerUploadPictureContainerimgUploadPictureClass,
     fileContainerUploadPicturesWrapperClass,
+    image,
 } from './styles';
 import InfoCard from './infoCard';
 import SummaryCard from './summaryCard';
-import RemoveImageButton from './RemoveImageButton';
-import DuplicateImageButton from './DuplicateImageButton';
-import CheckBoxThumbPhoto from './CheckBoxThumbPhoto';
-import CardControls from './CardControls'
-import { modalContainer, modalLabel } from '../Transactions/TransactionDetails/styles';
+import CardControls from './CardControls';
 
 const PTstatus = {
     available: 'Disponível',
@@ -31,6 +26,7 @@ const INstatus = {
 }
 
 export default ({
+                    product,
                     products,
                     setProducts,
                     filesList,
@@ -66,52 +62,29 @@ export default ({
     return (
         <div style={fileContainerUploadPicturesWrapperClass} className="uploadPicturesWrapper">
             <div key={index} style={fileContainerUploadPictureContainerClass} className="uploadPictureContainer">
-                <CardControls />
-                <DuplicateImageButton setDuplicateImageModal={setDuplicateImageModal}/>
-                <Modal boxStyle={modalContainer} isOpen={duplicateImageModal}
-                       setIsOpen={() => setDuplicateImageModal(false)}>
-                    <div style={{ display: 'grid', gridTemplateRows: '1fr auto', gridRowGap: '20px' }}>
-                        <label style={modalLabel}>Deseja realmente duplicar a imagem?</label>
-                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gridColumnGap: '20px' }}>
-                            <Button
-                                type="button"
-                                cta="Sim"
-                                click={() =>
-                                    duplicateImage(filesList, pictures, picture, setPictures, setFiles, setDuplicateImageModal, identifierOfPicture, uuid, index, dispatch)
-                                }
-                                template="regular"
-                            />
-                            <Button type="button" cta="Não" click={() => setDuplicateImageModal(false)}
-                                    template="light"/>
-                        </div>
-                    </div>
-                </Modal>
-                {removeImage && (
-                    <>
-                        <RemoveImageButton setRemoveImageModal={setRemoveImageModal}/>
-                        <Modal boxStyle={modalContainer} isOpen={removeImageModal}
-                               setIsOpen={() => setRemoveImageModal(false)}>
-                            <div style={{ display: 'grid', gridTemplateRows: '1fr auto', gridRowGap: '20px' }}>
-                                <label style={modalLabel}>Deseja realmente excluir a imagem ?</label>
-                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gridColumnGap: '20px' }}>
-                                    <Button
-                                        type="button"
-                                        cta="Sim"
-                                        click={() => removeImage(filesList, pictures, picture, setPictures, setFiles, setRemoveImageModal, identifierOfPicture)}
-                                        template="regular"
-                                    />
-                                    <Button type="button" cta="Não" click={() => setRemoveImageModal(false)}
-                                            template="light"/>
-                                </div>
-                            </div>
-                        </Modal>
-                    </>
-                )}
-                <CheckBoxThumbPhoto thumbPhoto={thumbPhoto} setThumbPhoto={setThumbPhoto}
-                                    identifierOfPicture={identifierOfPicture}/>
+                <CardControls
+                    duplicateImage={duplicateImage}
+                    filesList={filesList}
+                    pictures={pictures}
+                    picture={picture}
+                    setPictures={setPictures}
+                    setFiles={setFiles}
+                    setDuplicateImageModal={setDuplicateImageModal}
+                    identifierOfPicture={identifierOfPicture}
+                    uuid={uuid}
+                    index={index}
+                    dispatch={dispatch}
+                    duplicateImageModal={duplicateImageModal}
+                    removeImage={removeImage}
+                    setRemoveImageModal={setRemoveImageModal}
+                    thumbPhoto={thumbPhoto}
+                    setThumbPhoto={setThumbPhoto}
+                    removeImageModal={removeImageModal}
+                />
+
                 {cardInfo ? (
                     <RImg
-                        src={state.url}
+                        src={product.url}
                         style={image}
                         container={children =>
                             !initialStatus || initialStatus === 'waitingInfo' || editing ? (
@@ -131,17 +104,10 @@ export default ({
                     <RImg
                         src={picture}
                         style={fileContainerUploadPictureContainerimgUploadPictureClass}
-                        className="uploadPicture"
                         alt="preview"
                         container={children => (
-                            <CardInputs
-                                disabled
-                                image={children || null}
-                                update={update || null}
-                                arrayOfInputs={arrayOfInputs}
-                                validations={[]}
-                                index={index}
-                            />
+                            <CardInputs disabled image={children || null} update={update || null}
+                                        arrayOfInputs={arrayOfInputs} validations={[]} index={index}/>
                         )}
                     />
                 )}

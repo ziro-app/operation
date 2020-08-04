@@ -32,7 +32,19 @@ export function onUploadClick(e) {
     e.target.value = null;
 }
 
-export function removeImage(filesList, pictures, picture, setPictures, setFiles, setRemoveImageModal, identifierOfPicture) {
+export function removeImage({
+                                filesList,
+                                pictures,
+                                picture,
+                                setPictures,
+                                setFiles,
+                                setRemoveImageModal,
+                                identifierOfPicture,
+                                thumbPhoto,
+                                setThumbPhoto,
+                            }) {
+    console.log(filesList, pictures, picture, setPictures, setFiles, setRemoveImageModal, identifierOfPicture, thumbPhoto, setThumbPhoto);
+    if (thumbPhoto.identifierOfPicture === identifierOfPicture) setThumbPhoto('');
     const filteredPictures = pictures.filter(e => e.identifier !== identifierOfPicture);
     const filteredFiles = filesList.filter(e => e.identifierOfPicture !== identifierOfPicture);
     setPictures(filteredPictures);
@@ -40,18 +52,18 @@ export function removeImage(filesList, pictures, picture, setPictures, setFiles,
     setRemoveImageModal(false);
 }
 
-export function duplicateImage(
-    filesList,
-    pictures,
-    picture,
-    setPictures,
-    setFiles,
-    setDuplicateImageModal,
-    identifierOfPicture,
-    uuid,
-    index,
-    dispatch,
-) {
+export function duplicateImage({
+                                   filesList,
+                                   pictures,
+                                   picture,
+                                   setPictures,
+                                   setFiles,
+                                   setDuplicateImageModal,
+                                   identifierOfPicture,
+                                   uuid,
+                                   index,
+                                   dispatch,
+                               }) {
     const filteredPicture = pictures.find(e => e.identifier === identifierOfPicture);
     const filteredFile = filesList.find(e => e.identifierOfPicture === identifierOfPicture);
     const uid = uuid();
@@ -182,6 +194,8 @@ export function inputStateControl(state, payload) {
             return { ...state, [`colors${identifierOfPicture}`]: userValue };
         case 'typeSize':
             return { ...state, [`typeSize${identifierOfPicture}`]: userValue };
+        case 'referenceId':
+            return { ...state, [`referenceId${identifierOfPicture}`]: userValue };
         case 'availableQuantities':
             return {
                 ...state,
