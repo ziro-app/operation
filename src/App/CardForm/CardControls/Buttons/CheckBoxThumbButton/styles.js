@@ -7,4 +7,4 @@ export const checkbox = {
     padding: '6px',
     background: '#fff',
     boxShadow: '0px 2px 10px -4px #222',
-};
+}

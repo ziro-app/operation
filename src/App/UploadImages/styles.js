@@ -1,4 +1,4 @@
-import { fontBody, fontSizeSmall, fontTitle, gradient } from '@ziro/theme';
+import { fontTitle, gradient } from '@ziro/theme';
 
 export const brandName = {
     marginBottom: '-20px',
@@ -132,16 +132,16 @@ export const brandName = {
     fontWeight: 'bold',
     lineHeight: '30px',
     width: '30px',
-    height: '30px',
+      height: '30px',
   },
-  // .flipMove
-  flipMoveClass = {
-    display: 'flex',
-    alignItems: 'center',
-      justifyContent: 'center',
-      flexWrap: 'wrap',
-      width: '100%',
-  },
+    // .flipMove
+    flipMoveClass = {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexWrap: 'wrap',
+        width: '100%',
+    },
     title = {
         fontFamily: fontTitle,
     },
@@ -149,74 +149,20 @@ export const brandName = {
         display: 'grid',
     },
     quantitiesStyle = { display: 'grid', gridRowGap: '10px', padding: '0 0 0 5px', position: 'relative' },
-    labelRadioButton = {
-        fontSize: fontSizeSmall,
-        fontFamily: fontBody,
-        marginLeft: '12px',
-        marginBottom: '12px',
-        cursor: 'pointer',
-    },
-    radioButton = { cursor: 'pointer' },
     radioButtonContainer = {
         display: 'flex',
         position: 'relative',
         top: '-10px',
     },
-  checkmark = `
-.container {
-  display: block;
-  position: relative;
-  padding-left: 30px;
-  cursor: pointer;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
-
-/* hide the browser default radio */
-.container input {
-  position: absolute;
-  opacity: 0;
-  cursor: pointer;
-}
-
-.checkmark {
-  position: absolute;
-  top: -3px;
-  left: 0;
-  height: 25px;
-  width: 25px;
-  background-color: #eee;
-  border-radius: 50%;
-}
-
-.container:hover input ~ .checkmark {
-  background-color: #ccc;
-}
-
-.container input:checked ~ .checkmark {
-  background-color: #2196F3;
-}
-
-.checkmark:after {
-  content: "";
-  position: absolute;
-  display: none;
-}
-
-/* Show the indicator (dot/circle) when checked */
-.container input:checked ~ .checkmark:after {
-  display: block;
-}
-
-/* Style the indicator (dot/circle) */
-.container .checkmark:after {
-top: 9px;
-left: 9px;
-width: 8px;
-height: 8px;
-border-radius: 50%;
-background: white;
-}
-`
+    checkbox = {
+        position: 'relative',
+        cursor: 'pointer',
+        borderRadius: '50%',
+        width: '20px',
+        height: '20px',
+        padding: '6px',
+        background: '#fff',
+        boxShadow: '0px 2px 10px -4px #222',
+    },
+    centerInline = { display: 'flex', justifyContent: 'space-between', alignItems: 'center', margin: '5px' },
+    gapBetweenFlexItems = { padding: '4px' }

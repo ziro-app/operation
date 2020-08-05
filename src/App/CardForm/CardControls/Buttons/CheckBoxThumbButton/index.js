@@ -7,16 +7,11 @@ export default ({ setThumbPhoto, thumbPhoto, identifierOfPicture }) => {
         <>
             <div>
                 {thumbPhoto.identifierOfPicture === identifierOfPicture ? (
-                    <Icon
-                        style={checkbox}
-                        type="circleChecked"
-                        size={15}
-                        strokeWidth={2}
-                        onClick={() => setThumbPhoto({ ...thumbPhoto, identifierOfPicture })}
-                    />
+                    <Icon style={checkbox} type="circleChecked" size={15} strokeWidth={2}
+                          onClick={() => setThumbPhoto({ identifierOfPicture })}/>
                 ) : (
                     <Icon style={checkbox} type="circle" size={15} strokeWidth={2}
-                          onClick={() => setThumbPhoto({ ...thumbPhoto, identifierOfPicture })}/>
+                          onClick={() => setThumbPhoto({ identifierOfPicture })}/>
                 )}
             </div>
         </>

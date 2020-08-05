@@ -27,8 +27,6 @@ const INstatus = {
 
 export default ({
                     product,
-                    products,
-                    setProducts,
                     filesList,
                     setFiles,
                     index,
@@ -36,7 +34,6 @@ export default ({
                     removeImage,
                     update,
                     cardInfo = false,
-                    productRef,
                     editing,
                     cartProduct,
                     setEditing,
@@ -48,14 +45,11 @@ export default ({
                     initialStatus,
                     dispatch,
                     duplicateImage,
-                    // removeImageModal,
-                    // setRemoveImageModal,
-                    // duplicateImageModal,
-                    // setDuplicateImageModal,
                     identifierOfPicture,
                     uuid,
                     thumbPhoto,
                     setThumbPhoto,
+                    secondArrayOfInputs,
                 }) => {
     const [removeImageModal, setRemoveImageModal] = useState(false);
     const [duplicateImageModal, setDuplicateImageModal] = useState(false);
@@ -89,7 +83,8 @@ export default ({
                         container={children =>
                             !initialStatus || initialStatus === 'waitingInfo' || editing ? (
                                 <CardInputs image={children || null} update={update || null} index={index}
-                                            arrayOfInputs={arrayOfInputs} validations={validations}/>
+                                            arrayOfInputs={arrayOfInputs} validations={validations}
+                                            secondArrayOfInputs={secondArrayOfInputs}/>
                             ) : initialStatus === 'unavailable' && cartProduct.status !== 'closed' ? (
                                 <InfoCard product={{ requestedQuantities: {}, ...state, ...cartProduct }}
                                           image={children} setEditing={setEditing}/>

@@ -59,9 +59,7 @@ const UploadImages = () => {
     }, [brand]);
 
     if (isLoading) return <Spinner size="5rem"/>;
-
     // if (isError) return <Error />;
-
     const state = {
         setIsSubmitting,
         setIsSubmitted,

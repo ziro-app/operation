@@ -1,29 +1,30 @@
 import { fontTitle } from '@ziro/theme';
 
 export const container = {
+        display: 'flex',
+        justifyContent: 'space-between',
         position: 'relative',
         top: '1px',
         boxSizing: 'border-box',
         width: '100%',
-        padding: '5px 0px',
+        padding: '5px 5px',
         borderTopLeftRadius: '5px',
         borderTopRightRadius: '5px',
         background: 'rgba(0,0,0,0.6)',
     },
     checkboxContainer = {
         display: 'grid',
-        gridTemplateColumns: '1fr 2fr 1fr 1fr',
+        gridTemplateColumns: '1fr 4fr',
+        gridGap: '10px',
         alignItems: 'center',
         justifyItems: 'center',
     },
-    checkbox = {
-        cursor: 'pointer',
-        borderRadius: '50%',
-        width: '20px',
-        height: '20px',
-        padding: '6px',
-        background: '#fff',
-        boxShadow: '0px 2px 10px -4px #222',
+    buttonsDuplicateRemoveContainer = {
+        display: 'grid',
+        gridTemplateColumns: '1fr 1fr',
+        gridGap: '10px',
+        alignItems: 'center',
+        justifyItems: 'center',
     },
     caption = {
         position: 'relative',

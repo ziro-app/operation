@@ -3,7 +3,8 @@ import FormInput from '@bit/vitorbarbosa19.ziro.form-input';
 import InputText from '@bit/vitorbarbosa19.ziro.input-text';
 import currencyFormat from '@ziro/currency-format';
 import maskInput from '@ziro/mask-input';
-import { checkmark, labelRadioButton, quantitiesStyle, radioButton, radioButtonContainer } from './styles';
+import Icon from '@bit/vitorbarbosa19.ziro.icon';
+import { centerInline, checkbox, gapBetweenFlexItems, quantitiesStyle, radioButtonContainer } from './styles';
 
 export default (states, identifierOfPicture, dispatch, defaultQuantityValue, device, isSubmitting) => {
     const descriptionInput = (
@@ -79,16 +80,14 @@ export default (states, identifierOfPicture, dispatch, defaultQuantityValue, dev
             label=""
             input={
                 <div style={radioButtonContainer}>
-                    <style>{checkmark}</style>
-                    <div>
-                        <label style={labelRadioButton} className="container">
-                            <InputText
-                                disabled={isSubmitting}
-                                type="radio"
-                                name="radio"
-                                style={radioButton}
-                                checked={states[`typeSize${identifierOfPicture}`] === 'number'}
-                                onChange={() => {
+                    <div style={centerInline}>
+                        {states[`typeSize${identifierOfPicture}`] === 'number' ? (
+                            <Icon
+                                style={checkbox}
+                                type="circleChecked"
+                                size={15}
+                                strokeWidth={2}
+                                onClick={() => {
                                     let payload = {
                                         userValue: 'number',
                                         identifierOfPicture,
@@ -109,19 +108,44 @@ export default (states, identifierOfPicture, dispatch, defaultQuantityValue, dev
                                     dispatch(payload);
                                 }}
                             />
-                            <span className="checkmark"/>
-                            Numero
-                        </label>
+                        ) : (
+                            <Icon
+                                style={checkbox}
+                                type="circle"
+                                size={15}
+                                strokeWidth={2}
+                                onClick={() => {
+                                    let payload = {
+                                        userValue: 'number',
+                                        identifierOfPicture,
+                                        inputType: 'typeSize',
+                                    };
+                                    dispatch(payload);
+                                    payload = {
+                                        userValue: states[`colors${identifierOfPicture}`],
+                                        identifierOfPicture,
+                                        inputType: 'colors',
+                                    };
+                                    dispatch(payload);
+                                    payload = {
+                                        userValue: '36,38,40,42,44'.split(','),
+                                        identifierOfPicture,
+                                        inputType: 'sizes',
+                                    };
+                                    dispatch(payload);
+                                }}
+                            />
+                        )}
+                        <label style={gapBetweenFlexItems}>Numero</label>
                     </div>
-                    <div>
-                        <label style={labelRadioButton} className="container">
-                            <InputText
-                                disabled={isSubmitting}
-                                type="radio"
-                                name="radio"
-                                style={radioButton}
-                                checked={states[`typeSize${identifierOfPicture}`] === 'letter'}
-                                onChange={() => {
+                    <div style={centerInline}>
+                        {states[`typeSize${identifierOfPicture}`] === 'letter' ? (
+                            <Icon
+                                style={checkbox}
+                                type="circleChecked"
+                                size={15}
+                                strokeWidth={2}
+                                onClick={() => {
                                     let payload = {
                                         userValue: 'letter',
                                         identifierOfPicture,
@@ -142,9 +166,35 @@ export default (states, identifierOfPicture, dispatch, defaultQuantityValue, dev
                                     dispatch(payload);
                                 }}
                             />
-                            <span className="checkmark"/>
-                            Letra
-                        </label>
+                        ) : (
+                            <Icon
+                                style={checkbox}
+                                type="circle"
+                                size={15}
+                                strokeWidth={2}
+                                onClick={() => {
+                                    let payload = {
+                                        userValue: 'letter',
+                                        identifierOfPicture,
+                                        inputType: 'typeSize',
+                                    };
+                                    dispatch(payload);
+                                    payload = {
+                                        userValue: states[`colors${identifierOfPicture}`],
+                                        identifierOfPicture,
+                                        inputType: 'colors',
+                                    };
+                                    dispatch(payload);
+                                    payload = {
+                                        userValue: 'P,M,G'.split(','),
+                                        identifierOfPicture,
+                                        inputType: 'sizes',
+                                    };
+                                    dispatch(payload);
+                                }}
+                            />
+                        )}
+                        <label style={gapBetweenFlexItems}>Letra</label>
                     </div>
                 </div>
             }

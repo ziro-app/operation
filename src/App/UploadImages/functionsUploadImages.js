@@ -43,10 +43,15 @@ export function removeImage({
                                 thumbPhoto,
                                 setThumbPhoto,
                             }) {
-    console.log(filesList, pictures, picture, setPictures, setFiles, setRemoveImageModal, identifierOfPicture, thumbPhoto, setThumbPhoto);
-    if (thumbPhoto.identifierOfPicture === identifierOfPicture) setThumbPhoto('');
     const filteredPictures = pictures.filter(e => e.identifier !== identifierOfPicture);
     const filteredFiles = filesList.filter(e => e.identifierOfPicture !== identifierOfPicture);
+    if (thumbPhoto.identifierOfPicture === identifierOfPicture) {
+        if (filteredFiles.length === 0) setThumbPhoto('');
+        else {
+            const newThumbPhoto = filteredFiles[0].identifierOfPicture;
+            setThumbPhoto({ identifierOfPicture: newThumbPhoto });
+        }
+    }
     setPictures(filteredPictures);
     setFiles(filteredFiles);
     setRemoveImageModal(false);
