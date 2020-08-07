@@ -23,7 +23,7 @@ const fetch = (setIsLoading, setIsError, setAttendanceList) => {
 			const { data: { values } } = await axios(config)
             const [, ...dataWithoutHeaderRow] = values
             dataWithoutHeaderRow.map(attendance => {
-                if(attendance[13] !== 'Entregue' && attendance[13] !== 'Cancelado')
+                if(attendance[13] !== 'Cancelado')
                     attendances.push(`${attendance[0]} - ${attendance[3]}`)
             })
             setAttendanceList(attendances)

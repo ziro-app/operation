@@ -26,7 +26,7 @@ const operationalForm = ({ attendance, setAttendance, attendanceList, date, setD
                 focused={focusDate}
                 setFocused={setFocusDate}
                 placeholder={'01/01/2020'}
-                outsideRange={true}
+                outsideRange={false}
                 before={true}
             />
         } />,
