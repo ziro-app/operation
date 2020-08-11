@@ -27,7 +27,7 @@ export default ({ productId, cartProduct, setURL, setPrice }) => {
     const defaultQuantityValue = 2;
     const [states, dispatch] = useReducer((state, payload) => inputStateControl(state, payload), {});
     const updateCart = true;
-
+    console.log(states);
     const [identifierOfPicture, setIdentifierOfPicture] = useState(uuid());
 
     useEffect(
@@ -53,7 +53,6 @@ export default ({ productId, cartProduct, setURL, setPrice }) => {
                 setProduct(data);
                 setInitialStatus(data.status);
                 setFetchingProduct(false);
-                console.log(identifierOfPicture);
                 const payload = {
                     userValue: '',
                     identifierOfPicture,
@@ -123,23 +122,23 @@ export default ({ productId, cartProduct, setURL, setPrice }) => {
             container={children =>
                 !initialStatus || initialStatus === 'waitingInfo' || editing ? (
                     /* <Card
-                          key={index}
-                          identifierOfPicture={picture.identifier}
-                          states={states}
-                          filesList={filesList}
-                          setFiles={setFiles}
-                          index={index}
-                          picture={picture.urlImage}
-                          removeImage={removeImage}
-                          duplicateImage={duplicateImage}
-                          arrayOfInputs={inputs(states, picture.identifier, dispatch, defaultQuantityValue, device, isSubmitting)}
-                          pictures={pictures}
-                          setPictures={setPictures}
-                          dispatch={dispatch}
-                          uuid={uuid}
-                          thumbPhoto={thumbPhoto}
-                          setThumbPhoto={setThumbPhoto}
-                      /> */
+                                    key={index}
+                                    identifierOfPicture={picture.identifier}
+                                    states={states}
+                                    filesList={filesList}
+                                    setFiles={setFiles}
+                                    index={index}
+                                    picture={picture.urlImage}
+                                    removeImage={removeImage}
+                                    duplicateImage={duplicateImage}
+                                    arrayOfInputs={inputs(states, picture.identifier, dispatch, defaultQuantityValue, device, isSubmitting)}
+                                    pictures={pictures}
+                                    setPictures={setPictures}
+                                    dispatch={dispatch}
+                                    uuid={uuid}
+                                    thumbPhoto={thumbPhoto}
+                                    setThumbPhoto={setThumbPhoto}
+                                /> */
                     <Card
                         image={children}
                         product={product}

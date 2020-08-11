@@ -98,7 +98,7 @@ export function inputStateControl(state, payload) {
         case 'colors':
             return { ...state, [`colors${identifierOfPicture}`]: userValue };
         case 'discountCart':
-            return { ...state, [`discount${identifierOfPicture}`]: userValue };
+            return { ...state, [`discountCart${identifierOfPicture}`]: userValue };
         case 'sizesCart':
             return { ...state, [`sizes${identifierOfPicture}`]: userValue };
         case 'colorsCart':
