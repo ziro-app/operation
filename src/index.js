@@ -8,10 +8,10 @@ import './index.css';
 
 FontLoader({
     google: { families: ['Rubik:500,600', 'Work Sans:300,400,500'] },
-});
+})
 
 unstable_createRoot(document.getElementById('app')).render(
     <FirebaseAppProvider firebaseConfig={configFirebase}>
         <App/>
     </FirebaseAppProvider>,
-);
+)

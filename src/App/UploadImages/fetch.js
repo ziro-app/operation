@@ -37,6 +37,6 @@ const fetch = (setIsLoading, setIsError, setBrands, setBrandsAndTrends) => {
     };
     run();
     return () => source.cancel('Canceled fetch request. Component unmounted');
-};
+}
 
 export default fetch;

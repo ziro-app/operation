@@ -19,4 +19,4 @@ export default ({ isSubmitting, brand, setBrand, brands }) => {
             </div>
         </>
     );
-};
+}

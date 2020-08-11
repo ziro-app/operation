@@ -1,16 +1,16 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { get } from 'axios';
 import { useLocation, useRoute } from 'wouter';
-import { db, fs } from '../../../Firebase';
 import JSZip from 'jszip';
 import Header from '@bit/vitorbarbosa19.ziro.header';
 import Button from '@bit/vitorbarbosa19.ziro.button';
-import { brandCart, brandName, buttonDownload } from './styles';
-//import CardForm from '@bit/vitorbarbosa19.ziro.card-form';
-import Card from './card';
 import currencyFormat from '@ziro/currency-format';
-import { priceTotal, saleSummary, summary, total } from './styles_catalog';
 import { containerWithPadding } from '@ziro/theme';
+import { brandCart, brandName, buttonDownload } from './styles';
+// import CardForm from '@bit/vitorbarbosa19.ziro.card-form';
+import Card from './card';
+import { priceTotal, saleSummary, summary, total } from './styles_catalog';
+import { db, fs } from '../../../Firebase';
 import { reduceTotal } from './utils';
 
 export default ({ cart: { productIds, products, ...cart }, storeowner, oldQuery }) => {
@@ -18,7 +18,6 @@ export default ({ cart: { productIds, products, ...cart }, storeowner, oldQuery 
     const [urls, setURLs] = useState({});
     const [location, setLocation] = useLocation();
     const [match, params] = useRoute('/pedidos/:cartId?');
-
     const [totalItems, totalPrice] = useMemo(() => (productIds && products ? productIds.reduce(reduceTotal(prices, products), [0, 0]) : [0, 0]), [
         productIds,
         products,
@@ -79,17 +78,17 @@ export default ({ cart: { productIds, products, ...cart }, storeowner, oldQuery 
                 <label style={brandName}>{cart.brandName}</label>
                 <Button type="button" cta="Fazer download fotos" click={downloadAllImages} style={buttonDownload}/>
                 {productIds.map(productId => (
-                    /*<CardForm
-                                  key={productId}
-                                  productId={productId}
-                                  cartProduct={products[productId]}
-                                  setPrice={(price) =>
-                                      setPrices((old) => ({ ...old, [productId]: price }))
-                                  }
-                                  setURL={(url) =>
-                                      setURLs((old) => ({ ...old, [productId]: url }))
-                                  }
-                              />*/
+                    /* <CardForm
+                                            key={productId}
+                                            productId={productId}
+                                            cartProduct={products[productId]}
+                                            setPrice={(price) =>
+                                                setPrices((old) => ({ ...old, [productId]: price }))
+                                            }
+                                            setURL={(url) =>
+                                                setURLs((old) => ({ ...old, [productId]: url }))
+                                            }
+                                        /> */
                     <Card
                         key={productId}
                         productId={productId}
@@ -109,10 +108,10 @@ export default ({ cart: { productIds, products, ...cart }, storeowner, oldQuery 
                     </div>
                 </div>
                 {cart.status === 'waitingConfirmation' &&
-                <Button type="button" cta={'Confirmar pedido'} click={confirmCartItem} submitting={false}/>}
-                {cart.status === 'waitingPayment' && <Button type="button" cta={'Aguardando pagamento'} click={() => {
-                }} submitting={true}/>}
+                <Button type="button" cta="Confirmar pedido" click={confirmCartItem} submitting={false}/>}
+                {cart.status === 'waitingPayment' && <Button type="button" cta="Aguardando pagamento" click={() => {
+                }} submitting/>}
             </div>
         </div>
     );
-};
+}

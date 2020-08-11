@@ -13,14 +13,15 @@ const PTstatus = {
     closed: 'Disponível',
     waitingInfo: '',
     soldOut: 'Indisponível',
-};
+}
 
 const INstatus = {
     Disponível: 'available',
     Indisponível: 'soldOut',
-};
+}
 
-export default ({ image, product, setProduct, sizes, setSizes, colors, setColors, update }) => {
+export default ({ image, product, setProduct, sizes, setSizes, colors, setColors, update, typeSize, setTypeSize }) => {
+    console.log(product);
     const availabilityInput = useMemo(
         () => (
             <FormInput
@@ -142,7 +143,7 @@ export default ({ image, product, setProduct, sizes, setSizes, colors, setColors
                                 setProduct(old => {
                                     const newQuantities = Object.entries(old.availableQuantities || {}).reduce((prev, [key, value]) => {
                                         if (newColors.some(color => key.endsWith(color))) return { ...prev, [key]: value };
-                                        else return prev;
+                                        return prev;
                                     }, {});
                                     return { ...old, availableQuantities: newQuantities };
                                 });
@@ -182,7 +183,7 @@ export default ({ image, product, setProduct, sizes, setSizes, colors, setColors
                                             onChange={({ target: { value } }) =>
                                                 /^[0-9]*$/gm.test(value) &&
                                                 setProduct(old => {
-                                                    const newQuantities = Object.assign({}, old.availableQuantities || {});
+                                                    const newQuantities = { ...(old.availableQuantities || {}) };
                                                     newQuantities[`${size}-${color}`] = value;
                                                     return { ...old, availableQuantities: newQuantities };
                                                 })
@@ -230,4 +231,4 @@ export default ({ image, product, setProduct, sizes, setSizes, colors, setColors
             </div>
         </div>
     );
-};
+}

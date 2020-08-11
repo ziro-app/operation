@@ -82,9 +82,14 @@ export default ({
                         style={image}
                         container={children =>
                             !initialStatus || initialStatus === 'waitingInfo' || editing ? (
-                                <CardInputs image={children || null} update={update || null} index={index}
-                                            arrayOfInputs={arrayOfInputs} validations={validations}
-                                            secondArrayOfInputs={secondArrayOfInputs}/>
+                                <CardInputs
+                                    image={children || null}
+                                    update={update || null}
+                                    index={index}
+                                    arrayOfInputs={arrayOfInputs}
+                                    validations={validations}
+                                    secondArrayOfInputs={secondArrayOfInputs}
+                                />
                             ) : initialStatus === 'unavailable' && cartProduct.status !== 'closed' ? (
                                 <InfoCard product={{ requestedQuantities: {}, ...state, ...cartProduct }}
                                           image={children} setEditing={setEditing}/>
