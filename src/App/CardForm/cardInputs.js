@@ -4,7 +4,6 @@ import { card } from './styles';
 
 export default ({ update, image, arrayOfInputs, validations, isSubmitting, secondArrayOfInputs }) => {
     const _inputs = arrayOfInputs;
-    console.log(update);
     const inputs = useMemo(() => _inputs.filter(input => !!input), _inputs);
     return (
         <div style={{ display: 'grid', gridTemplateColumns: '1fr', boxShadow: card.boxShadow, borderRadius: '5px' }}>

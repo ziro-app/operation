@@ -100,9 +100,9 @@ export function inputStateControl(state, payload) {
         case 'discountCart':
             return { ...state, [`discountCart${identifierOfPicture}`]: userValue };
         case 'sizesCart':
-            return { ...state, [`sizes${identifierOfPicture}`]: userValue };
+            return { ...state, [`sizesCart${identifierOfPicture}`]: userValue };
         case 'colorsCart':
-            return { ...state, [`colors${identifierOfPicture}`]: userValue };
+            return { ...state, [`colorsCart${identifierOfPicture}`]: userValue };
         case 'typeSize':
             return { ...state, [`typeSize${identifierOfPicture}`]: userValue };
         case 'referenceId':

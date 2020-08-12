@@ -292,6 +292,6 @@ const App = () => {
             </userContext.Provider>
         </ErrorBoundary>
     );
-};
+}
 
 export default hot(App);

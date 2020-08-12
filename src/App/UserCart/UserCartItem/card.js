@@ -1,5 +1,5 @@
 import React, { useCallback, useContext, useEffect, useReducer, useState } from 'react';
-import RImg from 'react-image';
+import { Img } from 'react-image';
 import SpinnerWithDiv from '@bit/vitorbarbosa19.ziro.spinner-with-div';
 import { v4 as uuid } from 'uuid';
 import { image } from './styles';
@@ -16,7 +16,7 @@ export default ({ productId, cartProduct, setURL, setPrice }) => {
     const [fetchingProduct, setFetchingProduct] = useState(true);
     const [editing, setEditing] = useState(false);
     const [product, setProduct] = useState({ discount: '' });
-    const [cartProductUpdate, setCartProductUpdate] = useState({ status: 'available', identifierOfPicture });
+    const [cartProductUpdate, setCartProductUpdate] = useState({ status: 'available' });
     const [initialStatus, setInitialStatus] = useState();
     const [sizes, setSizes] = useState([]);
     const [colors, setColors] = useState([]);
@@ -26,8 +26,8 @@ export default ({ productId, cartProduct, setURL, setPrice }) => {
     const { device } = useContext(userContext);
     const defaultQuantityValue = 2;
     const [states, dispatch] = useReducer((state, payload) => inputStateControl(state, payload), {});
-    const updateCart = true;
-    console.log(states);
+    const updateCartInputs = true;
+    // console.log(states)
     const [identifierOfPicture, setIdentifierOfPicture] = useState(uuid());
 
     useEffect(
@@ -113,32 +113,82 @@ export default ({ productId, cartProduct, setURL, setPrice }) => {
             throw error;
         }
     }, [productRef, product]);
+    /* const updateCart = useCallback(async () => {
+      try {
+        const cartsWithThisProduct = await db
+          .collectionGroup('cart')
+          .where('productIds', 'array-contains', productId)
+          .where('status', '>', 'closed')
+          .get()
+        await db.runTransaction(async transaction => {
+          if (product.status === 'available' && !Object.keys(product.availableQuantities || {}).length)
+            transaction.update(productRef, { ...product, status: 'waitingStock' })
+          else if (
+            product.status === 'available' &&
+            Object.values(product.availableQuantities || {}).reduce((acc, cur) => acc + parseInt(cur), 0) === 0
+          )
+            transaction.update(productRef, { ...product, status: 'soldOut' })
+          else if (product.status === 'waitingInfo' || product.status === 'unavailable')
+            transaction.update(productRef, {
+              status: product.status,
+              price: fs.FieldValue.delete(),
+              referenceId: fs.FieldValue.delete(),
+              description: fs.FieldValue.delete(),
+              availableQuantities: fs.FieldValue.delete(),
+            })
+          else transaction.update(productRef, product)
+
+          cartsWithThisProduct.docs.forEach(doc =>
+            transaction.set(
+              doc.ref,
+              {
+                products: {
+                  [productId]: {
+                    requestedQuantities: fs.FieldValue.delete(),
+                    status: fs.FieldValue.delete(),
+                  },
+                },
+                status: 'open',
+                total: fs.FieldValue.delete(),
+                lastUpdate: fs.FieldValue.serverTimestamp(),
+                updatedBy: 'seller',
+              },
+              { merge: true },
+            ),
+          )
+        })
+        setEditing(false)
+      } catch (error) {
+        console.log({ error })
+        throw error
+      }
+    }, [productRef, product]) */
 
     if (fetchingProduct) return <SpinnerWithDiv/>;
     return (
-        <RImg
+        <Img
             src={product.url}
             style={image}
             container={children =>
                 !initialStatus || initialStatus === 'waitingInfo' || editing ? (
                     /* <Card
-                                    key={index}
-                                    identifierOfPicture={picture.identifier}
-                                    states={states}
-                                    filesList={filesList}
-                                    setFiles={setFiles}
-                                    index={index}
-                                    picture={picture.urlImage}
-                                    removeImage={removeImage}
-                                    duplicateImage={duplicateImage}
-                                    arrayOfInputs={inputs(states, picture.identifier, dispatch, defaultQuantityValue, device, isSubmitting)}
-                                    pictures={pictures}
-                                    setPictures={setPictures}
-                                    dispatch={dispatch}
-                                    uuid={uuid}
-                                    thumbPhoto={thumbPhoto}
-                                    setThumbPhoto={setThumbPhoto}
-                                /> */
+                                              key={index}
+                                              identifierOfPicture={picture.identifier}
+                                              states={states}
+                                              filesList={filesList}
+                                              setFiles={setFiles}
+                                              index={index}
+                                              picture={picture.urlImage}
+                                              removeImage={removeImage}
+                                              duplicateImage={duplicateImage}
+                                              arrayOfInputs={inputs(states, picture.identifier, dispatch, defaultQuantityValue, device, isSubmitting)}
+                                              pictures={pictures}
+                                              setPictures={setPictures}
+                                              dispatch={dispatch}
+                                              uuid={uuid}
+                                              thumbPhoto={thumbPhoto}
+                                              setThumbPhoto={setThumbPhoto}
+                                          /> */
                     <Card
                         image={children}
                         product={product}
@@ -180,15 +230,7 @@ export default ({ productId, cartProduct, setURL, setPrice }) => {
                             states,
                             dispatch,
                             identifierOfPicture,
-                            updateCart,
-                        ).filter(
-                            input =>
-                                input !== 0 &&
-                                input !== false &&
-                                input.props.name !== 'referenceId' &&
-                                input.props.name !== 'availability' &&
-                                input.props.name !== 'price' &&
-                                input.props.name !== 'description',
+                            updateCartInputs,
                         )}
                         cardInfo
                     />

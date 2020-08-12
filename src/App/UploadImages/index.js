@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useReducer, useState } from 'react';
+import React, { memo, Suspense, useContext, useEffect, useReducer, useState } from 'react';
 import Button from '@bit/vitorbarbosa19.ziro.button';
 import ImageUpload from '@bit/vitorbarbosa19.ziro.image-upload';
 import Spinner from '@bit/vitorbarbosa19.ziro.spinner-with-div';
@@ -40,6 +40,7 @@ const UploadImages = () => {
     const [states, dispatch] = useReducer((state, payload) => inputStateControl(state, payload), {});
     const defaultQuantityValue = 2;
     const { device } = useContext(userContext);
+    let cont = 0;
     useEffect(() => fetch(setIsLoading, setIsError, setBrands, setBrandsAndTrends), []);
     useEffect(() => {
         if (filesList.length === 0) setThumbPhoto('');
@@ -112,26 +113,31 @@ const UploadImages = () => {
                             )}
 
                             {pictures.map((picture, index) => {
+                                console.log('inside map on UploadImages', index);
+                                cont++;
+                                console.log(cont);
                                 return (
                                     <div key={index}>
-                                        <Card
-                                            key={index}
-                                            identifierOfPicture={picture.identifier}
-                                            states={states}
-                                            filesList={filesList}
-                                            setFiles={setFiles}
-                                            index={index}
-                                            picture={picture.urlImage}
-                                            removeImage={removeImage}
-                                            duplicateImage={duplicateImage}
-                                            arrayOfInputs={inputs(states, picture.identifier, dispatch, defaultQuantityValue, device, isSubmitting)}
-                                            pictures={pictures}
-                                            setPictures={setPictures}
-                                            dispatch={dispatch}
-                                            uuid={uuid}
-                                            thumbPhoto={thumbPhoto}
-                                            setThumbPhoto={setThumbPhoto}
-                                        />
+                                        <Suspense fallback={<Spinner size="5rem"/>}>
+                                            <Card
+                                                key={index}
+                                                identifierOfPicture={picture.identifier}
+                                                states={states}
+                                                filesList={filesList}
+                                                setFiles={setFiles}
+                                                index={index}
+                                                picture={picture.urlImage}
+                                                removeImage={removeImage}
+                                                duplicateImage={duplicateImage}
+                                                arrayOfInputs={inputs(states, picture.identifier, dispatch, defaultQuantityValue, device, isSubmitting)}
+                                                pictures={pictures}
+                                                setPictures={setPictures}
+                                                dispatch={dispatch}
+                                                uuid={uuid}
+                                                thumbPhoto={thumbPhoto}
+                                                setThumbPhoto={setThumbPhoto}
+                                            />
+                                        </Suspense>
                                     </div>
                                 );
                             })}
@@ -146,4 +152,4 @@ const UploadImages = () => {
         </>
     );
 }
-export default UploadImages;
+export default memo(UploadImages);
