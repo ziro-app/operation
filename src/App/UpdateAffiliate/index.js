@@ -10,6 +10,7 @@ import maskInput from '@ziro/mask-input'
 import capitalize from '@ziro/capitalize'
 import fetch from './fetch'
 import { inputEditUpdate, dropdownUpdate } from './sendToBackend'
+import validateDocuments from '../utils/validateDocuments'
 
 const UpdateAffiliate = () => {
     const [isLoading, setIsLoading] = useState(true)
@@ -132,7 +133,7 @@ const UpdateAffiliate = () => {
         }
     }
     const validateCpf = () => {
-        if (/(^\d{3}\.\d{3}\.\d{3}\-\d{2}$)|(^\d{2}\.\d{3}\.\d{3}\/\d{4}\-\d{2}$)/.test(newCpf)) {
+        if (/(^\d{3}\.\d{3}\.\d{3}\-\d{2}$)|(^\d{2}\.\d{3}\.\d{3}\/\d{4}\-\d{2}$)/.test(newCpf) && (process.env.HOMOLOG ? true : validateDocuments(newCpf))) {
             setErrorCpf('')
             return true
         } else {

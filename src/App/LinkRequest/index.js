@@ -14,6 +14,7 @@ import banksList from '../utils/banks'
 import fetch from './fetch'
 import sendToBackend from './sendToBackend'
 import matchForm from './matchForm'
+import validateDocuments from '../utils/validateDocuments'
 
 const LinkRequest = () => {
     const [isLoading, setIsLoading] = useState(true)
@@ -103,7 +104,7 @@ const LinkRequest = () => {
             message: 'Campo obrigatório'
         }, {
             name: 'beneficiaryDocument',
-            validation: value => paymentType === 'TED' ? /(^\d{3}\.\d{3}\.\d{3}\-\d{2}$)|(^\d{2}\.\d{3}\.\d{3}\/\d{4}\-\d{2}$)/.test(value) : true,
+            validation: value => paymentType === 'TED' ? /(^\d{3}\.\d{3}\.\d{3}\-\d{2}$)|(^\d{2}\.\d{3}\.\d{3}\/\d{4}\-\d{2}$)/.test(value) && (process.env.HOMOLOG ? true : validateDocuments(value)) : true,
             value: beneficiaryDocument,
             message: 'Documento inválido'
         }, {

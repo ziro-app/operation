@@ -8,8 +8,9 @@ import FormInput from '@bit/vitorbarbosa19.ziro.form-input'
 import InputMoney from '@bit/vitorbarbosa19.ziro.input-money'
 import fetch from './fetch'
 import sendToBackend from './sendToBackend'
-import { userContext } from '../appContext'
 import matchForm from './matchForm'
+import { userContext } from '../appContext'
+import validateDocuments from '../utils/validateDocuments'
 
 const RegisterExpenses = () => {
     const { nickname } = useContext(userContext)
@@ -44,7 +45,7 @@ const RegisterExpenses = () => {
     const setState = { setExpenseAmount, setType, setOperacionalDescription, setDate, setFocusDate, setAttendance, setHaveRefound, setNote, setCommonDescription, setPaymentMethod, setNumberOfInstallments, setBankTransfer, setBankName, setAccountNumber, setAgency, setBeneficiary, setBeneficiaryDocument }
     const state = { nickname, paymentMethodList, expenseAmount, type, operationalDescription, ODList, date, focusDate, attendance, attendanceList, haveRefound, refoundList, note, commonDescription, paymentMethod, numberOfInstallments, bankTransfer, bankTransferList, bankName, accountNumber, agency, refoundList, beneficiary, beneficiaryDocument, ...setState }
 
-    const validateCpfOrCnpj = (value) => /(^\d{3}\.\d{3}\.\d{3}\-\d{2}$)|(^\d{2}\.\d{3}\.\d{3}\/\d{4}\-\d{2}$)/.test(value)
+    const validateCpfOrCnpj = (value) => /(^\d{3}\.\d{3}\.\d{3}\-\d{2}$)|(^\d{2}\.\d{3}\.\d{3}\/\d{4}\-\d{2}$)/.test(value) && (process.env.HOMOLOG ? true : validateDocuments(value));
 
     const validations = [
         {

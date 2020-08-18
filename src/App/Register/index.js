@@ -19,6 +19,7 @@ import { containerWithPadding } from '@ziro/theme'
 import capitalize from '@ziro/capitalize'
 import maskInput from '@ziro/mask-input'
 import currencyFormat from '@ziro/currency-format'
+import validateDocuments from '../utils/validateDocuments'
 
 const Register = () => {
     const [isLoading, setIsLoading] = useState(false)
@@ -93,7 +94,7 @@ const Register = () => {
             message: 'Data inválida'
         }, {
             name: 'cpf',
-            validation: value => /(^\d{3}\.\d{3}\.\d{3}\-\d{2}$)|(^\d{2}\.\d{3}\.\d{3}\/\d{4}\-\d{2}$)/.test(value),
+            validation: value => /(^\d{3}\.\d{3}\.\d{3}\-\d{2}$)|(^\d{2}\.\d{3}\.\d{3}\/\d{4}\-\d{2}$)/.test(value) && (process.env.HOMOLOG ? true : validateDocuments(value)),
             value: cpf,
             message: 'Documento inválido'
         }, {

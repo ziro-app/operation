@@ -17,13 +17,14 @@ import fetch from './fetch'
 import { inputEditUpdate, formUpdate } from './sendToBackend'
 import GetCnpj from './GetCnpj'
 import { modalBox, container, titleError, svg } from './GetCnpj/styles'
+import validateDocuments from '../utils/validateDocuments'
 
 const UpdateStoreowner = () => {
     // SearchCnpjInfo
     const [errorMsg, setErrorMsg] = useState('')
     const [storeowner, setStoreowner] = useState({ 'cadastro': '', 'afiliado': '', 'afiliado_cpf': '', 'lojista': '', 'rg': '', 'cpf': '', 'nascimento': '', 'instagram': '', 'cnpj': '', 'ie': '', 'razao': '', 'fantasia': '', 'endereco': '', 'bairro': '', 'cep': '', 'cidade': '', 'estado': '', 'fone': '', 'email': '', 'assessor': '', 'vendedor': '', 'whats': '', 'entrega': '', 'bairroEntrega': '', 'cepEntrega': '', 'cidadeEntrega': '', 'estadoEntrega': '', vinculo: '' })
     const [storeowners, setStoreowners] = useState([])
-    const setCnpjInfo = {setStoreowner, storeowner, setStoreowners}
+    const setCnpjInfo = { setStoreowner, storeowner, setStoreowners }
     // Other Infos
     const [isLoading, setIsLoading] = useState(true)
     const [isError, setIsError] = useState(false)
@@ -238,7 +239,7 @@ const UpdateStoreowner = () => {
         }
     }
     const validateCpf = () => {
-        if (newCpf === '' || /(^\d{3}\.\d{3}\.\d{3}\-\d{2}$)|(^\d{2}\.\d{3}\.\d{3}\/\d{4}\-\d{2}$)/.test(newCpf)) {
+        if (newCpf === '' || /(^\d{3}\.\d{3}\.\d{3}\-\d{2}$)|(^\d{2}\.\d{3}\.\d{3}\/\d{4}\-\d{2}$)/.test(newCpf) && (process.env.HOMOLOG ? true : validateDocuments(newCpf))) {
             setErrorCpf('')
             return true
         } else {
@@ -348,19 +349,19 @@ const UpdateStoreowner = () => {
                     />
                 </div>
                 {errorMsg ? (
-                        <Modal boxStyle={modalBox} isOpen={errorMsg} setIsOpen={() => { }}>
-                            <div style={container}>
-                                <div style={svg} ><Illustration type="paymentError" size={200} /></div>
-                                <label style={titleError}>{errorMsg || 'Erro ao tentar consultar a receita'}</label>
-                                <label>Solicite suporte se necessário</label>
-                                <div style={{marginBottom:'15px'}}>
-                                    <Button type='link' cta='Tentar novamente' navigate={() => setErrorMsg(false)} />
-                                </div>
+                    <Modal boxStyle={modalBox} isOpen={errorMsg} setIsOpen={() => { }}>
+                        <div style={container}>
+                            <div style={svg} ><Illustration type="paymentError" size={200} /></div>
+                            <label style={titleError}>{errorMsg || 'Erro ao tentar consultar a receita'}</label>
+                            <label>Solicite suporte se necessário</label>
+                            <div style={{ marginBottom: '15px' }}>
+                                <Button type='link' cta='Tentar novamente' navigate={() => setErrorMsg(false)} />
                             </div>
-                        </Modal>
-                    ): (
-                        <div style={{marginBottom:'20px'}}>
-                            <GetCnpj cnpj={storeowner.cnpj} setState={setCnpjInfo} setErrorMsg={setErrorMsg}/>
+                        </div>
+                    </Modal>
+                ) : (
+                        <div style={{ marginBottom: '20px' }}>
+                            <GetCnpj cnpj={storeowner.cnpj} setState={setCnpjInfo} setErrorMsg={setErrorMsg} />
                         </div>
                     )}
                 {copyResultText ?

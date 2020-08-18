@@ -11,6 +11,7 @@ import Button from '@bit/vitorbarbosa19.ziro.button'
 import matchForm from './matchForm'
 import sendToBackend from './sendToBackend'
 import { modalBox, container, title, svg } from './styles'
+import validateDocuments from '../utils/validateDocuments'
 
 const CheckEmailVerified = () => {
     const [app, setApp] = useState('');
@@ -32,7 +33,7 @@ const CheckEmailVerified = () => {
     const validations = [
         {
             name: 'cnpj',
-            validation: value => type === 'CNPJ' ? /(^\d{2}\.\d{3}\.\d{3}\/\d{4}\-\d{2}$)/.test(value) : true,
+            validation: value => type === 'CNPJ' ? /(^\d{2}\.\d{3}\.\d{3}\/\d{4}\-\d{2}$)/.test(value) && (process.env.HOMOLOG ? true : validateDocuments(value)) : true,
             value: cnpj,
             message: 'CNPJ inválido'
         }, {

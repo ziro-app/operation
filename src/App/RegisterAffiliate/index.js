@@ -10,6 +10,7 @@ import FormInput from '@bit/vitorbarbosa19.ziro.form-input'
 import Dropdown from '@bit/vitorbarbosa19.ziro.dropdown'
 import InputText from '@bit/vitorbarbosa19.ziro.input-text'
 import InputPhone from '@bit/vitorbarbosa19.ziro.input-phone'
+import validateDocuments from '../utils/validateDocuments'
 
 const RegisterAffiliate = () => {
     const [isLoading, setIsLoading] = useState(true)
@@ -57,7 +58,7 @@ const RegisterAffiliate = () => {
             message: 'Campo obrigatório'
         }, {
             name: 'cpf',
-            validation: value => value === '' || /(^\d{3}\.\d{3}\.\d{3}\-\d{2}$)|(^\d{2}\.\d{3}\.\d{3}\/\d{4}\-\d{2}$)/.test(value),
+            validation: value => value === '' || (/(^\d{3}\.\d{3}\.\d{3}\-\d{2}$)|(^\d{2}\.\d{3}\.\d{3}\/\d{4}\-\d{2}$)/.test(value) && (process.env.HOMOLOG ? true : validateDocuments(value))),
             value: cpf,
             message: 'Formato inválido'
         }, {
