@@ -4,3 +4,13 @@ dist
 credentials.js
 credentialsDev.js
 credentialsProd.js
+.idea/codeStyles/codeStyleConfig.xml
+.idea/codeStyles/Project.xml
+.idea/discord.xml
+.idea/inspectionProfiles/Project_Default.xml
+.idea/jsLinters/eslint.xml
+.idea/misc.xml
+.idea/modules.xml
+.idea/operation.iml
+.idea/vcs.xml
+.idea/workspace.xml
