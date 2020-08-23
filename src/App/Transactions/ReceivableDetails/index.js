@@ -32,7 +32,10 @@ const ReceivableDetails = ({ transactions, transactionId, receivableId, transact
       let block = []
       const effectReceivable = transaction.receivables.filter(receivable => receivable.receivableZoopId === receivableId)[0]
       const sortedSplitAmount = transaction.receivables[0].split_rule
-        ? transaction.receivables.sort((a, b) => b.installment - a.installment).filter(item => item.split_rule !== null)
+        ? transaction.receivables
+            .sort((a, b) => b.installment - a.installment)
+            .filter(item => item.split_rule !== null)
+            .reverse()
         : []
       setReceivable(effectReceivable)
       if (effectReceivable) {
