@@ -43,6 +43,7 @@ import UploadBillet from './UploadBillet';
 import Transactions from './Transactions/index';
 import SplitPayment from './SplitPayment/index';
 import LinkRequest from './LinkRequest/index';
+import UpdateZoopPlan from './UpdateZoopPlan/index';
 import { userContext } from './appContext';
 
 const Router = ({ isLogged }) => {
@@ -54,35 +55,35 @@ const Router = ({ isLogged }) => {
 
     const [location] = useLocation();
     const publicRoutes = {
-        '/': <Login/>,
-        '/login': <Login/>,
-        '/cadastrar': <Register/>,
-        '/problemas-acesso': <LoginTrouble navigateTo="/login"/>,
-        '/reenviar-email': <ResendEmail/>,
-        '/resetar-senha': <ResetPass/>,
-        '/confirmar-email': <ConfirmEmail/>,
-        '/show-info': <ShowInfo/>,
+        '/': <Login />,
+        '/login': <Login />,
+        '/cadastrar': <Register />,
+        '/problemas-acesso': <LoginTrouble navigateTo="/login" />,
+        '/reenviar-email': <ResendEmail />,
+        '/resetar-senha': <ResetPass />,
+        '/confirmar-email': <ConfirmEmail />,
+        '/show-info': <ShowInfo />,
     };
     const privateRoutes = {
         // Menu can't be put inside the components because then it'll unmount on transition
         '/': (
             <Menu title="Minha Conta">
                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-                    <MyAccount/>
+                    <MyAccount />
                 </motion.div>
             </Menu>
         ),
         '/login': (
             <Menu title="Minha Conta">
-                <MyAccount/>
+                <MyAccount />
             </Menu>
         ),
-        '/trocar-email': <UpdateEmail/>,
-        '/trocar-senha': <UpdatePass/>,
+        '/trocar-email': <UpdateEmail />,
+        '/trocar-senha': <UpdatePass />,
         '/transacoes': <Transactions {...paramsTransactions} />,
         [matchTransactions ? location : null]: <Transactions {...paramsTransactions} />,
         [matchTransactionsSplit ? location : null]: <SplitPayment {...paramsTransactionsSplit} />,
-        '/deletar-conta': <DeleteAccount/>,
+        '/deletar-conta': <DeleteAccount />,
         '/administrativo': (
             <Menu title="Administrativo">
                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
@@ -135,6 +136,7 @@ const Router = ({ isLogged }) => {
                             ['Reenviar confirmação de email', '/checar-email'],
                             ['Aprovar confirmação de email', '/validar-email'],
                             ['Alterar email do usuário', '/alterar-email'],
+                            ['Atualizar Plano Zoop do usuário', '/atualizar-plano-zoop'],
                         ]}
                     />
                 </motion.div>
@@ -142,114 +144,119 @@ const Router = ({ isLogged }) => {
         ),
         '/upload-boleto': (
             <HeaderBack title="Upload de boleto" navigateTo="/assessoria">
-                <UploadBillet/>
+                <UploadBillet />
             </HeaderBack>
         ),
         '/consultar-frete': (
             <HeaderBack title="Consulta de frete" navigateTo="/logistica">
-                <ConsultShipping/>
+                <ConsultShipping />
             </HeaderBack>
         ),
         '/cadastrar-despesa': (
             <HeaderBack title="Cadastrar despesa" navigateTo="/logistica">
-                <RegisterExpenses/>
+                <RegisterExpenses />
             </HeaderBack>
         ),
         '/cadastrar-boleto': (
             <HeaderBack title="Cadastrar boleto" navigateTo="/assessoria">
-                <RegisterBillet/>
+                <RegisterBillet />
             </HeaderBack>
         ),
         '/requerir-material': (
             <HeaderBack title="Requisição de material" navigateTo="/administrativo">
-                <MaterialRequest/>
+                <MaterialRequest />
             </HeaderBack>
         ),
         '/visualizar-lojista': (
             <HeaderBack title="Visualizar lojista" navigateTo="/assessoria">
-                <UpdateStoreowner/>
+                <UpdateStoreowner />
             </HeaderBack>
         ),
         '/cadastrar-lojista': (
             <HeaderBack title="Cadastrar lojista" navigateTo="/assessoria">
-                <RegisterStoreowner/>
+                <RegisterStoreowner />
             </HeaderBack>
         ),
         '/cadastrar-afiliado': (
             <HeaderBack title="Cadastrar afiliado" navigateTo="/assessoria">
-                <RegisterAffiliate/>
+                <RegisterAffiliate />
             </HeaderBack>
         ),
         '/visualizar-afiliado': (
             <HeaderBack title="Visualizar afiliado" navigateTo="/assessoria">
-                <UpdateAffiliate/>
+                <UpdateAffiliate />
             </HeaderBack>
         ),
         '/upload-imagem': (
             <HeaderBack title="Upload de imagens" navigateTo="/assessoria">
-                <ImageUpload/>
+                <ImageUpload />
             </HeaderBack>
         ),
         '/upload-imagens': (
             <HeaderBack title="Upload de imagens/Novo" navigateTo="/assessoria">
-                <UploadImages withIcon imgExtension={['.jpg', '.gif', '.png', '.gif']} maxFileSize={5242880}/>
+                <UploadImages withIcon imgExtension={['.jpg', '.gif', '.png', '.gif']} maxFileSize={5242880} />
             </HeaderBack>
         ),
         '/update': (
             <HeaderBack title="Atualizar informações" navigateTo="/login">
-                <UpdateUserInfo/>
+                <UpdateUserInfo />
             </HeaderBack>
         ),
         '/atualizar-fabricantes': (
             <HeaderBack title="Atualizar fabricantes" navigateTo="/assessoria">
-                <UpdateBrandsInfos/>
+                <UpdateBrandsInfos />
             </HeaderBack>
         ),
-        '/criar-pagamento': <CreatePayment/>,
+        '/criar-pagamento': <CreatePayment />,
         '/entrada-saida': (
             <HeaderBack title="Entrada/Saída do Caixa" navigateTo="/administrativo">
-                <RegisterInputOutput/>
+                <RegisterInputOutput />
             </HeaderBack>
         ),
         '/solicitacao-link': (
             <HeaderBack title="Solicitação de Link" navigateTo="/administrativo">
-                <LinkRequest/>
+                <LinkRequest />
             </HeaderBack>
         ),
         '/checar-email': (
             <HeaderBack title="Reenviar Email" navigateTo="/suporte">
-                <CheckEmailVerified/>
+                <CheckEmailVerified />
             </HeaderBack>
         ),
         '/validar-email': (
             <HeaderBack title="Aprovar Email" navigateTo="/suporte">
-                <ValidateEmail/>
+                <ValidateEmail />
             </HeaderBack>
         ),
         '/alterar-email': (
             <HeaderBack title="Alterar Email" navigateTo="/suporte">
-                <ChangeStoreownerEmail/>
+                <ChangeStoreownerEmail />
+            </HeaderBack>
+        ),
+        '/atualizar-plano-zoop': (
+            <HeaderBack title="Atualizar Plano Zoop" navigateTo="/suporte">
+                <UpdateZoopPlan />
             </HeaderBack>
         ),
         [match ? location : null]: (
-            <Suspense fallback={<SpinnerWithDiv/>}>
+            <Suspense fallback={<SpinnerWithDiv />}>
                 <UserCart {...params} />
             </Suspense>
         ),
         // [match && !params.userId ? location : null]: <HeaderBack title='Procurar pedidos' navigateTo='/assessoria'><SearchUserCart /></HeaderBack>,
         // [match && params.userId && !params.requestId ? location : null]: <UserCart />,
         // [match && params.userId && params.requestId ? location : null]: <UserCartItem />,
-        '/show-info': <ShowInfo internal/>,
+        '/show-info': <ShowInfo internal />,
     };
 
     if (allowedUsers.includes(nickname))
         privateRoutes['/excluir-usuario'] = (
             <Menu title="Excluir Usuário">
-                <DeleteUser/>
+                <DeleteUser />
             </Menu>
         );
 
-    return routeMatcher(isLogged, publicRoutes, privateRoutes, <Login/>, <NotFound fallback="/"/>);
+    return routeMatcher(isLogged, publicRoutes, privateRoutes, <Login />, <NotFound fallback="/" />);
 }
 
 Router.propTypes = {
