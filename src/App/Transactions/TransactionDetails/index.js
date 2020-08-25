@@ -189,8 +189,9 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
         if (transaction !== {} && !nothing) {
           let block
           let dataTable
-          let insuranceValueFormatted = Object.prototype.hasOwnProperty.call(transaction, 'receivables') ? handleInsurance(transaction) : '-'
           let feesFormatted = transaction.fees ? `- ${currencyFormat(parseFloat(transaction.fees.replace('.', '')))}` : '-'
+          let insuranceValueFormatted =
+            Object.prototype.hasOwnProperty.call(transaction, 'receivables') && feesFormatted !== '-' ? handleInsurance(transaction) : '-'
           let liquidFormatted = transaction.fees
             ? currencyFormat(
                 parseFloat(
