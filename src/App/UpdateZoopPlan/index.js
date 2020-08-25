@@ -93,7 +93,7 @@ const UpdateZoopPlan = () => {
 
                 {supplier.percentage && <div style={{ ...info, paddingBottom: '20px' }}>
                     <label style={titleStyle}>PORCENTAGEM ATUAL</label>
-                    <label style={contentStyle}>{supplier.percentage}%</label>
+                    <label style={contentStyle}>{supplier.percentage}</label>
                 </div>}
 
                 {supplier.docId && supplier.name && supplier.percentage &&

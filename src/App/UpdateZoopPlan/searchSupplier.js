@@ -14,7 +14,7 @@ const searchSupplier = state => () => {
                     if (!doc.empty) {
                         const docId = doc.docs[0].id;
                         const { razao, zoopPlan } = doc.docs[0].data();
-                        setSupplier({ docId, name: razao ? capitalize(razao) : '', percentage: zoopPlan.percentage });
+                        setSupplier({ docId, name: razao ? capitalize(razao) : 'Sem razão social', percentage: (zoopPlan && zoopPlan.percentage) ? `${zoopPlan.percentage} %` : '0 %' });
                         resolve();
                     } else throw { msg: `Fabricante não encontrado`, customError: true };
                 });
