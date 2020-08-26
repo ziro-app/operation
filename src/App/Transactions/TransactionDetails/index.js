@@ -168,13 +168,15 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
   }
   function handleInsurance(transaction) {
     if (transaction.insurance === true) {
-      if (transaction.zoopPlan.percentage !== 0) {
+      if (transaction.splitPaymentPlan.percentage !== 0) {
         return `- ${currencyFormat(
-          parseFloat(transaction.charge.replace('R$', '').replace(',', '').replace('.', '')) / transaction.zoopPlan.percentage -
-            (transaction.zoopPlan.amount ? -transaction.zoopPlan.amount : 0),
+          parseFloat(transaction.charge.replace('R$', '').replace(',', '').replace('.', '')) / transaction.splitPaymentPlan.antiFraud.percentage -
+            (transaction.splitPaymentPlan.antiFraud.amount ? -transaction.splitPaymentPlan.antiFraud.amount : 0),
         )}`
       }
-      return `- ${currencyFormat(parseFloat(transaction.charge.replace('R$', '').replace(',', '').replace('.', '')) - transaction.zoopPlan.amount)}`
+      return `- ${currencyFormat(
+        parseFloat(transaction.charge.replace('R$', '').replace(',', '').replace('.', '')) - transaction.splitPaymentPlan.antiFraud.amount,
+      )}`
     }
     return '-'
   }
@@ -191,7 +193,12 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
           let dataTable
           let feesFormatted = transaction.fees ? `- ${currencyFormat(parseFloat(transaction.fees.replace('.', '')))}` : '-'
           let insuranceValueFormatted =
-            Object.prototype.hasOwnProperty.call(transaction, 'receivables') && feesFormatted !== '-' && transaction.zoopPlan !== ''
+            Object.prototype.hasOwnProperty.call(transaction, 'receivables') &&
+            feesFormatted !== '-' &&
+            transaction.splitPaymentPlan &&
+            feesFormatted !== '-' &&
+            transaction.splitPaymentPlan.antiFraud.amount &&
+            transaction.splitPaymentPlan.antiFraud.percentage
               ? handleInsurance(transaction)
               : '-'
           let liquidFormatted = transaction.fees

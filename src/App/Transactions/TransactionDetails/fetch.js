@@ -34,7 +34,7 @@ const fetch = (transactionId, setTransaction, setError, transaction) => {
               collaboratorName,
               observations,
               insurance,
-              zoopPlan,
+              splitPaymentPlan,
             } = snapshot.data()
             const chargeFormatted = currencyFormat(charge)
             const dateFormatted = date ? dateFormat(date) : ''
@@ -65,7 +65,7 @@ const fetch = (transactionId, setTransaction, setError, transaction) => {
               collaboratorName: collaboratorName || '',
               observations: observations || '',
               insurance: insurance || '',
-              zoopPlan: zoopPlan || '',
+              splitPaymentPlan: splitPaymentPlan || '',
             })
             if (transaction.status !== paymentDoc[0].status) {
               setTransaction(paymentDoc[0])
