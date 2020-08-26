@@ -15,10 +15,11 @@ const UpdateZoopPlan = () => {
     const typeList = ['CNPJ', 'Email'];
     const [cnpj, setCnpj] = useState('');
     const [email, setEmail] = useState('');
-    const [percentage, setPercentage] = useState('');
-    const [supplier, setSupplier] = useState({ 'docId': '', 'name': '', 'percentage': '' });
-    const setState = { setCnpj, setEmail, setType, setPercentage, setSupplier };
-    const state = { cnpj, email, type, percentage, supplier, ...setState };
+    const [markupPercentage, setMarkupPercentage] = useState('');
+    const [antifraudPercentage, setAntifraudPercentage] = useState('');
+    const [supplier, setSupplier] = useState({ 'docId': '', 'name': '', 'markupPercentage': '', 'antifraudPercentage': '' });
+    const setState = { setCnpj, setEmail, setType, setAntifraudPercentage, setSupplier, setMarkupPercentage };
+    const state = { cnpj, email, type, antifraudPercentage, supplier, markupPercentage, ...setState };
     const searchValidation = [
         {
             name: 'cnpj',
@@ -39,9 +40,14 @@ const UpdateZoopPlan = () => {
     ];
     const updateValidation = [
         {
-            name: 'percentage',
+            name: 'markupPercentage',
             validation: value => !!value && (parseFloat(value) >= 0 && parseFloat(value) <= 100),
-            value: percentage,
+            value: markupPercentage,
+            message: 'Valor inválido'
+        }, {
+            name: 'antifraudPercentage',
+            validation: value => !!value && (parseFloat(value) >= 0 && parseFloat(value) <= 100),
+            value: antifraudPercentage,
             message: 'Valor inválido'
         }
     ];
@@ -49,8 +55,9 @@ const UpdateZoopPlan = () => {
     const clear = () => {
         setCnpj('');
         setEmail('');
-        setPercentage('');
-        setSupplier({ 'docId': '', 'name': '', 'percentage': '' });
+        setMarkupPercentage('');
+        setAntifraudPercentage('');
+        setSupplier({ 'docId': '', 'name': '', 'markupPercentage': '', 'antifraudPercentage': '' });
     }
 
     return (
@@ -91,23 +98,39 @@ const UpdateZoopPlan = () => {
                     <label style={contentStyle}>{supplier.name}</label>
                 </div>}
 
-                {supplier.percentage && <div style={{ ...info, paddingBottom: '20px' }}>
-                    <label style={titleStyle}>PORCENTAGEM ATUAL</label>
-                    <label style={contentStyle}>{supplier.percentage}</label>
+                {supplier.markupPercentage && <div style={info}>
+                    <label style={titleStyle}>MARKUP ATUAL</label>
+                    <label style={contentStyle}>{supplier.markupPercentage}</label>
                 </div>}
 
-                {supplier.docId && supplier.name && supplier.percentage &&
+                {supplier.antifraudPercentage && <div style={{ ...info, paddingBottom: '10px' }}>
+                    <label style={titleStyle}>ANTIFRAUDE ATUAL</label>
+                    <label style={contentStyle}>{supplier.antifraudPercentage}</label>
+                </div>}
+
+                {supplier.docId && supplier.name && supplier.antifraudPercentage && supplier.markupPercentage &&
                     <Form
                         buttonName='Atualizar'
                         validations={updateValidation}
                         sendToBackend={sendToBackend ? sendToBackend({ ...state, clear }) : () => null}
                         inputs={[
-                            <FormInput name='percentage' label='Nova porcentagem' input={
+                            <FormInput name='markupPercentage' label='Nova porcentagem de Markup' input={
                                 <InputText
-                                    value={percentage ? `% ${percentage}` : ''}
+                                    value={markupPercentage ? `% ${markupPercentage}` : ''}
                                     onChange={({ target: { value } }) => {
                                         let newPrctg = value.replace(/\s/g, '').replace('%', '').replace(',', '.');
-                                        setPercentage(newPrctg)
+                                        setMarkupPercentage(newPrctg)
+                                    }}
+                                    placeholder='% 0.00'
+                                    inputMode='numeric'
+                                />
+                            } />,
+                            <FormInput name='antifraudPercentage' label='Nova porcentagem de Antifraude' input={
+                                <InputText
+                                    value={antifraudPercentage ? `% ${antifraudPercentage}` : ''}
+                                    onChange={({ target: { value } }) => {
+                                        let newPrctg = value.replace(/\s/g, '').replace('%', '').replace(',', '.');
+                                        setAntifraudPercentage(newPrctg)
                                     }}
                                     placeholder='% 0.00'
                                     inputMode='numeric'

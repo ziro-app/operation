@@ -1,21 +1,28 @@
 import { db } from '../../Firebase/index';
 
 const sendToBackend = state => () => {
-    const { supplier, percentage } = state;
+    const { supplier, markupPercentage, antifraudPercentage } = state;
     const { docId } = supplier;
-    const percent = percentage ? parseFloat(percentage) : -1;
+    const percentMarkup = markupPercentage ? parseFloat(markupPercentage) : -1;
+    const percentAntifraud = antifraudPercentage ? parseFloat(antifraudPercentage) : -1;
 
     return new Promise(async (resolve, reject) => {
         try {
-            if (percent !== -1) {
+            if (percentMarkup !== -1 && percentAntifraud) {
                 await db.collection('suppliers').doc(docId).update({
-                    zoopPlan: {
-                        amount: 0,
-                        percentage: percent
+                    splitPaymentPlan: {
+                        antiFraud: {
+                            amount: 0,
+                            percentage: percentAntifraud
+                        },
+                        markup: {
+                            amount: 0,
+                            percentage: percentMarkup
+                        }
                     }
                 });
                 resolve('Plano atualizado');
-            } else throw { msg: 'Porcentagem inválida, tente novamente', customError: true };
+            } else throw { msg: 'Valores inválidos, tente novamente', customError: true };
         } catch (error) {
             console.log(error);
             if (error.customError) reject(error);

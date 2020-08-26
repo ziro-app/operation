@@ -13,8 +13,13 @@ const searchSupplier = state => () => {
                 await db.collection('suppliers').where(field, '==', value).onSnapshot(doc => {
                     if (!doc.empty) {
                         const docId = doc.docs[0].id;
-                        const { razao, zoopPlan } = doc.docs[0].data();
-                        setSupplier({ docId, name: razao ? capitalize(razao) : 'Sem razão social', percentage: (zoopPlan && zoopPlan.percentage) ? `${zoopPlan.percentage} %` : '0 %' });
+                        const { razao, splitPaymentPlan } = doc.docs[0].data();
+                        setSupplier({
+                            docId,
+                            name: razao ? capitalize(razao) : 'Sem razão social',
+                            markupPercentage: (splitPaymentPlan && splitPaymentPlan.markup && splitPaymentPlan.markup.percentage) ? `${splitPaymentPlan.markup.percentage} %` : '0 %',
+                            antifraudPercentage: (splitPaymentPlan && splitPaymentPlan.antiFraud && splitPaymentPlan.antiFraud.percentage) ? `${splitPaymentPlan.antiFraud.percentage} %` : '0 %'
+                        });
                         resolve();
                     } else throw { msg: `Fabricante não encontrado`, customError: true };
                 });
