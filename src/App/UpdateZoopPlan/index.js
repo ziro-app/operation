@@ -1,145 +1,136 @@
-import React, { useState } from 'react'
-import { motion } from 'framer-motion'
-import Form from '@bit/vitorbarbosa19.ziro.form'
-import FormInput from '@bit/vitorbarbosa19.ziro.form-input'
-import InputText from '@bit/vitorbarbosa19.ziro.input-text'
-import Dropdown from '@bit/vitorbarbosa19.ziro.dropdown'
-import matchForm from './matchForm'
-import sendToBackend from './sendToBackend'
-import searchSupplier from './searchSupplier'
-import { contentStyle, info, titleStyle } from './styles'
-import validateDocuments from '../utils/validateDocuments'
+import React, { useState, useEffect, useContext } from 'react';
+import { motion } from 'framer-motion';
+import Form from '@bit/vitorbarbosa19.ziro.form';
+import FormInput from '@bit/vitorbarbosa19.ziro.form-input';
+import InputPercentage from '@bit/vitorbarbosa19.ziro.input-percentage';
+import Dropdown from '@bit/vitorbarbosa19.ziro.dropdown';
+import Details from '@bit/vitorbarbosa19.ziro.details';
+import SpinnerWithDiv from '@bit/vitorbarbosa19.ziro.spinner-with-div';
+import Error from '@bit/vitorbarbosa19.ziro.error';
+import sendToBackend from './sendToBackend';
+import fetch from './fetch';
+import { userContext } from '../appContext';
 
 const UpdateZoopPlan = () => {
-    const [type, setType] = useState('');
-    const typeList = ['CNPJ', 'Email'];
-    const [cnpj, setCnpj] = useState('');
-    const [email, setEmail] = useState('');
+    const [isLoading, setIsLoading] = useState(true);
+    const [errorLoading, setErrorLoading] = useState(false);
+    const [searchedName, setSearchedName] = useState('');
     const [markupPercentage, setMarkupPercentage] = useState('');
     const [antifraudPercentage, setAntifraudPercentage] = useState('');
-    const [supplier, setSupplier] = useState({ 'docId': '', 'name': '', 'markupPercentage': '', 'antifraudPercentage': '' });
-    const setState = { setCnpj, setEmail, setType, setAntifraudPercentage, setSupplier, setMarkupPercentage };
-    const state = { cnpj, email, type, antifraudPercentage, supplier, markupPercentage, ...setState };
-    const searchValidation = [
-        {
-            name: 'cnpj',
-            validation: value => type === 'CNPJ' ? /(^\d{2}\.\d{3}\.\d{3}\/\d{4}\-\d{2}$)/.test(value) && (process.env.HOMOLOG ? true : validateDocuments(value)) : true,
-            value: cnpj,
-            message: 'CNPJ inválido'
-        }, {
-            name: 'email',
-            validation: value => type === 'Email' ? /^\S+@\S+\.\S+$/g.test(value) : true,
-            value: email,
-            message: 'Email inválido'
-        }, {
-            name: 'type',
-            validation: value => typeList.includes(value),
-            value: type,
-            message: 'Tipo inválido'
-        }
-    ];
-    const updateValidation = [
+    const [suppliers, setSuppliers] = useState([]);
+    const [supplier, setSupplier] = useState({ 'docId': '', 'name': '', 'reason': '', 'markupPercentage': '', 'antifraudPercentage': '' });
+    const [blocks, setBlocks] = useState([]);
+    const { nickname } = useContext(userContext);
+    const setState = { setAntifraudPercentage, setSupplier, setMarkupPercentage, setBlocks };
+    const state = { nickname, antifraudPercentage, supplier, markupPercentage, blocks, ...setState };
+    const validations = [
         {
             name: 'markupPercentage',
-            validation: value => !!value && (parseFloat(value) >= 0 && parseFloat(value) <= 100),
+            validation: value => !!value,
             value: markupPercentage,
             message: 'Valor inválido'
         }, {
             name: 'antifraudPercentage',
-            validation: value => !!value && (parseFloat(value) >= 0 && parseFloat(value) <= 100),
+            validation: value => !!value,
             value: antifraudPercentage,
             message: 'Valor inválido'
         }
     ];
 
-    const clear = () => {
-        setCnpj('');
-        setEmail('');
-        setMarkupPercentage('');
-        setAntifraudPercentage('');
-        setSupplier({ 'docId': '', 'name': '', 'markupPercentage': '', 'antifraudPercentage': '' });
+    const mountBlock = (name, reason, markup, antifraud) => {
+        return [{
+            header: 'Detalhes',
+            body: [
+                {
+                    title: 'Fabricante',
+                    content: name,
+                },
+                {
+                    title: 'Razão',
+                    content: reason,
+                },
+                {
+                    title: 'Markup',
+                    content: markup,
+                },
+                {
+                    title: 'Antifraude',
+                    content: antifraud,
+                }
+            ]
+        }];
     }
 
+    useEffect(() => fetch(setIsLoading, setErrorLoading, setSuppliers, setBlocks, mountBlock), []);
+
+    if (isLoading) return <SpinnerWithDiv size="5rem" />;
+    if (errorLoading) return <Error />;
+
     return (
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-            <>
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={{ display: 'grid', gridTemplateRows: 'auto 1fr auto', gridRowGap: '20px' }} >
+            <Dropdown
+                value={searchedName}
+                onChange={({ target: { value } }) => {
+                    if (value !== '') {
+                        setSearchedName(value)
+                        let person = suppliers.find(element => element.name === value)
+                        if (person) {
+                            setSupplier(person);
+                            setBlocks(mountBlock(person.name, person.reason, person.markupPercentage, person.antifraudPercentage));
+                        } else {
+                            setSupplier({ 'docId': '', 'name': '', 'reason': '', 'markupPercentage': '', 'antifraudPercentage': '' });
+                            setBlocks(mountBlock('', '', '', ''));
+                        }
+                    } else {
+                        setSupplier({ 'docId': '', 'name': '', 'reason': '', 'markupPercentage': '', 'antifraudPercentage': '' });
+                        setBlocks(mountBlock('', '', '', ''));
+                        setSearchedName('');
+                    }
+                }}
+                onChangeKeyboard={element => {
+                    if (element) {
+                        setSearchedName(element.value)
+                        let person = suppliers.find(storeowner => storeowner.name === element.value)
+                        if (person) {
+                            setSupplier(person);
+                            setBlocks(mountBlock(person.name, person.reason, person.markupPercentage, person.antifraudPercentage));
+                        } else {
+                            setSupplier({ 'docId': '', 'name': '', 'reason': '', 'markupPercentage': '', 'antifraudPercentage': '' });
+                            setBlocks(mountBlock('', '', '', ''));
+                        }
+                    } else {
+                        setSupplier({ 'docId': '', 'name': '', 'reason': '', 'markupPercentage': '', 'antifraudPercentage': '' });
+                        setBlocks(mountBlock('', '', '', ''));
+                        setSearchedName('');
+                    }
+                }}
+                list={suppliers.map(supplier => supplier.name).sort()}
+                placeholder="Escolha o fabricante"
+            />
+
+            <Details blocks={blocks} />
+
+            {supplier.docId && supplier.name && supplier.reason && supplier.antifraudPercentage && supplier.markupPercentage &&
                 <Form
-                    buttonName='Buscar'
-                    buttonOnTop={true}
-                    validations={searchValidation}
-                    sendToBackend={searchSupplier ? searchSupplier(state) : () => null}
+                    buttonName='Atualizar'
+                    validations={validations}
+                    sendToBackend={sendToBackend ? sendToBackend({ ...state, mountBlock }) : () => null}
                     inputs={[
-                        <FormInput name='type' label='Campo de busca' input={
-                            <Dropdown
-                                value={type}
-                                onChange={({ target: { value } }) => {
-                                    setType(value);
-                                    clear();
-                                }}
-                                onChangeKeyboard={element => {
-                                    if (element) {
-                                        setType(element.value)
-                                        clear();
-                                    }
-                                    else null
-                                }
-                                }
-                                readOnly={true}
-                                list={typeList}
-                                placeholder="Buscar por cnpj ou email"
-                            />}
-                        />,
-                        ...matchForm(state)
+                        <FormInput name='markupPercentage' label='Nova porcentagem de Markup' input={
+                            <InputPercentage
+                                value={markupPercentage}
+                                setValue={setMarkupPercentage}
+                            />
+                        } />,
+                        <FormInput name='antifraudPercentage' label='Nova porcentagem de Antifraude' input={
+                            <InputPercentage
+                                value={antifraudPercentage}
+                                setValue={setAntifraudPercentage}
+                            />
+                        } />
                     ]}
                 />
-
-                {supplier.name && <div style={info}>
-                    <label style={titleStyle}>FABRICANTE</label>
-                    <label style={contentStyle}>{supplier.name}</label>
-                </div>}
-
-                {supplier.markupPercentage && <div style={info}>
-                    <label style={titleStyle}>MARKUP ATUAL</label>
-                    <label style={contentStyle}>{supplier.markupPercentage}</label>
-                </div>}
-
-                {supplier.antifraudPercentage && <div style={{ ...info, paddingBottom: '10px' }}>
-                    <label style={titleStyle}>ANTIFRAUDE ATUAL</label>
-                    <label style={contentStyle}>{supplier.antifraudPercentage}</label>
-                </div>}
-
-                {supplier.docId && supplier.name && supplier.antifraudPercentage && supplier.markupPercentage &&
-                    <Form
-                        buttonName='Atualizar'
-                        validations={updateValidation}
-                        sendToBackend={sendToBackend ? sendToBackend({ ...state, clear }) : () => null}
-                        inputs={[
-                            <FormInput name='markupPercentage' label='Nova porcentagem de Markup' input={
-                                <InputText
-                                    value={markupPercentage ? `% ${markupPercentage}` : ''}
-                                    onChange={({ target: { value } }) => {
-                                        let newPrctg = value.replace(/\s/g, '').replace('%', '').replace(',', '.');
-                                        setMarkupPercentage(newPrctg)
-                                    }}
-                                    placeholder='% 0.00'
-                                    inputMode='numeric'
-                                />
-                            } />,
-                            <FormInput name='antifraudPercentage' label='Nova porcentagem de Antifraude' input={
-                                <InputText
-                                    value={antifraudPercentage ? `% ${antifraudPercentage}` : ''}
-                                    onChange={({ target: { value } }) => {
-                                        let newPrctg = value.replace(/\s/g, '').replace('%', '').replace(',', '.');
-                                        setAntifraudPercentage(newPrctg)
-                                    }}
-                                    placeholder='% 0.00'
-                                    inputMode='numeric'
-                                />
-                            } />
-                        ]}
-                    />
-                }
-            </>
+            }
         </motion.div>
     )
 
