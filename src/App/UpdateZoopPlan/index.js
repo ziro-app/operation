@@ -26,12 +26,12 @@ const UpdateZoopPlan = () => {
     const validations = [
         {
             name: 'markupPercentage',
-            validation: value => !!value,
+            validation: value => !!value && (value >= 0 && value <= 10000),
             value: markupPercentage,
             message: 'Valor inválido'
         }, {
             name: 'antifraudPercentage',
-            validation: value => !!value,
+            validation: value => !!value && (value >= 0 && value <= 10000),
             value: antifraudPercentage,
             message: 'Valor inválido'
         }
@@ -61,6 +61,13 @@ const UpdateZoopPlan = () => {
         }];
     }
 
+    const clear = () => {
+        setMarkupPercentage('');
+        setAntifraudPercentage('');
+        setSupplier({ 'docId': '', 'name': '', 'reason': '', 'markupPercentage': '', 'antifraudPercentage': '' });
+        setBlocks(mountBlock('', '', '', ''));
+    };
+
     useEffect(() => fetch(setIsLoading, setErrorLoading, setSuppliers, setBlocks, mountBlock), []);
 
     if (isLoading) return <SpinnerWithDiv size="5rem" />;
@@ -77,13 +84,9 @@ const UpdateZoopPlan = () => {
                         if (person) {
                             setSupplier(person);
                             setBlocks(mountBlock(person.name, person.reason, person.markupPercentage, person.antifraudPercentage));
-                        } else {
-                            setSupplier({ 'docId': '', 'name': '', 'reason': '', 'markupPercentage': '', 'antifraudPercentage': '' });
-                            setBlocks(mountBlock('', '', '', ''));
-                        }
+                        } else clear();
                     } else {
-                        setSupplier({ 'docId': '', 'name': '', 'reason': '', 'markupPercentage': '', 'antifraudPercentage': '' });
-                        setBlocks(mountBlock('', '', '', ''));
+                        clear();
                         setSearchedName('');
                     }
                 }}
@@ -94,13 +97,9 @@ const UpdateZoopPlan = () => {
                         if (person) {
                             setSupplier(person);
                             setBlocks(mountBlock(person.name, person.reason, person.markupPercentage, person.antifraudPercentage));
-                        } else {
-                            setSupplier({ 'docId': '', 'name': '', 'reason': '', 'markupPercentage': '', 'antifraudPercentage': '' });
-                            setBlocks(mountBlock('', '', '', ''));
-                        }
+                        } else clear();
                     } else {
-                        setSupplier({ 'docId': '', 'name': '', 'reason': '', 'markupPercentage': '', 'antifraudPercentage': '' });
-                        setBlocks(mountBlock('', '', '', ''));
+                        clear();
                         setSearchedName('');
                     }
                 }}
