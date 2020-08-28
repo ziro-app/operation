@@ -166,19 +166,16 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
       }, 2500)
     }
   }
+
   function handleInsurance(transaction) {
-    if (transaction.insurance === true) {
-      if (transaction.splitPaymentPlan.percentage !== 0) {
-        return `- ${currencyFormat(
-          parseFloat(transaction.charge.replace('R$', '').replace(',', '').replace('.', '')) / transaction.splitPaymentPlan.antiFraud.percentage -
-            (transaction.splitPaymentPlan.antiFraud.amount ? -transaction.splitPaymentPlan.antiFraud.amount : 0),
-        )}`
-      }
-      return `- ${currencyFormat(
-        parseFloat(transaction.charge.replace('R$', '').replace(',', '').replace('.', '')) - transaction.splitPaymentPlan.antiFraud.amount,
-      )}`
+    if (transaction.insurance === true && transaction.splitPaymentPlan) {
+      return `- ${parseFloat(transaction.splitPaymentPlan.antiFraud.receivable_amount)
+        .toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })
+        .replace(/\s/g, '')}`
     }
-    return '-'
+  }
+  function handleMarkup(transaction) {
+    return `- ${parseFloat(transaction.splitPaymentPlan.markup.receivable_amount).toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}`
   }
 
   useEffect(() => {
@@ -191,15 +188,27 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
         if (transaction !== {} && !nothing) {
           let block
           let dataTable
-          let feesFormatted = transaction.fees ? `- ${currencyFormat(parseFloat(transaction.fees.replace('.', '')))}` : '-'
+          let feesFormatted = transaction.fees
+            ? `- ${currencyFormat(
+                parseFloat(transaction.fees.replace('.', '')) +
+                  (transaction.splitPaymentPlan && (transaction.splitPaymentPlan.markup.amount || transaction.splitPaymentPlan.markup.percentage)
+                    ? parseFloat(handleMarkup(transaction).replace('R$', '').replace(',', '').replace('.', '').replace('-', ''))
+                    : 0),
+              )}`
+            : '-'
           let insuranceValueFormatted =
             Object.prototype.hasOwnProperty.call(transaction, 'receivables') &&
             feesFormatted !== '-' &&
             transaction.splitPaymentPlan &&
-            feesFormatted !== '-' &&
-            transaction.splitPaymentPlan.antiFraud.amount &&
-            transaction.splitPaymentPlan.antiFraud.percentage
+            (transaction.splitPaymentPlan.antiFraud.amount || transaction.splitPaymentPlan.antiFraud.percentage)
               ? handleInsurance(transaction)
+              : '-'
+          let markupValueFormatted =
+            Object.prototype.hasOwnProperty.call(transaction, 'receivables') &&
+            feesFormatted !== '-' &&
+            transaction.splitPaymentPlan &&
+            (transaction.splitPaymentPlan.markup.amount || transaction.splitPaymentPlan.markup.percentage)
+              ? handleMarkup(transaction)
               : '-'
           let liquidFormatted = transaction.fees
             ? currencyFormat(
@@ -207,6 +216,7 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
                   `${(
                     stringToFloat(transaction.charge) -
                     parseFloat(transaction.fees) -
+                    (markupValueFormatted !== '-' ? stringToFloat(markupValueFormatted.replace(/[R$\.,]/g, '').replace('-', '')) : 0) -
                     (insuranceValueFormatted !== '-' ? stringToFloat(insuranceValueFormatted.replace(/[R$\.,]/g, '').replace('-', '')) : 0)
                   ).toFixed(2)}`.replace(/[R$\.,]/g, ''),
                 ),
@@ -291,12 +301,16 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
             let unpaidAmount = 0
             let unpaidAmountWithoutFees = 0
             sortedTransactions.map(transaction => {
+              const sumSplit =
+                sortedSplitAmount.length > 0
+                  ? sortedSplitAmount
+                      .filter(item => item.installment === transaction.installment)
+                      .reduce((acc, val) => {
+                        return parseFloat(acc) + parseFloat(val.gross_amount)
+                      }, 0)
+                  : 0
               if (!transaction.paid_at) {
-                let upAm = round(
-                  parseFloat(transaction.gross_amount) +
-                    (sortedSplitAmount.length > 0 ? parseFloat(sortedSplitAmount[transaction.installment - 1].gross_amount) : 0),
-                  2,
-                )
+                let upAm = round(parseFloat(transaction.gross_amount) + (sortedSplitAmount.length > 0 ? sumSplit : 0), 2)
                 let upAmw = round(parseFloat(transaction.amount), 2)
                 unpaidRows.push([
                   `${transaction.installment}`,
@@ -309,11 +323,7 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
                 unpaidAmount += parseFloat(upAm)
                 unpaidAmountWithoutFees += parseFloat(upAmw)
               } else {
-                let upAm = round(
-                  parseFloat(transaction.gross_amount) +
-                    (sortedSplitAmount.length > 0 ? parseFloat(sortedSplitAmount[transaction.installment - 1].gross_amount) : 0),
-                  2,
-                )
+                let upAm = round(parseFloat(transaction.gross_amount) + (sortedSplitAmount.length > 0 ? sumSplit : 0), 2)
                 let upAmw = round(parseFloat(transaction.amount), 2)
                 paidRows.push([
                   `${transaction.installment}`,
