@@ -45,7 +45,13 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
   const [remakeBlockTransaction, setRemakeBlockTransaction] = useState(false)
   async function getTransaction(transactionId, setTransaction, setError, transaction) {
     await fetch(transactionId, setTransaction, setError, transaction)
-    if (transaction.splitPaymentPlan === '') setOlderTransaction(true)
+
+    if (
+      transaction.splitPaymentPlan === '' ||
+      (transaction.splitPaymentPlan.markup.percentage === 0 && transaction.splitPaymentPlan.markup.amount === 0)
+    )
+      setOlderTransaction(true)
+    else setOlderTransaction(false)
   }
   useEffect(() => {
     setTransaction({})
@@ -331,9 +337,7 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
                       }, 0)
                   : 0
               if (!transaction.paid_at) {
-                console.log('transaction', transaction)
                 let upAm = round(parseFloat(transaction.gross_amount) + (sortedSplitAmount.length > 0 ? sumSplit : 0), 2)
-                console.log('olderTransaction', olderTransaction)
                 let upAmw = olderTransaction ? round(parseFloat(transaction.amount), 2) : round(parseFloat(transaction.gross_amount), 2)
                 unpaidRows.push([
                   `${transaction.installment}`,
@@ -347,7 +351,7 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
                 unpaidAmountWithoutFees += parseFloat(upAmw)
               } else {
                 let upAm = round(parseFloat(transaction.gross_amount) + (sortedSplitAmount.length > 0 ? sumSplit : 0), 2)
-                olderTransaction ? round(parseFloat(transaction.amount), 2) : round(parseFloat(transaction.gross_amount), 2)
+                let upAmw = olderTransaction ? round(parseFloat(transaction.amount), 2) : round(parseFloat(transaction.gross_amount), 2)
                 paidRows.push([
                   `${transaction.installment}`,
                   `${parcelFormat(upAm)}`,
