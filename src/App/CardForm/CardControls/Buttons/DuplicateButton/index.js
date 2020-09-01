@@ -12,7 +12,7 @@ export default ({ setDuplicateImageModal }) => {
                 strokeWidth={2}
                 style={containerDuplicateImageClass}
                 onClick={() => setDuplicateImageModal(true)}
-                color="blue"
+                color="#222"
             />
         </>
     );

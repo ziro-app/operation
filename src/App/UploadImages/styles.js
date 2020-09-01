@@ -152,17 +152,23 @@ export const brandName = {
     radioButtonContainer = {
         display: 'flex',
         position: 'relative',
-        top: '-10px',
+        top: '-15px',
     },
     checkbox = {
-        position: 'relative',
-        cursor: 'pointer',
-        borderRadius: '50%',
-        width: '20px',
-        height: '20px',
-        padding: '6px',
-        background: '#fff',
-        boxShadow: '0px 2px 10px -4px #222',
+      position: 'relative',
+      background: '#fff',
+      borderRadius: '30%',
+      cursor: 'pointer',
+      width: '12px',
+      height: '12px',
+      padding: '6px',
+      boxShadow: '0px 2px 10px -4px #222',
     },
     centerInline = { display: 'flex', justifyContent: 'space-between', alignItems: 'center', margin: '5px' },
-    gapBetweenFlexItems = { padding: '4px' }
+    gapBetweenFlexItems = {
+      fontFamily: fontTitle,
+      fontSize: '1.3rem',
+      fontWeight: '500',
+      paddingLeft: '5px',
+      textTransform: 'uppercase'
+    }

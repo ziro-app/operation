@@ -1,7 +1,7 @@
 export const fileContainerDeleteImageClass = {
     position: 'relative',
     background: '#fff',
-    borderRadius: '50%',
+    borderRadius: '30%',
     cursor: 'pointer',
     width: '20px',
     height: '20px',
