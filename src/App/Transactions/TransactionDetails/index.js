@@ -189,20 +189,28 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
           let block
           let dataTable
           console.log('transaction', transaction)
-          let feesFormatted = transaction.fees
-            ? ` ${
-                transaction.splitPaymentPlan && (transaction.splitPaymentPlan.markup.amount || transaction.splitPaymentPlan.markup.percentage)
-                  ? '- '.concat(
-                      parseFloat(transaction.splitPaymentPlan.markup.receivable_gross_amount)
-                        .toLocaleString('pt-br', {
-                          style: 'currency',
-                          currency: 'BRL',
-                        })
-                        .replace(/\s/g, ''),
-                    )
-                  : '-'
-              }`
-            : '-'
+          let feesFormatted =
+            transaction.status !== 'Cancelado' && transaction.fees
+              ? ` ${
+                  transaction.splitPaymentPlan && (transaction.splitPaymentPlan.markup.amount || transaction.splitPaymentPlan.markup.percentage)
+                    ? '- '.concat(
+                        parseFloat(transaction.splitPaymentPlan.markup.receivable_gross_amount)
+                          .toLocaleString('pt-br', {
+                            style: 'currency',
+                            currency: 'BRL',
+                          })
+                          .replace(/\s/g, ''),
+                      )
+                    : '- '.concat(
+                        parseFloat(transaction.fees)
+                          .toLocaleString('pt-br', {
+                            style: 'currency',
+                            currency: 'BRL',
+                          })
+                          .replace(/\s/g, ''),
+                      )
+                }`
+              : '-'
           let insuranceValueFormatted =
             transaction.status !== 'Cancelado' &&
             Object.prototype.hasOwnProperty.call(transaction, 'receivables') &&
@@ -218,8 +226,9 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
             (transaction.splitPaymentPlan.markup.amount || transaction.splitPaymentPlan.markup.percentage)
               ? handleMarkup(transaction)
               : '-'
+
           let liquidFormatted =
-            transaction.status !== 'Cancelado' && transaction.fees
+            transaction.status !== 'Cancelado' && markupValueFormatted !== '-'
               ? currencyFormat(
                   parseFloat(
                     `${(
@@ -229,8 +238,10 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
                     ).toFixed(2)}`.replace(/[R$\.,]/g, ''),
                   ),
                 )
+              : transaction.fees
+              ? currencyFormat(parseFloat(`${(stringToFloat(transaction.charge) - transaction.fees).toFixed(2)}`.replace(/[R$\.,]/g, '')))
               : '-'
-
+          console.log(liquidFormatted)
           block = [
             {
               header: 'Venda',
