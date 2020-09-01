@@ -84,9 +84,9 @@ export default (states, identifierOfPicture, dispatch, defaultQuantityValue, dev
                         {states[`typeSize${identifierOfPicture}`] === 'number' ? (
                             <Icon
                                 style={checkbox}
-                                type="circleChecked"
+                                type="check"
                                 size={15}
-                                strokeWidth={2}
+                                strokeWidth={3}
                                 onClick={() => {
                                     let payload = {
                                         userValue: 'number',
@@ -109,11 +109,8 @@ export default (states, identifierOfPicture, dispatch, defaultQuantityValue, dev
                                 }}
                             />
                         ) : (
-                            <Icon
+                            <div
                                 style={checkbox}
-                                type="circle"
-                                size={15}
-                                strokeWidth={2}
                                 onClick={() => {
                                     let payload = {
                                         userValue: 'number',
@@ -133,8 +130,8 @@ export default (states, identifierOfPicture, dispatch, defaultQuantityValue, dev
                                         inputType: 'sizes',
                                     };
                                     dispatch(payload);
-                                }}
-                            />
+                                }}>
+                            </div>
                         )}
                         <label style={gapBetweenFlexItems}>Numero</label>
                     </div>
@@ -142,9 +139,9 @@ export default (states, identifierOfPicture, dispatch, defaultQuantityValue, dev
                         {states[`typeSize${identifierOfPicture}`] === 'letter' ? (
                             <Icon
                                 style={checkbox}
-                                type="circleChecked"
+                                type="check"
                                 size={15}
-                                strokeWidth={2}
+                                strokeWidth={3}
                                 onClick={() => {
                                     let payload = {
                                         userValue: 'letter',
@@ -167,11 +164,8 @@ export default (states, identifierOfPicture, dispatch, defaultQuantityValue, dev
                                 }}
                             />
                         ) : (
-                            <Icon
+                            <div
                                 style={checkbox}
-                                type="circle"
-                                size={15}
-                                strokeWidth={2}
                                 onClick={() => {
                                     let payload = {
                                         userValue: 'letter',
@@ -191,8 +185,8 @@ export default (states, identifierOfPicture, dispatch, defaultQuantityValue, dev
                                         inputType: 'sizes',
                                     };
                                     dispatch(payload);
-                                }}
-                            />
+                                }}>
+                            </div>
                         )}
                         <label style={gapBetweenFlexItems}>Letra</label>
                     </div>

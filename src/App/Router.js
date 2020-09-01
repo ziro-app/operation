@@ -193,7 +193,7 @@ const Router = ({ isLogged }) => {
             </HeaderBack>
         ),
         '/upload-imagens': (
-            <HeaderBack title="Upload de imagens/Novo" navigateTo="/assessoria">
+            <HeaderBack title="Upload de imagens" navigateTo="/assessoria">
                 <UploadImages withIcon imgExtension={['.jpg', '.gif', '.png', '.gif']} maxFileSize={5242880} />
             </HeaderBack>
         ),

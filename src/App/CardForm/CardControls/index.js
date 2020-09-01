@@ -29,7 +29,7 @@ const CardControls = ({
       {setThumbPhoto ? (
         <div style={checkboxContainer}>
           <CheckBoxThumbPhoto thumbPhoto={thumbPhoto} setThumbPhoto={setThumbPhoto} identifierOfPicture={identifierOfPicture} />
-          <div style={caption}>Foto de capa</div>
+          <div style={caption}>Capa</div>
         </div>
       ) : (
         <div />
@@ -73,7 +73,7 @@ const CardControls = ({
               thumbPhoto,
               setThumbPhoto,
             }}
-            labelText="Deseja realmente excluir a imagem ?"
+            labelText="Deseja realmente excluir a imagem?"
           />
         </div>
       </div>

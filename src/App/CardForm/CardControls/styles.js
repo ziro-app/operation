@@ -4,20 +4,16 @@ export const container = {
         display: 'flex',
         justifyContent: 'space-between',
         position: 'relative',
-        top: '1px',
         boxSizing: 'border-box',
         width: '100%',
-        padding: '5px 5px',
-        borderTopLeftRadius: '5px',
-        borderTopRightRadius: '5px',
-        background: 'rgba(0,0,0,0.6)',
+        padding: '15px 10px'
     },
     checkboxContainer = {
         display: 'grid',
         gridTemplateColumns: '1fr 4fr',
-        gridGap: '10px',
+        gridGap: '5px',
         alignItems: 'center',
-        justifyItems: 'center',
+        justifyItems: 'left',
     },
     buttonsDuplicateRemoveContainer = {
         display: 'grid',
@@ -28,11 +24,9 @@ export const container = {
     },
     caption = {
         position: 'relative',
-        left: '-15px',
         fontFamily: fontTitle,
-        padding: '0px 10px',
         fontSize: '1.5rem',
-        color: 'white',
+        color: '#222',
     },
     modalContainer = {
         zIndex: '999',
