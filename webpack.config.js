@@ -54,7 +54,9 @@ module.exports = (env, { mode }) => {
       email_token,
       api_email,
       sheet_leads_pre_id,
-      homolog,
+      token_correios,
+      url_correios,
+      homolog
     } = require('./credentials')
     config.devtool = 'cheap-module-eval-source-map'
     config.devServer = { historyApiFallback: true, hot: true, port: 9090 }
@@ -86,6 +88,8 @@ module.exports = (env, { mode }) => {
           EMAIL_TOKEN: JSON.stringify(email_token),
           API_EMAIL: JSON.stringify(api_email),
           SHEET_LEADS_PRE_ID: JSON.stringify(sheet_leads_pre_id),
+          TOKEN_CORREIOS: JSON.stringify(token_correios),
+          URL_CORREIOS: JSON.stringify(url_correios),
           // FOR DEV TESTS ONLY
           HOMOLOG: JSON.stringify(homolog),
         },
@@ -136,6 +140,8 @@ module.exports = (env, { mode }) => {
           EMAIL_TOKEN: JSON.stringify(process.env.EMAIL_TOKEN),
           API_EMAIL: JSON.stringify(process.env.API_EMAIL),
           SHEET_LEADS_PRE_ID: JSON.stringify(process.env.SHEET_LEADS_PRE_ID),
+          TOKEN_CORREIOS: JSON.stringify(process.env.TOKEN_CORREIOS),
+          URL_CORREIOS: JSON.stringify(process.env.URL_CORREIOS),
         },
       }),
     )
