@@ -41,9 +41,11 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
   const [blocksStoreowner, setBlocksStoreowner] = useState([])
   const [validationMessage, setValidationMessage] = useState('')
   const [loadingButton, setLoadingButton] = useState(false)
+  const [olderTransaction, setOlderTransaction] = useState(false)
   const [remakeBlockTransaction, setRemakeBlockTransaction] = useState(false)
   async function getTransaction(transactionId, setTransaction, setError, transaction) {
     await fetch(transactionId, setTransaction, setError, transaction)
+    if (transaction.splitPaymentPlan === '') setOlderTransaction(true)
   }
   useEffect(() => {
     setTransaction({})
@@ -329,8 +331,10 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
                       }, 0)
                   : 0
               if (!transaction.paid_at) {
+                console.log('transaction', transaction)
                 let upAm = round(parseFloat(transaction.gross_amount) + (sortedSplitAmount.length > 0 ? sumSplit : 0), 2)
-                let upAmw = round(parseFloat(transaction.gross_amount), 2)
+                console.log('olderTransaction', olderTransaction)
+                let upAmw = olderTransaction ? round(parseFloat(transaction.amount), 2) : round(parseFloat(transaction.gross_amount), 2)
                 unpaidRows.push([
                   `${transaction.installment}`,
                   `${parcelFormat(upAm)}`,
@@ -343,7 +347,7 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
                 unpaidAmountWithoutFees += parseFloat(upAmw)
               } else {
                 let upAm = round(parseFloat(transaction.gross_amount) + (sortedSplitAmount.length > 0 ? sumSplit : 0), 2)
-                let upAmw = round(parseFloat(transaction.amount), 2)
+                olderTransaction ? round(parseFloat(transaction.amount), 2) : round(parseFloat(transaction.gross_amount), 2)
                 paidRows.push([
                   `${transaction.installment}`,
                   `${parcelFormat(upAm)}`,
