@@ -79,6 +79,7 @@ const sendToBackend = state => async () => {
                     'Content-Type': 'application/json'
 				}
 			}
+			console.log('aqui!')
         try {
 				const requestSedex = await axios(config('sedex'))
 				const requestPac = await axios(config('pac'))
