@@ -14,6 +14,10 @@ const sendToBackend = state => () => {
     setMaxInstallments,
     observations,
     setObservations,
+    hasSplitPaymentPlan,
+    setInsurenceDropdownValue,
+    insurance,
+    setInsurance,
   } = state
   const nome = nickname ? nickname.trim() : ''
   const baseUrl = process.env.HOMOLOG ? 'http://localhost:8080/pagamento/' : 'https://ziro.app/pagamento/'
@@ -33,6 +37,8 @@ const sendToBackend = state => () => {
             maxInstallments,
             status: 'Aguardando Pagamento',
             observations,
+            insurance: insurance || true,
+            splitPaymentPlan: hasSplitPaymentPlan || null,
           })
           try {
             const doc = await docRef.get()
@@ -46,6 +52,8 @@ const sendToBackend = state => () => {
           setCharge('')
           setMaxInstallments('')
           setObservations('')
+          setInsurance(null)
+          setInsurenceDropdownValue('')
         } else {
           throw { msg: 'Vendedor não encontrado', customError: true }
         }
@@ -58,6 +66,8 @@ const sendToBackend = state => () => {
         setCharge('')
         setMaxInstallments('')
         setObservations('')
+        setInsurance(null)
+        setInsurenceDropdownValue('')
       }
       if (error.customError) reject(error)
       else {

@@ -273,7 +273,7 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
                 },
                 {
                   title: 'Valor líquido',
-                  content: liquidFormatted,
+                  content: transaction.status !== 'Cancelado' ? liquidFormatted : '-',
                 },
                 {
                   title: 'Parcela máxima',
@@ -320,7 +320,6 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
                   .filter(item => item.split_rule !== null)
                   .reverse()
               : transaction.receivables.sort((a, b) => b.installment - a.installment).reverse()
-            console.log(sortedTransactions)
             const paidRows = []
             const paidClicks = []
             let paidAmount = 0
@@ -330,7 +329,6 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
             let unpaidAmount = 0
             let unpaidAmountWithoutFees = 0
             sortedTransactions.map(transaction => {
-              console.log('transaction teste', transaction)
               const sumSplit =
                 sortedSplitAmount.length > 0
                   ? sortedSplitAmount

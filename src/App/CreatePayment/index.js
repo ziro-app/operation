@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
+import { db, fs } from '../../Firebase/index'
 
 import Dropdown from '@bit/vitorbarbosa19.ziro.dropdown'
 import Form from '@bit/vitorbarbosa19.ziro.form'
@@ -27,6 +28,10 @@ const CreatePayment = () => {
   const [maxInstallments, setMaxInstallments] = useState('')
   const [observations, setObservations] = useState('')
   const { nickname } = useContext(userContext)
+  const [hasSplitPaymentPlan, setHasSplitPaymentPlan] = useState(null)
+  const [insurance, setInsurance] = useState(null)
+  const [insurenceDropdownValue, setInsurenceDropdownValue] = useState('')
+  const options = ['Com seguro', 'Sem seguro']
   const state = {
     nickname,
     setBrand,
@@ -40,8 +45,31 @@ const CreatePayment = () => {
     setMaxInstallments,
     observations,
     setObservations,
+    hasSplitPaymentPlan,
+    setHasSplitPaymentPlan,
+    insurance,
+    setInsurance,
+    setInsurenceDropdownValue,
   }
+  useEffect(() => {
+    if (fantasy) {
+      async function getSplitPaymentPlan() {
+        const getSupplierData = await db.collection('suppliers').where('fantasia', '==', fantasy.toUpperCase()).get()
+        getSupplierData.forEach(doc => {
+          setHasSplitPaymentPlan(doc.data().splitPaymentPlan || null)
+        })
+      }
+      getSplitPaymentPlan()
+    }
+  }, [fantasy])
   const validations = [
+    {
+      name: 'insurance',
+      validation: value =>
+        hasSplitPaymentPlan && (hasSplitPaymentPlan.antiFraud.amount || hasSplitPaymentPlan.antiFraud.percentage) ? value !== '' : true,
+      value: insurenceDropdownValue,
+      message: 'Opção inválida',
+    },
     {
       name: 'fantasy',
       validation: value => fantasyNames.includes(value),
@@ -157,6 +185,43 @@ const CreatePayment = () => {
                     }}
                     placeholder="R$1.299,99"
                     inputMode="numeric"
+                  />
+                }
+              />,
+              <FormInput
+                name="insurance"
+                label="Seguro antifraude na transação"
+                input={
+                  <Dropdown
+                    disabled={!hasSplitPaymentPlan}
+                    value={insurenceDropdownValue}
+                    onChange={({ target: { value } }) => {
+                      if (value === 'Com seguro') {
+                        setInsurance(true)
+                        setInsurenceDropdownValue('Com seguro')
+                      } else if (value === 'Sem seguro') {
+                        setInsurance(false)
+                        setInsurenceDropdownValue('Sem seguro')
+                      } else {
+                        setInsurance(null)
+                        setInsurenceDropdownValue('')
+                      }
+                    }}
+                    onChangeKeyboard={element => {
+                      if (element.value === 'Com seguro') {
+                        setInsurance(true)
+                        setInsurenceDropdownValue('Com seguro')
+                      } else if (element.value === 'Sem seguro') {
+                        setInsurance(false)
+                        setInsurenceDropdownValue('Sem seguro')
+                      } else {
+                        setInsurance(false)
+                        setInsurenceDropdownValue('')
+                      }
+                    }}
+                    list={options}
+                    placeholder="Escolha com ou sem seguro"
+                    readOnly
                   />
                 }
               />,
