@@ -37,7 +37,7 @@ const sendToBackend = state => () => {
             maxInstallments,
             status: 'Aguardando Pagamento',
             observations,
-            insurance: insurance || true,
+            insurance: insurance !== null ? insurance : true,
             splitPaymentPlan: hasSplitPaymentPlan || null,
           })
           try {
