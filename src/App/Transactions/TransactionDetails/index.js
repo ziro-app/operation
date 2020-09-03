@@ -37,7 +37,9 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
   const [captureModal, setCaptureModal] = useState(false)
   const [splitTransactionModal, setSplitTransactionModal] = useState(false)
   const textAreaRef = useRef(null)
-  const paymentLink = `https://ziro.app/pagamento/${transactionId}/escolher-cartao?doc`
+  const paymentLink = process.env.HOMOLOG
+    ? `http://localhost:8080/pagamento/${transactionId}/escolher-cartao?doc`
+    : `https://ziro.app/pagamento/${transactionId}/escolher-cartao?doc`
   const [blocksStoreowner, setBlocksStoreowner] = useState([])
   const [validationMessage, setValidationMessage] = useState('')
   const [loadingButton, setLoadingButton] = useState(false)
@@ -45,13 +47,14 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
   const [remakeBlockTransaction, setRemakeBlockTransaction] = useState(false)
   async function getTransaction(transactionId, setTransaction, setError, transaction) {
     await fetch(transactionId, setTransaction, setError, transaction)
-
-    if (
-      transaction.splitPaymentPlan === '' ||
-      (transaction.splitPaymentPlan.markup.percentage === 0 && transaction.splitPaymentPlan.markup.amount === 0)
-    )
-      setOlderTransaction(true)
-    else setOlderTransaction(false)
+    if (Object.prototype.hasOwnProperty.call(transaction, 'splitPaymentPlan')) {
+      if (
+        transaction.splitPaymentPlan === '' ||
+        (transaction.splitPaymentPlan.markup.percentage === 0 && transaction.splitPaymentPlan.markup.amount === 0)
+      )
+        setOlderTransaction(true)
+      else setOlderTransaction(false)
+    } else setOlderTransaction(false)
   }
   useEffect(() => {
     setTransaction({})
@@ -196,7 +199,6 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
         if (transaction !== {} && !nothing) {
           let block
           let dataTable
-          console.log('transaction', transaction)
           let feesFormatted =
             transaction.status !== 'Cancelado' && transaction.fees
               ? ` ${
@@ -249,7 +251,6 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
               : transaction.fees
               ? currencyFormat(parseFloat(`${(stringToFloat(transaction.charge) - transaction.fees).toFixed(2)}`.replace(/[R$\.,]/g, '')))
               : '-'
-          console.log(liquidFormatted)
           block = [
             {
               header: 'Venda',
@@ -318,7 +319,8 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
                   .sort((a, b) => b.installment - a.installment)
                   .filter(item => item.split_rule !== null)
                   .reverse()
-              : []
+              : transaction.receivables.sort((a, b) => b.installment - a.installment).reverse()
+            console.log(sortedTransactions)
             const paidRows = []
             const paidClicks = []
             let paidAmount = 0
@@ -328,6 +330,7 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
             let unpaidAmount = 0
             let unpaidAmountWithoutFees = 0
             sortedTransactions.map(transaction => {
+              console.log('transaction teste', transaction)
               const sumSplit =
                 sortedSplitAmount.length > 0
                   ? sortedSplitAmount
