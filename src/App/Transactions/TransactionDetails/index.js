@@ -204,7 +204,7 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
               ? ` ${
                   transaction.splitPaymentPlan && (transaction.splitPaymentPlan.markup.amount || transaction.splitPaymentPlan.markup.percentage)
                     ? '- '.concat(
-                        parseFloat(transaction.splitPaymentPlan.markup.receivable_gross_amount)
+                        parseFloat(parseFloat(transaction.splitPaymentPlan.markup.receivable_gross_amount) + parseFloat(transaction.fees))
                           .toLocaleString('pt-br', {
                             style: 'currency',
                             currency: 'BRL',
@@ -243,6 +243,7 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
                   parseFloat(
                     `${(
                       stringToFloat(transaction.charge) -
+                      parseFloat(transaction.fees) -
                       (markupValueFormatted !== '-' ? stringToFloat(markupValueFormatted.replace(/[R$\.,]/g, '').replace('-', '')) : 0) -
                       (insuranceValueFormatted !== '-' ? stringToFloat(insuranceValueFormatted.replace(/[R$\.,]/g, '').replace('-', '')) : 0)
                     ).toFixed(2)}`.replace(/[R$\.,]/g, ''),
@@ -339,7 +340,7 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
                   : 0
               if (!transaction.paid_at) {
                 let upAm = round(parseFloat(transaction.gross_amount) + (sortedSplitAmount.length > 0 ? sumSplit : 0), 2)
-                let upAmw = olderTransaction ? round(parseFloat(transaction.amount), 2) : round(parseFloat(transaction.gross_amount), 2)
+                let upAmw = round(parseFloat(transaction.amount), 2)
                 unpaidRows.push([
                   `${transaction.installment}`,
                   `${parcelFormat(upAm)}`,
@@ -347,12 +348,13 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
                   `${dateFormat(transaction.expected_on)}`,
                   <Icon type="chevronRight" size={14} />,
                 ])
+
                 unpaidClicks.push(() => setLocation(`/transacoes/${transactionId}/${transaction.receivableZoopId}`))
                 unpaidAmount += parseFloat(upAm)
                 unpaidAmountWithoutFees += parseFloat(upAmw)
               } else {
-                let upAm = round(parseFloat(transaction.gross_amount) + (sortedSplitAmount.length > 0 ? sumSplit : 0), 2)
-                let upAmw = olderTransaction ? round(parseFloat(transaction.amount), 2) : round(parseFloat(transaction.gross_amount), 2)
+                let upAm = round(parseFloat(transaction.gross_amount), 2)
+                let upAmw = round(parseFloat(transaction.amount), 2)
                 paidRows.push([
                   `${transaction.installment}`,
                   `${parcelFormat(upAm)}`,

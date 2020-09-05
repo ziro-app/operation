@@ -38,18 +38,37 @@ const ReceivableDetails = ({ transactions, transactionId, receivableId, transact
             .reverse()
         : []
       setReceivable(effectReceivable)
+      const sumReceivablesSplitAntiFraud =
+        sortedSplitAmount.length > 0
+          ? sortedSplitAmount
+              .filter(item => item.split_rule === transaction.splitPaymentPlan.antiFraud.id)
+              .filter(item => item.installment === effectReceivable.installment)
+              .reduce((acc, { gross_amount }) => acc + parseFloat(gross_amount), 0)
+          : 0
+      //console.log('sumReceivablesSplitAntiFraud', sumReceivablesSplitAntiFraud);
+      const sumReceivablesSplitZiro =
+        sortedSplitAmount.length > 0
+          ? sortedSplitAmount
+              .filter(item => item.split_rule === transaction.splitPaymentPlan.markup.id)
+              .filter(item => item.installment === effectReceivable.installment)
+              .reduce((acc, { gross_amount }) => acc + parseFloat(gross_amount), 0)
+          : 0
+      //console.log('sumReceivablesSplitZiro', sumReceivablesSplitZiro);
       if (effectReceivable) {
         let feesFormatted =
           effectReceivable.gross_amount && effectReceivable.amount
             ? `- ${currencyFormat(
-                parseFloat(`${round(parseFloat(effectReceivable.gross_amount) - parseFloat(effectReceivable.amount), 2)}`.replace(/[R$\.,]/g, '')),
+                parseFloat(
+                  `${round(
+                    parseFloat(effectReceivable.gross_amount) + parseFloat(sumReceivablesSplitZiro) - parseFloat(effectReceivable.amount),
+                    2,
+                  )}`.replace(/[R$\.,]/g, ''),
+                ),
               )}`
             : '-'
         let zoopSplitFormatted =
           sortedSplitAmount.length > 0
-            ? `- ${currencyFormat(
-                parseFloat(`${round(parseFloat(sortedSplitAmount[effectReceivable.installment - 1].gross_amount), 2)}`.replace(/[R$\.,]/g, '')),
-              )}`
+            ? `- ${currencyFormat(parseFloat(`${round(parseFloat(sumReceivablesSplitAntiFraud), 2)}`.replace(/[R$\.,]/g, '')))}`
             : '-'
         let zoopSplitValue = zoopSplitFormatted !== '-' ? stringToFloat(zoopSplitFormatted.replace(/[R$\.,]/g, '').replace('-', '')) : 0
         block = [
@@ -62,7 +81,9 @@ const ReceivableDetails = ({ transactions, transactionId, receivableId, transact
               },
               {
                 title: 'Valor da parcela',
-                content: `R$${parcelFormat(round(effectReceivable.gross_amount, 2))}`,
+                content: `R$${parcelFormat(
+                  round(parseFloat(effectReceivable.gross_amount) + sumReceivablesSplitZiro + sumReceivablesSplitAntiFraud, 2),
+                )}`,
               },
               {
                 title: 'Tarifa Ziro Pay',
