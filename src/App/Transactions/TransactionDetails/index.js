@@ -180,9 +180,11 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
 
   function handleInsurance(transaction) {
     if (transaction.insurance === true && transaction.splitPaymentPlan) {
-      return `- ${parseFloat(transaction.splitPaymentPlan.antiFraud.receivable_amount)
-        .toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })
-        .replace(/\s/g, '')}`
+      if (transaction.splitPaymentPlan.antiFraud.receivable_amount)
+        return `- ${parseFloat(transaction.splitPaymentPlan.antiFraud.receivable_amount)
+          .toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })
+          .replace(/\s/g, '')}`
+      return '- R$0,00'
     }
   }
   function handleMarkup(transaction) {
@@ -224,6 +226,7 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
           let insuranceValueFormatted =
             transaction.status !== 'Cancelado' &&
             Object.prototype.hasOwnProperty.call(transaction, 'receivables') &&
+            Object.prototype.hasOwnProperty.call(transaction.splitPaymentPlan.antiFraud.amount, 'receivable_amount') &&
             feesFormatted !== '-' &&
             transaction.splitPaymentPlan &&
             (transaction.splitPaymentPlan.antiFraud.amount || transaction.splitPaymentPlan.antiFraud.percentage)
@@ -236,7 +239,6 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
             (transaction.splitPaymentPlan.markup.amount || transaction.splitPaymentPlan.markup.percentage)
               ? handleMarkup(transaction)
               : '-'
-
           let liquidFormatted =
             transaction.status !== 'Cancelado' && markupValueFormatted !== '-'
               ? currencyFormat(
@@ -245,7 +247,7 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
                       stringToFloat(transaction.charge) -
                       parseFloat(transaction.fees) -
                       (markupValueFormatted !== '-' ? stringToFloat(markupValueFormatted.replace(/[R$\.,]/g, '').replace('-', '')) : 0) -
-                      (insuranceValueFormatted !== '-' ? stringToFloat(insuranceValueFormatted.replace(/[R$\.,]/g, '').replace('-', '')) : 0)
+                      (insuranceValueFormatted !== '- R$0,00' ? stringToFloat(insuranceValueFormatted.replace(/[R$\.,]/g, '').replace('-', '')) : 0)
                     ).toFixed(2)}`.replace(/[R$\.,]/g, ''),
                   ),
                 )
@@ -269,7 +271,7 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
                   content: feesFormatted,
                 },
                 {
-                  title: 'Tarifa Seguro Ziro',
+                  title: 'Tarifa Ziro Seguro Antifraude',
                   content: insuranceValueFormatted,
                 },
                 {
