@@ -14,7 +14,7 @@ const sendToBackend = state => () => {
     setMaxInstallments,
     observations,
     setObservations,
-    hasSplitPaymentPlan,
+    hasSellerZoopPlan,
     setInsurenceDropdownValue,
     insurance,
     setInsurance,
@@ -38,7 +38,7 @@ const sendToBackend = state => () => {
             status: 'Aguardando Pagamento',
             observations,
             insurance: insurance !== null ? insurance : true,
-            splitPaymentPlan: hasSplitPaymentPlan || null,
+            sellerZoopPlan: hasSellerZoopPlan || null,
           })
           try {
             const doc = await docRef.get()

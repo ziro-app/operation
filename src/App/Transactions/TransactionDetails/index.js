@@ -47,11 +47,8 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
   const [remakeBlockTransaction, setRemakeBlockTransaction] = useState(false)
   async function getTransaction(transactionId, setTransaction, setError, transaction) {
     await fetch(transactionId, setTransaction, setError, transaction)
-    if (Object.prototype.hasOwnProperty.call(transaction, 'splitPaymentPlan')) {
-      if (
-        transaction.splitPaymentPlan === '' ||
-        (transaction.splitPaymentPlan.markup.percentage === 0 && transaction.splitPaymentPlan.markup.amount === 0)
-      )
+    if (Object.prototype.hasOwnProperty.call(transaction, 'sellerZoopPlan')) {
+      if (transaction.sellerZoopPlan === '' || (transaction.sellerZoopPlan.markup.percentage === 0 && transaction.sellerZoopPlan.markup.amount === 0))
         setOlderTransaction(true)
       else setOlderTransaction(false)
     } else setOlderTransaction(false)
@@ -179,16 +176,16 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
   }
 
   function handleInsurance(transaction) {
-    if (transaction.insurance === true && transaction.splitPaymentPlan) {
-      if (transaction.splitPaymentPlan.antiFraud.receivable_amount)
-        return `- ${parseFloat(transaction.splitPaymentPlan.antiFraud.receivable_amount)
+    if (transaction.insurance === true && transaction.sellerZoopPlan) {
+      if (transaction.sellerZoopPlan.antiFraud.receivable_amount)
+        return `- ${parseFloat(transaction.sellerZoopPlan.antiFraud.receivable_amount)
           .toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })
           .replace(/\s/g, '')}`
       return '- R$0,00'
     }
   }
   function handleMarkup(transaction) {
-    return `- ${parseFloat(transaction.splitPaymentPlan.markup.receivable_amount).toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}`
+    return `- ${parseFloat(transaction.sellerZoopPlan.markup.receivable_amount).toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}`
   }
 
   useEffect(() => {
@@ -201,12 +198,13 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
         if (transaction !== {} && !nothing) {
           let block
           let dataTable
+          console.log('transaction',transaction)
           let feesFormatted =
             transaction.status !== 'Cancelado' && transaction.fees
               ? ` ${
-                  transaction.splitPaymentPlan && (transaction.splitPaymentPlan.markup.amount || transaction.splitPaymentPlan.markup.percentage)
+                  transaction.sellerZoopPlan && (transaction.sellerZoopPlan.markup.amount || transaction.sellerZoopPlan.markup.percentage)
                     ? '- '.concat(
-                        parseFloat(parseFloat(transaction.splitPaymentPlan.markup.receivable_gross_amount) + parseFloat(transaction.fees))
+                        parseFloat(parseFloat(transaction.sellerZoopPlan.markup.receivable_gross_amount) + parseFloat(transaction.fees))
                           .toLocaleString('pt-br', {
                             style: 'currency',
                             currency: 'BRL',
@@ -226,17 +224,20 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
           let insuranceValueFormatted =
             transaction.status !== 'Cancelado' &&
             Object.prototype.hasOwnProperty.call(transaction, 'receivables') &&
-            Object.prototype.hasOwnProperty.call(transaction.splitPaymentPlan.antiFraud.amount, 'receivable_amount') &&
+            Object.prototype.hasOwnProperty.call(transaction, 'sellerZoopPlan') &&
+            Object.prototype.hasOwnProperty.call(transaction.sellerZoopPlan, 'antiFraud') &&
+            Object.prototype.hasOwnProperty.call(transaction.sellerZoopPlan.antiFraud.amount, 'receivable_amount') &&
             feesFormatted !== '-' &&
-            transaction.splitPaymentPlan &&
-            (transaction.splitPaymentPlan.antiFraud.amount || transaction.splitPaymentPlan.antiFraud.percentage)
+            transaction.sellerZoopPlan &&
+            (transaction.sellerZoopPlan.antiFraud.amount || transaction.sellerZoopPlan.antiFraud.percentage)
               ? handleInsurance(transaction)
-              : '- R$0,00'
+              : '-'
+          console.log(transaction)
           let markupValueFormatted =
             Object.prototype.hasOwnProperty.call(transaction, 'receivables') &&
             feesFormatted !== '-' &&
-            transaction.splitPaymentPlan &&
-            (transaction.splitPaymentPlan.markup.amount || transaction.splitPaymentPlan.markup.percentage)
+            transaction.sellerZoopPlan &&
+            (transaction.sellerZoopPlan.markup.amount || transaction.sellerZoopPlan.markup.percentage)
               ? handleMarkup(transaction)
               : '-'
           let liquidFormatted =
@@ -247,7 +248,7 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
                       stringToFloat(transaction.charge) -
                       parseFloat(transaction.fees) -
                       (markupValueFormatted !== '-' ? stringToFloat(markupValueFormatted.replace(/[R$\.,]/g, '').replace('-', '')) : 0) -
-                      (insuranceValueFormatted !== '- R$0,00' ? stringToFloat(insuranceValueFormatted.replace(/[R$\.,]/g, '').replace('-', '')) : 0)
+                      (transaction.insurance ? stringToFloat(insuranceValueFormatted.replace(/[R$\.,]/g, '').replace('-', '')) : 0)
                     ).toFixed(2)}`.replace(/[R$\.,]/g, ''),
                   ),
                 )

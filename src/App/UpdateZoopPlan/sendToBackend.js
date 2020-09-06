@@ -27,7 +27,7 @@ const sendToBackend = state => () => {
             .collection('suppliers')
             .doc(docId)
             .update({
-              splitPaymentPlan: {
+                sellerZoopPlan: {
                 antiFraud: {
                   amount: 0,
                   percentage: percentAntifraud,

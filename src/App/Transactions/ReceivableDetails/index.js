@@ -41,7 +41,7 @@ const ReceivableDetails = ({ transactions, transactionId, receivableId, transact
       const sumReceivablesSplitAntiFraud =
         sortedSplitAmount.length > 0
           ? sortedSplitAmount
-              .filter(item => item.split_rule === transaction.splitPaymentPlan.antiFraud.id)
+              .filter(item => item.split_rule === transaction.sellerZoopPlan.antiFraud.id)
               .filter(item => item.installment === effectReceivable.installment)
               .reduce((acc, { gross_amount }) => acc + parseFloat(gross_amount), 0)
           : 0
@@ -49,30 +49,33 @@ const ReceivableDetails = ({ transactions, transactionId, receivableId, transact
       const sumReceivablesSplitZiro =
         sortedSplitAmount.length > 0
           ? sortedSplitAmount
-              .filter(item => item.split_rule === transaction.splitPaymentPlan.markup.id)
+              .filter(item => item.split_rule === transaction.sellerZoopPlan.markup.id)
               .filter(item => item.installment === effectReceivable.installment)
               .reduce((acc, { gross_amount }) => acc + parseFloat(gross_amount), 0)
           : 0
-      //console.log('sumReceivablesSplitZiro', sumReceivablesSplitZiro);
+      console.log('effectReceivable.gross_amount', effectReceivable.gross_amount)
+      console.log('effectReceivable.amount', effectReceivable.amount)
+      console.log('sumReceivablesSplitZiro', sumReceivablesSplitZiro)
+      console.log(
+        'calculo',
+        round(parseFloat(effectReceivable.gross_amount) + parseFloat(sumReceivablesSplitZiro) - parseFloat(effectReceivable.amount), 2)
+          .toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })
+          .replace(/\s/g, ''),
+      )
       if (effectReceivable) {
         let feesFormatted =
           effectReceivable.gross_amount && effectReceivable.amount
-            ? `- ${currencyFormat(
-                parseFloat(
-                  `${round(
-                    parseFloat(effectReceivable.gross_amount) + parseFloat(sumReceivablesSplitZiro) - parseFloat(effectReceivable.amount),
-                    2,
-                  )}`.replace(/[R$\.,]/g, ''),
-                ),
-              )}`
+            ? `- ${round(parseFloat(effectReceivable.gross_amount) + parseFloat(sumReceivablesSplitZiro) - parseFloat(effectReceivable.amount), 2)
+                .toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })
+                .replace(/\s/g, '')}`
             : '-'
+        console.log('transaction', transaction)
         let zoopSplitFormatted =
-          sortedSplitAmount.length > 0
+          sortedSplitAmount.length > 0 && transaction.insurance === true
             ? `- ${parseFloat(`${round(parseFloat(sumReceivablesSplitAntiFraud), 2)}`.replace(/[R$\.,]/g, ''))
                 .toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })
                 .replace(/\s/g, '')}`
             : '- R$0,00'
-        let zoopSplitValue = zoopSplitFormatted !== '-' ? stringToFloat(zoopSplitFormatted.replace(/[R$\.,]/g, '').replace('-', '')) : 0
         block = [
           {
             header: 'Informações adicionais',
