@@ -53,15 +53,6 @@ const ReceivableDetails = ({ transactions, transactionId, receivableId, transact
               .filter(item => item.installment === effectReceivable.installment)
               .reduce((acc, { gross_amount }) => acc + parseFloat(gross_amount), 0)
           : 0
-      console.log('effectReceivable.gross_amount', effectReceivable.gross_amount)
-      console.log('effectReceivable.amount', effectReceivable.amount)
-      console.log('sumReceivablesSplitZiro', sumReceivablesSplitZiro)
-      console.log(
-        'calculo',
-        round(parseFloat(effectReceivable.gross_amount) + parseFloat(sumReceivablesSplitZiro) - parseFloat(effectReceivable.amount), 2)
-          .toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })
-          .replace(/\s/g, ''),
-      )
       if (effectReceivable) {
         let feesFormatted =
           effectReceivable.gross_amount && effectReceivable.amount
@@ -69,10 +60,9 @@ const ReceivableDetails = ({ transactions, transactionId, receivableId, transact
                 .toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })
                 .replace(/\s/g, '')}`
             : '-'
-        console.log('transaction', transaction)
         let zoopSplitFormatted =
           sortedSplitAmount.length > 0 && transaction.insurance === true
-            ? `- ${parseFloat(`${round(parseFloat(sumReceivablesSplitAntiFraud), 2)}`.replace(/[R$\.,]/g, ''))
+            ? `- ${parseFloat(`${round(parseFloat(sumReceivablesSplitAntiFraud), 2)}`)
                 .toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })
                 .replace(/\s/g, '')}`
             : '- R$0,00'

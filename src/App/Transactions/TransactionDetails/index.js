@@ -198,7 +198,6 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
         if (transaction !== {} && !nothing) {
           let block
           let dataTable
-          console.log('transaction',transaction)
           let feesFormatted =
             transaction.status !== 'Cancelado' && transaction.fees
               ? ` ${
@@ -226,13 +225,10 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
             Object.prototype.hasOwnProperty.call(transaction, 'receivables') &&
             Object.prototype.hasOwnProperty.call(transaction, 'sellerZoopPlan') &&
             Object.prototype.hasOwnProperty.call(transaction.sellerZoopPlan, 'antiFraud') &&
-            Object.prototype.hasOwnProperty.call(transaction.sellerZoopPlan.antiFraud.amount, 'receivable_amount') &&
             feesFormatted !== '-' &&
-            transaction.sellerZoopPlan &&
             (transaction.sellerZoopPlan.antiFraud.amount || transaction.sellerZoopPlan.antiFraud.percentage)
               ? handleInsurance(transaction)
-              : '-'
-          console.log(transaction)
+              : '- R$0,00'
           let markupValueFormatted =
             Object.prototype.hasOwnProperty.call(transaction, 'receivables') &&
             feesFormatted !== '-' &&
