@@ -17,7 +17,7 @@ const sendToBackend = state => () => {
   const nome = nickname ? nickname.trim() : ''
   const percentMarkup = markupPercentage ? markupPercentage / 100 : -1
   const percentAntifraud = antifraudPercentage ? antifraudPercentage / 100 : -1
-  const allowedUsers = ['Uiller', 'Vitor']
+  const allowedUsers = ['Uiller', 'Vitor', 'Alessandro', 'Wermeson']
 
   return new Promise(async (resolve, reject) => {
     try {
