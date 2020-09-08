@@ -1,15 +1,15 @@
 import React, { memo, useEffect, useState } from 'react'
-import { dateFormat, parcelFormat, round, stringToFloat } from '../utils'
 
 import Details from '@bit/vitorbarbosa19.ziro.details'
 import Error from '@bit/vitorbarbosa19.ziro.error'
 import Header from '@bit/vitorbarbosa19.ziro.header'
 import { containerWithPadding } from '@ziro/theme'
 import currencyFormat from '@ziro/currency-format'
-import fetch from '../TransactionDetails/fetch'
-import matchStatusColor from '../matchStatusColor'
 import { motion } from 'framer-motion'
 import { useLocation } from 'wouter'
+import fetch from '../TransactionDetails/fetch'
+import matchStatusColor from '../matchStatusColor'
+import { dateFormat, parcelFormat, round, stringToFloat } from '../utils'
 
 const ReceivableDetails = ({ transactions, transactionId, receivableId, transaction, setTransaction }) => {
   const [blocks, setBlocks] = useState([])
@@ -27,7 +27,6 @@ const ReceivableDetails = ({ transactions, transactionId, receivableId, transact
       setNothing(false)
       getTransaction(transactionId, setTransaction, setError, transaction).catch(r => setNothing(true))
     }
-
     if (typeof transaction.receivables !== 'undefined' && !nothing) {
       let block = []
       const effectReceivable = transaction.receivables.filter(receivable => receivable.receivableZoopId === receivableId)[0]
@@ -45,7 +44,7 @@ const ReceivableDetails = ({ transactions, transactionId, receivableId, transact
               .filter(item => item.installment === effectReceivable.installment)
               .reduce((acc, { gross_amount }) => acc + parseFloat(gross_amount), 0)
           : 0
-      //console.log('sumReceivablesSplitAntiFraud', sumReceivablesSplitAntiFraud);
+      // console.log('sumReceivablesSplitAntiFraud', sumReceivablesSplitAntiFraud);
       const sumReceivablesSplitZiro =
         sortedSplitAmount.length > 0
           ? sortedSplitAmount
@@ -54,13 +53,13 @@ const ReceivableDetails = ({ transactions, transactionId, receivableId, transact
               .reduce((acc, { gross_amount }) => acc + parseFloat(gross_amount), 0)
           : 0
       if (effectReceivable) {
-        let feesFormatted =
+        const feesFormatted =
           effectReceivable.gross_amount && effectReceivable.amount
             ? `- ${round(parseFloat(effectReceivable.gross_amount) + parseFloat(sumReceivablesSplitZiro) - parseFloat(effectReceivable.amount), 2)
                 .toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })
                 .replace(/\s/g, '')}`
             : '-'
-        let zoopSplitFormatted =
+        const zoopSplitFormatted =
           sortedSplitAmount.length > 0 && transaction.insurance === true
             ? `- ${parseFloat(`${round(parseFloat(sumReceivablesSplitAntiFraud), 2)}`)
                 .toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })
@@ -76,9 +75,10 @@ const ReceivableDetails = ({ transactions, transactionId, receivableId, transact
               },
               {
                 title: 'Valor da parcela',
-                content: `R$${parcelFormat(
+                content:
+                  transaction.charge /* `R$${parcelFormat(
                   round(parseFloat(effectReceivable.gross_amount) + sumReceivablesSplitZiro + sumReceivablesSplitAntiFraud, 2),
-                )}`,
+                )}` */,
               },
               {
                 title: 'Tarifa Ziro Pay',
