@@ -38,6 +38,7 @@ import UpdatePass from './UpdatePass/index'
 import UpdateStoreowner from './UpdateStoreowner/index'
 import UpdateUserInfo from './UpdateUserInfo/index'
 import UpdateZoopPlan from './UpdateZoopPlan/index'
+import CommissionModels from './CommissionModels'
 import UploadBillet from './UploadBillet'
 import UploadImages from './UploadImages/index'
 import UserCart from './UserCart'
@@ -108,6 +109,7 @@ const Router = ({ isLogged }) => {
               ['Requisição de Material', 'requerir-material'],
               ['Entrada/Saída do Caixa', 'entrada-saida'],
               ['Solicitação de Link', 'solicitacao-link'],
+              ['Modelo Parcela 2', 'commission-models'],
             ]}
           />
         </motion.div>
@@ -232,6 +234,11 @@ const Router = ({ isLogged }) => {
     '/solicitacao-link': (
       <HeaderBack title="Solicitação de Link" navigateTo="/administrativo">
         <LinkRequest />
+      </HeaderBack>
+    ),
+    '/commission-models': (
+      <HeaderBack title="Modelo Parcela 2" navigateTo="/administrativo">
+        <CommissionModels />
       </HeaderBack>
     ),
     '/checar-email': (

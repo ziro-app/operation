@@ -56,6 +56,8 @@ module.exports = (env, { mode }) => {
       sheet_leads_pre_id,
       token_correios,
       url_correios,
+      url_providers,
+      token_providers,
       homolog
     } = require('./credentials')
     config.devtool = 'cheap-module-eval-source-map'
@@ -90,6 +92,8 @@ module.exports = (env, { mode }) => {
           SHEET_LEADS_PRE_ID: JSON.stringify(sheet_leads_pre_id),
           TOKEN_CORREIOS: JSON.stringify(token_correios),
           URL_CORREIOS: JSON.stringify(url_correios),
+          URL_PROVIDERS: JSON.stringify(url_providers),
+          TOKEN_PROVIDERS: JSON.stringify(token_providers),
           // FOR DEV TESTS ONLY
           HOMOLOG: JSON.stringify(homolog),
         },
@@ -142,6 +146,8 @@ module.exports = (env, { mode }) => {
           SHEET_LEADS_PRE_ID: JSON.stringify(process.env.SHEET_LEADS_PRE_ID),
           TOKEN_CORREIOS: JSON.stringify(process.env.TOKEN_CORREIOS),
           URL_CORREIOS: JSON.stringify(process.env.URL_CORREIOS),
+          URL_PROVIDERS: JSON.stringify(process.env.URL_PROVIDERS),
+          TOKEN_PROVIDERS: JSON.stringify(process.env.TOKEN_PROVIDERS)
         },
       }),
     )
