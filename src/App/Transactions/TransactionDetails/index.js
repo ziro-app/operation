@@ -3,9 +3,6 @@
 /* eslint-disable no-lone-blocks */
 import React, { useEffect, useRef, useState } from 'react'
 import { alertColor, containerWithPadding, successColor } from '@ziro/theme'
-import { btn, btnRed, buttonContainer, custom, illustrationContainer, modalContainer, modalLabel, spinner } from './styles'
-import { dateFormat, parcelFormat, round, stringToFloat } from '../utils'
-import { db, fs } from '../../../Firebase/index'
 
 import Button from '@bit/vitorbarbosa19.ziro.button'
 import Details from '@bit/vitorbarbosa19.ziro.details'
@@ -18,9 +15,12 @@ import Spinner from '@bit/vitorbarbosa19.ziro.spinner'
 import Table from '@bit/vitorbarbosa19.ziro.table'
 import axios from 'axios'
 import currencyFormat from '@ziro/currency-format'
-import fetch from './fetch'
 import { motion } from 'framer-motion'
 import { useLocation } from 'wouter'
+import fetch from './fetch'
+import { db, fs } from '../../../Firebase/index'
+import { dateFormat, parcelFormat, round, stringToFloat } from '../utils'
+import { btn, btnRed, buttonContainer, custom, illustrationContainer, modalContainer, modalLabel, spinner } from './styles'
 
 const TransactionDetails = ({ transactions, transactionId, transaction, setTransaction }) => {
   const [amount, setAmount] = useState('')
@@ -222,6 +222,7 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
               : '-'
           let insuranceValueFormatted =
             transaction.status !== 'Cancelado' &&
+            transaction.insurance === true &&
             Object.prototype.hasOwnProperty.call(transaction, 'receivables') &&
             Object.prototype.hasOwnProperty.call(transaction, 'sellerZoopPlan') &&
             Object.prototype.hasOwnProperty.call(transaction.sellerZoopPlan, 'antiFraud') &&
@@ -395,7 +396,7 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
             })
 
           setBlocks(block)
-          setData(dataTable ? dataTable : [])
+          setData(dataTable || [])
 
           {
             let blockStoreowner
