@@ -19,7 +19,7 @@ const sendToBackend = state => () => {
     const currentAntifraud = parseFloat(supplier.antifraudPercentage.replace(/[\s\%]/g, ''))
     const percentMarkup = markupPercentage !== '' ? markupPercentage / 100 : currentMarkup
     const percentAntifraud = antifraudPercentage !== '' ? antifraudPercentage / 100 : currentAntifraud
-    const allowedUsers = ['Uiller', 'Vitor', 'Alessandro', 'Wermeson']
+    const allowedUsers = ['Uiller', 'Vitor', 'Alessandro', 'Wermeson', 'Ale']
 
     return new Promise(async (resolve, reject) => {
         try {
