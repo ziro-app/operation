@@ -1,17 +1,18 @@
 import React, { useContext, useEffect, useReducer, useState } from 'react'
+import { cardContainerClass, fileContainerClass } from './styles'
+import { duplicateImage, inputStateControl, isValidBrand, onDragOver, removeImage, settingThePicturesAndFiles } from './functionsUploadImages'
+
+import BrandChoose from './BrandChoose'
 import Button from '@bit/vitorbarbosa19.ziro.button'
+import Card from '../CardForm'
 import ImageUpload from '@bit/vitorbarbosa19.ziro.image-upload'
 import Spinner from '@bit/vitorbarbosa19.ziro.spinner-with-div'
-import { v4 as uuid } from 'uuid'
-import fetch from './fetch'
-import { cardContainerClass, fileContainerClass } from './styles'
-import sendToBackend from './sendToBackend'
-import { duplicateImage, inputStateControl, isValidBrand, onDragOver, removeImage, settingThePicturesAndFiles } from './functionsUploadImages'
-import Card from '../CardForm'
-import BrandChoose from './BrandChoose'
-import inputs from './inputs'
 import ToastNotification from '../ToastNotification'
+import fetch from './fetch'
+import inputs from './inputs'
+import sendToBackend from './sendToBackend'
 import { userContext } from '../appContext'
+import { v4 as uuid } from 'uuid'
 
 const UploadImages = () => {
   const [isLoading, setIsLoading] = useState(true)
@@ -38,7 +39,7 @@ const UploadImages = () => {
   useEffect(() => {
     if (filesList.length === 0) setThumbPhoto('')
   }, [filesList])
-
+  console.log(states)
   useEffect(() => {
     if (pictures[0]) setShowButtonBot(true)
     else setShowButtonBot(false)

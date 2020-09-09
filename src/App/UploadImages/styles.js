@@ -1,4 +1,4 @@
-import { fontTitle, gradient } from '@ziro/theme';
+import { fontTitle, gradient } from '@ziro/theme'
 
 export const brandName = {
     marginBottom: '-20px',
@@ -7,11 +7,20 @@ export const brandName = {
     fontSize: '20px',
     textAlign: 'center',
   },
+  priceLabel = {
+    fontFamily: fontTitle,
+    fontSize: '1.5rem',
+  },
   image = {
     alignSelf: 'start',
     objectFit: 'cover',
     width: '100%',
     borderRadius: '3px',
+  },
+  editCardInputs = {
+    display: 'grid',
+    gridRowGap: '3em',
+    padding: '10px 10px 20px',
   },
   icon = {
     alignSelf: 'center',
@@ -132,43 +141,43 @@ export const brandName = {
     fontWeight: 'bold',
     lineHeight: '30px',
     width: '30px',
-      height: '30px',
+    height: '30px',
   },
-    // .flipMove
-    flipMoveClass = {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        flexWrap: 'wrap',
-        width: '100%',
-    },
-    title = {
-        fontFamily: fontTitle,
-    },
-    container = {
-        display: 'grid',
-    },
-    quantitiesStyle = { display: 'grid', gridRowGap: '10px', padding: '0 0 0 5px', position: 'relative' },
-    radioButtonContainer = {
-        display: 'flex',
-        position: 'relative',
-        top: '-15px',
-    },
-    checkbox = {
-      position: 'relative',
-      background: '#fff',
-      borderRadius: '30%',
-      cursor: 'pointer',
-      width: '12px',
-      height: '12px',
-      padding: '6px',
-      boxShadow: '0px 2px 10px -4px #222',
-    },
-    centerInline = { display: 'flex', justifyContent: 'space-between', alignItems: 'center', margin: '5px' },
-    gapBetweenFlexItems = {
-      fontFamily: fontTitle,
-      fontSize: '1.3rem',
-      fontWeight: '500',
-      paddingLeft: '5px',
-      textTransform: 'uppercase'
-    }
+  // .flipMove
+  flipMoveClass = {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexWrap: 'wrap',
+    width: '100%',
+  },
+  title = {
+    fontFamily: fontTitle,
+  },
+  container = {
+    display: 'grid',
+  },
+  quantitiesStyle = { display: 'grid', gridRowGap: '10px', padding: '0 0 0 5px', position: 'relative' },
+  radioButtonContainer = {
+    display: 'flex',
+    position: 'relative',
+    top: '-15px',
+  },
+  checkbox = {
+    position: 'relative',
+    background: '#fff',
+    borderRadius: '30%',
+    cursor: 'pointer',
+    width: '12px',
+    height: '12px',
+    padding: '6px',
+    boxShadow: '0px 2px 10px -4px #222',
+  },
+  centerInline = { display: 'flex', justifyContent: 'space-between', alignItems: 'center', margin: '5px' },
+  gapBetweenFlexItems = {
+    fontFamily: fontTitle,
+    fontSize: '1.3rem',
+    fontWeight: '500',
+    paddingLeft: '5px',
+    textTransform: 'uppercase',
+  }
