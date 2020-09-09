@@ -26,12 +26,12 @@ const UpdateZoopPlan = () => {
     const validations = [
         {
             name: 'markupPercentage',
-            validation: value => !!value && (value >= 0 && value <= 10000),
+            validation: value => value === '' || (value >= 0 && value <= 10000),
             value: markupPercentage,
             message: 'Valor inválido'
         }, {
             name: 'antifraudPercentage',
-            validation: value => !!value && (value >= 0 && value <= 10000),
+            validation: value => value === '' || (value >= 0 && value <= 10000),
             value: antifraudPercentage,
             message: 'Valor inválido'
         }

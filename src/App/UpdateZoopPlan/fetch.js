@@ -27,8 +27,8 @@ const fetch = (setIsLoading, setErrorLoading, setSuppliers, setBlocks, mountBloc
             setErrorLoading(false);
             setIsLoading(false);
         } catch (error) {
+            console.log(error);
             setErrorLoading(true);
-        } finally {
             setIsLoading(false);
         }
     };
