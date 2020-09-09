@@ -40,8 +40,8 @@ const sendToBackend = state => () => {
                                 },
                             },
                         })
-                    const updatedMarkup = currencyFormat(percentMarkup * 100).replace('R$', '% ')
-                    const updatedAntifraud = currencyFormat(percentAntifraud * 100).replace('R$', '% ')
+                    const updatedMarkup = percentMarkup !== 0 ? currencyFormat(percentMarkup * 100).replace('R$', '% ') : '% 0'
+                    const updatedAntifraud = percentAntifraud !== 0 ? currencyFormat(percentAntifraud * 100).replace('R$', '% ') : '% 0'
                     setMarkupPercentage('')
                     setAntifraudPercentage('')
                     setSupplier({ ...supplier, markupPercentage: updatedMarkup, antifraudPercentage: updatedAntifraud })
