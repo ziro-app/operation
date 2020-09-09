@@ -52,7 +52,7 @@ export default memo(
     setThumbPhoto,
     secondArrayOfInputs,
   }) => {
-    console.log('index inside cardForm', index)
+    console.log('index inside cardForm.', index)
     const [removeImageModal, setRemoveImageModal] = useState(false)
     const [duplicateImageModal, setDuplicateImageModal] = useState(false)
     return (
