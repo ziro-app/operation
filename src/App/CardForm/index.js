@@ -1,14 +1,18 @@
-import React, { useState, memo } from 'react'
-import RImg from 'react-image'
-import SpinnerWithDiv from '@bit/vitorbarbosa19.ziro.spinner-with-div'
-import CardInputs from './cardInputs'
+/* eslint-disable no-nested-ternary */
+import React, { memo, useCallback, useMemo, useState } from 'react'
 import {
   fileContainerUploadPictureContainerClass,
   fileContainerUploadPictureContainerimgUploadPictureClass,
   fileContainerUploadPicturesWrapperClass,
   image,
 } from './styles'
+
+import CardControls from './CardControls'
+import CardInputs from './cardInputs'
+import Dropdown from '@bit/vitorbarbosa19.ziro.dropdown'
 import InfoCard from './infoCard'
+import RImg from 'react-image'
+import SpinnerWithDiv from '@bit/vitorbarbosa19.ziro.spinner-with-div'
 import SummaryCard from './summaryCard'
 import CardControls from './CardControls'
 
@@ -34,6 +38,7 @@ export default memo(
     picture,
     removeImage,
     update,
+    updateCarts,
     cardInfo = false,
     editing,
     cartProduct,
@@ -52,7 +57,9 @@ export default memo(
     setThumbPhoto,
     secondArrayOfInputs,
   }) => {
-    console.log('index inside cardForm.', index)
+    console.log('index inside cardForm', index)
+    console.log('product', product)
+
     const [removeImageModal, setRemoveImageModal] = useState(false)
     const [duplicateImageModal, setDuplicateImageModal] = useState(false)
     return (
@@ -83,15 +90,20 @@ export default memo(
               src={product.url}
               style={image}
               container={children =>
-                !initialStatus || initialStatus === 'waitingInfo' || editing ? (
-                  <CardInputs
-                    image={children || null}
-                    update={update || null}
-                    index={index}
-                    arrayOfInputs={arrayOfInputs}
-                    validations={validations}
-                    secondArrayOfInputs={secondArrayOfInputs}
-                  />
+                editing || !initialStatus || initialStatus === 'waitingInfo' ? (
+                  <>
+                    <CardInputs
+                      image={children || null}
+                      update={update || null}
+                      updateCarts={updateCarts || null}
+                      index={index}
+                      arrayOfInputs={arrayOfInputs}
+                      validations={validations}
+                      secondArrayOfInputs={secondArrayOfInputs}
+                      product={product}
+                      setEditing={setEditing}
+                    />
+                  </>
                 ) : initialStatus === 'unavailable' && cartProduct.status !== 'closed' ? (
                   <InfoCard product={{ requestedQuantities: {}, ...state, ...cartProduct }} image={children} setEditing={setEditing} />
                 ) : (

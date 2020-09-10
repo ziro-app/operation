@@ -61,7 +61,7 @@ const toPair = storeowners => id => (razao => razao ? [id,clean(razao)]:null)(st
 
 // funcao para preparar os estoreowners para consumo
 export const prepareStoreownersForConsume = (usableCarts, storeowners) => () => {
-    const availableStoreowners = usableCarts.reduce(toList('storeownerId'), [])
+    const availableStoreowners = usableCarts.reduce(toList('buyerStoreownerId'), [])
     const pairs = availableStoreowners.map(toPair(storeowners)).filter(exist)
     const [ids,razoes] = pairs.reduce(toSplittedArrays,[[],[]])
     const [IdToRazao,RazaoToId] = pairs.reduce(toConverter,[{},{}])
@@ -73,9 +73,9 @@ export const prepareStoreownersForConsume = (usableCarts, storeowners) => () => 
  */
 
 // funcao para retornar um filtro para os carrinhos de acordo com as variaveis
-const withPredicate = (seller, storeownerId, status) => cart => 
+const withPredicate = (seller, buyerStoreownerId, status) => cart =>
 (!seller||cart.brandName.startsWith(seller))&&
-(!storeownerId||storeownerId===cart.storeownerId)&&
+(!buyerStoreownerId||buyerStoreownerId===cart.buyerStoreownerId)&&
 (!status||cart.status.startsWith(status))
 
 // funcao para criar um objeto { status: [carts] }
@@ -95,8 +95,8 @@ const toConsumableCarts = ({ added, lastUpdate, ...cart }) => {
     return { ...cart, added: toReadableDate(added.seconds), lastUpdate: lastUpdate && toReadableDate(lastUpdate.seconds) }
 }
 
-export const prepareCartsForConsume = (carts,seller,storeownerId,status) => () => {
-    const available = carts.filter(withPredicate(seller,storeownerId,status)).map(toConsumableCarts)
+export const prepareCartsForConsume = (carts,seller,buyerStoreownerId,status) => () => {
+    const available = carts.filter(withPredicate(seller,buyerStoreownerId,status)).map(toConsumableCarts)
     const byStatus = available.reduce(toStatusObject,{})
     return { available, byStatus }
 }
@@ -106,7 +106,7 @@ export const prepareCartsForConsume = (carts,seller,storeownerId,status) => () =
  */
 
 // funcao para criar um array com todos os carrinhos
-export const toCartArray = (acc,doc) => [...acc,{ ...doc.data(), id: doc.id, storeownerId: doc.ref.parent.parent.id }]
+export const toCartArray = (acc,doc) => [...acc,{ ...doc.data(), id: doc.id, buyerStoreownerId: doc.ref.parent.parent.id }]
 
 // funcao para criar um objeto com todos os storeowners
 export const toStoreownerData = (acc,doc) => ({...acc,[doc.id]: doc.data() })
