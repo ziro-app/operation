@@ -109,7 +109,7 @@ const Router = ({ isLogged }) => {
               ['Requisição de Material', 'requerir-material'],
               ['Entrada/Saída do Caixa', 'entrada-saida'],
               ['Solicitação de Link', 'solicitacao-link'],
-              ['Modelo Parcela 2', 'commission-models'],
+              ['Comissões', 'commission-models'],
             ]}
           />
         </motion.div>
@@ -237,7 +237,7 @@ const Router = ({ isLogged }) => {
       </HeaderBack>
     ),
     '/commission-models': (
-      <HeaderBack title="Modelo Parcela 2" navigateTo="/administrativo">
+      <HeaderBack title="Comissões" navigateTo="/administrativo">
         <CommissionModels />
       </HeaderBack>
     ),
