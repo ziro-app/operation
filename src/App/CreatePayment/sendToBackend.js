@@ -8,10 +8,10 @@ const sendToBackend = state => () => {
     setBrand,
     sellerId,
     charge,
-    maxInstallments,
+      installmentsMax,
     setFantasy,
     setCharge,
-    setMaxInstallments,
+    setInstallmentsMax,
     observations,
     setObservations,
     hasSellerZoopPlan,
@@ -34,7 +34,7 @@ const sendToBackend = state => () => {
             onBehalfOfBrand,
             sellerZoopId: sellerId,
             charge,
-            maxInstallments,
+              installmentsMax,
             status: 'Aguardando Pagamento',
             observations,
             insurance: insurance !== null ? insurance : true,
@@ -50,7 +50,7 @@ const sendToBackend = state => () => {
           setFantasy('')
           setBrand('')
           setCharge('')
-          setMaxInstallments('')
+          setInstallmentsMax('')
           setObservations('')
           setInsurance(null)
           setInsurenceDropdownValue('')
@@ -64,7 +64,7 @@ const sendToBackend = state => () => {
         setFantasy('')
         setBrand('')
         setCharge('')
-        setMaxInstallments('')
+        setInstallmentsMax('')
         setObservations('')
         setInsurance(null)
         setInsurenceDropdownValue('')

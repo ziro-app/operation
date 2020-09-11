@@ -10,10 +10,10 @@ import InputText from '@bit/vitorbarbosa19.ziro.input-text'
 import SpinnerWithDiv from '@bit/vitorbarbosa19.ziro.spinner-with-div'
 import axios from 'axios'
 import currencyFormat from '@ziro/currency-format'
-import { db } from '../../Firebase'
-import fetch from './fetch'
 import maskInput from '@ziro/mask-input'
 import { motion } from 'framer-motion'
+import { db } from '../../Firebase'
+import fetch from './fetch'
 import sendToBackend from './sendToBackend'
 
 function useIsMountedRef() {
@@ -38,7 +38,7 @@ const SplitPayment = ({ transactionId }) => {
   const [chargeTypeInput, setChargeTypeInput] = useState('')
   const [chargeType, setChargeType] = useState('')
   const [charge, setCharge] = useState('')
-  const [maxInstallments, setMaxInstallments] = useState('')
+  const [installmentsMax, setInstallmentsMax] = useState('')
   const [validationMessage, setValidationMessage] = useState('')
   const [cancelModal, setCancelModal] = useState(false)
   const [loadingButton, setLoadingButton] = useState(false)
@@ -81,7 +81,7 @@ const SplitPayment = ({ transactionId }) => {
     },
   ]
   useEffect(() => {
-    //let mounted = true;
+    // let mounted = true;
     if (transactionId) {
       fetch(transactionId, setTransaction, setError, transaction, setList, setIsLoading)
     }
@@ -92,7 +92,7 @@ const SplitPayment = ({ transactionId }) => {
   useEffect(() => {
     setAmount('')
   }, [chargeTypeInput])
-  //if (isLoading) return <SpinnerWithDiv size="5rem" />;
+  // if (isLoading) return <SpinnerWithDiv size="5rem" />;
   if (errorLoading) return <Error />
 
   const deleteSplit = async (id, item) => {
@@ -117,7 +117,7 @@ const SplitPayment = ({ transactionId }) => {
 
           setLoadingButton(false)
           setCancelModal(false)
-          //document.location.reload(true);
+          // document.location.reload(true);
 
           // setError(true);
           // setLocation('/recibo');
@@ -162,7 +162,7 @@ const SplitPayment = ({ transactionId }) => {
               label="Cobrança em"
               input={
                 <Dropdown
-                  readOnly={true}
+                  readOnly
                   value={chargeTypeInput}
                   onChange={({ target: { value } }) => {
                     setChargeTypeInput(value)
@@ -176,7 +176,7 @@ const SplitPayment = ({ transactionId }) => {
                   }}
                   onChangeKeyboard={element => {
                     if (element) {
-                      const value = element.value
+                      const {value} = element
                       setChargeTypeInput(value)
                       if (chargeTypeInput === '') {
                         setChargeType('')
@@ -218,8 +218,8 @@ const SplitPayment = ({ transactionId }) => {
                     onChange={({ target: { value } }) => {
                       const toInteger = parseInt(value.replace(/[R$\.,]/g, ''), 10)
                       const transactionAmount = parseInt(transaction.charge.replace('R$', '').replace(',', '').replace('.', ''))
-                      //if (toInteger > transactionAmount) setValidationMessage('Valor deve ser menor que o da transação');
-                      //else setValidationMessage('');
+                      // if (toInteger > transactionAmount) setValidationMessage('Valor deve ser menor que o da transação');
+                      // else setValidationMessage('');
                       return setAmount(maskInput(toInteger, '#######', true))
                     }}
                     placeholder="R$1.299,99"

@@ -1,17 +1,17 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { db, fs } from '../../Firebase/index'
 
 import Dropdown from '@bit/vitorbarbosa19.ziro.dropdown'
 import Form from '@bit/vitorbarbosa19.ziro.form'
 import FormInput from '@bit/vitorbarbosa19.ziro.form-input'
 import InputText from '@bit/vitorbarbosa19.ziro.input-text'
-import { Menu } from '../Menu'
 import SpinnerWithDiv from '@bit/vitorbarbosa19.ziro.spinner-with-div'
 import capitalize from '@ziro/capitalize'
 import currencyFormat from '@ziro/currency-format'
-import fetch from './fetch'
 import maskInput from '@ziro/mask-input'
 import { motion } from 'framer-motion'
+import fetch from './fetch'
+import { Menu } from '../Menu'
+import { db, fs } from '../../Firebase/index'
 import sendToBackend from './sendToBackend'
 import { userContext } from '../appContext'
 
@@ -25,7 +25,7 @@ const CreatePayment = () => {
   const [brand, setBrand] = useState('')
   const [zoopId, setZoopId] = useState('')
   const [charge, setCharge] = useState('')
-  const [maxInstallments, setMaxInstallments] = useState('')
+  const [installmentsMax, setInstallmentsMax] = useState('')
   const [observations, setObservations] = useState('')
   const { nickname } = useContext(userContext)
   const [hasSellerZoopPlan, setHasSellerZoopPlan] = useState(null)
@@ -39,10 +39,10 @@ const CreatePayment = () => {
     onBehalfOfBrand: capitalize(brand),
     sellerId: zoopId,
     charge,
-    maxInstallments,
+      installmentsMax,
     setFantasy,
     setCharge,
-    setMaxInstallments,
+    setInstallmentsMax,
     observations,
     setObservations,
     hasSellerZoopPlan,
@@ -90,9 +90,9 @@ const CreatePayment = () => {
       message: 'Fabricante inválido',
     },
     {
-      name: 'maxInstallments',
+      name: 'installmentsMax',
       validation: value => parseInt(value) > 0 && parseInt(value) <= 10,
-      value: maxInstallments,
+      value: installmentsMax,
       message: 'Deve ser entre 1 e 10',
     },
   ]
@@ -127,7 +127,7 @@ const CreatePayment = () => {
                     }}
                     onChangeKeyboard={element => {
                       if (element) {
-                        const value = element.value
+                        const {value} = element
                         setFantasy(value)
                         if (fantasyNames.includes(value)) {
                           const supplier = suppliers.filter(supplier => supplier.fantasia === value)
@@ -159,7 +159,7 @@ const CreatePayment = () => {
                     }}
                     onChangeKeyboard={element => {
                       if (element) {
-                        const value = element.value
+                        const {value} = element
                         setBrand(value)
                         if (catalogBrands.includes(value)) {
                           const selectedBrand = catalogBrands.filter(item => item.brand === value)
@@ -227,14 +227,14 @@ const CreatePayment = () => {
                 }
               />,
               <FormInput
-                name="maxInstallments"
+                name="installmentsMax"
                 label="Parcelamento máximo"
                 input={
                   <InputText
-                    value={maxInstallments}
+                    value={installmentsMax}
                     onChange={({ target: { value } }) => {
                       const toInteger = parseInt(value, 10)
-                      setMaxInstallments(maskInput(toInteger, '##', true))
+                      setInstallmentsMax(maskInput(toInteger, '##', true))
                     }}
                     placeholder="10"
                     inputMode="numeric"
@@ -276,7 +276,7 @@ const CreatePayment = () => {
                     }}
                     onChangeKeyboard={element => {
                       if (element) {
-                        const value = element.value
+                        const {value} = element
                         setFantasy(value)
                         if (fantasyNames.includes(value)) {
                           const supplier = suppliers.filter(supplier => supplier.fantasia === value)
@@ -307,14 +307,14 @@ const CreatePayment = () => {
                 }
               />,
               <FormInput
-                name="maxInstallments"
+                name="installmentsMax"
                 label="Parcelamento máximo"
                 input={
                   <InputText
-                    value={maxInstallments}
+                    value={installmentsMax}
                     onChange={({ target: { value } }) => {
                       const toInteger = parseInt(value, 10)
-                      setMaxInstallments(maskInput(toInteger, '##', true))
+                      setInstallmentsMax(maskInput(toInteger, '##', true))
                     }}
                     placeholder="10"
                     inputMode="numeric"

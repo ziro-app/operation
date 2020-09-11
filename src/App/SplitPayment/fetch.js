@@ -1,8 +1,8 @@
 import currencyFormat from '@ziro/currency-format';
+import axios from 'axios';
 import { db } from '../../Firebase/index';
 import matchStatusColor from '../Transactions/matchStatusColor';
 import { dateFormat } from '../Transactions/utils';
-import axios from 'axios';
 
 const getSplitRules = async (transaction_id, setTransaction, transaction, setList, setIsLoading) => {
   try {
@@ -37,68 +37,68 @@ const fetch = (transactionId, setTransaction, setError, transaction, setList, se
                     if (snapshot.exists) {
                         const {
                             charge,
-                            date,
+                            datePaid,
                             fees,
               installments,
               dateLinkCreated,
               transactionZoopId,
-              maxInstallments,
+                            installmentsMax,
               sellerZoopId,
               status,
                             buyerRazao,
                             receivables,
                             receivement,
                             seller,
-                            brand,
-                            firstFour,
-                            lastFour,
+                            cardBrand,
+                            cardFirstFour,
+                            cardLastFour,
                             cardholder,
                             receiptId,
                             split_rules,
                         } = snapshot.data()
                         const chargeFormatted = currencyFormat(charge);
-                        const dateFormatted = date ? dateFormat(date) : '';
+                        const dateFormatted = datePaid ? dateFormat(datePaid) : '';
 
-                        /*const dateFormatted = new Date(date.seconds * 1000)
+                        /* const dateFormatted = new Date(date.seconds * 1000)
                                                         .toLocaleDateString("pt-br", {
                                                             day: "2-digit",
                                                             month: "2-digit",
                                                             year: "2-digit",
                                                         })
-                                                        .replace(" de ", "/");*/
+                                                        .replace(" de ", "/"); */
                         const statusColor = matchStatusColor(status);
                         paymentDoc.push({
-              transactionZoopId: transactionZoopId ? transactionZoopId : '',
+              transactionZoopId: transactionZoopId || '',
               transactionId: snapshot.id,
               charge: chargeFormatted,
               dateLinkCreated,
-              date: dateFormatted,
-              fees: fees ? fees : '',
-              installments: installments ? installments : '',
-              maxInstallments: maxInstallments ? maxInstallments : '',
-              seller: buyerRazao ? buyerRazao : '-',
-              sellerZoopId: sellerZoopId ? sellerZoopId : '',
-              status: status ? status : '',
+                            datePaid: dateFormatted,
+              fees: fees || '',
+              installments: installments || '',
+                            installmentsMax: installmentsMax || '',
+              seller: buyerRazao || '-',
+              sellerZoopId: sellerZoopId || '',
+              status: status || '',
               statusColor: matchStatusColor(status),
                             buyerRazao,
-                            receivables: receivables ? receivables : [],
+                            receivables: receivables || [],
                             receivement,
-                            brand,
+                            cardBrand,
                             seller,
-                            firstFour,
-                            lastFour,
+                            cardFirstFour,
+                            cardLastFour,
                             cardholder,
                             receiptId,
                             split_rules,
                         })
                         if (transaction !== paymentDoc[0]) setTransaction(paymentDoc[0]);
                         setIsLoading(false);
-                        //setList(split_rules);
-                        //await getSplitRules(transactionZoopId, setTransaction, transaction, setList, setIsLoading);
+                        // setList(split_rules);
+                        // await getSplitRules(transactionZoopId, setTransaction, transaction, setList, setIsLoading);
                     } else {
                         setError(true);
-                        //setLastDoc(null);
-                        //if (payments) setPayments([]);
+                        // setLastDoc(null);
+                        // if (payments) setPayments([]);
                     }
                 },
                 error => {

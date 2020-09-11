@@ -181,7 +181,7 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
         return `- ${parseFloat(transaction.sellerZoopPlan.antiFraud.receivable_amount)
           .toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })
           .replace(/\s/g, '')}`
-      return '- R$0,00'
+      return '-'
     }
   }
   function handleMarkup(transaction) {
@@ -229,7 +229,7 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
             feesFormatted !== '-' &&
             (transaction.sellerZoopPlan.antiFraud.amount || transaction.sellerZoopPlan.antiFraud.percentage)
               ? handleInsurance(transaction)
-              : '- R$0,00'
+              : '-'
           let markupValueFormatted =
             Object.prototype.hasOwnProperty.call(transaction, 'receivables') &&
             feesFormatted !== '-' &&
@@ -238,7 +238,9 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
               ? handleMarkup(transaction)
               : '-'
           let liquidFormatted =
-            transaction.status !== 'Cancelado' && (markupValueFormatted !== '-' || insuranceValueFormatted !== '-')
+            transaction.status !== 'Cancelado' &&
+            transaction.status !== 'Pré Autorizado' &&
+            (markupValueFormatted !== '-' || insuranceValueFormatted !== '-')
               ? currencyFormat(
                   parseFloat(
                     `${(
@@ -278,7 +280,7 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
                 },
                 {
                   title: 'Parcela máxima',
-                  content: `${transaction.maxInstallments}x`,
+                  content: `${transaction.installmentsMax}x`,
                 },
                 {
                   title: 'Parcela escolhida',
@@ -286,7 +288,7 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
                 },
                 {
                   title: 'Data de pagamento',
-                  content: transaction.date ? `${transaction.date}` : '-',
+                  content: transaction.datePaid ? `${transaction.datePaid}` : '-',
                 },
                 {
                   title: 'Data de criação do link',
@@ -409,11 +411,11 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
                     body: [
                       {
                         title: 'Bandeira',
-                        content: transaction.brand ? transaction.brand : '-',
+                        content: transaction.cardBrand ? transaction.cardBrand : '-',
                       },
                       {
                         title: 'Número',
-                        content: transaction.firstFour ? `${transaction.firstFour}...${transaction.lastFour}` : '-',
+                        content: transaction.cardFirstFour ? `${transaction.cardFirstFour}...${transaction.cardLastFour}` : '-',
                       },
                       {
                         title: 'Portador',
@@ -430,11 +432,11 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
                   body: [
                     {
                       title: 'Bandeira',
-                      content: transaction.brand ? transaction.brand : '-',
+                      content: transaction.cardBrand ? transaction.cardBrand : '-',
                     },
                     {
                       title: 'Número',
-                      content: transaction.firstFour ? `${transaction.firstFour}...${transaction.lastFour}` : '-',
+                      content: transaction.cardFirstFour ? `${transaction.cardFirstFour}...${transaction.cardLastFour}` : '-',
                     },
                     {
                       title: 'Portador',

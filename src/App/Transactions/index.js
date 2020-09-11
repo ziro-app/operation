@@ -1,12 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react';
 import Spinner from '@bit/vitorbarbosa19.ziro.spinner';
 import Error from '@bit/vitorbarbosa19.ziro.error';
+import Dropdown from '@bit/vitorbarbosa19.ziro.dropdown';
 import TransactionsList from './TransactionsList/index';
 import TransactionDetails from './TransactionDetails/index';
 import ReceivableDetails from './ReceivableDetails/index';
 import { spinner } from './styles';
 import fetch from './fetch';
-import Dropdown from '@bit/vitorbarbosa19.ziro.dropdown';
 import { userContext } from '../appContext';
 import { useQuery } from '../UserCart/SearchCart/useQuery';
 import { Menu } from '../Menu/index';
@@ -26,7 +26,7 @@ const Transactions = ({ transactionId, receivableId, carts, storeowners, setQuer
     const [limitFetch, setLimitFetch] = useState(10);
     const [isLoadingMore, setIsLoadingMore] = useState(true);
     const [transaction, setTransaction] = useState({});
-    const [storeownerId, setStoreownerId] = useQuerySelector('storeownerId');
+    const [buyerStoreownerId, setBuyerStoreownerId] = useQuerySelector('buyerStoreownerId');
     const [seller, setSeller] = useQuerySelector('seller');
     const [status, setStatus] = useQuerySelector('status');
     const zoopId = '93fb596c44384485b7ece404de0e3584';
@@ -113,9 +113,9 @@ const Transactions = ({ transactionId, receivableId, carts, storeowners, setQuer
             ) : (
                 <TransactionsList
                     transactions={payments.map(payment => {
-                        const {dateLastUpdate, date, seller, status, charge, statusColor, transactionId} = payment
+                        const {dateLastUpdate, datePaid, seller, status, charge, statusColor, transactionId} = payment
                         return {
-                            date: dateLastUpdate || date,
+                            datePaid: dateLastUpdate || datePaid,
                             seller,
                             status,
                             charge,
