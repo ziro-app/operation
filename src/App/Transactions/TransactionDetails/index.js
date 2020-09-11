@@ -229,7 +229,7 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
             feesFormatted !== '-' &&
             (transaction.sellerZoopPlan.antiFraud.amount || transaction.sellerZoopPlan.antiFraud.percentage)
               ? handleInsurance(transaction)
-              : '-'
+              : '- R$0,00'
           let markupValueFormatted =
             Object.prototype.hasOwnProperty.call(transaction, 'receivables') &&
             feesFormatted !== '-' &&
