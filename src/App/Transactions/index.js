@@ -57,10 +57,10 @@ const Transactions = ({ transactionId, receivableId, carts, storeowners, setQuer
     if (isLoading)
         return (
             <div style={spinner}>
-                <Spinner size="5.5rem"/>
+                <Spinner size="5.5rem" />
             </div>
         );
-    if (errorLoading) return <Error/>;
+    if (errorLoading) return <Error />;
     if (transactionId && receivableId)
         return (
             <ReceivableDetails
@@ -73,7 +73,7 @@ const Transactions = ({ transactionId, receivableId, carts, storeowners, setQuer
         );
     if (transactionId)
         return <TransactionDetails transactions={payments} transactionId={transactionId} transaction={transaction}
-                                   setTransaction={setTransaction}/>;
+            setTransaction={setTransaction} />;
     const listStatus = listStatusForFilter;
     const listSellers = listSellersForFilter;
     return (
@@ -108,30 +108,30 @@ const Transactions = ({ transactionId, receivableId, carts, storeowners, setQuer
             </div>
             {isLoadingResults ? (
                 <div style={spinner}>
-                    <Spinner size="5.5rem"/>
+                    <Spinner size="5.5rem" />
                 </div>
             ) : (
-                <TransactionsList
-                    transactions={payments.map(payment => {
-                        const {dateLastUpdate, datePaid, seller, status, charge, statusColor, transactionId} = payment
-                        return {
-                            datePaid: dateLastUpdate || datePaid,
-                            seller,
-                            status,
-                            charge,
-                            statusColor,
-                            transactionId
-                        }
-                    })}
-                    btnMoreClick={() => {
-                        setLoadingMore(true);
-                        setLimitFetch(limitFetch + 10);
-                    }}
-                    hasMore={!(payments.length === totalTransactions)}
-                    isSearching={isLoadingMore}
-                    loadingMore={isLoadingMore}
-                />
-            )}
+                    <TransactionsList
+                        transactions={payments.map(payment => {
+                            const { dateLastUpdate, datePaid, seller, status, charge, statusColor, transactionId } = payment
+                            return {
+                                date: dateLastUpdate || datePaid,
+                                seller,
+                                status,
+                                charge,
+                                statusColor,
+                                transactionId
+                            }
+                        })}
+                        btnMoreClick={() => {
+                            setLoadingMore(true);
+                            setLimitFetch(limitFetch + 10);
+                        }}
+                        hasMore={!(payments.length === totalTransactions)}
+                        isSearching={isLoadingMore}
+                        loadingMore={isLoadingMore}
+                    />
+                )}
         </Menu>
     );
 };
