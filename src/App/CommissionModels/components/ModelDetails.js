@@ -4,6 +4,7 @@ import Details from '@bit/vitorbarbosa19.ziro.details';
 import InputText from '@bit/vitorbarbosa19.ziro.input-text';
 import Button from '@bit/vitorbarbosa19.ziro.button';
 import Dropdown from '@bit/vitorbarbosa19.ziro.dropdown';
+import FormInput from '@bit/vitorbarbosa19.ziro.form-input'
 import maskInput from '@ziro/mask-input'
 import currencyFormat from '@ziro/currency-format';
 import filterProviders from '../utils/filterProviders'
@@ -38,7 +39,7 @@ const ModelDetails = ({dataProviders, block, arrayInputs, blockCalc, modeloParce
         return (
                 <motion.div style={{marginTop:'20px'}} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
                 <Details blocks={block} />
-                <div style={{marginTop:'20px'}}>
+                <div style={{marginTop:'20px', marginBottom:'20px'}}>
                     <Dropdown
                         value={calcule || ''}
                         list={['Simulação', 'Recebido']}
@@ -51,8 +52,7 @@ const ModelDetails = ({dataProviders, block, arrayInputs, blockCalc, modeloParce
                     <>
                         {arrayInputs.map(inputInfo => {
                             return (
-                                <div key={inputInfo.title}>
-                                    <h2>{inputInfo.title}</h2>
+                                <FormInput key={inputInfo.title} name={inputInfo.title} label={inputInfo.title} input={
                                     <InputText
                                     value={currencyFormat(inputInfo.state)}
                                     onChange={({ target: { value } }) => {
@@ -61,7 +61,7 @@ const ModelDetails = ({dataProviders, block, arrayInputs, blockCalc, modeloParce
                                     }}
                                     placeholder={inputInfo.placeholder}
                                     />
-                                </div>
+                                } />
                             )
                         })}
                         {blockPrevisao && (
@@ -85,22 +85,25 @@ const ModelDetails = ({dataProviders, block, arrayInputs, blockCalc, modeloParce
                 {calcule === 'Recebido' && (
                     <>
                         <div style ={{marginTop:'20px'}}>
-                            <h2>Colaborador</h2>
-                            <Dropdown
-                            value={provider || ''}
-                            list={arrayProviders}
-                            placeholder="Escolha um assessor"
-                            onChange={({ target: { value } }) => {setProvider(value)}}
-                            onChangeKeyboard={element => element ? setProvider(element.value) : null}
-                            />
-                            <h2>Mês e Ano</h2>
-                            <Dropdown
-                            value={mes || ''}
-                            list={arrayDatas}
-                            placeholder="Escolha uma data"
-                            onChange={({ target: { value } }) => {setMes(value)}}
-                            onChangeKeyboard={element => element ? setMes(element.value) : null}
-                            />
+                            <FormInput name='colaborador' label='Colaborador' input={
+                                <Dropdown
+                                value={provider || ''}
+                                list={arrayProviders}
+                                placeholder="Escolha um assessor"
+                                onChange={({ target: { value } }) => {setProvider(value)}}
+                                onChangeKeyboard={element => element ? setProvider(element.value) : null}
+                                />
+                            } />
+                            <FormInput name='meseano' label='Mês e Ano' input={
+                                <Dropdown
+                                input='Mês e Ano'
+                                value={mes || ''}
+                                list={arrayDatas}
+                                placeholder="Escolha uma data"
+                                onChange={({ target: { value } }) => {setMes(value)}}
+                                onChangeKeyboard={element => element ? setMes(element.value) : null}
+                                />
+                            } />
                         </div>
                         {blockModel && (
                             <Details blocks={blockModel} />
