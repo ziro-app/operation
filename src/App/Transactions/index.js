@@ -12,6 +12,8 @@ import { useQuery } from '../UserCart/SearchCart/useQuery';
 import { Menu } from '../Menu/index';
 
 const Transactions = ({ transactionId, receivableId, carts, storeowners, setQueryStr }) => {
+    const storageFilterStatus = localStorage.getItem('statusFilter')
+    const storageFilterSeller =  localStorage.getItem('sellerFilter')
     const [isLoading, setIsLoading] = useState(true);
     const [errorLoading, setErrorLoading] = useState(false);
     const [loadingMore, setLoadingMore] = useState(true);
@@ -21,8 +23,8 @@ const Transactions = ({ transactionId, receivableId, carts, storeowners, setQuer
     const [isLoadingResults, setIsLoadingResults] = useState(false);
     const { listStatusForFilter, listSellersForFilter } = useContext(userContext);
     const useQuerySelector = useQuery();
-    const [statusFilter, setStatusFilter] = useState('');
-    const [sellerFilter, setSellerFilter] = useState('');
+    const [statusFilter, setStatusFilter] = useState(storageFilterStatus || '');
+    const [sellerFilter, setSellerFilter] = useState(storageFilterSeller || '');
     const [limitFetch, setLimitFetch] = useState(10);
     const [isLoadingMore, setIsLoadingMore] = useState(true);
     const [transaction, setTransaction] = useState({});
@@ -73,7 +75,7 @@ const Transactions = ({ transactionId, receivableId, carts, storeowners, setQuer
         );
     if (transactionId)
         return <TransactionDetails transactions={payments} transactionId={transactionId} transaction={transaction}
-            setTransaction={setTransaction} />;
+            setTransaction={setTransaction}/>;
     const listStatus = listStatusForFilter;
     const listSellers = listSellersForFilter;
     return (
@@ -84,11 +86,17 @@ const Transactions = ({ transactionId, receivableId, carts, storeowners, setQuer
                     list={listSellers}
                     placeholder="Filtrar fabricante"
                     onChange={({ target: { value } }) => {
-                        if (listSellers.includes(value) || value === '') setIsLoadingResults(true);
+                        if (listSellers.includes(value) || value === ''){
+                            setIsLoadingResults(true);
+                            localStorage.setItem('sellerFilter', value);  
+                        }
                         setSellerFilter(value);
                     }}
                     onChangeKeyboard={e => {
-                        if (listSellers.includes(e.value) || e.value === '') setIsLoadingResults(true);
+                        if (listSellers.includes(e.value) || e.value === ''){
+                            setIsLoadingResults(true);
+                            localStorage.setItem('sellerFilter', e.value);
+                        }
                         setSellerFilter(e.value);
                     }}
                 />
@@ -97,41 +105,47 @@ const Transactions = ({ transactionId, receivableId, carts, storeowners, setQuer
                     list={listStatus}
                     placeholder="Filtrar status"
                     onChange={({ target: { value } }) => {
-                        if (listStatus.includes(value) || value === '') setIsLoadingResults(true);
+                        if (listStatus.includes(value) || value === ''){
+                            setIsLoadingResults(true);
+                            localStorage.setItem('statusFilter', value);  
+                        }
                         setStatusFilter(value);
                     }}
                     onChangeKeyboard={e => {
-                        if (listStatus.includes(e.value) || e.value === '') setIsLoadingResults(true);
+                        if (listStatus.includes(e.value) || e.value === ''){
+                            setIsLoadingResults(true);
+                            localStorage.setItem('statusFilter', e.value); 
+                        }
                         setStatusFilter(e.value);
                     }}
                 />
             </div>
             {isLoadingResults ? (
                 <div style={spinner}>
-                    <Spinner size="5.5rem" />
+                    <Spinner size="5.5rem"/>
                 </div>
             ) : (
-                    <TransactionsList
-                        transactions={payments.map(payment => {
-                            const { dateLastUpdate, datePaid, seller, status, charge, statusColor, transactionId } = payment
-                            return {
-                                date: dateLastUpdate || datePaid,
-                                seller,
-                                status,
-                                charge,
-                                statusColor,
-                                transactionId
-                            }
-                        })}
-                        btnMoreClick={() => {
-                            setLoadingMore(true);
-                            setLimitFetch(limitFetch + 10);
-                        }}
-                        hasMore={!(payments.length === totalTransactions)}
-                        isSearching={isLoadingMore}
-                        loadingMore={isLoadingMore}
-                    />
-                )}
+                <TransactionsList
+                    transactions={payments.map(payment => {
+                        const {dateLastUpdate, date, seller, status, charge, statusColor, transactionId} = payment
+                        return {
+                            date: dateLastUpdate || date,
+                            seller,
+                            status,
+                            charge,
+                            statusColor,
+                            transactionId
+                        }
+                    })}
+                    btnMoreClick={() => {
+                        setLoadingMore(true);
+                        setLimitFetch(limitFetch + 10);
+                    }}
+                    hasMore={!(payments.length === totalTransactions)}
+                    isSearching={isLoadingMore}
+                    loadingMore={isLoadingMore}
+                />
+            )}
         </Menu>
     );
 };

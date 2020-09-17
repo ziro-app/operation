@@ -22,45 +22,57 @@ const fetch = (
   limitFetch,
   setIsLoadingMore,
 ) => {
+  const storageFilterSeller =  localStorage.getItem('sellerFilter')
+  const storageFilterStatus = localStorage.getItem('statusFilter')
+  console.log(storageFilterStatus, storageFilterSeller)
   if (payments) setIsLoadingMore(true)
   else setIsLoadingMore(false)
   let query = ''
-  if (!sellerFilter && !statusFilter) {
+  if (!storageFilterSeller && !storageFilterStatus) {
+    console.log('primeiro')
     query = db.collection('credit-card-payments').orderBy('dateLastUpdate', 'desc').limit(limitFetch)
   }
-  if (sellerFilter && !statusFilter) {
-    query = db.collection('credit-card-payments').orderBy('dateLastUpdate', 'desc').where('seller', '==', `${sellerFilter}`).limit(limitFetch)
+  if (storageFilterSeller && !storageFilterStatus) {
+    console.log('segundo')
+    query = db.collection('credit-card-payments').orderBy('dateLastUpdate', 'desc').where('seller', '==', `${storageFilterSeller}`).limit(limitFetch)
   }
-  if (!sellerFilter && statusFilter) {
-    query = db.collection('credit-card-payments').orderBy('dateLastUpdate', 'desc').where('status', '==', `${statusFilter}`).limit(limitFetch)
+  if (!storageFilterSeller && storageFilterStatus) {
+    console.log('terceiro')
+    query = db.collection('credit-card-payments').orderBy('dateLastUpdate', 'desc').where('status', '==', `${storageFilterStatus}`).limit(limitFetch)
   }
-  if (sellerFilter && statusFilter) {
+  if (storageFilterSeller && storageFilterStatus) {
+    console.log('quarto')
     query = db
       .collection('credit-card-payments')
       .orderBy('dateLastUpdate', 'desc')
-      .where('seller', '==', `${sellerFilter}`)
-      .where('status', '==', `${statusFilter}`)
+      .where('seller', '==', `${storageFilterSeller}`)
+      .where('status', '==', `${storageFilterStatus}`)
       .limit(limitFetch)
   }
   const run = async () => {
     try {
+      const snapShot = await query.get()
+      console.log(snapShot.docs.length)
       await query.onSnapshot(
         async snapshot => {
+          const storageFilterSeller =  localStorage.getItem('sellerFilter')
+          const storageFilterStatus = localStorage.getItem('statusFilter')
+          console.log(storageFilterSeller, storageFilterStatus)
           let collectionData = ''
-          if (!sellerFilter && !statusFilter) {
+          if (!storageFilterSeller && !storageFilterStatus) {
             collectionData = await db.collection('credit-card-payments').get()
           }
-          if (sellerFilter && !statusFilter) {
-            collectionData = await db.collection('credit-card-payments').where('seller', '==', `${sellerFilter}`).get()
+          if (storageFilterSeller && !storageFilterStatus) {
+            collectionData = await db.collection('credit-card-payments').where('seller', '==', `${storageFilterSeller}`).get()
           }
-          if (!sellerFilter && statusFilter) {
-            collectionData = await db.collection('credit-card-payments').where('status', '==', `${statusFilter}`).get()
+          if (!storageFilterSeller && storageFilterStatus) {
+            collectionData = await db.collection('credit-card-payments').where('status', '==', `${storageFilterStatus}`).get()
           }
-          if (sellerFilter && statusFilter) {
+          if (storageFilterSeller && storageFilterStatus) {
             collectionData = await db
               .collection('credit-card-payments')
-              .where('seller', '==', `${sellerFilter}`)
-              .where('status', '==', `${statusFilter}`)
+              .where('seller', '==', `${storageFilterSeller}`)
+              .where('status', '==', `${storageFilterStatus}`)
               .get()
           }
 
