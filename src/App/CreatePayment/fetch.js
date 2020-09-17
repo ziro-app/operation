@@ -10,10 +10,10 @@ const fetch = (setIsLoading, setErrorLoading, setSuppliers, setFantasyNames, set
             query.onSnapshot(snapshot => {
                 if (!snapshot.empty) {
                     snapshot.forEach(doc => {
-                        const { zoopId, fantasia } = doc.data();
+                        const { zoopId, fantasia, maxParcelas } = doc.data();
                         if (fantasia && fantasia !== '********') {
                             fantasy.push(fantasia);
-                            suppliers.push({ zoopId, fantasia });
+                            suppliers.push({ zoopId, fantasia, maxParcelas });
                         }
                     });
                     setSuppliers(suppliers);
@@ -32,8 +32,8 @@ const fetch = (setIsLoading, setErrorLoading, setSuppliers, setFantasyNames, set
         } finally {
             setIsLoading(false);
         }
-  };
-  run();
+    };
+    run();
 };
 
 export default fetch;
