@@ -13,7 +13,7 @@ const CommissionModels = () => {
     const [error, setError] = useState(false)
     const state = {setDataProviders, setIsLoading, setError}
     useEffect(() => fetchProviders(state),[])
-    const listModeloParcela2 = ['assessores2020', 'assessoresCOVID', 'atendimento2020', 'cobranca2019', 'logistica2019', 'prospeccao2020', 'vendas2019']
+    const listModeloParcela2 = ['assessores2020', 'assessoresCOVID', 'atendimento2020', 'cobranca2019', 'logistica2019', 'prospeccao2020', 'vendas2019', 'assessores20202', 'logistica2020', 'cobranca2020', 'vendedores2020']
     if(error) return <Error />
     if(isLoading) return <Spinner />
     return(

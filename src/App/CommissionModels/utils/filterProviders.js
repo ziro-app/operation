@@ -1,5 +1,5 @@
 const filterProviders = async (fetchInfo) => {
-    const {dataProviders, setBlockModel, mes, provider, model} = fetchInfo
+    const {dataProviders, setBlockModel, mes, provider, model, numeric} = fetchInfo
     const [realMes, realAno] = mes.split('/')
     const conditionalMes = (mes) => {
         if(mes.startsWith(0)){

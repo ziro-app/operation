@@ -10,7 +10,7 @@ import currencyFormat from '@ziro/currency-format';
 import filterProviders from '../utils/filterProviders'
 import removeDuplicates from '../utils/removeDuplicate'
 
-const ModelDetails = ({dataProviders, block, arrayInputs, blockCalc, modeloParcela2}) => {
+const ModelDetails = ({dataProviders, block, arrayInputs, blockCalc, modeloParcela2, numeric}) => {
     const [calcule, setCalcule] = useState(false)
     const [provider, setProvider] = useState('')
     const [blockModel, setBlockModel] = useState('')
@@ -51,18 +51,32 @@ const ModelDetails = ({dataProviders, block, arrayInputs, blockCalc, modeloParce
                 {calcule === 'Simulação' && (
                     <>
                         {arrayInputs.map(inputInfo => {
-                            return (
-                                <FormInput key={inputInfo.title} name={inputInfo.title} label={inputInfo.title} input={
-                                    <InputText
-                                    value={currencyFormat(inputInfo.state)}
-                                    onChange={({ target: { value } }) => {
-                                        const toInteger = parseInt(value.replace(/[R$\.,]/g, ''), 10);
-                                        return inputInfo.setState(maskInput(toInteger, '##########', true)); 
-                                    }}
-                                    placeholder={inputInfo.placeholder}
-                                    />
-                                } />
-                            )
+                            if(!numeric){
+                                return (
+                                    <FormInput key={inputInfo.title} name={inputInfo.title} label={inputInfo.title} input={
+                                        <InputText
+                                        value={currencyFormat(inputInfo.state)}
+                                        onChange={({ target: { value } }) => {
+                                            const toInteger = parseInt(value.replace(/[R$\.,]/g, ''), 10);
+                                            return inputInfo.setState(maskInput(toInteger, '##########', true)); 
+                                        }}
+                                        placeholder={inputInfo.placeholder}
+                                        />
+                                    } />
+                                )
+                            }
+                                return(
+                                    <FormInput key={inputInfo.title} name={inputInfo.title} label={inputInfo.title} input={
+                                        <InputText
+                                        value={inputInfo.state}
+                                        onChange={({ target: { value } }) => {
+                                            return inputInfo.setState(maskInput(value, '###', false)) 
+                                        }}
+                                        placeholder={inputInfo.placeholder}
+                                        />
+                                    } />
+                                )
+                            
                         })}
                         {blockPrevisao && (
                             <Details blocks={blockPrevisao} />
