@@ -13,7 +13,7 @@ import { Menu } from '../Menu/index';
 
 const Transactions = ({ transactionId, receivableId, carts, storeowners, setQueryStr }) => {
     const storageFilterStatus = localStorage.getItem('statusFilter')
-    const storageFilterSeller =  localStorage.getItem('sellerFilter')
+    const storageFilterSeller = localStorage.getItem('sellerFilter')
     const [isLoading, setIsLoading] = useState(true);
     const [errorLoading, setErrorLoading] = useState(false);
     const [loadingMore, setLoadingMore] = useState(true);
@@ -75,7 +75,7 @@ const Transactions = ({ transactionId, receivableId, carts, storeowners, setQuer
         );
     if (transactionId)
         return <TransactionDetails transactions={payments} transactionId={transactionId} transaction={transaction}
-            setTransaction={setTransaction}/>;
+            setTransaction={setTransaction} />;
     const listStatus = listStatusForFilter;
     const listSellers = listSellersForFilter;
     return (
@@ -86,14 +86,14 @@ const Transactions = ({ transactionId, receivableId, carts, storeowners, setQuer
                     list={listSellers}
                     placeholder="Filtrar fabricante"
                     onChange={({ target: { value } }) => {
-                        if (listSellers.includes(value) || value === ''){
+                        if (listSellers.includes(value) || value === '') {
                             setIsLoadingResults(true);
-                            localStorage.setItem('sellerFilter', value);  
+                            localStorage.setItem('sellerFilter', value);
                         }
                         setSellerFilter(value);
                     }}
                     onChangeKeyboard={e => {
-                        if (listSellers.includes(e.value) || e.value === ''){
+                        if (listSellers.includes(e.value) || e.value === '') {
                             setIsLoadingResults(true);
                             localStorage.setItem('sellerFilter', e.value);
                         }
@@ -105,16 +105,16 @@ const Transactions = ({ transactionId, receivableId, carts, storeowners, setQuer
                     list={listStatus}
                     placeholder="Filtrar status"
                     onChange={({ target: { value } }) => {
-                        if (listStatus.includes(value) || value === ''){
+                        if (listStatus.includes(value) || value === '') {
                             setIsLoadingResults(true);
-                            localStorage.setItem('statusFilter', value);  
+                            localStorage.setItem('statusFilter', value);
                         }
                         setStatusFilter(value);
                     }}
                     onChangeKeyboard={e => {
-                        if (listStatus.includes(e.value) || e.value === ''){
+                        if (listStatus.includes(e.value) || e.value === '') {
                             setIsLoadingResults(true);
-                            localStorage.setItem('statusFilter', e.value); 
+                            localStorage.setItem('statusFilter', e.value);
                         }
                         setStatusFilter(e.value);
                     }}
@@ -122,30 +122,31 @@ const Transactions = ({ transactionId, receivableId, carts, storeowners, setQuer
             </div>
             {isLoadingResults ? (
                 <div style={spinner}>
-                    <Spinner size="5.5rem"/>
+                    <Spinner size="5.5rem" />
                 </div>
             ) : (
-                <TransactionsList
-                    transactions={payments.map(payment => {
-                        const {dateLastUpdate, date, seller, status, charge, statusColor, transactionId} = payment
-                        return {
-                            date: dateLastUpdate || date,
-                            seller,
-                            status,
-                            charge,
-                            statusColor,
-                            transactionId
-                        }
-                    })}
-                    btnMoreClick={() => {
-                        setLoadingMore(true);
-                        setLimitFetch(limitFetch + 10);
-                    }}
-                    hasMore={!(payments.length === totalTransactions)}
-                    isSearching={isLoadingMore}
-                    loadingMore={isLoadingMore}
-                />
-            )}
+                    <TransactionsList
+                        transactions={payments.map(payment => {
+                            const { dateLastUpdate, date, seller, status, charge, statusColor, transactionId, insurance } = payment
+                            return {
+                                date: dateLastUpdate || date,
+                                seller,
+                                status,
+                                charge,
+                                statusColor,
+                                transactionId,
+                                insurance
+                            }
+                        })}
+                        btnMoreClick={() => {
+                            setLoadingMore(true);
+                            setLimitFetch(limitFetch + 10);
+                        }}
+                        hasMore={!(payments.length === totalTransactions)}
+                        isSearching={isLoadingMore}
+                        loadingMore={isLoadingMore}
+                    />
+                )}
         </Menu>
     );
 };

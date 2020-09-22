@@ -1,5 +1,5 @@
 import React from 'react';
-import { unstable_createRoot } from 'react-dom';
+import { render } from 'react-dom';
 import { FirebaseAppProvider } from 'reactfire';
 import { load as FontLoader } from 'webfontloader';
 import { configFirebase } from './Firebase/index';
@@ -10,8 +10,6 @@ FontLoader({
     google: { families: ['Rubik:500,600', 'Work Sans:300,400,500'] },
 });
 
-unstable_createRoot(document.getElementById('app')).render(
-    <FirebaseAppProvider firebaseConfig={configFirebase}>
-        <App/>
-    </FirebaseAppProvider>,
-);
+render(<FirebaseAppProvider firebaseConfig={configFirebase}>
+    <App />
+</FirebaseAppProvider>, document.getElementById('app'));
