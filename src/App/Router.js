@@ -1,9 +1,20 @@
 import React, { Suspense, useContext } from 'react'
 import { useLocation, useRoute } from 'wouter'
-
+import { motion } from 'framer-motion'
+import PropTypes from 'prop-types'
+// Ziro components
+import { Router2 as routeMatcher } from '@ziro/router'
+import LoginTrouble from '@bit/vitorbarbosa19.ziro.login-trouble'
+import ConfirmEmail from '@bit/vitorbarbosa19.ziro.confirm-email'
+import MyAccount from '@bit/vitorbarbosa19.ziro.my-account'
+import NotFound from '@bit/vitorbarbosa19.ziro.not-found'
+import SpinnerWithDiv from '@bit/vitorbarbosa19.ziro.spinner-with-div'
+import Submenu from '@bit/vitorbarbosa19.ziro.submenu'
+// Internal components
+import UserCart from './UserCart'
+import { userContext } from './appContext'
 import ChangeStoreownerEmail from './ChangeStoreownerEmail/index'
 import CheckEmailVerified from './CheckEmailVerified/index'
-import ConfirmEmail from '@bit/vitorbarbosa19.ziro.confirm-email'
 import ConsultShipping from './ConsultShipping/index'
 import CreatePayment from './CreatePayment/index'
 import DeleteAccount from './DeleteAccount/index'
@@ -12,12 +23,8 @@ import { HeaderBack } from './HeaderBack/index'
 import ImageUpload from './ImageUpload/index'
 import LinkRequest from './LinkRequest/index'
 import Login from './Login/index'
-import LoginTrouble from '@bit/vitorbarbosa19.ziro.login-trouble'
 import MaterialRequest from './MaterialRequest/index'
 import { Menu } from './Menu/index'
-import MyAccount from '@bit/vitorbarbosa19.ziro.my-account'
-import NotFound from '@bit/vitorbarbosa19.ziro.not-found'
-import PropTypes from 'prop-types'
 import Register from './Register/index'
 import RegisterAffiliate from './RegisterAffiliate/index'
 import RegisterBillet from './RegisterBillet/index'
@@ -27,9 +34,7 @@ import RegisterStoreowner from './RegisterStoreowner/index'
 import ResendEmail from './ResendEmail/index'
 import ResetPass from './ResetPass/index'
 import ShowInfo from './ShowInfo/index'
-import SpinnerWithDiv from '@bit/vitorbarbosa19.ziro.spinner-with-div'
 import SplitPayment from './SplitPayment/index'
-import Submenu from '@bit/vitorbarbosa19.ziro.submenu'
 import Transactions from './Transactions/index'
 import UpdateAffiliate from './UpdateAffiliate/index'
 import UpdateBrandsInfos from './UpdateBrandsInfos'
@@ -41,27 +46,9 @@ import UpdateZoopPlan from './UpdateZoopPlan/index'
 import CommissionModels from './CommissionModels'
 import UploadBillet from './UploadBillet'
 import UploadImages from './UploadImages/index'
-import UserCart from './UserCart'
 import ValidateEmail from './ValidateEmail/index'
-import { motion } from 'framer-motion'
-import { Router2 as routeMatcher } from '@ziro/router'
-import { userContext } from './appContext'
-
+import Adjustment from './Adjustment/index'
 // import FirebaseMigration from './FirebaseMigration/index' -> Inacabado
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 const Router = ({ isLogged }) => {
   const [match, params] = useRoute('/pedidos/:cartId?')
@@ -110,6 +97,7 @@ const Router = ({ isLogged }) => {
               ['Entrada/Saída do Caixa', 'entrada-saida'],
               ['Solicitação de Link', 'solicitacao-link'],
               ['Consulta Parcela 2', 'commission-models'],
+              ['Reajuste', 'adjustment'],
             ]}
           />
         </motion.div>
@@ -239,6 +227,11 @@ const Router = ({ isLogged }) => {
     '/commission-models': (
       <HeaderBack title="Consulta Parcela 2" navigateTo="/administrativo">
         <CommissionModels />
+      </HeaderBack>
+    ),
+    '/adjustment': (
+      <HeaderBack title="Reajuste" navigateTo="/administrativo">
+        <Adjustment />
       </HeaderBack>
     ),
     '/checar-email': (
