@@ -48,6 +48,7 @@ import UploadBillet from './UploadBillet'
 import UploadImages from './UploadImages/index'
 import ValidateEmail from './ValidateEmail/index'
 import Adjustment from './Adjustment/index'
+import Pickup from './Pickup/index'
 // import FirebaseMigration from './FirebaseMigration/index' -> Inacabado
 
 const Router = ({ isLogged }) => {
@@ -129,6 +130,7 @@ const Router = ({ isLogged }) => {
             options={[
               ['Cadastrar despesa', 'cadastrar-despesa'],
               ['Consulta de frete', 'consultar-frete'],
+              ['Retiradas', 'retiradas'],
             ]}
           />
         </motion.div>
@@ -156,6 +158,11 @@ const Router = ({ isLogged }) => {
     '/consultar-frete': (
       <HeaderBack title="Consulta de frete" navigateTo="/logistica">
         <ConsultShipping />
+      </HeaderBack>
+    ),
+    '/retiradas': (
+      <HeaderBack title="Cadastrar Retirada" navigateTo="/logistica">
+        <Pickup />
       </HeaderBack>
     ),
     '/cadastrar-despesa': (
