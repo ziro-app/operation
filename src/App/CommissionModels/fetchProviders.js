@@ -1,24 +1,27 @@
 import axios from 'axios'
 
-const fetchProviders = async (state) => {
+const fetch = (state) => {
     const  {setDataProviders, setIsLoading, setError} = state
-    const options = {
-        'method' : 'GET',
-        'url':process.env.URL_PROVIDERS,
-        'headers' : {
-            'Authorization':process.env.TOKEN_PROVIDERS,
-            'Origin':'https://ziro.app'
+	const run = async () => {
+        const options = {
+            'method' : 'GET',
+            'url':process.env.URL_PROVIDERS,
+            'headers' : {
+                'Authorization':process.env.TOKEN_PROVIDERS
+            }
+        }
+        try {
+            const result = await axios(options)
+            setDataProviders(result.data)
+        } catch (error) {
+            setError(true)
+            console.log(error)
+        }
+        finally{
+            setIsLoading(false)
         }
     }
-    try {
-        const result = await axios(options)
-        setDataProviders(result.data)
-    } catch (error) {
-        setError(true)
-        console.log(error)
-    } finally {
-        setIsLoading(false)
-    }
+    run()
 }
 
-export default fetchProviders
+export default fetch
