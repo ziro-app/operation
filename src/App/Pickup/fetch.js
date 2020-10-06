@@ -22,7 +22,7 @@ const fetch = (state) => {
             const data = result.data.valueRanges[0].values
             setData(data)
             const arrayProviders = data.map(row => row[12]).filter((item, index) => index !== 0 && item)
-            setProviders(arrayProviders)
+            setProviders([...arrayProviders, 'Pertence do cliente'])
         } catch (error) {
             console.log(error)
         }

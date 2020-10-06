@@ -29,8 +29,8 @@ const Pickup = () => {
     const [observation, setObservation] = useState('')
     const [data, setData] = useState('')
     const [reseller, setReseller] = useState('')
-    const [adresses, setAdresses] = useState(['OUTROS'])
-    const state = {setInputDate,setCodPickup,setProvider,setAdress,setBags,setInvoice,setRomaneio,setFilename,setObservation,setReseller,setAdresses,reseller, adresses, codPickup, inputDate, provider, adress,bags, invoice, romaneio, filename, observation, setIsLoading, setData, setProviders}
+    const [adresses, setAdresses] = useState(['Outro'])
+    const state = {provider,setInputDate,setCodPickup,setProvider,setAdress,setBags,setInvoice,setRomaneio,setFilename,setObservation,setReseller,setAdresses,reseller, adresses, codPickup, inputDate, provider, adress,bags, invoice, romaneio, filename, observation, setIsLoading, setData, setProviders}
     useEffect(() => fetch(state),[])
     useEffect(() => {
         const codes = data ? data.filter(row => row[10] !== 'Entregue' && row[10] !== 'Cancelado' && row[11] === codPickup) : null
@@ -47,9 +47,11 @@ const Pickup = () => {
                 return index >= 14
             }) : []
             setAdresses(arrayAdresses(arraySeparationAdresses)[0] ? [...removeDuplicates(arrayAdresses(arraySeparationAdresses)), ...adresses] : adresses)
-        }else{
-            setAdresses(['OUTROS'])
-        }
+        }else if(provider === 'Pertence do cliente'){
+                setAdresses(['Ziro', 'Outro'])
+            }else{
+                setAdresses(['Outro'])
+            }
     },[provider])
     const validations = [
         {
@@ -96,7 +98,7 @@ const Pickup = () => {
         },
         {
             name: 'romaneio',
-            validation: value => value !== undefined && value !== '' && /(\.jpg|\.jpeg|\.png)$/.test(value.name),
+            validation: value => provider === 'Pertence do cliente' ? true : value !== undefined && value !== '' && /(\.jpg|\.jpeg|\.png)$/.test(value.name),
             value: romaneio,
             message: 'Formatos válidos: .png, .jpg e .jpeg'
         }
