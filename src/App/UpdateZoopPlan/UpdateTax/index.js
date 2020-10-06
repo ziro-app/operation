@@ -1,22 +1,23 @@
-import React, { useState, useEffect, useContext, memo } from 'react'
-import { motion } from 'framer-motion'
-import Form from '@bit/vitorbarbosa19.ziro.form'
-import FormInput from '@bit/vitorbarbosa19.ziro.form-input'
-import InputPercentage from '@bit/vitorbarbosa19.ziro.input-percentage'
-import Dropdown from '@bit/vitorbarbosa19.ziro.dropdown'
-import Details from '@bit/vitorbarbosa19.ziro.details'
-import SpinnerWithDiv from '@bit/vitorbarbosa19.ziro.spinner-with-div'
+import React, { memo, useEffect, useState, useContext } from 'react'
 import Error from '@bit/vitorbarbosa19.ziro.error'
-import Button from '@bit/vitorbarbosa19.ziro.button'
+import Header from '@bit/vitorbarbosa19.ziro.header'
+import { containerWithPadding } from '@ziro/theme'
+import { motion } from 'framer-motion'
 import { useLocation, useRoute } from 'wouter'
-import sendToBackend from './sendToBackend'
+import InputText from '@bit/vitorbarbosa19.ziro.input-text'
+import InputPercentage2 from '@bit/vitorbarbosa19.ziro.input-percentage'
+import FormInput from '@bit/vitorbarbosa19.ziro.form-input'
+import Button from '@bit/vitorbarbosa19.ziro.button'
+import { useForm } from 'react-hook-form'
+import InputPercentage from './InputPercentage/index'
+import { returnInstallmentsWithFee, translateFees, translateInstallments, testInstallments } from './functions'
 import fetch from './fetch'
-import { userContext } from '../appContext'
-import { alphanum, returnInstallmentsWithFee, translateFees, translateInstallments } from './functions'
-import { wrapper, text, title, item } from './styles'
-import UpdateTax from './UpdateTax/index'
+import { wrapper, item, content, title, item2 } from './styles'
+import sendToBackend from './sendToBackend'
+import { userContext } from '../../appContext'
+import { db } from '../../../Firebase'
 
-const UpdateZoopPlan = ({ sellerId }) => {
+const UpdateTax = ({ fee, setFee }) => {
   const defaultValues = {
     activePlan: 'standard',
     standard: {
@@ -488,208 +489,154 @@ const UpdateZoopPlan = ({ sellerId }) => {
       },
     },
   }
-  const [sellerZoopPlan2, setSellerZoopPlan2] = useState({})
-  const [fees, setFees] = useState(null)
-  const [feesUpdate, setFeesUpdate] = useState(null)
-  const [feesFormatted, setFeesFormatted] = useState(null)
-  const [selectedPlan, setSelectedPlan] = useState(null)
-  const [allPlans, setAllPlans] = useState([])
-  const [isLoading, setIsLoading] = useState(true)
-  const [errorLoading, setErrorLoading] = useState(false)
-  const [searchedName, setSearchedName] = useState('')
-  const [markupPercentage, setMarkupPercentage] = useState('')
-  const [antifraudPercentage, setAntifraudPercentage] = useState('')
-  const [suppliers, setSuppliers] = useState([])
-  const [supplier, setSupplier] = useState({ docId: '', name: '', reason: '', markupPercentage: '', antifraudPercentage: '', sellerZoopPlan: '' })
-  const [blocks, setBlocks] = useState([])
-  const [, setLocation] = useLocation()
-  /* if (!sellerId) {
-    const [matchSellerId, paramsSellerId] = useRoute('/atualizar-plano-zoop/:sellerId?')
-    const { sellerId } = paramsSellerId
-  } */
-  console.log('sellerId', sellerId)
-  const collator = new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' })
   const { nickname } = useContext(userContext)
-  const setState = { setAntifraudPercentage, setSupplier, setMarkupPercentage, setBlocks }
-  const state = {
-    docId: supplier.docId,
-    selectedPlan,
-    nickname,
-    sellerZoopPlan2,
-    antifraudPercentage,
-    supplier,
-    markupPercentage,
-    blocks,
-    ...setState,
-  }
-  // console.log(sellerZoopPlan2)
-  const validations = [
-    {
-      name: 'markupPercentage',
-      validation: value => value === '' || (value >= 0 && value <= 10000),
-      value: markupPercentage,
-      message: 'Valor inválido',
-    },
-    {
-      name: 'antifraudPercentage',
-      validation: value => value === '' || (value >= 0 && value <= 10000),
-      value: antifraudPercentage,
-      message: 'Valor inválido',
-    },
-  ]
 
-  const mountBlock = (name, reason, markup, antifraud) => {
-    return [
-      {
-        header: 'Detalhes',
-        body: [
-          {
-            title: 'Fabricante',
-            content: name,
-          },
-          {
-            title: 'Razão',
-            content: reason,
-          },
-          {
-            title: 'Markup',
-            content: markup,
-          },
-          {
-            title: 'Antifraude',
-            content: antifraud,
-          },
-        ],
-      },
-    ]
-  }
-
-  const clear = () => {
-    setMarkupPercentage('')
-    setAntifraudPercentage('')
-    setSupplier({ docId: '', name: '', reason: '', markupPercentage: '', antifraudPercentage: '', sellerZoopPlan: '' })
-    setBlocks(mountBlock('', '', '', ''))
-  }
-  // console.log(supplier)
-  useEffect(() => fetch(setIsLoading, setErrorLoading, setSuppliers, setBlocks, mountBlock, setSellerZoopPlan2, setFees, selectedPlan), [
-    selectedPlan,
-  ])
+  const [countLoop, setCountLoop] = useState(0)
+  const [feesValues, setFeesValues] = useState({})
+  const [sellerZoopPlan, setSellerZoopPlan] = useState({})
+  const [sellerZoopPlanObject, setSellerZoopPlanObject] = useState({})
+  const [sellerZoopPlanForFirebase, setSellerZoopPlanForFirebase] = useState({})
+  const [sellerActualZoopPlanForFirebase, setActualZoopPlanForFirebase] = useState({})
+  const [otherPlansForFirebase, setOtherPlansForFirebase] = useState({})
+  const [selectedPlanForFirebase, setSelectedPlanForFirebase] = useState('')
+  const [fees, setFees] = useState(null)
+  const [, setLocation] = useLocation()
+  const [nothing, setNothing] = useState(false)
+  const [error, setError] = useState(false)
+  const [matchSellerId, paramsSellerId] = useRoute('/atualizar-plano-zoop/:sellerId?/:fee?/:selectedPlan?')
+  const { sellerId, selectedPlan } = paramsSellerId
+  const { activePlan } = sellerZoopPlan
+  const otherPlans = Object.entries(sellerZoopPlan).filter(item => item[0] !== selectedPlan && item[0] !== 'activePlan')
+  let newPlan = {}
   useEffect(() => {
-    if (sellerZoopPlan2 && Object.keys(sellerZoopPlan2).length !== 0) {
+    if (countLoop < 4) {
+      const newCount = countLoop + 1
+      setCountLoop(newCount)
+      if (selectedPlan !== selectedPlanForFirebase) {
+        setSelectedPlanForFirebase(selectedPlan)
+      }
+      setNothing(false)
+
+      async function getFee(setSellerZoopPlan, setFees, sellerId, defaultValues, selectedPlanForFirebase, fees) {
+        await fetch(setSellerZoopPlan, setFees, sellerId, defaultValues, selectedPlanForFirebase, fees)
+      }
+
+      getFee(setSellerZoopPlan, setFees, sellerId, defaultValues, selectedPlanForFirebase, fees)
     }
-  }, [sellerZoopPlan2, fees, selectedPlan])
-  if (isLoading) return <SpinnerWithDiv size="5rem" />
-  if (errorLoading) return <Error />
-  // if (feesUpdate) return <UpdateTax fee={feesUpdate} setFee={setFeesUpdate} />
-  // console.log(fees)
-  return (
-    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={{ display: 'grid', gridTemplateRows: 'auto 1fr auto', gridRowGap: '20px' }}>
-      <Dropdown
-        value={searchedName}
-        onChange={({ target: { value } }) => {
-          if (value !== '') {
-            setSearchedName(value)
-            const person = suppliers.find(element => element.name === value)
-            if (person) {
-              console.log('person', person)
-              setAllPlans(Object.keys(person.sellerZoopPlan).filter(item => item !== 'activePlan'))
-              setSupplier(person)
-              setBlocks(mountBlock(person.name, person.reason, person.markupPercentage, person.antifraudPercentage, person.sellerZoopPlan))
-            } else clear()
-          } else {
-            clear()
-            setSearchedName('')
-          }
+  }, [fee, error, selectedPlanForFirebase])
+  if (otherPlans.length > 0 && Object.keys(otherPlansForFirebase).length !== 0 && otherPlansForFirebase.constructor !== Object) {
+    otherPlans.map(plan => {
+      const newItem = { [plan[0]]: plan[1] }
+      setOtherPlansForFirebase(prevState => ({ ...prevState, ...newItem }))
+    })
+  }
+
+  const state = {
+    sellerId,
+    sellerZoopPlanForFirebase,
+    fee,
+    setSellerZoopPlanForFirebase,
+    nickname,
+    defaultValues,
+    selectedPlan,
+    activePlan,
+    sellerZoopPlan,
+    otherPlansForFirebase,
+    sellerActualZoopPlanForFirebase,
+  }
+
+  if (nothing || (Object.keys(fee).length === 0 && fee.constructor === Object))
+    return (
+      <Error
+        message="Taxa inválida ou não encontrada, retorne e tente novamente."
+        type="noData"
+        title="Erro ao buscar detalhes da transação"
+        backRoute="/atualizar-plano-zoop"
+        backRouteFunction={route => {
+          setLocation(route)
         }}
-        onChangeKeyboard={element => {
-          if (element) {
-            setSearchedName(element.value)
-            const person = suppliers.find(storeowner => storeowner.name === element.value)
-            if (person) {
-              console.log('person', person)
-              setSupplier(person)
-              setAllPlans(Object.keys(person.sellerZoopPlan).filter(item => item !== 'activePlan'))
-              setBlocks(mountBlock(person.name, person.reason, person.markupPercentage, person.antifraudPercentage, person.sellerZoopPlan))
-            } else clear()
-          } else {
-            clear()
-            setSearchedName('')
-          }
-        }}
-        list={suppliers.map(supplier => supplier.name).sort()}
-        placeholder="Escolha o fabricante"
       />
-      {supplier.docId && supplier.name && supplier.reason && (
-        <Dropdown
-          value={selectedPlan}
-          onChange={({ target: { value } }) => setSelectedPlan(value)}
-          onChangeKeyboard={element => (element ? setSelectedPlan(element.value) : null)}
-          readOnly
-          list={allPlans}
-          placeholder="Escolha o plano ou crie um"
-        />
-      )}
-      {supplier.docId && supplier.name && supplier.reason && (
-        <Button
-          type="button"
-          cta="Criar plano"
-          template="regular"
-          click={() => {
-            console.log(supplier.docId)
-            // setFeesUpdate(fee)
-            setLocation(`/atualizar-plano-zoop/${supplier.docId}/newPlan`)
-          }}
-        />
-      )}
-      {supplier.docId && supplier.name && supplier.reason && selectedPlan && fees && (
-        <Button
-          type="button"
-          cta="Ativar plano"
-          template="regular"
-          click={() => {
-            console.log(supplier.docId, selectedPlan)
-            sendToBackend(state)
-            // setFeesUpdate(fee)
-            // setLocation(`/atualizar-plano-zoop/${supplier.docId}/newPlan`)
-          }}
-        />
-      )}
-      <div style={wrapper}>
-        {supplier.docId &&
-          supplier.name &&
-          supplier.reason &&
-          selectedPlan &&
-          fees &&
-          fees.map(fee => (
-            <div>
-              <Button
-                type="button"
-                cta={`Editar ${translateFees(fee[0]).split(' ')[1]}`}
-                template="regular"
-                click={() => {
-                  // console.log(fee)
-                  setFeesUpdate(fee)
-                  setLocation(`/atualizar-plano-zoop/${supplier.docId}/${fee[0]}/${selectedPlan}`)
-                }}
-              />
-              <div style={title}>{translateFees(fee[0])}</div>
-              <br />{' '}
-              {Object.entries(fee[1]).map(card => (
-                <div style={item}>
-                  Cartão: {card[0].toUpperCase()}
-                  <div>
-                    {returnInstallmentsWithFee(card, fee, feesFormatted, setFeesFormatted).map(item => (
-                      <div>{`${translateInstallments(item.split(' ')[0])} ${item.split(' ')[1]} ${item.split(' ')[2]}`}</div>
-                    ))}
-                  </div>
-                  <br />
+    )
+  return (
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={containerWithPadding}>
+      <Header type="icon-link" title={`Atualizar ${translateFees(fee)}`} navigateTo={`atualizar-plano-zoop/${sellerId}`} icon="back" />
+      <div>
+        {fees !== null &&
+          fees.map(
+            feeMap =>
+              feeMap[0] === fee && (
+                <div style={wrapper}>
+                  {Object.entries(feeMap[1]).map(card => (
+                    <div style={item}>
+                      <div style={title}>Cartão: {card[0].toUpperCase()}</div>
+                      <div>
+                        {returnInstallmentsWithFee(card).map(item => (
+                          <div style={content}>
+                            <label
+                              style={{
+                                paddingBottom: '20px',
+                              }}
+                            >{`${translateInstallments(item.split(' ')[0])} `}</label>
+                            {testInstallments(card, item)}
+                            <FormInput
+                              name="percentage"
+                              input={
+                                <InputPercentage
+                                  id={`${card[0]}${item.split(' ')[0]}${item.split(' ')[1]}${item.split(' ')[2]}`}
+                                  value={sellerZoopPlanObject[`${card[0]}${item.split(' ')[0]}${item.split(' ')[1]}${item.split(' ')[2]}`]}
+                                  setValue={setSellerZoopPlanObject}
+                                  defaultValue={item.split(' ')[2] || ''}
+                                />
+                              }
+                            />
+                          </div>
+                        ))}
+                      </div>
+                      <br />
+                    </div>
+                  ))}
                 </div>
-              ))}{' '}
-            </div>
-          ))}
+              ),
+          )}
       </div>
+      <Button
+        type="button"
+        cta={`Atualizar ${translateFees(fee)}`}
+        template="regular"
+        click={() => {
+          fees.map(
+            feeMap =>
+              feeMap[0] === fee &&
+              Object.entries(feeMap[1]).map(card => {
+                // console.log('card', card[0])
+                console.log('sellerZoopPlan', sellerZoopPlan)
+                Object.entries(sellerZoopPlanObject).map(installment => {
+                  const actualInstallment = installment[0].split(card[0])[1]
+                    ? installment[0].split(card[0])[1].split(':')[0]
+                    : installment[0].split(card[0])[1]
+                  const actualInstallmentPercentage = installment[1] ? parseFloat(installment[1]) / 100 : installment[1]
+                  const actualCard = card[0]
+                  if (actualInstallment && actualInstallmentPercentage) {
+                    const newItem = sellerZoopPlanForFirebase
+                    // newItem[actualCard] = {}
+                    if (!Object.prototype.hasOwnProperty.call(newItem, actualCard)) newItem[actualCard] = {}
+                    newItem[actualCard][actualInstallment] = parseInt(actualInstallmentPercentage)
+                    setSellerZoopPlanForFirebase(prevState => ({ ...prevState, ...newItem }))
+                    const newZoopPlan = sellerZoopPlan
+                    newZoopPlan[selectedPlan][fee] = sellerZoopPlanForFirebase
+                    setActualZoopPlanForFirebase(newZoopPlan)
+                    newPlan = newZoopPlan
+                  }
+                })
+              }),
+          )
+          console.log('contador de length', Object.keys(sellerActualZoopPlanForFirebase).length)
+          console.log('newPlan', newPlan)
+          sendToBackend && Object.keys(newPlan).length !== 0 ? sendToBackend(state, newPlan) : () => null
+        }}
+      />
     </motion.div>
   )
 }
 
-export default memo(UpdateZoopPlan)
+export default memo(UpdateTax)

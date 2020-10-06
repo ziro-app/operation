@@ -1,16 +1,17 @@
 import React, { Suspense, useContext } from 'react'
 import { useLocation, useRoute } from 'wouter'
-import { motion } from 'framer-motion'
+
 import PropTypes from 'prop-types'
+import { motion } from 'framer-motion'
 // Ziro components
 import { Router2 as routeMatcher } from '@ziro/router'
-import LoginTrouble from '@bit/vitorbarbosa19.ziro.login-trouble'
-import ConfirmEmail from '@bit/vitorbarbosa19.ziro.confirm-email'
 import MyAccount from '@bit/vitorbarbosa19.ziro.my-account'
 import NotFound from '@bit/vitorbarbosa19.ziro.not-found'
+// Internal components
+import ConfirmEmail from '@bit/vitorbarbosa19.ziro.confirm-email'
+import LoginTrouble from '@bit/vitorbarbosa19.ziro.login-trouble'
 import SpinnerWithDiv from '@bit/vitorbarbosa19.ziro.spinner-with-div'
 import Submenu from '@bit/vitorbarbosa19.ziro.submenu'
-// Internal components
 import UserCart from './UserCart'
 import { userContext } from './appContext'
 import ChangeStoreownerEmail from './ChangeStoreownerEmail/index'
@@ -47,6 +48,9 @@ import CommissionModels from './CommissionModels'
 import UploadBillet from './UploadBillet'
 import UploadImages from './UploadImages/index'
 import ValidateEmail from './ValidateEmail/index'
+import UpdateTax from './UpdateZoopPlan/UpdateTax'
+import NewZoopPlan from './UpdateZoopPlan/NewZoopPlan'
+
 import Adjustment from './Adjustment/index'
 import Pickup from './Pickup/index'
 // import FirebaseMigration from './FirebaseMigration/index' -> Inacabado
@@ -55,6 +59,9 @@ const Router = ({ isLogged }) => {
   const [match, params] = useRoute('/pedidos/:cartId?')
   const [matchTransactions, paramsTransactions] = useRoute('/transacoes/:transactionId?/:receivableId?')
   const [matchTransactionsSplit, paramsTransactionsSplit] = useRoute('/transacoes/:transactionId?/split')
+  const [matchSeller, paramsSeller] = useRoute('/atualizar-plano-zoop/:sellerId?')
+  const [matchSellerNewPlan, paramsSellerNewPlan] = useRoute('/atualizar-plano-zoop/:sellerId?/newPlan')
+  const [matchFee, paramsFee] = useRoute('/atualizar-plano-zoop/:sellerId?/:fee?/:selectedPlan?')
   const { nickname } = useContext(userContext)
   const allowedUsers = ['Vitor']
 
@@ -88,6 +95,13 @@ const Router = ({ isLogged }) => {
     '/transacoes': <Transactions {...paramsTransactions} />,
     [matchTransactions ? location : null]: <Transactions {...paramsTransactions} />,
     [matchTransactionsSplit ? location : null]: <SplitPayment {...paramsTransactionsSplit} />,
+    [matchFee ? location : null]: <UpdateTax {...paramsFee} />,
+    [matchSeller ? location : null]: (
+      <HeaderBack title="Atualizar Plano Zoop" navigateTo="/suporte">
+        <UpdateZoopPlan {...paramsSeller} />
+      </HeaderBack>
+    ),
+    [matchSellerNewPlan ? location : null]: <NewZoopPlan {...paramsSellerNewPlan} />,
     '/deletar-conta': <DeleteAccount />,
     '/administrativo': (
       <Menu title="Administrativo">
