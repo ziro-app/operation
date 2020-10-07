@@ -113,6 +113,7 @@ const CreatePayment = () => {
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
         {fantasy === 'ZIRO' ? (
           <Form
+            buttonName="Criar Link"
             validations={validations}
             sendToBackend={sendToBackend ? sendToBackend(state) : () => null}
             inputs={[
@@ -291,6 +292,7 @@ const CreatePayment = () => {
           />
         ) : (
           <Form
+            buttonName="Criar Link"
             validations={validations}
             sendToBackend={sendToBackend ? sendToBackend(state) : () => null}
             inputs={[
