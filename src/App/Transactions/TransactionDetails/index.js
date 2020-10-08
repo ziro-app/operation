@@ -37,8 +37,13 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
   const [captureModal, setCaptureModal] = useState(false)
   const [splitTransactionModal, setSplitTransactionModal] = useState(false)
   const textAreaRef = useRef(null)
+  console.log(transaction)
   const paymentLink = process.env.HOMOLOG
-    ? `http://localhost:8080/pagamento/${transactionId}/escolher-cartao?doc`
+    ? transaction.checkoutWithoutRegister
+      ? `http://localhost:8080/pagamento/${transactionId}/finalizar-sem-cadastro`
+      : `http://localhost:8080/pagamento/${transactionId}/escolher-cartao?doc`
+    : transaction.checkoutWithoutRegister
+    ? `https://ziro.app/pagamento/${transactionId}/finalizar-sem-cadastro`
     : `https://ziro.app/pagamento/${transactionId}/escolher-cartao?doc`
   const [blocksStoreowner, setBlocksStoreowner] = useState([])
   const [validationMessage, setValidationMessage] = useState('')
@@ -239,12 +244,7 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
               ? handleMarkup(transaction)
               : '-'
           let sumOfFees = 0
-          if (
-            transaction.status !== 'Cancelado' &&
-            transaction.status !== 'Pré Autorizado' &&
-            transaction.status !== 'Atualizando' &&
-            transaction.status !== 'Aguardando Pagamento'
-          ) {
+          if (transaction.status === 'Aprovado') {
             sumOfFees = transaction.fee_details.reduce(function (sum, item) {
               return (sum += parseFloat(item.amount))
             }, 0)

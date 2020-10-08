@@ -37,6 +37,7 @@ const fetch = (transactionId, setTransaction, setError, transaction) => {
               sellerZoopPlan,
               totalFees,
               fee_details,
+              checkoutWithoutRegister,
             } = snapshot.data()
             const chargeFormatted = currencyFormat(charge)
             const dateFormatted = datePaid ? dateFormat(datePaid) : ''
@@ -70,6 +71,7 @@ const fetch = (transactionId, setTransaction, setError, transaction) => {
               sellerZoopPlan: sellerZoopPlan || '',
               totalFees: totalFees || '-',
               fee_details: fee_details || '-',
+              checkoutWithoutRegister: checkoutWithoutRegister || false,
             })
             if (transaction.status !== paymentDoc[0].status) {
               setTransaction(paymentDoc[0])
