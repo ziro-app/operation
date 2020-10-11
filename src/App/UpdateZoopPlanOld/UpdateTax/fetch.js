@@ -1,6 +1,6 @@
 import { db } from '../../../Firebase/index'
 
-const fetch = (setSellerZoopPlan, setFees, sellerId, selectedPlanForFirebase, fees) => {
+const fetch = (setSellerZoopPlan, setFees, sellerId, defaultValues, selectedPlanForFirebase, fees) => {
   const run = async () => {
     try {
       if (selectedPlanForFirebase !== '' && fees === null) {

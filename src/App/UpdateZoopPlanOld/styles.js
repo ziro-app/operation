@@ -17,14 +17,4 @@ export const wrapper = {
   title = {
     fontFamily: fontTitle,
     fontSize: fontSizeNormal,
-  },
-  container = {
-    justifyItems: 'center',
-    fontColor: primaryColor,
-    fontSize: fontSizeNormal,
-    fontFamily: fontBody,
-    display: 'grid',
-    gridRowGap: '15px',
-    padding: '0 20px',
-    margin: '10px 0',
   }

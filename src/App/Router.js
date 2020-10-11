@@ -44,13 +44,14 @@ import UpdatePass from './UpdatePass/index'
 import UpdateStoreowner from './UpdateStoreowner/index'
 import UpdateUserInfo from './UpdateUserInfo/index'
 import UpdateZoopPlan from './UpdateZoopPlan/index'
+import UpdateZoopPlanOld from './UpdateZoopPlanOld/index'
 import CommissionModels from './CommissionModels'
 import UploadBillet from './UploadBillet'
 import UploadImages from './UploadImages/index'
 import ValidateEmail from './ValidateEmail/index'
 import UpdateTax from './UpdateZoopPlan/UpdateTax'
 import NewZoopPlan from './UpdateZoopPlan/NewZoopPlan'
-
+import TestingPercentagesSplitRules from './TestingPercentagesSplitRules'
 import Adjustment from './Adjustment/index'
 import Pickup from './Pickup/index'
 // import FirebaseMigration from './FirebaseMigration/index' -> Inacabado
@@ -158,7 +159,9 @@ const Router = ({ isLogged }) => {
               ['Reenviar confirmação de email', '/checar-email'],
               ['Aprovar confirmação de email', '/validar-email'],
               ['Alterar email do usuário', '/alterar-email'],
-              ['Atualizar Plano Zoop do usuário', '/atualizar-plano-zoop'],
+              ['Atualizar Plano Zoop do usuário antigo', '/atualizar-plano-zoop-old'],
+              ['Atualizar Plano Zoop do usuário novo', '/atualizar-plano-zoop'],
+              ['Testar porcentagens', '/testando-porcentagem'],
             ]}
           />
         </motion.div>
@@ -182,6 +185,16 @@ const Router = ({ isLogged }) => {
     '/cadastrar-despesa': (
       <HeaderBack title="Cadastrar despesa" navigateTo="/logistica">
         <RegisterExpenses />
+      </HeaderBack>
+    ),
+    '/atualizar-plano-zoop-old': (
+      <HeaderBack title="Atualizar Plano Zoop do usuário antigo" navigateTo="/suporte">
+        <UpdateZoopPlanOld />
+      </HeaderBack>
+    ),
+    '/testando-porcentagem': (
+      <HeaderBack title="Teste de porcentagens" navigateTo="/suporte">
+        <TestingPercentagesSplitRules />
       </HeaderBack>
     ),
     '/cadastrar-boleto': (

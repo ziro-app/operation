@@ -1,17 +1,15 @@
 import capitalize from '@ziro/capitalize'
 import { db } from '../../../Firebase/index'
 
-const fetch = (setIsLoading, setErrorLoading, setSellerZoopPlan2, selectedPlan) => {
+const fetch = (setIsLoading, setErrorLoading, setSellerZoopPlan2, selectedPlan, sellerId) => {
   const run = async () => {
     try {
-      const query = await db.collection('suppliers').get()
-      if (!query.empty) {
-        query.forEach(sup => {
-          const docId = sup.id
-          const { sellerZoopPlan2 } = sup.data()
-
-          sellerZoopPlan2 ? setSellerZoopPlan2(sellerZoopPlan2) : setSellerZoopPlan2(null)
-        })
+      const supplier = await db.collection('suppliers').doc(sellerId).get()
+      if (!supplier.empty) {
+        const docId = supplier.id
+        const { sellerZoopPlan2 } = supplier.data()
+        console.log(sellerZoopPlan2)
+        sellerZoopPlan2 ? setSellerZoopPlan2(sellerZoopPlan2) : setSellerZoopPlan2(null)
       }
       setErrorLoading(false)
       setIsLoading(false)

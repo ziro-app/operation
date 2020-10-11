@@ -6,8 +6,7 @@ import { inline, styleTag } from './styles'
 
 const InputPercentage = forwardRef(({ defaultValue, id, value, setValue, style = inline, css = styleTag, disabled, submitting, ...rest }, ref) => {
   const inputProps = { style, disabled: disabled || submitting, ref, inputMode: 'numeric', placeholder: '% 20', ...rest }
-  // console.log('value,defaultValue', value, defaultValue)
-
+  console.log('value', value)
   return (
     <>
       <style>{css}</style>
@@ -16,9 +15,7 @@ const InputPercentage = forwardRef(({ defaultValue, id, value, setValue, style =
         className="input-text"
         value={
           value
-            ? value === '% 0,00'
-              ? '% 0,00'
-              : `% ${currencyFormat(value).replace(/[R$]/g, '')}`
+            ? `% ${currencyFormat(value).replace(/[R$]/g, '')}`
             : setValue(prev => ({
                 ...prev,
                 [id]:
@@ -26,22 +23,32 @@ const InputPercentage = forwardRef(({ defaultValue, id, value, setValue, style =
                     ? parseFloat(defaultValue.split('%')[0]) * 100 <= 10000
                       ? maskInput(parseFloat(defaultValue.split('%')[0]) * 100, '#######', true)
                       : maskInput(10000, '#######', true)
+                    : parseFloat(defaultValue.split('%')[0]) === 0
+                    ? '% 0,00'
                     : '% 0,00',
-              }))
+              })) || '% 0,00'
         }
         onChange={({ target: { value } }) => {
-          const toInteger = parseInt(value.replace(/[\.,\s%]/g, ''), 10)
-          setValue(prev => ({
-            ...prev,
-            // eslint-disable-next-line no-nested-ternary
-            [id]: toInteger
-              ? toInteger <= 10000
-                ? maskInput(toInteger, '#######', true)
-                : maskInput(10000, '#######', true)
-              : toInteger === 0
-              ? '0'
-              : '',
-          }))
+          if (value === '% 0,0') {
+            setValue(prev => ({
+              ...prev,
+              [id]: '000',
+            }))
+            // setValue('% 0,00');
+          } else {
+            const toInteger = parseInt(value.replace(/[\.,\s%]/g, ''), 10)
+            setValue(prev => ({
+              ...prev,
+              // eslint-disable-next-line no-nested-ternary
+              [id]: toInteger
+                ? toInteger <= 10000
+                  ? maskInput(toInteger, '#######', true)
+                  : maskInput(10000, '#######', true)
+                : toInteger === 0
+                ? '0'
+                : '',
+            }))
+          }
         }}
       />
     </>

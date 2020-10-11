@@ -1,14 +1,14 @@
 import capitalize from '@ziro/capitalize'
 import { db } from '../../Firebase/index'
 
-const fetch = (setIsLoading, setErrorLoading, setSuppliers, setBlocks, mountBlock, setSellerZoopPlan2, setFees, selectedPlan, supplier) => {
+const fetch = (setIsLoading, setErrorLoading, setSuppliers, setSellerZoopPlan2, setFees, selectedPlan, supplier) => {
   const run = async () => {
     try {
-      let fetchedPlan = {}
       const fantasyList = []
       const suppliers = []
+      let fetchedPlan = {}
       const query = await db.collection('suppliers').get()
-      console.log('supplier', supplier)
+
       if (supplier.docId) {
         fetchedPlan = await db.collection('suppliers').doc(supplier.docId).get()
         console.log('fetchedPlan', fetchedPlan)
@@ -24,10 +24,6 @@ const fetch = (setIsLoading, setErrorLoading, setSuppliers, setBlocks, mountBloc
         query.forEach(sup => {
           const docId = sup.id
           const { fantasia, razao, sellerZoopPlan, nome, sobrenome, sellerZoopPlan2 } = sup.data()
-
-          if (sellerZoopPlan2 && supplier.id) {
-            // const fetchedPlan = db.collection('suppliers').doc(supplier.id).get()
-          }
           const name = fantasia
             ? fantasyList.includes(fantasia)
               ? capitalize(`${fantasia} - ${nome}`)
@@ -43,7 +39,6 @@ const fetch = (setIsLoading, setErrorLoading, setSuppliers, setBlocks, mountBloc
         })
       }
       setSuppliers(suppliers)
-      setBlocks(mountBlock('', '', '', ''))
       setErrorLoading(false)
       setIsLoading(false)
     } catch (error) {
