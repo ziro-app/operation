@@ -30,7 +30,6 @@ const UpdateZoopPlan = ({ sellerId }) => {
   const [antifraudPercentage, setAntifraudPercentage] = useState('')
   const [suppliers, setSuppliers] = useState([])
   const [supplier, setSupplier] = useState({ docId: '', name: '', reason: '', markupPercentage: '', antifraudPercentage: '', sellerZoopPlan: '' })
-  const [blocks, setBlocks] = useState([])
   const [, setLocation] = useLocation()
   const [settingActivePlan, setSettingActivePlan] = useState('')
   /* if (!sellerId) {
@@ -40,7 +39,7 @@ const UpdateZoopPlan = ({ sellerId }) => {
   console.log('sellerId', sellerId)
   const collator = new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' })
   const { nickname } = useContext(userContext)
-  const setState = { setAntifraudPercentage, setSupplier, setMarkupPercentage, setBlocks }
+  const setState = { setAntifraudPercentage, setSupplier, setMarkupPercentage }
   const state = {
     docId: supplier.docId,
     selectedPlan,
@@ -49,7 +48,7 @@ const UpdateZoopPlan = ({ sellerId }) => {
     antifraudPercentage,
     supplier,
     markupPercentage,
-    blocks,
+
     setSettingActivePlan,
     ...setState,
   }
@@ -100,12 +99,22 @@ const UpdateZoopPlan = ({ sellerId }) => {
     setMarkupPercentage('')
     setAntifraudPercentage('')
     setSupplier({ docId: '', name: '', reason: '', markupPercentage: '', antifraudPercentage: '', sellerZoopPlan: '' })
-    setBlocks(mountBlock('', '', '', ''))
   }
   // console.log(supplier)
   useEffect(() => {
-    fetch(setIsLoading, setErrorLoading, setSuppliers, setBlocks, mountBlock, setSellerZoopPlan2, setFees, selectedPlan, supplier)
-  }, [selectedPlan, supplier])
+    if (localStorage.getItem('sellerName')) setSearchedName(localStorage.getItem('sellerName'))
+    if (localStorage.getItem('selectedPlan')) setSelectedPlan(localStorage.getItem('selectedPlan'))
+    fetch(setIsLoading, setErrorLoading, setSuppliers, setSellerZoopPlan2, setFees, selectedPlan, supplier, suppliers)
+    const person = suppliers.find(storeowner => storeowner.name === localStorage.getItem('sellerName'))
+    if (person) {
+      setSupplier(person)
+      if (person.sellerZoopPlan) setAllPlans(Object.keys(person.sellerZoopPlan).filter(item => item !== 'activePlan'))
+      else {
+        setAllPlans([''])
+        setSelectedPlan('')
+      }
+    }
+  }, [selectedPlan, supplier, suppliers])
   useEffect(() => {
     if (sellerZoopPlan2 && Object.keys(sellerZoopPlan2).length !== 0) {
     }
@@ -123,17 +132,21 @@ const UpdateZoopPlan = ({ sellerId }) => {
             setSearchedName(value)
             const person = suppliers.find(element => element.name === value)
             if (person) {
+              localStorage.setItem('sellerName', person.name)
               console.log('person', person)
               if (person.sellerZoopPlan) setAllPlans(Object.keys(person.sellerZoopPlan).filter(item => item !== 'activePlan'))
-              else {
-              }
               setSupplier(person)
-              setBlocks(mountBlock(person.name, person.reason, person.markupPercentage, person.antifraudPercentage, person.sellerZoopPlan))
-            } else clear()
+            } else {
+              clear()
+              localStorage.removeItem('sellerName')
+              localStorage.removeItem('selectedPlan')
+            }
           } else {
             clear()
             setSearchedName('')
             setSelectedPlan('')
+            localStorage.removeItem('sellerName')
+            localStorage.removeItem('selectedPlan')
           }
         }}
         onChangeKeyboard={element => {
@@ -148,22 +161,37 @@ const UpdateZoopPlan = ({ sellerId }) => {
                 setAllPlans([''])
                 setSelectedPlan('')
               }
-              setBlocks(mountBlock(person.name, person.reason, person.markupPercentage, person.antifraudPercentage, person.sellerZoopPlan))
-            } else clear()
+            } else {
+              clear()
+              localStorage.removeItem('sellerName')
+              localStorage.removeItem('selectedPlan')
+            }
           } else {
             clear()
             setSearchedName('')
             setSelectedPlan('')
+            localStorage.removeItem('selectedPlan')
+            localStorage.removeItem('sellerName')
           }
         }}
         list={suppliers.map(supplier => supplier.name).sort()}
         placeholder="Escolha o fabricante"
       />
-      {supplier.docId && supplier.name && supplier.reason && (
+      {supplier.docId && supplier.name && supplier.reason && supplier.sellerZoopPlan && (
         <Dropdown
           value={selectedPlan}
-          onChange={({ target: { value } }) => setSelectedPlan(value)}
-          onChangeKeyboard={element => (element ? setSelectedPlan(element.value) : null)}
+          onChange={({ target: { value } }) => {
+            setSelectedPlan(value)
+            localStorage.setItem('selectedPlan', value)
+          }}
+          onChangeKeyboard={element => {
+            if (element) {
+              setSelectedPlan(element.value)
+              localStorage.setItem('selectedPlan', element.value)
+            } else {
+              return null
+            }
+          }}
           readOnly
           list={allPlans}
           placeholder="Escolha o plano ou crie um"
