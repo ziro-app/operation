@@ -493,7 +493,18 @@ const NewZoopPlan = () => {
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={containerWithPadding}>
       <Header type="icon-link" title="Adicionar Plano de Venda" navigateTo={`atualizar-plano-zoop/${sellerId}`} icon="back" />
       <div style={{ padding: '5px' }}>
-        <InputText value={planName} onChange={({ target: { value } }) => setPlanName(value)} placeholder="Nome do plano" />
+        <InputText
+          value={planName}
+          onChange={({ target: { value } }) => {
+            if (value.includes(' ')) {
+              const newValue = value.replace(/\s/g, '')
+              setPlanName(newValue)
+            } else {
+              setPlanName(value)
+            }
+          }}
+          placeholder="Nome do plano"
+        />
       </div>
       <div style={{ padding: '5px' }}>
         <Button
