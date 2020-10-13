@@ -98,7 +98,7 @@ const Pickup = () => {
         },
         {
             name: 'romaneio',
-            validation: value => provider === 'Pertence do cliente' ? true : value !== undefined && value !== '' && /(\.jpg|\.jpeg|\.png)$/.test(value.name),
+            validation: value => !value ? true : value !== undefined && value !== '' && /(\.jpg|\.jpeg|\.png)$/.test(value.name),
             value: romaneio,
             message: 'Formatos válidos: .png, .jpg e .jpeg'
         }
