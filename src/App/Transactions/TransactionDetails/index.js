@@ -43,8 +43,8 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
       ? `http://localhost:8080/pagamento/${transactionId}/finalizar-sem-cadastro`
       : `http://localhost:8080/pagamento/${transactionId}/escolher-cartao?doc`
     : transaction.checkoutWithoutRegister
-    ? `https://ziro.app/pagamento/${transactionId}/finalizar-sem-cadastro`
-    : `https://ziro.app/pagamento/${transactionId}/escolher-cartao?doc`
+      ? `https://ziro.app/pagamento/${transactionId}/finalizar-sem-cadastro`
+      : `https://ziro.app/pagamento/${transactionId}/escolher-cartao?doc`
   const [blocksStoreowner, setBlocksStoreowner] = useState([])
   const [validationMessage, setValidationMessage] = useState('')
   const [loadingButton, setLoadingButton] = useState(false)
@@ -206,41 +206,40 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
           let dataTable
           let feesFormatted =
             transaction.status !== 'Cancelado' && transaction.fees
-              ? ` ${
-                  transaction.sellerZoopPlan && (transaction.sellerZoopPlan.markup.amount || transaction.sellerZoopPlan.markup.percentage)
-                    ? '- '.concat(
-                        parseFloat(parseFloat(transaction.sellerZoopPlan.markup.receivable_gross_amount) + parseFloat(transaction.fees))
-                          .toLocaleString('pt-br', {
-                            style: 'currency',
-                            currency: 'BRL',
-                          })
-                          .replace(/\s/g, ''),
-                      )
-                    : '- '.concat(
-                        parseFloat(transaction.fees)
-                          .toLocaleString('pt-br', {
-                            style: 'currency',
-                            currency: 'BRL',
-                          })
-                          .replace(/\s/g, ''),
-                      )
-                }`
+              ? ` ${transaction.sellerZoopPlan && (transaction.sellerZoopPlan.markup.amount || transaction.sellerZoopPlan.markup.percentage)
+                ? '- '.concat(
+                  parseFloat(parseFloat(transaction.sellerZoopPlan.markup.receivable_gross_amount) + parseFloat(transaction.fees))
+                    .toLocaleString('pt-br', {
+                      style: 'currency',
+                      currency: 'BRL',
+                    })
+                    .replace(/\s/g, ''),
+                )
+                : '- '.concat(
+                  parseFloat(transaction.fees)
+                    .toLocaleString('pt-br', {
+                      style: 'currency',
+                      currency: 'BRL',
+                    })
+                    .replace(/\s/g, ''),
+                )
+              }`
               : '-'
           let insuranceValueFormatted =
             transaction.status !== 'Cancelado' &&
-            transaction.insurance === true &&
-            Object.prototype.hasOwnProperty.call(transaction, 'receivables') &&
-            Object.prototype.hasOwnProperty.call(transaction, 'sellerZoopPlan') &&
-            Object.prototype.hasOwnProperty.call(transaction.sellerZoopPlan, 'antiFraud') &&
-            feesFormatted !== '-' &&
-            (transaction.sellerZoopPlan.antiFraud.amount || transaction.sellerZoopPlan.antiFraud.percentage)
+              transaction.insurance === true &&
+              Object.prototype.hasOwnProperty.call(transaction, 'receivables') &&
+              Object.prototype.hasOwnProperty.call(transaction, 'sellerZoopPlan') &&
+              Object.prototype.hasOwnProperty.call(transaction.sellerZoopPlan, 'antiFraud') &&
+              feesFormatted !== '-' &&
+              (transaction.sellerZoopPlan.antiFraud.amount || transaction.sellerZoopPlan.antiFraud.percentage)
               ? handleInsurance(transaction)
-              : '- R$0,00'
+              : '-'
           let markupValueFormatted =
             Object.prototype.hasOwnProperty.call(transaction, 'receivables') &&
-            feesFormatted !== '-' &&
-            transaction.sellerZoopPlan &&
-            (transaction.sellerZoopPlan.markup.amount || transaction.sellerZoopPlan.markup.percentage)
+              feesFormatted !== '-' &&
+              transaction.sellerZoopPlan &&
+              (transaction.sellerZoopPlan.markup.amount || transaction.sellerZoopPlan.markup.percentage)
               ? handleMarkup(transaction)
               : '-'
           let sumOfFees = 0
@@ -251,15 +250,15 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
           }
           let liquidFormatted =
             transaction.status !== 'Cancelado' &&
-            transaction.status !== 'Pré Autorizado' &&
-            transaction.status !== 'Atualizando' &&
-            transaction.totalFees !== '-'
+              transaction.status !== 'Pré Autorizado' &&
+              transaction.status !== 'Atualizando' &&
+              transaction.totalFees !== '-'
               ? parseFloat(`${stringToFloat(transaction.charge) - parseFloat(transaction.totalFees)}`)
-                  .toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })
-                  .replace(/\s/g, '')
+                .toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })
+                .replace(/\s/g, '')
               : transaction.fees
-              ? currencyFormat(parseFloat(`${(stringToFloat(transaction.charge) - sumOfFees).toFixed(2)}`.replace(/[R$\.,]/g, '')))
-              : '-'
+                ? currencyFormat(parseFloat(`${(stringToFloat(transaction.charge) - sumOfFees).toFixed(2)}`.replace(/[R$\.,]/g, '')))
+                : '-'
 
           block = [
             {
@@ -328,9 +327,9 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
             const sortedTransactions = transaction.receivables.sort((a, b) => b.installment - a.installment).filter(item => item.split_rule === null)
             const sortedSplitAmount = Object.prototype.hasOwnProperty.call(transaction.receivables[0], 'split_rule')
               ? transaction.receivables
-                  .sort((a, b) => b.installment - a.installment)
-                  .filter(item => item.split_rule !== null)
-                  .reverse()
+                .sort((a, b) => b.installment - a.installment)
+                .filter(item => item.split_rule !== null)
+                .reverse()
               : transaction.receivables.sort((a, b) => b.installment - a.installment).reverse()
             const paidRows = []
             const paidClicks = []
@@ -344,10 +343,10 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
               const sumSplit =
                 sortedSplitAmount.length > 0
                   ? sortedSplitAmount
-                      .filter(item => item.installment === transaction.installment)
-                      .reduce((acc, val) => {
-                        return parseFloat(acc) + parseFloat(val.gross_amount)
-                      }, 0)
+                    .filter(item => item.installment === transaction.installment)
+                    .reduce((acc, val) => {
+                      return parseFloat(acc) + parseFloat(val.gross_amount)
+                    }, 0)
                   : 0
               if (!transaction.paid_at) {
                 let upAm = round(parseFloat(transaction.gross_amount) + (sortedSplitAmount.length > 0 ? sumSplit : 0), 2)
@@ -505,13 +504,13 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
                       <Spinner size="3.5rem" />
                     </div>
                   ) : (
-                    <Button
-                      type="button"
-                      cta="Sim"
-                      click={() => postCapture(transaction.transactionZoopId, transaction.sellerZoopId, transaction.charge)}
-                      template="regular"
-                    />
-                  )}
+                      <Button
+                        type="button"
+                        cta="Sim"
+                        click={() => postCapture(transaction.transactionZoopId, transaction.sellerZoopId, transaction.charge)}
+                        template="regular"
+                      />
+                    )}
                   <Button type="button" cta="Não" click={() => setCaptureModal(false)} template="light" />
                 </div>
                 {validationMessage && <label style={{ color: alertColor }}>{validationMessage}</label>}
@@ -531,13 +530,13 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
                       <Spinner size="3.5rem" />
                     </div>
                   ) : (
-                    <Button
-                      type="button"
-                      cta="Sim"
-                      click={() => cancelTransaction(transaction.transactionZoopId, transaction.sellerZoopId, transaction.charge)}
-                      template="regular"
-                    />
-                  )}
+                      <Button
+                        type="button"
+                        cta="Sim"
+                        click={() => cancelTransaction(transaction.transactionZoopId, transaction.sellerZoopId, transaction.charge)}
+                        template="regular"
+                      />
+                    )}
                   <Button type="button" cta="Não" click={() => setCancelModal(false)} template="light" />
                 </div>
                 {validationMessage && <label style={{ color: alertColor }}>{validationMessage}</label>}
@@ -571,8 +570,8 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
                   <span>{copyResultText}</span>
                 </div>
               ) : (
-                <div style={{ padding: '0 0 5px', height: '24px' }}>&nbsp;</div>
-              )}
+                  <div style={{ padding: '0 0 5px', height: '24px' }}>&nbsp;</div>
+                )}
               <Button style={btn} type="button" cta="Copiar link" click={copyToClipboard} template="regular" />
             </div>
             <div>
