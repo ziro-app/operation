@@ -543,13 +543,13 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
               </div>
             </Modal>
             <div style={buttonContainer}>
-              <Button
+              {/* <Button
                 style={btn}
                 type="button"
                 cta="Efetuar divisão"
                 click={() => setLocation(`/transacoes/${transactionId}/split`)}
                 template="regular"
-              />
+              /> */}
               <Button style={btnRed} type="button" cta="Cancelar transação" click={() => setCancelModal(true)} template="destructive" />
             </div>
           </>
