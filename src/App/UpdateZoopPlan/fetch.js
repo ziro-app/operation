@@ -24,8 +24,6 @@ const fetch = (setIsLoading, setErrorLoading, setSuppliers, setSellerZoopPlan2, 
               setFees(feesFiltered)
             }
           }
-
-          // }
         })
       }
       const query = db.collection('suppliers').where('tipoCadastro', '==', 'Completo')
@@ -35,9 +33,6 @@ const fetch = (setIsLoading, setErrorLoading, setSuppliers, setSellerZoopPlan2, 
             const docId = sup.id
             const { fantasia, razao, sellerZoopPlan, nome, sobrenome, sellerZoopPlan2 } = sup.data()
 
-            if (sellerZoopPlan2 && supplier.id) {
-              // const fetchedPlan = db.collection('suppliers').doc(supplier.id).get()
-            }
             const name = fantasia
               ? fantasyList.includes(fantasia)
                 ? capitalize(`${fantasia} - ${nome}`)

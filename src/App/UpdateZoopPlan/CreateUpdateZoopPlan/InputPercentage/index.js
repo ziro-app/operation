@@ -7,7 +7,7 @@ import { inline, styleTag } from './styles'
 const InputPercentage = forwardRef(({ defaultValue, id, value, setValue, style = inline, css = styleTag, disabled, submitting, ...rest }, ref) => {
   const inputProps = { style, disabled: disabled || submitting, ref, inputMode: 'numeric', placeholder: '% 20', ...rest }
   // console.log('value,defaultValue', value, defaultValue)
-
+  console.log('value', value)
   return (
     <>
       <style>{css}</style>
@@ -18,15 +18,14 @@ const InputPercentage = forwardRef(({ defaultValue, id, value, setValue, style =
           value
             ? value === '% 0,00'
               ? '% 0,00'
-              : `% ${currencyFormat(value).replace(/[R$]/g, '')}`
+              : `% ${value.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' }).replace(/[R$]/g, '')}`
             : setValue(prev => ({
                 ...prev,
-                [id]:
-                  parseFloat(defaultValue.split('%')[0]) * 100
-                    ? parseFloat(defaultValue.split('%')[0]) * 100 <= 10000
-                      ? maskInput(parseFloat(defaultValue.split('%')[0]) * 100, '#######', true)
-                      : maskInput(10000, '#######', true)
-                    : '% 0,00',
+                [id]: parseFloat(defaultValue.split('%')[0])
+                  ? parseFloat(defaultValue.split('%')[0]) <= 10000
+                    ? maskInput(parseFloat(defaultValue.split('%')[0]), '#######', true)
+                    : maskInput(10000, '#######', true)
+                  : '% 0,00',
               }))
         }
         onChange={({ target: { value } }) => {

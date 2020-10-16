@@ -21,12 +21,11 @@ const InputPercentage = forwardRef(({ defaultValue, id, value, setValue, style =
               : `% ${currencyFormat(value).replace(/[R$]/g, '')}`
             : setValue(prev => ({
                 ...prev,
-                [id]:
-                  parseFloat(defaultValue.split('%')[0]) * 100
-                    ? parseFloat(defaultValue.split('%')[0]) * 100 <= 10000
-                      ? maskInput(parseFloat(defaultValue.split('%')[0]) * 100, '#######', true)
-                      : maskInput(10000, '#######', true)
-                    : '% 0,00',
+                [id]: parseFloat(defaultValue.split('%')[0]) //* 100
+                  ? parseFloat(defaultValue.split('%')[0]) //* 100 <= 10000
+                    ? maskInput(parseFloat(defaultValue.split('%')[0]), '#######', true) //* 100, '#######', true)
+                    : maskInput(10000, '#######', true)
+                  : '% 0,00',
               }))
         }
         onChange={({ target: { value } }) => {

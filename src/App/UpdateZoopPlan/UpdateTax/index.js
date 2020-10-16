@@ -41,7 +41,6 @@ const UpdateTax = ({ fee, setFee }) => {
   let newPlan = {}
   const mountBlock = (name, reason, activePlan, plans = []) => {
     const plansFormatted = plans ? plans.join(' , ') : ''
-    console.log('three', name, reason, activePlan)
     return [
       {
         header: 'Detalhes',
@@ -78,8 +77,8 @@ const UpdateTax = ({ fee, setFee }) => {
       getFee(setSellerZoopPlan, setFees, sellerId, selectedPlanForFirebase, fees)
     }
   }, [fee, error, selectedPlanForFirebase])
-  console.log('supplier', supplier)
-  console.log('blocks', blocks)
+  // console.log('supplier', supplier)
+  // console.log('blocks', blocks)
   if (supplier.fantasia && blocks.length === 0) {
     setBlocks(mountBlock(supplier.fantasia, supplier.razao, selectedPlan))
 
@@ -171,7 +170,7 @@ const UpdateTax = ({ fee, setFee }) => {
               feeMap[0] === fee &&
               Object.entries(feeMap[1]).map(card => {
                 // console.log('card', card[0])
-                console.log('sellerZoopPlan', sellerZoopPlan)
+                // console.log('sellerZoopPlan', sellerZoopPlan)
                 Object.entries(sellerZoopPlanObject).map(installment => {
                   const actualInstallment = installment[0].split(card[0])[1]
                     ? installment[0].split(card[0])[1].split(':')[0]
@@ -179,9 +178,9 @@ const UpdateTax = ({ fee, setFee }) => {
                   let actualInstallmentPercentage = installment[1] ? parseFloat(installment[1]) / 100 : installment[1]
                   if (!actualInstallmentPercentage) actualInstallmentPercentage = 0
                   const actualCard = card[0]
-                  console.log('actualInstallment,actualInstallmentPercentage', actualInstallment, actualInstallmentPercentage)
+                  // console.log('actualInstallment,actualInstallmentPercentage', actualInstallment, actualInstallmentPercentage)
                   if ((actualInstallment && actualInstallmentPercentage) || (actualInstallment && actualInstallmentPercentage === 0)) {
-                    console.log('actualInstallment,actualInstallmentPercentage', actualInstallment, actualInstallmentPercentage)
+                    // console.log('actualInstallment,actualInstallmentPercentage', actualInstallment, actualInstallmentPercentage)
                     const newItem = sellerZoopPlanForFirebase
                     // newItem[actualCard] = {}
                     if (!Object.prototype.hasOwnProperty.call(newItem, actualCard)) newItem[actualCard] = {}
