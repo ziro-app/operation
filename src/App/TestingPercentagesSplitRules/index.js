@@ -22,16 +22,41 @@ const TestingPercentagesSplitRules = () => {
   const [antifraudPercentage, setAntifraudPercentage] = useState('')
   const [suppliers, setSuppliers] = useState([])
   const [supplier, setSupplier] = useState({ docId: '', name: '', reason: '', markupPercentage: '', antifraudPercentage: '', sellerZoopPlan: '' })
-  const [blocks, setBlocks] = useState([])
+  const [counter, setCounter] = useState(0)
   const allCards = ['americanexpress', 'elo', 'hipercard', 'mastercard', 'visa']
-  const allInstallments = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '0']
+  const allInstallments = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
   const allInsurance = ['Com seguro', 'Sem seguro']
-
+  const clear = () => {
+    setSearchedName('')
+    setSelectedPlan('')
+    setInstallment('')
+    setCard('')
+    setInsurance(false)
+    setMarkupPercentage('')
+    setAntifraudPercentage('')
+    setSupplier({ docId: '', name: '', reason: '', markupPercentage: '', antifraudPercentage: '', sellerZoopPlan: '' })
+  }
+  useEffect(() => {
+    if (suppliers.length > 0 && counter < 2) {
+      setCounter(counter + 1)
+      if (localStorage.getItem('sellerName')) {
+        const searchedNameFromLocalStorage = localStorage.getItem('sellerName')
+        setSearchedName(searchedNameFromLocalStorage)
+        const person = suppliers.find(element => element.name === searchedNameFromLocalStorage)
+        if (person) {
+          console.log('person', person)
+          setAllPlans(Object.keys(person.sellerZoopPlan).filter(item => item !== 'activePlan'))
+          setSupplier(person)
+        } else clear()
+      }
+    }
+  }, [suppliers])
   useEffect(() => {
     fetch(setIsLoading, setErrorLoading, setSuppliers, setSellerZoopPlan2, setFees, selectedPlan, supplier)
   }, [supplier])
   useEffect(() => {
     //
+
     if (supplier.docId && supplier.name && supplier.reason && selectedPlan && card && installment) {
       const { percentageZiroMarkup, percentageZiroAntifraud } = findPlanPercentages({
         cardBrand: card,
@@ -41,26 +66,11 @@ const TestingPercentagesSplitRules = () => {
         test: true,
         selectedPlan,
       })
-      console.log(percentageZiroMarkup, percentageZiroAntifraud)
+
       setMarkupPercentage(percentageZiroMarkup)
       setAntifraudPercentage(percentageZiroAntifraud)
     }
   }, [selectedPlan, installment, selectedPlan, insurance, card, sellerZoopPlan2])
-  const clear = () => {
-    setSearchedName('')
-    setSelectedPlan('')
-    setSelectedPlan('')
-    setInstallment('')
-    setCard('')
-    setInsurance(false)
-    setMarkupPercentage('')
-    setAntifraudPercentage('')
-    setSupplier({ docId: '', name: '', reason: '', markupPercentage: '', antifraudPercentage: '', sellerZoopPlan: '' })
-  }
-  console.log('card', card)
-  console.log('installment', installment)
-  console.log('insurance', insurance)
-  console.log('sellerZoopPlan2', sellerZoopPlan2)
 
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>

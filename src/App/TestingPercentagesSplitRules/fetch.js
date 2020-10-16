@@ -7,7 +7,7 @@ const fetch = (setIsLoading, setErrorLoading, setSuppliers, setSellerZoopPlan2, 
       const fantasyList = []
       const suppliers = []
       let fetchedPlan = {}
-      const query = await db.collection('suppliers').get()
+      const query = await db.collection('suppliers').orderBy('sellerZoopPlan2', 'asc').get()
 
       if (supplier.docId) {
         fetchedPlan = await db.collection('suppliers').doc(supplier.docId).get()
