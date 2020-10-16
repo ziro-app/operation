@@ -28,15 +28,15 @@ const sendToBackend = state => () => {
     const {setInputDate,setCodPickup,setProvider,setAdress,setBags,setInvoice,setRomaneio,setObservation,setFilename, reseller, codPickup, inputDate, provider, adress,bags, invoice, romaneio, observation} = state
     return new Promise(async (resolve, reject) => {
         try {
-            if (romaneio.size === 0) throw { msg: 'Imagem com tamanho vazio', customError: true };
             const cadastro = dateHourFormatter(new Date())
             const timestamp = Date.now();
             const conferencia = `${bags} sacola(s)${invoice === 'Sim' ? ', nota fiscal' : ''}`
             console.log(provider)
-            if(provider === 'Pertence do cliente'){
+            if(!romaneio){
               const arrayToSheet = [cadastro, codPickup.split('RL')[1],codPickup, inputDate, reseller, provider, adress, conferencia, observation]
               await axios(configSheet(arrayToSheet))
             }else{
+              if (romaneio.size === 0) throw { msg: 'Imagem com tamanho vazio', customError: true };
               const image = storage.child(`Romaneios/atendimento-${codPickup.split('RL')[1]}-${timestamp}`);
               const compressed = await readAndCompressImage(romaneio, { quality: 0.65 });
               const uploadTask = await image.put(compressed);
