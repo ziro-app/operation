@@ -114,7 +114,7 @@ const TestingPercentagesSplitRules = () => {
             onChangeKeyboard={element => (element ? setCard(element.value) : null)}
             readOnly
             list={allCards}
-            placeholder="Escolha o cartão"
+            placeholder="Escolha a bandeira"
           />
         )}
         {supplier.docId && supplier.name && supplier.reason && selectedPlan && card && (

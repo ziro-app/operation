@@ -50,6 +50,7 @@ import UploadBillet from './UploadBillet'
 import UploadImages from './UploadImages/index'
 import ValidateEmail from './ValidateEmail/index'
 import UpdateTax from './UpdateZoopPlan/UpdateTax'
+import CreateAndUpdate from './UpdateZoopPlan/CreateUpdateZoopPlan'
 import NewZoopPlan from './UpdateZoopPlan/NewZoopPlan'
 import TestingPercentagesSplitRules from './TestingPercentagesSplitRules'
 import Adjustment from './Adjustment/index'
@@ -96,6 +97,7 @@ const Router = ({ isLogged }) => {
     '/transacoes': <Transactions {...paramsTransactions} />,
     [matchTransactions ? location : null]: <Transactions {...paramsTransactions} />,
     [matchTransactionsSplit ? location : null]: <SplitPayment {...paramsTransactionsSplit} />,
+    // [matchFee ? location : null]: <CreateAndUpdate {...paramsFee} />,
     [matchFee ? location : null]: <UpdateTax {...paramsFee} />,
     [matchSeller ? location : null]: (
       <HeaderBack title="Atualizar Plano Zoop" navigateTo="/suporte">
@@ -161,7 +163,6 @@ const Router = ({ isLogged }) => {
               ['Alterar email do usuário', '/alterar-email'],
               ['Atualizar Plano Zoop do usuário antigo', '/atualizar-plano-zoop-old'],
               ['Atualizar Plano Zoop do usuário novo', '/atualizar-plano-zoop'],
-              ['Testar porcentagens', '/testando-porcentagem'],
             ]}
           />
         </motion.div>
@@ -193,7 +194,7 @@ const Router = ({ isLogged }) => {
       </HeaderBack>
     ),
     '/testando-porcentagem': (
-      <HeaderBack title="Teste de porcentagens" navigateTo="/suporte">
+      <HeaderBack title="Teste de porcentagens" navigateTo="/atualizar-plano-zoop">
         <TestingPercentagesSplitRules />
       </HeaderBack>
     ),
