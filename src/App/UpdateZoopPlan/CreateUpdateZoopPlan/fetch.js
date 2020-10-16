@@ -1,6 +1,6 @@
 import { db } from '../../../Firebase/index'
 
-const fetch = (setSellerZoopPlan, setFees, sellerId, selectedPlanForFirebase, fees, setSupplier) => {
+const fetch = (setSellerZoopPlan, setFees, sellerId, selectedPlanForFirebase, fees) => {
   const run = async () => {
     try {
       if (selectedPlanForFirebase !== '' && fees === null) {
@@ -9,14 +9,13 @@ const fetch = (setSellerZoopPlan, setFees, sellerId, selectedPlanForFirebase, fe
           await query.onSnapshot(sup => {
             const docId = sup.id
             const { sellerZoopPlan2 } = sup.data()
-            setSupplier(sup.data())
             setSellerZoopPlan(sellerZoopPlan2)
             // if (sellerZoopPlan2) {
             const whichPlan = sellerZoopPlan2.activePlan
             const selectedPlan = selectedPlanForFirebase
-            // const sellerZoopPlanObjectForIteration = sellerZoopPlan2[selectedPlan]
+            const sellerZoopPlanObjectForIteration = sellerZoopPlan2[selectedPlan]
             const entries = Object.entries(sellerZoopPlan2[selectedPlan])
-            // const entries2 = Object.entries(sellerZoopPlan2[whichPlan])
+            const entries2 = Object.entries(sellerZoopPlan2[whichPlan])
             setFees(entries)
 
             // }

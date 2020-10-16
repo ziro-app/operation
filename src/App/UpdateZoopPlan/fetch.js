@@ -3,42 +3,55 @@ import { db } from '../../Firebase/index'
 
 const fetch = (setIsLoading, setErrorLoading, setSuppliers, setSellerZoopPlan2, setFees, selectedPlan, supplier, suppliers) => {
   const run = async () => {
+    console.log('selectedPlan', selectedPlan)
+    console.log('supplier', supplier)
+    console.log('suppliers', suppliers)
     try {
       let fetchedPlan = {}
       const fantasyList = []
       const suppliersFetch = []
-      const query = await db.collection('suppliers').get()
       if (supplier.docId) {
-        fetchedPlan = await db.collection('suppliers').doc(supplier.docId).get()
-        if (Object.prototype.hasOwnProperty.call(fetchedPlan.data(), 'sellerZoopPlan2')) {
-          setSellerZoopPlan2(fetchedPlan.data().sellerZoopPlan2)
-          if (!selectedPlan) selectedPlan = Object.keys(fetchedPlan.data().sellerZoopPlan2)[0]
-          const whichPlan = selectedPlan || 'standard'
-          const sellerZoopPlanObjectForIteration = fetchedPlan.data().sellerZoopPlan2[whichPlan]
-          setFees(Object.entries(sellerZoopPlanObjectForIteration))
-        }
-      }
-      if (!query.empty && suppliers.length === 0) {
-        query.forEach(sup => {
-          const docId = sup.id
-          const { fantasia, razao, sellerZoopPlan, nome, sobrenome, sellerZoopPlan2 } = sup.data()
-
-          if (sellerZoopPlan2 && supplier.id) {
-            // const fetchedPlan = db.collection('suppliers').doc(supplier.id).get()
+        fetchedPlan = db.collection('suppliers').doc(supplier.docId)
+        await fetchedPlan.onSnapshot(sup => {
+          if (Object.prototype.hasOwnProperty.call(sup.data(), 'sellerZoopPlan2')) {
+            setSellerZoopPlan2(sup.data().sellerZoopPlan2)
+            if (selectedPlan) {
+              const sellerZoopPlanObjectForIteration = sup.data().sellerZoopPlan2[selectedPlan]
+              console.log('sellerZoopPlanObjectForIteration', sellerZoopPlanObjectForIteration)
+              console.log('sellerZoopPlanObjectForIteration entries', Object.entries(sellerZoopPlanObjectForIteration))
+              const feesFiltered = Object.entries(sellerZoopPlanObjectForIteration) // .filter()
+              console.log('feesFiltered', feesFiltered)
+              setFees(feesFiltered)
+            }
           }
-          const name = fantasia
-            ? fantasyList.includes(fantasia)
-              ? capitalize(`${fantasia} - ${nome}`)
-              : capitalize(fantasia)
-            : `${nome} ${sobrenome}`
-          fantasyList.push(fantasia)
-          suppliersFetch.push({
-            docId,
-            name,
-            reason: razao ? capitalize(razao) : '-',
-            sellerZoopPlan: sellerZoopPlan2 || null,
-          })
+
+          // }
         })
+      }
+      const query = db.collection('suppliers').where('tipoCadastro', '==', 'Completo')
+      if (!query.empty && suppliers.length === 0) {
+        query.onSnapshot(snapshot => {
+          snapshot.forEach(sup => {
+            const docId = sup.id
+            const { fantasia, razao, sellerZoopPlan, nome, sobrenome, sellerZoopPlan2 } = sup.data()
+
+            if (sellerZoopPlan2 && supplier.id) {
+              // const fetchedPlan = db.collection('suppliers').doc(supplier.id).get()
+            }
+            const name = fantasia
+              ? fantasyList.includes(fantasia)
+                ? capitalize(`${fantasia} - ${nome}`)
+                : capitalize(fantasia)
+              : `${nome} ${sobrenome}`
+            fantasyList.push(fantasia)
+            suppliersFetch.push({
+              docId,
+              name,
+              reason: razao ? capitalize(razao) : '-',
+              sellerZoopPlan: sellerZoopPlan2 || null,
+            })
+          })
+        }) // até aqui
         setSuppliers(suppliersFetch)
       }
       setErrorLoading(false)

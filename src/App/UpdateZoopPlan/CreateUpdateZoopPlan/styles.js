@@ -25,10 +25,4 @@ export const content = {
     fontFamily: fontTitle,
     fontSize: fontSizeNormal,
     paddingBottom: '10px',
-  },
-  cardTitle = {
-    fontFamily: fontTitle,
-    fontSize: fontSizeNormal,
-    textAlign: 'left',
-    paddingBottom: '10px',
   }

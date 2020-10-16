@@ -9,10 +9,11 @@ import InputPercentage2 from '@bit/vitorbarbosa19.ziro.input-percentage'
 import FormInput from '@bit/vitorbarbosa19.ziro.form-input'
 import Button from '@bit/vitorbarbosa19.ziro.button'
 import { useForm } from 'react-hook-form'
+import Details from '@bit/vitorbarbosa19.ziro.details'
 import InputPercentage from './InputPercentage/index'
 import { returnInstallmentsWithFee, translateFees, translateInstallments, testInstallments } from './functions'
 import fetch from './fetch'
-import { wrapper, item, content, title, item2 } from './styles'
+import { wrapper, item, content, cardTitle, title, item2 } from './styles'
 import sendToBackend from './sendToBackend'
 import { userContext } from '../../appContext'
 import { db } from '../../../Firebase'
@@ -21,7 +22,7 @@ const UpdateTax = ({ fee, setFee }) => {
   const { nickname } = useContext(userContext)
 
   const [countLoop, setCountLoop] = useState(0)
-  const [feesValues, setFeesValues] = useState({})
+  const [blocks, setBlocks] = useState([])
   const [sellerZoopPlan, setSellerZoopPlan] = useState({})
   const [sellerZoopPlanObject, setSellerZoopPlanObject] = useState({})
   const [sellerZoopPlanForFirebase, setSellerZoopPlanForFirebase] = useState({})
@@ -31,12 +32,36 @@ const UpdateTax = ({ fee, setFee }) => {
   const [fees, setFees] = useState(null)
   const [, setLocation] = useLocation()
   const [nothing, setNothing] = useState(false)
+  const [supplier, setSupplier] = useState({ docId: '', name: '', reason: '', markupPercentage: '', antifraudPercentage: '', sellerZoopPlan: '' })
   const [error, setError] = useState(false)
   const [matchSellerId, paramsSellerId] = useRoute('/atualizar-plano-zoop/:sellerId?/:fee?/:selectedPlan?')
   const { sellerId, selectedPlan } = paramsSellerId
   const { activePlan } = sellerZoopPlan
   const otherPlans = Object.entries(sellerZoopPlan).filter(item => item[0] !== selectedPlan && item[0] !== 'activePlan')
   let newPlan = {}
+  const mountBlock = (name, reason, activePlan, plans = []) => {
+    const plansFormatted = plans ? plans.join(' , ') : ''
+    console.log('three', name, reason, activePlan)
+    return [
+      {
+        header: 'Detalhes',
+        body: [
+          {
+            title: 'Fabricante',
+            content: name,
+          },
+          {
+            title: 'Razão',
+            content: reason,
+          },
+          {
+            title: 'Plano Atualmente selecionado',
+            content: activePlan,
+          },
+        ],
+      },
+    ]
+  }
   useEffect(() => {
     if (countLoop < 4) {
       const newCount = countLoop + 1
@@ -47,12 +72,19 @@ const UpdateTax = ({ fee, setFee }) => {
       setNothing(false)
 
       async function getFee(setSellerZoopPlan, setFees, sellerId, selectedPlanForFirebase, fees) {
-        await fetch(setSellerZoopPlan, setFees, sellerId, selectedPlanForFirebase, fees)
+        await fetch(setSellerZoopPlan, setFees, sellerId, selectedPlanForFirebase, fees, setSupplier)
       }
 
       getFee(setSellerZoopPlan, setFees, sellerId, selectedPlanForFirebase, fees)
     }
   }, [fee, error, selectedPlanForFirebase])
+  console.log('supplier', supplier)
+  console.log('blocks', blocks)
+  if (supplier.fantasia && blocks.length === 0) {
+    setBlocks(mountBlock(supplier.fantasia, supplier.razao, selectedPlan))
+
+    // console.log('blocks', blocks)
+  }
   if (otherPlans.length > 0 && Object.keys(otherPlansForFirebase).length !== 0 && otherPlansForFirebase.constructor !== Object) {
     otherPlans.map(plan => {
       const newItem = { [plan[0]]: plan[1] }
@@ -88,6 +120,8 @@ const UpdateTax = ({ fee, setFee }) => {
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={containerWithPadding}>
       <Header type="icon-link" title={`Atualizar ${translateFees(fee)}`} navigateTo={`atualizar-plano-zoop/${sellerId}`} icon="back" />
+      {supplier.fantasia && <Details blocks={blocks} />}
+      <br />
       <div>
         {fees !== null &&
           fees.map(
@@ -96,7 +130,7 @@ const UpdateTax = ({ fee, setFee }) => {
                 <div style={wrapper}>
                   {Object.entries(feeMap[1]).map(card => (
                     <div style={item}>
-                      <div style={title}>Cartão: {card[0].toUpperCase()}</div>
+                      <div style={cardTitle}>{card[0].toUpperCase()}</div>
                       <div>
                         {returnInstallmentsWithFee(card).map(item => (
                           <div style={content}>

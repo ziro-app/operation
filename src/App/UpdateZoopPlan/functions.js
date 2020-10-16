@@ -1,4 +1,5 @@
 import React from 'react'
+import { db } from '../../Firebase'
 
 const collator = new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' })
 
@@ -73,4 +74,189 @@ export function returnUniqueKey(card) {
       return `${translateInstallments(key)} : ${card[1][key]}%`
     })
     .sort(collator.compare)
+}
+
+export const createNewPlan = (sellerZoopPlanForFirebase, nickname, sellerId) => {
+  const allowedUsers = ['Uiller', 'Vitor', 'Alessandro', 'Wermeson', 'Ale']
+  const nome = nickname ? nickname.trim() : ''
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (process.env.HOMOLOG ? true : allowedUsers.includes(nome)) {
+        console.log('entrou 1')
+        // if (Object.keys(sellerZoopPlanForFirebase).length !== 0) {
+        console.log('newPlan dentro do backend', sellerZoopPlanForFirebase)
+        await db.collection('suppliers').doc(sellerId).update({
+          sellerZoopPlan2: sellerZoopPlanForFirebase, // newPlan, // sellerActualZoopPlanForFirebase,
+        })
+        console.log('entrou 3')
+        resolve('Plano atualizado')
+        // } else throw { msg: 'Atualize ao menos um campo', customError: true }
+      } else throw { msg: 'Permissão insuficiente', customError: true }
+    } catch (error) {
+      console.log(error)
+      if (error.customError) reject(error)
+      else if (error.response && error.response.data) {
+        const { erro, message } = error.response.data
+        console.log(message)
+        reject({ msg: erro, customError: true })
+      } else reject(error)
+    }
+  })
+}
+
+export const defaultValues = {
+  ziroAntifraudFee: {
+    visa: {
+      installment12: 0,
+      installment3: 0,
+      installment4: 0,
+      installment5: 0,
+      installment2: 0,
+      installment6: 0,
+      installment0: 0,
+      installment11: 0,
+      installment8: 0,
+      installment7: 0,
+      installment9: 0,
+      installment1: 0,
+      installment10: 0,
+    },
+    hipercard: {
+      installment6: 0,
+      installment7: 0,
+      installment5: 0,
+      installment0: 0,
+      installment2: 0,
+      installment9: 0,
+      installment12: 0,
+      installment1: 0,
+      installment10: 0,
+      installment11: 0,
+      installment3: 0,
+      installment8: 0,
+      installment4: 0,
+    },
+    americanexpress: {
+      installment4: 0,
+      installment1: 0,
+      installment5: 0,
+      installment8: 0,
+      installment7: 0,
+      installment6: 0,
+      installment10: 0,
+      installment3: 0,
+      installment12: 0,
+      installment2: 0,
+      installment9: 0,
+      installment0: 0,
+      installment11: 0,
+    },
+    elo: {
+      installment10: 0,
+      installment5: 0,
+      installment6: 0,
+      installment2: 0,
+      installment11: 0,
+      installment0: 0,
+      installment3: 0,
+      installment8: 0,
+      installment4: 0,
+      installment12: 0,
+      installment9: 0,
+      installment7: 0,
+      installment1: 0,
+    },
+    mastercard: {
+      installment12: 0,
+      installment8: 0,
+      installment4: 0,
+      installment7: 0,
+      installment9: 0,
+      installment2: 0,
+      installment5: 0,
+      installment6: 0,
+      installment0: 0,
+      installment10: 0,
+      installment11: 0,
+      installment1: 0,
+      installment3: 0,
+    },
+  },
+  ziroMarkupFee: {
+    hipercard: {
+      installment6: 0,
+      installment11: 0,
+      installment10: 0,
+      installment1: 0,
+      installment12: 0,
+      installment8: 0,
+      installment4: 0,
+      installment3: 0,
+      installment2: 0,
+      installment0: 0,
+      installment9: 0,
+      installment7: 0,
+      installment5: 0,
+    },
+    elo: {
+      installment0: 0,
+      installment10: 0,
+      installment3: 0,
+      installment7: 0,
+      installment8: 0,
+      installment9: 0,
+      installment2: 0,
+      installment5: 0,
+      installment6: 0,
+      installment1: 0,
+      installment4: 0,
+      installment11: 0,
+      installment12: 0,
+    },
+    visa: {
+      installment0: 0,
+      installment1: 0,
+      installment11: 0,
+      installment4: 0,
+      installment9: 0,
+      installment6: 0,
+      installment5: 0,
+      installment7: 0,
+      installment2: 0,
+      installment8: 0,
+      installment10: 0,
+      installment3: 0,
+      installment12: 0,
+    },
+    mastercard: {
+      installment1: 0,
+      installment0: 0,
+      installment2: 0,
+      installment12: 0,
+      installment3: 0,
+      installment10: 0,
+      installment8: 0,
+      installment4: 0,
+      installment6: 0,
+      installment7: 0,
+      installment11: 0,
+      installment9: 0,
+      installment5: 0,
+    },
+    americanexpress: {
+      installment8: 0,
+      installment1: 0,
+      installment2: 0,
+      installment9: 0,
+      installment12: 0,
+      installment4: 0,
+      installment3: 0,
+      installment11: 0,
+      installment10: 0,
+      installment7: 0,
+      installment6: 0,
+      installment5: 0,
+      installment0: 0,
+    },
+  },
 }

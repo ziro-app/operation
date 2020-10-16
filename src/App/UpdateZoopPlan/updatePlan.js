@@ -1,21 +1,17 @@
-import { db } from '../../../Firebase/index'
+import { db } from '../../Firebase/index'
 
-const sendToBackend = (sellerZoopPlanForFirebase, nickname, sellerId, setPlanName) => {
+const updatePlan = (sellerZoopPlanForFirebase, nickname, sellerId) => {
   const allowedUsers = ['Uiller', 'Vitor', 'Alessandro', 'Wermeson', 'Ale']
   const nome = nickname ? nickname.trim() : ''
   return new Promise(async (resolve, reject) => {
     try {
       if (process.env.HOMOLOG ? true : allowedUsers.includes(nome)) {
-        console.log('entrou 1')
-        // if (Object.keys(sellerZoopPlanForFirebase).length !== 0) {
-        console.log('newPlan dentro do backend', sellerZoopPlanForFirebase)
         await db.collection('suppliers').doc(sellerId).update({
           sellerZoopPlan2: sellerZoopPlanForFirebase, // newPlan, // sellerActualZoopPlanForFirebase,
         })
-        console.log('entrou 3')
-        setPlanName('')
         resolve('Plano atualizado')
-        // } else throw { msg: 'Atualize ao menos um campo', customError: true }
+
+        localStorage.removeItem('selectedPlan')
       } else throw { msg: 'Permissão insuficiente', customError: true }
     } catch (error) {
       console.log(error)
@@ -29,4 +25,4 @@ const sendToBackend = (sellerZoopPlanForFirebase, nickname, sellerId, setPlanNam
   })
 }
 
-export default sendToBackend
+export default updatePlan
