@@ -69,7 +69,7 @@ const UpdateZoopPlan = ({ sellerId }) => {
 
   const mountBlock = (name, reason, activePlan, plans = []) => {
     const plansFormatted = plans ? plans.join(' , ') : ''
-    console.log(plans)
+    // console.log(plans)
     return [
       {
         header: 'Detalhes',
@@ -100,7 +100,6 @@ const UpdateZoopPlan = ({ sellerId }) => {
   }
   const deletePlan = async planName => {
     const newAllPlans = allPlans
-    console.log('before', sellerZoopPlan2)
     delete sellerZoopPlan2[planName]
     const index = newAllPlans.indexOf(planName)
     if (index > -1) {
@@ -112,10 +111,8 @@ const UpdateZoopPlan = ({ sellerId }) => {
     setSelectedPlan('')
     setOpenModalDeletePlan(false)
     setLocation('/atualizar-plano-zoop')
-    console.log('newAllPlans', newAllPlans)
-    console.log('allPlans', allPlans)
   }
-  console.log('sellerZoopPlan2', sellerZoopPlan2)
+  console.log('supplier', supplier)
   useEffect(() => {
     if (localStorage.getItem('sellerName')) setSearchedName(localStorage.getItem('sellerName'))
     if (localStorage.getItem('selectedPlan')) setSelectedPlan(localStorage.getItem('selectedPlan'))
@@ -138,9 +135,9 @@ const UpdateZoopPlan = ({ sellerId }) => {
     if (person) {
       setSupplier(person)
       let activePlan = 'Nenhum plano ativo'
-      if (Object.prototype.hasOwnProperty.call(sellerZoopPlan2, 'activePlan'))
+      const { sellerZoopPlan } = supplier
+      if (sellerZoopPlan && Object.prototype.hasOwnProperty.call(sellerZoopPlan, 'activePlan'))
         activePlan = settingActivePlan || supplier.sellerZoopPlan.activePlan || 'Nenhum plano ativo'
-      console.log('supplier', supplier)
       if (supplier.name) setBlocks(mountBlock(supplier.name, supplier.reason, activePlan, Object.keys(sellerZoopPlan2)))
       if (person.sellerZoopPlan) setAllPlans(Object.keys(person.sellerZoopPlan).filter(item => item !== 'activePlan'))
       else {
@@ -149,12 +146,14 @@ const UpdateZoopPlan = ({ sellerId }) => {
       }
     }
   }, [supplier, settingActivePlan])
-  console.log(supplier)
+  // console.log(supplier)
+  const { sellerZoopPlan } = supplier
   if (
     supplier.name &&
     blocks.length === 0 &&
     Object.prototype.hasOwnProperty.call(supplier, 'sellerZoopPlan') &&
-    Object.prototype.hasOwnProperty.call(sellerZoopPlan2, 'activePlan')
+    sellerZoopPlan !== null &&
+    Object.prototype.hasOwnProperty.call(sellerZoopPlan, 'activePlan')
   ) {
     setBlocks(
       mountBlock(
@@ -182,7 +181,7 @@ const UpdateZoopPlan = ({ sellerId }) => {
             if (person) {
               localStorage.setItem('sellerName', person.name)
               localStorage.setItem('sellerObject', JSON.stringify(person))
-              console.log('person', person)
+              // console.log('person', person)
               // if (person.sellerZoopPlan) setAllPlans(Object.keys(person.sellerZoopPlan).filter(item => item !== 'activePlan'))
               setSupplier(person)
             } else {
@@ -205,8 +204,9 @@ const UpdateZoopPlan = ({ sellerId }) => {
             setSearchedName(element.value)
             const person = suppliers.find(storeowner => storeowner.name === element.value)
             if (person) {
-              console.log('person', person)
+              // console.log('person', person)
               setSupplier(person)
+              localStorage.setItem('sellerName', person.name)
               localStorage.setItem('sellerObject', JSON.stringify(person))
               if (person.sellerZoopPlan) setAllPlans(Object.keys(person.sellerZoopPlan).filter(item => item !== 'activePlan'))
               else {
@@ -246,13 +246,13 @@ const UpdateZoopPlan = ({ sellerId }) => {
           }
         }}
         onChangeKeyboard={element => {
-          if (element.includes(' ')) {
-            const newValue = element.replace(/\s/g, '')
+          if (element && element.value === '') {
+            const newValue = element.value.replace(/\s/g, '')
             setSelectedPlan(newValue)
             localStorage.setItem('selectedPlan', newValue)
-          } else {
-            setSelectedPlan(element)
-            localStorage.setItem('selectedPlan', element)
+          } else if (element) {
+            setSelectedPlan(element.value)
+            localStorage.setItem('selectedPlan', element.value)
           }
         }}
         // readOnly
@@ -308,7 +308,7 @@ const UpdateZoopPlan = ({ sellerId }) => {
             }
             // sellerZoopPlan2[defaultValue] // defaultValuesForNewPlanWithNumber
             // console.log('teste 2', sellerZoopPlanForFirebase.teste2)
-            console.log(sellerZoopPlanForFirebase, nickname, supplier.docId)
+            // console.log(sellerZoopPlanForFirebase, nickname, supplier.docId)
             createNewPlan && Object.keys(sellerZoopPlanForFirebase).length !== 0
               ? createNewPlan(sellerZoopPlanForFirebase, nickname, supplier.docId)
               : () => null
@@ -322,7 +322,7 @@ const UpdateZoopPlan = ({ sellerId }) => {
         template="regular"
         submitting={selectedPlan === '' || !supplier.docId || !Object.keys(sellerZoopPlan2).includes(selectedPlan)}
         click={() => {
-          console.log(supplier.docId, selectedPlan)
+          // console.log(supplier.docId, selectedPlan)
           sendToBackend(state)
           // '/testando-porcentagem'
           // setLocation(`/atualizar-plano-zoop/${supplier.docId}/newPlan`)
@@ -362,7 +362,7 @@ const UpdateZoopPlan = ({ sellerId }) => {
         submitting={selectedPlan === '' || !supplier.docId || !Object.keys(sellerZoopPlan2).includes(selectedPlan)}
         click={() => {
           if (selectedPlan !== sellerZoopPlan2.activePlan) setOpenModalDeletePlan(true)
-          console.log(supplier.docId, selectedPlan)
+          // console.log(supplier.docId, selectedPlan)
         }}
       />
 
