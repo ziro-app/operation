@@ -74,6 +74,8 @@ export function returnUniqueKey(card) {
     })
     .sort(collator.compare)
 }
-export function testInstallments(card, item) {
+export function testInstallments(card, item, sellerZoopPlanObject) {
   // console.log('teste do functions', `${card[0]}${item.split(' ')[0]}${item.split(' ')[1]}${item.split(' ')[2]}`)
+  // console.log('test:', item.split(' ')[2] || '')
+  // console.log(sellerZoopPlanObject[`${card[0]}${item.split(' ')[0]}${item.split(' ')[1]}${item.split(' ')[2]}`])
 }

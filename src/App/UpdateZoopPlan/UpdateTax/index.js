@@ -138,7 +138,7 @@ const UpdateTax = ({ fee, setFee }) => {
                                 paddingBottom: '20px',
                               }}
                             >{`${translateInstallments(item.split(' ')[0])} `}</label>
-                            {testInstallments(card, item)}
+                            {testInstallments(card, item, sellerZoopPlanObject)}
                             <FormInput
                               name="percentage"
                               input={
@@ -194,8 +194,8 @@ const UpdateTax = ({ fee, setFee }) => {
                 })
               }),
           )
-          console.log('contador de length', Object.keys(sellerActualZoopPlanForFirebase).length)
-          console.log('newPlan', newPlan)
+          // console.log('contador de length', Object.keys(sellerActualZoopPlanForFirebase).length)
+          // console.log('newPlan', newPlan)
           sendToBackend && Object.keys(newPlan).length !== 0 ? sendToBackend(state, newPlan) : () => null
         }}
       />
