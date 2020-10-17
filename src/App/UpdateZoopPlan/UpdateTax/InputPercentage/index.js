@@ -7,9 +7,11 @@ import { inline, styleTag } from './styles'
 const InputPercentage = forwardRef(({ defaultValue, id, value, setValue, style = inline, css = styleTag, disabled, submitting, ...rest }, ref) => {
   const inputProps = { style, disabled: disabled || submitting, ref, inputMode: 'numeric', placeholder: '% 20', ...rest }
   // console.log('value,defaultValue', value, defaultValue)
-  if (value > 1000) {
+  if (value > 0) {
     /* console.log('input', parseFloat(defaultValue.split('%')[0]) * 100 < 10000)
     console.log('defaultValue', defaultValue)
+    console.log('testing', maskInput(parseFloat(defaultValue.split('%')[0]) * 100, '#######', true))
+    console.log('testing', `% ${value.replace(/[R$]/g, '')}`)
     console.log(parseFloat(defaultValue.split('%')[0]) * 100) */
     /* console.log('value', value)
   console.log('defaultValue', defaultValue)
@@ -32,6 +34,8 @@ const InputPercentage = forwardRef(({ defaultValue, id, value, setValue, style =
                 [id]: parseFloat(defaultValue.split('%')[0]) //* 100
                   ? parseFloat(defaultValue.split('%')[0]) * 100 < 100
                     ? maskInput(parseFloat(defaultValue.split('%')[0]) * 100, '#######', true) //* 100, '#######', true)
+                    : (parseFloat(defaultValue.split('%')[0]) * 100) % 2 === 0
+                    ? maskInput(parseFloat(defaultValue.split('%')[0]) * 100, '#######', true)
                     : maskInput(parseFloat(defaultValue.split('%')[0]), '#######', true)
                   : '% 0,00',
               }))
