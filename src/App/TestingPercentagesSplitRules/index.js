@@ -71,7 +71,9 @@ const TestingPercentagesSplitRules = () => {
       setAntifraudPercentage(percentageZiroAntifraud)
     }
   }, [selectedPlan, installment, selectedPlan, insurance, card, sellerZoopPlan2])
-
+  console.log('antifraud', antifraudPercentage)
+  console.log('markup', markupPercentage)
+  console.log(typeof antifraudPercentage !== 'undefined')
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
       <div style={dropDowns}>
@@ -150,8 +152,8 @@ const TestingPercentagesSplitRules = () => {
       </div>
       {supplier.docId && supplier.name && supplier.reason && selectedPlan && card && installment && (
         <div style={container}>
-          <div>Porcentagem de markup: {markupPercentage}</div>
-          <div>Porcentagem de antifraude: {antifraudPercentage}</div>
+          <div>Porcentagem de markup: {markupPercentage}%</div>
+          <div>Porcentagem de antifraude: {antifraudPercentage === 'N/A' ? antifraudPercentage : `${antifraudPercentage}%`}</div>
         </div>
       )}
     </motion.div>
