@@ -23,6 +23,8 @@ import { dateFormat, parcelFormat, round, stringToFloat } from '../utils'
 import { btn, btnRed, buttonContainer, custom, illustrationContainer, modalContainer, modalLabel, spinner } from './styles'
 
 const TransactionDetails = ({ transactions, transactionId, transaction, setTransaction }) => {
+  const storageFilterStatus = localStorage.getItem('statusFilter')
+  const storageFilterSeller = localStorage.getItem('sellerFilter')
   const [amount, setAmount] = useState('')
   const [receipt_id, setReceipt_id] = useState('')
   const [error, setError] = useState(false)
@@ -140,10 +142,16 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
   const deleteTransaction = async () => {
     setIsLoading(true)
     try {
-      await db.collection('credit-card-payments').doc(transactionId).delete()
-      setLocation('/transacoes')
-      window.location.reload()
-      setIsLoading(false)
+      if(storageFilterStatus || storageFilterSeller){
+        await db.collection('credit-card-payments').doc(transactionId).delete()
+        setLocation('/transacoes')
+        window.location.reload()
+        setIsLoading(false)
+      }else{
+        await db.collection('credit-card-payments').doc(transactionId).delete()
+        setLocation('/transacoes')
+        setIsLoading(false)
+      }
     } catch (error) {
       console.log(error)
       if (error.response) console.log(error.response)
