@@ -55,6 +55,7 @@ import NewZoopPlan from './UpdateZoopPlan/NewZoopPlan'
 import TestingPercentagesSplitRules from './TestingPercentagesSplitRules'
 import Adjustment from './Adjustment/index'
 import Pickup from './Pickup/index'
+import CommissionManagement from './CommissionManagement/index'
 // import FirebaseMigration from './FirebaseMigration/index' -> Inacabado
 
 const Router = ({ isLogged }) => {
@@ -116,6 +117,7 @@ const Router = ({ isLogged }) => {
               ['Solicitação de Link', 'solicitacao-link'],
               ['Consulta Parcela 2', 'commission-models'],
               ['Reajuste', 'adjustment'],
+              ['Gestão Parcela 2', 'comission-gestao'],
             ]}
           />
         </motion.div>
@@ -267,6 +269,11 @@ const Router = ({ isLogged }) => {
     '/adjustment': (
       <HeaderBack title="Reajuste" navigateTo="/administrativo">
         <Adjustment />
+      </HeaderBack>
+    ),
+    '/comission-gestao': (
+      <HeaderBack title="Gestão Parcela 2" navigateTo="/administrativo">
+        <CommissionManagement />
       </HeaderBack>
     ),
     '/checar-email': (
