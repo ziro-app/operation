@@ -22,11 +22,12 @@ const configSheet = (array) => {
   }
 
 const sendToBackend = async state => {
-    const {parcela, modeloParcela, escopo,apelido, inputDate} = state
+    const {parcela, modeloParcela, escopo,apelido, inputDate, setError} = state
     try {
         await axios(configSheet(['-',apelido,inputDate,escopo, parcela/100, modeloParcela]))
     } catch (error) {
         console.log(error)
+        setError(true)
     }
 }
 
