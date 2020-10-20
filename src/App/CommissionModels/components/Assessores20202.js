@@ -29,7 +29,7 @@ const Assessores20202 = ({dataProviders}) => {
             }
         ]
         return (
-            <ModelDetails dataProviders={dataProviders} block={block} arrayInputs={arrayInputs} blockCalc={blockCalc} modeloParcela2='assessoria20202'/>
+            <ModelDetails dataProviders={dataProviders} block={block} arrayInputs={arrayInputs} blockCalc={blockCalc} modeloParcela2='assessores20202'/>
         )
         
 }
