@@ -56,6 +56,7 @@ import TestingPercentagesSplitRules from './TestingPercentagesSplitRules'
 import Adjustment from './Adjustment/index'
 import Pickup from './Pickup/index'
 import CommissionManagement from './CommissionManagement/index'
+import PostDuplicata from './PostDuplicata/index'
 // import FirebaseMigration from './FirebaseMigration/index' -> Inacabado
 
 const Router = ({ isLogged }) => {
@@ -118,6 +119,7 @@ const Router = ({ isLogged }) => {
               ['Consulta Parcela 2', 'commission-models'],
               ['Reajuste', 'adjustment'],
               ['Gestão Parcela 2', 'comission-gestao'],
+              ['Lançamento de Duplicata', 'post-duplicata'],
             ]}
           />
         </motion.div>
@@ -274,6 +276,11 @@ const Router = ({ isLogged }) => {
     '/comission-gestao': (
       <HeaderBack title="Gestão Parcela 2" navigateTo="/administrativo">
         <CommissionManagement />
+      </HeaderBack>
+    ),
+    '/post-duplicata':(
+      <HeaderBack title="Lançamento de Duplicata" navigateTo="/administrativo">
+        <PostDuplicata />
       </HeaderBack>
     ),
     '/checar-email': (
