@@ -3,9 +3,9 @@ import { db } from '../../Firebase/index'
 
 const fetch = (setIsLoading, setErrorLoading, setSuppliers, setSellerZoopPlan2, setFees, selectedPlan, supplier, suppliers) => {
   const run = async () => {
-    console.log('selectedPlan', selectedPlan)
+    /* console.log('selectedPlan', selectedPlan)
     console.log('supplier', supplier)
-    console.log('suppliers', suppliers)
+    console.log('suppliers', suppliers) */
     try {
       let fetchedPlan = {}
       const fantasyList = []
@@ -27,12 +27,12 @@ const fetch = (setIsLoading, setErrorLoading, setSuppliers, setSellerZoopPlan2, 
         })
       }
       const query = db.collection('suppliers').where('tipoCadastro', '==', 'Completo')
+
       if (!query.empty && suppliers.length === 0) {
         query.onSnapshot(snapshot => {
           snapshot.forEach(sup => {
             const docId = sup.id
             const { fantasia, razao, sellerZoopPlan, nome, sobrenome, sellerZoopPlan2 } = sup.data()
-
             const name = fantasia
               ? fantasyList.includes(fantasia)
                 ? capitalize(`${fantasia} - ${nome}`)
@@ -46,8 +46,8 @@ const fetch = (setIsLoading, setErrorLoading, setSuppliers, setSellerZoopPlan2, 
               sellerZoopPlan: sellerZoopPlan2 || null,
             })
           })
+          setSuppliers(suppliersFetch)
         }) // até aqui
-        setSuppliers(suppliersFetch)
       }
       setErrorLoading(false)
       setIsLoading(false)

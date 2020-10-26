@@ -127,35 +127,37 @@ const UpdateTax = ({ fee, setFee }) => {
             feeMap =>
               feeMap[0] === fee && (
                 <div style={wrapper}>
-                  {Object.entries(feeMap[1]).map(card => (
-                    <div style={item}>
-                      <div style={cardTitle}>{card[0].toUpperCase()}</div>
-                      <div>
-                        {returnInstallmentsWithFee(card).map(item => (
-                          <div style={content}>
-                            <label
-                              style={{
-                                paddingBottom: '20px',
-                              }}
-                            >{`${translateInstallments(item.split(' ')[0])} `}</label>
-                            {testInstallments(card, item, sellerZoopPlanObject)}
-                            <FormInput
-                              name="percentage"
-                              input={
-                                <InputPercentage
-                                  id={`${card[0]}${item.split(' ')[0]}${item.split(' ')[1]}${item.split(' ')[2]}`}
-                                  value={sellerZoopPlanObject[`${card[0]}${item.split(' ')[0]}${item.split(' ')[1]}${item.split(' ')[2]}`]}
-                                  setValue={setSellerZoopPlanObject}
-                                  defaultValue={item.split(' ')[2] || ''}
-                                />
-                              }
-                            />
-                          </div>
-                        ))}
+                  {Object.entries(feeMap[1])
+                    .sort()
+                    .map(card => (
+                      <div style={item}>
+                        <div style={cardTitle}>{card[0].toUpperCase()}</div>
+                        <div>
+                          {returnInstallmentsWithFee(card).map(item => (
+                            <div style={content}>
+                              <label
+                                style={{
+                                  paddingBottom: '20px',
+                                }}
+                              >{`${translateInstallments(item.split(' ')[0])} `}</label>
+                              {testInstallments(card, item, sellerZoopPlanObject)}
+                              <FormInput
+                                name="percentage"
+                                input={
+                                  <InputPercentage
+                                    id={`${card[0]}${item.split(' ')[0]}${item.split(' ')[1]}${item.split(' ')[2]}`}
+                                    value={sellerZoopPlanObject[`${card[0]}${item.split(' ')[0]}${item.split(' ')[1]}${item.split(' ')[2]}`]}
+                                    setValue={setSellerZoopPlanObject}
+                                    defaultValue={item.split(' ')[2] || ''}
+                                  />
+                                }
+                              />
+                            </div>
+                          ))}
+                        </div>
+                        <br />
                       </div>
-                      <br />
-                    </div>
-                  ))}
+                    ))}
                 </div>
               ),
           )}

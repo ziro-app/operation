@@ -112,20 +112,20 @@ const UpdateZoopPlan = ({ sellerId }) => {
     setOpenModalDeletePlan(false)
     setLocation('/atualizar-plano-zoop')
   }
-  console.log('supplier', supplier)
   useEffect(() => {
     if (localStorage.getItem('sellerName')) setSearchedName(localStorage.getItem('sellerName'))
     if (localStorage.getItem('selectedPlan')) setSelectedPlan(localStorage.getItem('selectedPlan'))
     if (localStorage.getItem('sellerObject')) setSupplier(JSON.parse(localStorage.getItem('sellerObject')))
-
-    fetch(setIsLoading, setErrorLoading, setSuppliers, setSellerZoopPlan2, setFees, selectedPlan, supplier, suppliers)
-    const person = suppliers.find(storeowner => storeowner.name === localStorage.getItem('sellerName'))
-    if (person) {
-      setSupplier(person)
-      if (person.sellerZoopPlan) setAllPlans(Object.keys(person.sellerZoopPlan).filter(item => item !== 'activePlan'))
-      else {
-        setAllPlans([''])
-        setSelectedPlan('')
+    if (localStorage.getItem('sellerName')) {
+      fetch(setIsLoading, setErrorLoading, setSuppliers, setSellerZoopPlan2, setFees, selectedPlan, supplier, suppliers)
+      const person = suppliers.find(storeowner => storeowner.name === localStorage.getItem('sellerName'))
+      if (person) {
+        setSupplier(person)
+        if (person.sellerZoopPlan) setAllPlans(Object.keys(person.sellerZoopPlan).filter(item => item !== 'activePlan'))
+        else {
+          setAllPlans([''])
+          setSelectedPlan('')
+        }
       }
     }
   }, [])
@@ -260,34 +260,39 @@ const UpdateZoopPlan = ({ sellerId }) => {
         placeholder="Escolha o plano ou adicione um"
       />
 
-      <div style={wrapper}>
-        <div style={{ width: '50%', padding: '0px 0px 0px 0px' }}>
-          <Button
-            type="button"
-            cta="Editar Antifraude"
-            template="regular"
-            submitting={!selectedPlan || !Object.keys(sellerZoopPlan2).includes(selectedPlan)}
-            click={() => {
-              // console.log(fee)
-              // setFeesUpdate(fee)
-              setLocation(`/atualizar-plano-zoop/${supplier.docId}/ziroAntifraudFee/${selectedPlan}`)
-            }}
-          />
-        </div>
-        <div style={{ width: '50%', padding: '0px 0px 0px 0px' }}>
-          <Button
-            type="button"
-            cta="Editar Markup"
-            template="regular"
-            submitting={!selectedPlan || !Object.keys(sellerZoopPlan2).includes(selectedPlan)}
-            click={() => {
-              // console.log(fee)
-              // setFeesUpdate(fee)
-              setLocation(`/atualizar-plano-zoop/${supplier.docId}/ziroMarkupFee/${selectedPlan}`)
-            }}
-          />
-        </div>
-      </div>
+      <Button
+        type="button"
+        cta="Editar Antifraude"
+        template="regular"
+        submitting={!selectedPlan || !Object.keys(sellerZoopPlan2).includes(selectedPlan)}
+        click={() => {
+          // console.log(fee)
+          // setFeesUpdate(fee)
+          setLocation(`/atualizar-plano-zoop/${supplier.docId}/ziroAntifraudFee/${selectedPlan}`)
+        }}
+      />
+      <Button
+        type="button"
+        cta="Editar Markup"
+        template="regular"
+        submitting={!selectedPlan || !Object.keys(sellerZoopPlan2).includes(selectedPlan)}
+        click={() => {
+          // console.log(fee)
+          // setFeesUpdate(fee)
+          setLocation(`/atualizar-plano-zoop/${supplier.docId}/ziroMarkupFee/${selectedPlan}`)
+        }}
+      />
+      <Button
+        type="button"
+        cta="Editar Zoop"
+        template="regular"
+        submitting={!selectedPlan || !Object.keys(sellerZoopPlan2).includes(selectedPlan)}
+        click={() => {
+          // console.log(fee)
+          // setFeesUpdate(fee)
+          setLocation(`/atualizar-plano-zoop/${supplier.docId}/zoopFee/${selectedPlan}`)
+        }}
+      />
 
       <Button
         type="button"
