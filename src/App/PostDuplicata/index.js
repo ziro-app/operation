@@ -32,7 +32,7 @@ const PostDuplicata = () => {
             name: 'provider',
             validation: value => apelidos.includes(value),
             value: provider,
-            message: 'Colaborador Inválido'
+            message: 'Pessoa Inválido'
         },
         {
             name: 'type',
@@ -73,13 +73,13 @@ const PostDuplicata = () => {
                 validations={validations}
                 sendToBackend={sendToBackend ? sendToBackend(state) : () => null}
                 inputs={[
-                    <FormInput name='provider' label='Colaborador' input={
+                    <FormInput name='provider' label='Pessoa' input={
                         <Dropdown
                             readOnly={false}
                             value={provider}
                             onChange={({ target: { value } }) => setProvider(value)}
                             list={apelidos}
-                            placeholder="escolha um colaborador"
+                            placeholder="escolha uma Pessoa"
                             onChangeKeyboard={element =>
                             element ? setProvider(element.value) : null
                             }
