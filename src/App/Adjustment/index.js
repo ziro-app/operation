@@ -34,7 +34,7 @@ const CommissionModels = () => {
     const nome = nickname ? nickname.trim() : ''
     const state = {setIsLoading, setError, setApelidos, setIsOpen, setApelido, setDataReajuste, parcela, modeloParcela, escopo, apelido, inputDate}
     const newListModelos = [...listModeloParcela2(), 'nenhum']
-    const allowedUsers = ['Mud','Uiller', 'Vitor', 'Claudia', 'Cesar']
+    const allowedUsers = ['Mud','Uiller', 'Vitor', 'Claudia', 'Cesar', 'Guilherme']
     useEffect(() => fetch(state),[])
     useEffect(() => {
         if(apelido && apelidos.includes(apelido)){
