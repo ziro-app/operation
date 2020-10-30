@@ -57,6 +57,7 @@ import Adjustment from './Adjustment/index'
 import Pickup from './Pickup/index'
 import CommissionManagement from './CommissionManagement/index'
 import PostDuplicata from './PostDuplicata/index'
+import ShowAttendance from './ShowAttendance/index'
 // import FirebaseMigration from './FirebaseMigration/index' -> Inacabado
 
 const Router = ({ isLogged }) => {
@@ -79,6 +80,7 @@ const Router = ({ isLogged }) => {
     '/resetar-senha': <ResetPass />,
     '/confirmar-email': <ConfirmEmail />,
     '/show-info': <ShowInfo />,
+    '/show-attendance': <ShowAttendance />
   }
   const privateRoutes = {
     // Menu can't be put inside the components because then it'll unmount on transition
