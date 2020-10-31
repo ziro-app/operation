@@ -73,6 +73,7 @@
         "@bit/vitorbarbosa19.ziro.login-page": "0.1.83",
         "@bit/vitorbarbosa19.ziro.login-trouble": "0.1.68",
         "@bit/vitorbarbosa19.ziro.logo": "^0.1.53",
+        "@bit/vitorbarbosa19.ziro.message-modal": "0.0.59",
         "@bit/vitorbarbosa19.ziro.modal": "0.1.11",
         "@bit/vitorbarbosa19.ziro.my-account": "0.1.59",
         "@bit/vitorbarbosa19.ziro.not-found": "0.1.52",
@@ -121,6 +122,7 @@
         "reactfire": "^2.0.3",
         "uuid": "^8.2.0",
         "webfontloader": "^1.6.28",
-        "wouter": "^2.4.0"
+        "wouter": "^2.4.0",
+        "ziro-messages": "0.0.63"
     }
 }
