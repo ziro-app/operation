@@ -163,10 +163,10 @@ const TestingPercentagesSplitRules = () => {
           <div>Porcentagem da zoop: {zoopPercentage}%</div>
           <div style={{ fontWeight: 'bold' }}>
             Porcentagem Total com seguro:{' '}
-            {parseFloat(markupPercentageWithInsurance) + parseFloat(antifraudPercentageWithInsurance) + parseFloat(zoopPercentage)}%
+            {(parseFloat(markupPercentageWithInsurance) + parseFloat(antifraudPercentageWithInsurance) + parseFloat(zoopPercentage)).toFixed(2)}%
           </div>
           <div style={{ fontWeight: 'bold' }}>
-            Porcentagem Total sem seguro: {parseFloat(markupPercentageWithInsurance) + parseFloat(zoopPercentage)}%
+            Porcentagem Total sem seguro: {(parseFloat(markupPercentageWithInsurance) + parseFloat(zoopPercentage)).toFixed(2)}%
           </div>
         </div>
       )}
