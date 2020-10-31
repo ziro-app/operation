@@ -10,7 +10,7 @@ export function returnInstallmentAndFee(fees) {
 export function translateInstallments(text) {
   const installmentName = text.match(/[\d\.]+|\D+/g)[0]
   const installmentNumber = text.match(/[\d\.]+|\D+/g)[1]
-  return `${installmentName === 'installment' ? `x  ${installmentNumber}` : 'Débito'}`
+  return `${installmentName === 'installment' ? `x${installmentNumber}` : 'Débito'}`
 }
 export function translateFees(text) {
   const ziroMarkupFee = 'Taxa Ziro'
@@ -75,6 +75,7 @@ export function returnUniqueKey(card) {
     .sort(collator.compare)
 }
 export function testInstallments(card, item, sellerZoopPlanObject) {
+  console.log('teste', item.split(' ')[0])
   // console.log('teste do functions', `${card[0]}${item.split(' ')[0]}${item.split(' ')[1]}${item.split(' ')[2]}`)
   // console.log('test:', item.split(' ')[2] || '')
   // console.log(sellerZoopPlanObject[`${card[0]}${item.split(' ')[0]}${item.split(' ')[1]}${item.split(' ')[2]}`])

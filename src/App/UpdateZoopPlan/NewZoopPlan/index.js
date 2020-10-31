@@ -174,14 +174,14 @@ const NewZoopPlan = () => {
   const [selectedPlan, setSelectedPlan] = useState(null)
 
   const [planName, setPlanName] = useState('')
-  const [matchSellerId, paramsSellerId] = useRoute('/atualizar-plano-zoop/:sellerId?/newPlan')
+  const [matchSellerId, paramsSellerId] = useRoute('/atualizar-plano-venda/:sellerId?/newPlan')
   const { sellerId } = paramsSellerId
   useEffect(() => fetch(setIsLoading, setErrorLoading, setSellerZoopPlan2, selectedPlan, sellerId), [])
   const newPlan = {}
 
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={containerWithPadding}>
-      <Header type="icon-link" title="Adicionar Plano de Venda" navigateTo={`atualizar-plano-zoop/${sellerId}`} icon="back" />
+      <Header type="icon-link" title="Adicionar Plano de Venda" navigateTo={`atualizar-plano-venda/${sellerId}`} icon="back" />
       <div style={{ padding: '5px' }}>
         <InputText
           value={planName}

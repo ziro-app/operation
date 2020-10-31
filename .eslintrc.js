@@ -21,7 +21,7 @@ module.exports = {
   rules: {
     'prettier/prettier': 'off',
     'react/jsx-filename-extension': ['error', { extensions: ['.js', '.jsx'] }],
-
+    'dot-notation': 'off',
     'import/prefer-default-export': 'off',
     'no-unused-vars': 'off', //['error', { argsIgnorePattern: '^_' }],
     'no-unused-expressions': 'off',
@@ -55,4 +55,4 @@ module.exports = {
     'no-shadow': 'off',
     radix: 'off',
   },
-};
+}

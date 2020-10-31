@@ -1,7 +1,7 @@
 import currencyFormat from '@ziro/currency-format'
 import { db } from '../../Firebase/index'
 
-const sendToBackend = state => {
+const sendToBackend = async state => {
   const { docId, selectedPlan, nickname, sellerZoopPlan2, setSettingActivePlan } = state
   const nome = nickname ? nickname.trim() : ''
   const allowedUsers = ['Uiller', 'Vitor', 'Alessandro', 'Wermeson', 'Ale']
@@ -11,7 +11,7 @@ const sendToBackend = state => {
       if (process.env.HOMOLOG ? true : allowedUsers.includes(nome)) {
         const sellerPlanWithNewActivePlan = sellerZoopPlan2
         sellerPlanWithNewActivePlan.activePlan = selectedPlan
-        console.log('sellerPlanWithNewActivePlan', sellerPlanWithNewActivePlan)
+        // console.log('sellerPlanWithNewActivePlan', sellerPlanWithNewActivePlan)
         setSettingActivePlan(selectedPlan)
         await db.collection('suppliers').doc(docId).update({
           sellerZoopPlan2: sellerPlanWithNewActivePlan,
@@ -23,7 +23,7 @@ const sendToBackend = state => {
       if (error.customError) reject(error)
       else if (error.response && error.response.data && error.response.data.erro) {
         const { erro, message } = error.response.data
-        console.log(message)
+        // console.log(message)
         reject({ msg: erro, customError: true })
       } else reject(error)
     }

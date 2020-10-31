@@ -76,19 +76,19 @@ export function returnUniqueKey(card) {
     .sort(collator.compare)
 }
 
-export const createNewPlan = (sellerZoopPlanForFirebase, nickname, sellerId) => {
+export const createNewPlan = async (sellerZoopPlanForFirebase, nickname, sellerId) => {
   const allowedUsers = ['Uiller', 'Vitor', 'Alessandro', 'Wermeson', 'Ale']
   const nome = nickname ? nickname.trim() : ''
   return new Promise(async (resolve, reject) => {
     try {
       if (process.env.HOMOLOG ? true : allowedUsers.includes(nome)) {
-        console.log('entrou 1')
+        // console.log('entrou 1')
         // if (Object.keys(sellerZoopPlanForFirebase).length !== 0) {
-        console.log('newPlan dentro do backend', sellerZoopPlanForFirebase)
+        // console.log('newPlan dentro do backend', sellerZoopPlanForFirebase)
         await db.collection('suppliers').doc(sellerId).update({
           sellerZoopPlan2: sellerZoopPlanForFirebase, // newPlan, // sellerActualZoopPlanForFirebase,
         })
-        console.log('entrou 3')
+        // console.log('entrou 3')
         resolve('Plano atualizado')
         // } else throw { msg: 'Atualize ao menos um campo', customError: true }
       } else throw { msg: 'Permissão insuficiente', customError: true }

@@ -17,10 +17,10 @@ const fetch = (setIsLoading, setErrorLoading, setSuppliers, setSellerZoopPlan2, 
             setSellerZoopPlan2(sup.data().sellerZoopPlan2)
             if (selectedPlan) {
               const sellerZoopPlanObjectForIteration = sup.data().sellerZoopPlan2[selectedPlan]
-              console.log('sellerZoopPlanObjectForIteration', sellerZoopPlanObjectForIteration)
-              console.log('sellerZoopPlanObjectForIteration entries', Object.entries(sellerZoopPlanObjectForIteration))
+              // console.log('sellerZoopPlanObjectForIteration', sellerZoopPlanObjectForIteration)
+              // console.log('sellerZoopPlanObjectForIteration entries', Object.entries(sellerZoopPlanObjectForIteration))
               const feesFiltered = Object.entries(sellerZoopPlanObjectForIteration) // .filter()
-              console.log('feesFiltered', feesFiltered)
+              // console.log('feesFiltered', feesFiltered)
               setFees(feesFiltered)
             }
           }

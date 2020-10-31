@@ -2,33 +2,17 @@ import { fontBody, fontSizeNormal, fontTitle, fontWeightBody, gradient, primaryC
 
 export const content = {
     display: 'grid',
-    gridTemplateColumns: '1fr 2fr',
-    gridGap: '5px',
+    gridTemplateColumns: 'auto auto',
     alignItems: 'center',
-    padding: '0px 0px',
-    // borderTop: '1px solid #F0F0F0',
-    justifyContent: 'center',
-    textAlign: 'center',
   },
-  item = { width: '215px', fontFamily: fontBody },
-  item2 = { width: '120px', fontFamily: fontBody },
+  item = { width: '137px', fontFamily: fontBody, placeSelf: 'center' },
   wrapper = {
-    display: 'flex',
-    flexFlow: 'row wrap',
-    fontWeight: fontWeightBody,
-    textAlign: 'center',
-    flex: '1 100%',
-    justifyContent: 'center',
-    color: primaryColor,
-  },
-  title = {
-    fontFamily: fontTitle,
-    fontSize: fontSizeNormal,
-    paddingBottom: '10px',
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fill,minmax(153px,1fr))',
   },
   cardTitle = {
     fontFamily: fontTitle,
     fontSize: fontSizeNormal,
-    textAlign: 'left',
+    textAlign: 'center',
     paddingBottom: '10px',
   }

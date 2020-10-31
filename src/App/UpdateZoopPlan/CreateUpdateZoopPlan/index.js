@@ -32,7 +32,7 @@ const CreateAndUpdate = ({ fee, setFee }) => {
   const [, setLocation] = useLocation()
   const [nothing, setNothing] = useState(false)
   const [error, setError] = useState(false)
-  const [matchSellerId, paramsSellerId] = useRoute('/atualizar-plano-zoop/:sellerId?/:fee?/:selectedPlan?')
+  const [matchSellerId, paramsSellerId] = useRoute('/atualizar-plano-venda/:sellerId?/:fee?/:selectedPlan?')
   const { sellerId, selectedPlan } = paramsSellerId
   const { activePlan } = sellerZoopPlan
   const otherPlans = Object.entries(sellerZoopPlan).filter(item => item[0] !== selectedPlan && item[0] !== 'activePlan')
@@ -79,7 +79,7 @@ const CreateAndUpdate = ({ fee, setFee }) => {
         message="Taxa inválida ou não encontrada, retorne e tente novamente."
         type="noData"
         title="Erro ao buscar detalhes da transação"
-        backRoute="/atualizar-plano-zoop"
+        backRoute="/atualizar-plano-venda"
         backRouteFunction={route => {
           setLocation(route)
         }}
@@ -87,7 +87,7 @@ const CreateAndUpdate = ({ fee, setFee }) => {
     )
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={containerWithPadding}>
-      <Header type="icon-link" title="Criar Taxas/Atualizar" navigateTo="atualizar-plano-zoop/" icon="back" />
+      <Header type="icon-link" title="Criar Taxas/Atualizar" navigateTo="atualizar-plano-venda/" icon="back" />
       <div style={title}>Markup da Ziro</div>
       <div>
         {fees !== null &&

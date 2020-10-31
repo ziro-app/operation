@@ -13,10 +13,11 @@ import Details from '@bit/vitorbarbosa19.ziro.details'
 import InputPercentage from './InputPercentage/index'
 import { returnInstallmentsWithFee, translateFees, translateInstallments, testInstallments } from './functions'
 import fetch from './fetch'
-import { wrapper, item, content, cardTitle, title, item2 } from './styles'
+import { wrapper, item, content, cardTitle } from './styles'
 import sendToBackend from './sendToBackend'
 import { userContext } from '../../appContext'
 import { db } from '../../../Firebase'
+import ToastNotification from '../../ToastNotification'
 
 const UpdateTax = ({ fee, setFee }) => {
   const { nickname } = useContext(userContext)
@@ -29,15 +30,18 @@ const UpdateTax = ({ fee, setFee }) => {
   const [sellerActualZoopPlanForFirebase, setActualZoopPlanForFirebase] = useState({})
   const [otherPlansForFirebase, setOtherPlansForFirebase] = useState({})
   const [selectedPlanForFirebase, setSelectedPlanForFirebase] = useState('')
+  const [openToast, setOpenToast] = useState(false)
+  const [messageToast, setMessageToast] = useState('')
   const [fees, setFees] = useState(null)
   const [, setLocation] = useLocation()
   const [nothing, setNothing] = useState(false)
   const [supplier, setSupplier] = useState({ docId: '', name: '', reason: '', markupPercentage: '', antifraudPercentage: '', sellerZoopPlan: '' })
   const [error, setError] = useState(false)
-  const [matchSellerId, paramsSellerId] = useRoute('/atualizar-plano-zoop/:sellerId?/:fee?/:selectedPlan?')
+  const [matchSellerId, paramsSellerId] = useRoute('/atualizar-plano-venda/:sellerId?/:fee?/:selectedPlan?')
   const { sellerId, selectedPlan } = paramsSellerId
   const { activePlan } = sellerZoopPlan
   const otherPlans = Object.entries(sellerZoopPlan).filter(item => item[0] !== selectedPlan && item[0] !== 'activePlan')
+  const typeOfToast = 'alert'
   let newPlan = {}
   const mountBlock = (name, reason, activePlan, plans = []) => {
     const plansFormatted = plans ? plans.join(' , ') : ''
@@ -54,7 +58,7 @@ const UpdateTax = ({ fee, setFee }) => {
             content: reason,
           },
           {
-            title: 'Plano Atualmente selecionado',
+            title: 'Plano selecionado',
             content: activePlan,
           },
         ],
@@ -110,7 +114,7 @@ const UpdateTax = ({ fee, setFee }) => {
         message="Taxa inválida ou não encontrada, retorne e tente novamente."
         type="noData"
         title="Erro ao buscar detalhes da transação"
-        backRoute="/atualizar-plano-zoop"
+        backRoute="/atualizar-plano-venda"
         backRouteFunction={route => {
           setLocation(route)
         }}
@@ -118,7 +122,8 @@ const UpdateTax = ({ fee, setFee }) => {
     )
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={containerWithPadding}>
-      <Header type="icon-link" title={`Atualizar ${translateFees(fee)}`} navigateTo={`atualizar-plano-zoop/${sellerId}`} icon="back" />
+      <ToastNotification openToastRoot={openToast} setOpenToastRoot={setOpenToast} messageToastRoot={messageToast} type={typeOfToast} />
+      <Header type="icon-link" title={`Editar ${translateFees(fee)}`} navigateTo={`atualizar-plano-venda/${sellerId}`} icon="back" />
       {supplier.fantasia && <Details blocks={blocks} />}
       <br />
       <div>
@@ -138,18 +143,29 @@ const UpdateTax = ({ fee, setFee }) => {
                               <label
                                 style={{
                                   paddingBottom: '20px',
+                                  width: '25px',
                                 }}
                               >{`${translateInstallments(item.split(' ')[0])} `}</label>
                               {testInstallments(card, item, sellerZoopPlanObject)}
                               <FormInput
                                 name="percentage"
                                 input={
-                                  <InputPercentage
-                                    id={`${card[0]}${item.split(' ')[0]}${item.split(' ')[1]}${item.split(' ')[2]}`}
-                                    value={sellerZoopPlanObject[`${card[0]}${item.split(' ')[0]}${item.split(' ')[1]}${item.split(' ')[2]}`]}
-                                    setValue={setSellerZoopPlanObject}
-                                    defaultValue={item.split(' ')[2] || ''}
-                                  />
+                                  card[0].toUpperCase() === 'AMERICANEXPRESS' && item.split(' ')[0] === 'installment0' ? (
+                                    <InputPercentage
+                                      disabled
+                                      id={`${card[0]}${item.split(' ')[0]}${item.split(' ')[1]}${item.split(' ')[2]}`}
+                                      value={sellerZoopPlanObject[`${card[0]}${item.split(' ')[0]}${item.split(' ')[1]}${item.split(' ')[2]}`]}
+                                      setValue={setSellerZoopPlanObject}
+                                      defaultValue={item.split(' ')[2] || ''}
+                                    />
+                                  ) : (
+                                    <InputPercentage
+                                      id={`${card[0]}${item.split(' ')[0]}${item.split(' ')[1]}${item.split(' ')[2]}`}
+                                      value={sellerZoopPlanObject[`${card[0]}${item.split(' ')[0]}${item.split(' ')[1]}${item.split(' ')[2]}`]}
+                                      setValue={setSellerZoopPlanObject}
+                                      defaultValue={item.split(' ')[2] || ''}
+                                    />
+                                  )
                                 }
                               />
                             </div>
@@ -198,7 +214,13 @@ const UpdateTax = ({ fee, setFee }) => {
           )
           // console.log('contador de length', Object.keys(sellerActualZoopPlanForFirebase).length)
           // console.log('newPlan', newPlan)
-          sendToBackend && Object.keys(newPlan).length !== 0 ? sendToBackend(state, newPlan) : () => null
+          if (sendToBackend && Object.keys(newPlan).length !== 0) {
+            sendToBackend(state, newPlan)
+            setMessageToast('Taxa atualizada!')
+            setOpenToast(true)
+          } else {
+            return () => null
+          }
         }}
       />
     </motion.div>

@@ -11,10 +11,7 @@ const fetch = (setIsLoading, setErrorLoading, setSuppliers, setSellerZoopPlan2, 
 
       if (supplier.docId) {
         fetchedPlan = await db.collection('suppliers').doc(supplier.docId).get()
-        console.log('fetchedPlan', fetchedPlan)
         setSellerZoopPlan2(fetchedPlan.data().sellerZoopPlan2)
-        console.log('keys', Object.keys(fetchedPlan.data().sellerZoopPlan2)[0])
-        console.log('sellerZoopPlan2', fetchedPlan.data().sellerZoopPlan2)
         if (!selectedPlan) selectedPlan = Object.keys(fetchedPlan.data().sellerZoopPlan2)[0]
         const whichPlan = selectedPlan || 'standard'
         const sellerZoopPlanObjectForIteration = fetchedPlan.data().sellerZoopPlan2[whichPlan]
