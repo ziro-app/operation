@@ -64,9 +64,9 @@ const Router = ({ isLogged }) => {
   const [match, params] = useRoute('/pedidos/:cartId?')
   const [matchTransactions, paramsTransactions] = useRoute('/transacoes/:transactionId?/:receivableId?')
   const [matchTransactionsSplit, paramsTransactionsSplit] = useRoute('/transacoes/:transactionId?/split')
-  const [matchSeller, paramsSeller] = useRoute('/atualizar-plano-zoop/:sellerId?')
-  const [matchSellerNewPlan, paramsSellerNewPlan] = useRoute('/atualizar-plano-zoop/:sellerId?/newPlan')
-  const [matchFee, paramsFee] = useRoute('/atualizar-plano-zoop/:sellerId?/:fee?/:selectedPlan?')
+  const [matchSeller, paramsSeller] = useRoute('/atualizar-plano-venda/:sellerId?')
+  const [matchSellerNewPlan, paramsSellerNewPlan] = useRoute('/atualizar-plano-venda/:sellerId?/newPlan')
+  const [matchFee, paramsFee] = useRoute('/atualizar-plano-venda/:sellerId?/:fee?/:selectedPlan?')
   const { nickname } = useContext(userContext)
   const allowedUsers = ['Vitor']
 
@@ -104,7 +104,7 @@ const Router = ({ isLogged }) => {
     // [matchFee ? location : null]: <CreateAndUpdate {...paramsFee} />,
     [matchFee ? location : null]: <UpdateTax {...paramsFee} />,
     [matchSeller ? location : null]: (
-      <HeaderBack title="Atualizar Plano Zoop" navigateTo="/suporte">
+      <HeaderBack title="Alterar Plano de Venda" navigateTo="/suporte">
         <UpdateZoopPlan {...paramsSeller} />
       </HeaderBack>
     ),
@@ -168,7 +168,7 @@ const Router = ({ isLogged }) => {
               ['Aprovar confirmação de email', '/validar-email'],
               ['Alterar email do usuário', '/alterar-email'],
               ['Atualizar Plano Zoop do usuário antigo', '/atualizar-plano-zoop-old'],
-              ['Atualizar Plano Zoop do usuário novo', '/atualizar-plano-zoop'],
+              ['Alterar Plano de Venda', '/atualizar-plano-venda'],
             ]}
           />
         </motion.div>
@@ -199,8 +199,8 @@ const Router = ({ isLogged }) => {
         <UpdateZoopPlanOld />
       </HeaderBack>
     ),
-    '/testando-porcentagem': (
-      <HeaderBack title="Teste de porcentagens" navigateTo="/atualizar-plano-zoop">
+    '/testar-tarifas': (
+      <HeaderBack title="Testar Tarifas do Plano" navigateTo="/atualizar-plano-venda">
         <TestingPercentagesSplitRules />
       </HeaderBack>
     ),
@@ -280,7 +280,7 @@ const Router = ({ isLogged }) => {
         <CommissionManagement />
       </HeaderBack>
     ),
-    '/post-duplicata':(
+    '/post-duplicata': (
       <HeaderBack title="Lançamento de Duplicata" navigateTo="/administrativo">
         <PostDuplicata />
       </HeaderBack>
@@ -300,8 +300,8 @@ const Router = ({ isLogged }) => {
         <ChangeStoreownerEmail />
       </HeaderBack>
     ),
-    '/atualizar-plano-zoop': (
-      <HeaderBack title="Atualizar Plano Zoop" navigateTo="/suporte">
+    '/atualizar-plano-venda': (
+      <HeaderBack title="Alterar Plano de Venda" navigateTo="/suporte">
         <UpdateZoopPlan />
       </HeaderBack>
     ),

@@ -2,7 +2,6 @@ import currencyFormat from '@ziro/currency-format'
 import { db } from '../../../Firebase/index'
 
 const sendToBackend = (state, newPlan) => {
-  console.log('entrou sendToBackend')
   const {
     sellerId,
     sellerZoopPlanForFirebase,
@@ -21,14 +20,9 @@ const sendToBackend = (state, newPlan) => {
   return new Promise(async (resolve, reject) => {
     try {
       if (process.env.HOMOLOG ? true : allowedUsers.includes(nome)) {
-        console.log('entrou 1')
-        // if (Object.keys(sellerZoopPlanForFirebase).length !== 0) {
-        console.log('newPlan dentro do backend', newPlan)
-        console.log(sellerActualZoopPlanForFirebase)
         await db.collection('suppliers').doc(sellerId).update({
           sellerZoopPlan2: newPlan, // newPlan, // sellerActualZoopPlanForFirebase,
         })
-        console.log('entrou 3')
         // setSellerZoopPlanForFirebase({})
         resolve('Plano atualizado')
         // } else throw { msg: 'Atualize ao menos um campo', customError: true }

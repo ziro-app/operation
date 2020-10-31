@@ -146,7 +146,7 @@ const UpdateTax = ({ fee, setFee }) => {
                                   width: '25px',
                                 }}
                               >{`${translateInstallments(item.split(' ')[0])} `}</label>
-                              {testInstallments(card, item, sellerZoopPlanObject)}
+
                               <FormInput
                                 name="percentage"
                                 input={
