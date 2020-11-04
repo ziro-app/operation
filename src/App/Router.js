@@ -58,6 +58,7 @@ import Pickup from './Pickup/index'
 import CommissionManagement from './CommissionManagement/index'
 import PostDuplicata from './PostDuplicata/index'
 import ShowAttendance from './ShowAttendance/index'
+import Pagamentos from './Pagamentos'
 // import FirebaseMigration from './FirebaseMigration/index' -> Inacabado
 
 const Router = ({ isLogged }) => {
@@ -123,6 +124,7 @@ const Router = ({ isLogged }) => {
               ['Gestão Parcela 2', 'comission-gestao'],
               ['Lançamento de Duplicata', 'post-duplicata'],
               ['Cadastrar despesa', 'cadastrar-despesa'],
+              ['Visualizar pagamentos', 'visualizar-pagamentos'],
             ]}
           />
         </motion.div>
@@ -152,7 +154,6 @@ const Router = ({ isLogged }) => {
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
           <Submenu
             options={[
-              ['Cadastrar despesa', 'cadastrar-despesa'],
               ['Consulta de frete', 'consultar-frete'],
               ['Retiradas', 'retiradas'],
             ]}
@@ -284,6 +285,11 @@ const Router = ({ isLogged }) => {
     '/post-duplicata': (
       <HeaderBack title="Lançamento de Duplicata" navigateTo="/administrativo">
         <PostDuplicata />
+      </HeaderBack>
+    ),
+    '/visualizar-pagamentos':(
+      <HeaderBack title="Visualizar pagamentos" navigateTo="/administrativo">
+        <Pagamentos />
       </HeaderBack>
     ),
     '/checar-email': (

@@ -61,6 +61,7 @@ module.exports = (env, { mode }) => {
       sheet_id_pickup,
       sheet_id_form_duplicates,
       sheet_id_transito,
+      sheet_id_pessoas,
       homolog
     } = require('./credentials')
     config.devtool = 'cheap-module-eval-source-map'
@@ -100,6 +101,7 @@ module.exports = (env, { mode }) => {
           SHEET_ID_PICKUP: JSON.stringify(sheet_id_pickup),
           SHEET_ID_FORM_DUPLICATES : JSON.stringify(sheet_id_form_duplicates),
           SHEET_ID_TRANSITO : JSON.stringify(sheet_id_transito),
+          SHEET_ID_PESSOAS : JSON.stringify(sheet_id_pessoas),
           // FOR DEV TESTS ONLY
           HOMOLOG: JSON.stringify(homolog),
         },
@@ -156,7 +158,8 @@ module.exports = (env, { mode }) => {
           SHEET_ID_PICKUP: JSON.stringify(process.env.SHEET_ID_PICKUP),
           TOKEN_PROVIDERS: JSON.stringify(process.env.TOKEN_PROVIDERS),
           SHEET_ID_FORM_DUPLICATES : JSON.stringify(process.env.SHEET_ID_FORM_DUPLICATES),
-          SHEET_ID_TRANSITO : JSON.stringify(process.env.SHEET_ID_TRANSITO)
+          SHEET_ID_TRANSITO : JSON.stringify(process.env.SHEET_ID_TRANSITO),
+          SHEET_ID_PESSOAS : JSON.stringify(process.env.SHEET_ID_PESSOAS)
         },
       }),
     )
