@@ -26,7 +26,8 @@ const fetch = (state) => {
             const result = await axios(configGetSheet)
             const data = arrayToObject(result.data.valueRanges[0])
             setPaymentResume(data)
-        } catch (error) {
+          } catch (error) {
+            setIsLoading(false)
             setError(true)
             console.log(error)
         }

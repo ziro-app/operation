@@ -21,8 +21,8 @@ const Pagamentos = () => {
     const state = {paymentResume, setPaymentResume, ano, arrayParcela1, setArrayParcela1, arrayParcela2, setArrayParcela2, categories, setCategories, isLoading, setIsLoading, error, setError, nickname}
     useEffect(() => fetch(state),[])
     useEffect(() => fetchGraph(state),[ano, paymentResume])
-    if(isLoading) return <Spinner />
     if(error) return <Error />
+    if(isLoading) return <Spinner />
     return (
         <>
             <FormInput name='ano' label='Ano do pagamento' input={
