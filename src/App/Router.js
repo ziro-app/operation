@@ -122,6 +122,7 @@ const Router = ({ isLogged }) => {
               ['Reajuste', 'adjustment'],
               ['Gestão Parcela 2', 'comission-gestao'],
               ['Lançamento de Duplicata', 'post-duplicata'],
+              ['Cadastrar despesa', 'cadastrar-despesa'],
             ]}
           />
         </motion.div>
@@ -190,7 +191,7 @@ const Router = ({ isLogged }) => {
       </HeaderBack>
     ),
     '/cadastrar-despesa': (
-      <HeaderBack title="Cadastrar despesa" navigateTo="/logistica">
+      <HeaderBack title="Cadastrar despesa" navigateTo="/administrativo">
         <RegisterExpenses />
       </HeaderBack>
     ),
