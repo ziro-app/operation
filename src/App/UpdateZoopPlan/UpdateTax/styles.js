@@ -1,18 +1,23 @@
-import { fontBody, fontSizeNormal, fontTitle, fontWeightBody, gradient, primaryColor } from '@ziro/theme'
+import { fontBody, fontTitle } from '@ziro/theme'
 
 export const content = {
     display: 'grid',
     gridTemplateColumns: 'auto auto',
     alignItems: 'center',
   },
-  item = { width: '137px', fontFamily: fontBody, placeSelf: 'center' },
+  item = {
+    fontFamily: fontBody,
+    placeSelf: 'center'
+  },
   wrapper = {
     display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fill,minmax(153px,1fr))',
+    gridTemplateColumns: 'repeat(auto-fill,minmax(100px,137px))',
+    gridColumnGap: '6px',
+    justifyContent: 'space-between'
   },
   cardTitle = {
     fontFamily: fontTitle,
-    fontSize: fontSizeNormal,
+    fontSize: '1.4rem',
     textAlign: 'center',
     paddingBottom: '10px',
   }

@@ -125,8 +125,7 @@ const UpdateTax = ({ fee, setFee }) => {
       <ToastNotification openToastRoot={openToast} setOpenToastRoot={setOpenToast} messageToastRoot={messageToast} type={typeOfToast} />
       <Header type="icon-link" title={`Editar ${translateFees(fee)}`} navigateTo={`atualizar-plano-venda/${sellerId}`} icon="back" />
       {supplier.fantasia && <Details blocks={blocks} />}
-      <br />
-      <div>
+      <div style={{ marginTop: '35px'}}>
         {fees !== null &&
           fees.map(
             feeMap =>
