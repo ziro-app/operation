@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import maskInput from '@ziro/mask-input'
 import { inline, styleTag } from './styles'
@@ -24,8 +24,18 @@ const currencyFormat = (value) => {
   return "";
 };
 
-const InputPercentage = forwardRef(({ defaultValue, id, value, setValue, style = inline, css = styleTag, disabled, submitting, ...rest }, ref) => {
-  const inputProps = { style, disabled: disabled || submitting, ref, inputMode: 'numeric', placeholder: '% 20', ...rest }
+const sanitizeValue = value => {
+  const toInteger = parseInt(value.replace(/[\.,\s%]/g, ''), 10)
+  let validValue
+  if (toInteger === 0) validValue = 0
+  else if (!toInteger) validValue = ''
+  else if (toInteger <= 10000) validValue = maskInput(toInteger, '#######', true)
+  else validValue = maskInput(10000, '#######', true)
+  return validValue.toString()
+}
+
+const InputPercentage = ({ defaultValue, id, value, setValue, style = inline, css = styleTag, disabled, submitting, ...rest }) => {
+  const inputProps = { style, disabled: disabled || submitting, inputMode: 'numeric', placeholder: '% 20', ...rest }
   return (
     <>
       <style>{css}</style>
@@ -36,24 +46,15 @@ const InputPercentage = forwardRef(({ defaultValue, id, value, setValue, style =
         value={
           value !== undefined
             ? `% ${currencyFormat(value).replace(/[R$]/g, '')}`
-            : setValue(prev => ({
-                ...prev,
-                [id]: parseFloat(defaultValue.split('%')[0]) ? parseFloat(defaultValue.split('%')[0]).toFixed(2) * 100 : '% 0,00',
-              }))
+            : setValue(prev => ({ ...prev, [id]: sanitizeValue(defaultValue) }))
         }
         onChange={({ target: { value } }) => {
-          const toInteger = parseInt(value.replace(/[\.,\s%]/g, ''), 10)
-          let validInputValue
-          if (toInteger === 0) validInputValue = 0
-          else if (!toInteger) validInputValue = ''
-          else if (toInteger <= 10000) validInputValue = maskInput(toInteger, '#######', true)
-          else validInputValue = maskInput(10000, '#######', true)
-          setValue(prev => ({ ...prev, [id]: validInputValue }))
+          setValue(prev => ({ ...prev, [id]: sanitizeValue(value) }))
         }}
       />
     </>
   )
-})
+}
 
 InputPercentage.propTypes = {
   value: PropTypes.string.isRequired,
