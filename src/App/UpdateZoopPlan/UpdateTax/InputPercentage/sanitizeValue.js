@@ -7,7 +7,7 @@ const sanitizeValue = value => {
   else if (!toInteger) validValue = ''
   else if (toInteger <= 10000) validValue = maskInput(toInteger, '#######', true)
   else validValue = maskInput(10000, '#######', true)
-  return validValue.toString()
+  return (validValue / 100).toFixed(2)
 }
 
 export default sanitizeValue

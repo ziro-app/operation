@@ -6,6 +6,7 @@ import { inline, styleTag } from './styles'
 
 const InputPercentage = ({ defaultValue, id, value, setValue, style = inline, css = styleTag, disabled, submitting, ...rest }) => {
   const inputProps = { style, disabled: disabled || submitting, inputMode: 'numeric', placeholder: '% 20', ...rest }
+  const displayValue = `% ${currencyFormat((value * 100).toFixed(2)).replace(/[R$]/g, '')}`
   return (
     <>
       <style>{css}</style>
@@ -14,7 +15,7 @@ const InputPercentage = ({ defaultValue, id, value, setValue, style = inline, cs
         {...inputProps}
         className="input-text"
         value={
-          value !== undefined ? `% ${currencyFormat(value).replace(/[R$]/g, '')}` : setValue(prev => ({ ...prev, [id]: sanitizeValue(defaultValue) }))
+          value !== undefined ? displayValue : setValue(prev => ({ ...prev, [id]: sanitizeValue(defaultValue) }))
         }
         onChange={({ target: { value } }) => {
           setValue(prev => ({ ...prev, [id]: sanitizeValue(value) }))
