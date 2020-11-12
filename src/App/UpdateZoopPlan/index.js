@@ -148,14 +148,46 @@ const UpdateZoopPlan = () => {
     setIsLoadingFunction(false)
   }
   useEffect(() => {
-    if (localStorage.getItem('sellerName')) setSearchedName(localStorage.getItem('sellerName'))
-    if (localStorage.getItem('selectedPlan')) setSelectedPlan(localStorage.getItem('selectedPlan'))
-    if (localStorage.getItem('sellerObject')) setSupplier(JSON.parse(localStorage.getItem('sellerObject')))
-    if (localStorage.getItem('sellerName')) {
-      fetch(setIsLoading, setErrorLoading, setSuppliers, setSellerZoopPlan2, setFees, selectedPlan, supplier, suppliers)
+    async function fetchData() {
+      setIsLoading(true)
+      await fetch(setIsLoading, setErrorLoading, setSuppliers, setSellerZoopPlan2, setFees, selectedPlan, supplier, suppliers)
+      if (localStorage.getItem('sellerName')) setSearchedName(localStorage.getItem('sellerName'))
+      if (localStorage.getItem('selectedPlan')) setSelectedPlan(localStorage.getItem('selectedPlan'))
+      if (localStorage.getItem('sellerObject')) setSupplier(JSON.parse(localStorage.getItem('sellerObject')))
+      if (localStorage.getItem('sellerName')) {
+        const person = suppliers.find(storeowner => storeowner.name === localStorage.getItem('sellerName'))
+        if (person) {
+          setSupplier(person)
+          if (person.sellerZoopPlan) {
+            setAllPlans(Object.keys(person.sellerZoopPlan).filter(item => item !== 'activePlan'))
+            if (!allPlans.includes(localStorage.getItem('selectedPlan'))) {
+              localStorage.removeItem('selectedPlan')
+              setSelectedPlan('')
+            }
+            if (Object.prototype.hasOwnProperty.call(person.sellerZoopPlan, 'activePlan')) {
+              setSettingActivePlan(person.sellerZoopPlan.activePlan)
+            }
+          } else {
+            setAllPlans([''])
+            setSelectedPlan('')
+          }
+        }
+      }
+    }
+    fetchData()
+  }, [])
+  useEffect(() => {
+    async function fetchData() {
+      await fetch(setIsLoading, setErrorLoading, setSuppliers, setSellerZoopPlan2, setFees, selectedPlan, supplier, suppliers)
       const person = suppliers.find(storeowner => storeowner.name === localStorage.getItem('sellerName'))
       if (person) {
         setSupplier(person)
+        localStorage.setItem('sellerObject', JSON.stringify(person))
+        let activePlan = 'Nenhum plano ativo'
+        const { sellerZoopPlan } = supplier
+        if (sellerZoopPlan && Object.prototype.hasOwnProperty.call(sellerZoopPlan, 'activePlan'))
+          activePlan = settingActivePlan || supplier.sellerZoopPlan.activePlan || 'Nenhum plano ativo'
+        if (supplier.name) setBlocks(mountBlock(supplier.name, supplier.reason, activePlan, Object.keys(sellerZoopPlan2)))
         if (person.sellerZoopPlan) setAllPlans(Object.keys(person.sellerZoopPlan).filter(item => item !== 'activePlan'))
         else {
           setAllPlans([''])
@@ -163,43 +195,32 @@ const UpdateZoopPlan = () => {
         }
       }
     }
-  }, [])
-  useEffect(() => {
-    fetch(setIsLoading, setErrorLoading, setSuppliers, setSellerZoopPlan2, setFees, selectedPlan, supplier, suppliers)
-    const person = suppliers.find(storeowner => storeowner.name === localStorage.getItem('sellerName'))
-    if (person) {
-      setSupplier(person)
-      let activePlan = 'Nenhum plano ativo'
-      const { sellerZoopPlan } = supplier
-      if (sellerZoopPlan && Object.prototype.hasOwnProperty.call(sellerZoopPlan, 'activePlan'))
-        activePlan = settingActivePlan || supplier.sellerZoopPlan.activePlan || 'Nenhum plano ativo'
-      if (supplier.name) setBlocks(mountBlock(supplier.name, supplier.reason, activePlan, Object.keys(sellerZoopPlan2)))
-      if (person.sellerZoopPlan) setAllPlans(Object.keys(person.sellerZoopPlan).filter(item => item !== 'activePlan'))
-      else {
-        setAllPlans([''])
-        setSelectedPlan('')
-      }
-    }
-  }, [supplier, settingActivePlan])
+    fetchData()
+  }, [supplier, settingActivePlan, suppliers])
+  /*
   const { sellerZoopPlan } = supplier
-  if (
-    supplier.name &&
-    blocks.length === 0 &&
-    Object.prototype.hasOwnProperty.call(supplier, 'sellerZoopPlan') &&
-    sellerZoopPlan !== null &&
-    Object.prototype.hasOwnProperty.call(sellerZoopPlan, 'activePlan')
-  ) {
-    setBlocks(
-      mountBlock(
-        supplier.name,
-        supplier.reason,
-        settingActivePlan || supplier.sellerZoopPlan.activePlan || 'Nenhum plano ativo',
-        Object.keys(sellerZoopPlan2),
-      ),
-    )
-  } else if (supplier.name && blocks.length === 0) {
-    setBlocks(mountBlock(supplier.name, supplier.reason, 'Nenhum plano ativo'))
+  async function asyncCall() {
+    if (
+      supplier.name &&
+      blocks.length === 0 &&
+      Object.prototype.hasOwnProperty.call(supplier, 'sellerZoopPlan') &&
+      sellerZoopPlan !== null &&
+      Object.prototype.hasOwnProperty.call(sellerZoopPlan, 'activePlan')
+    ) {
+      await fetch(setIsLoading, setErrorLoading, setSuppliers, setSellerZoopPlan2, setFees, selectedPlan, supplier, suppliers)
+      setBlocks(
+        mountBlock(
+          supplier.name,
+          supplier.reason,
+          settingActivePlan || supplier.sellerZoopPlan.activePlan || 'Nenhum plano ativo',
+          Object.keys(sellerZoopPlan2),
+        ),
+      )
+    } else if (supplier.name && blocks.length === 0) {
+      setBlocks(mountBlock(supplier.name, supplier.reason, 'Nenhum plano ativo'))
+    }
   }
+  asyncCall() */
   const asyncClick = React.useCallback(async planName => {
     try {
       await setPromiseMessage(PromptMessage)
@@ -369,7 +390,7 @@ const UpdateZoopPlan = () => {
         template="regular"
         submitting={
           isLoadingFunction === true ||
-          settingActivePlan === selectedPlan ||
+          sellerZoopPlan2.activePlan === selectedPlan ||
           selectedPlan === '' ||
           !supplier.docId ||
           !Object.keys(sellerZoopPlan2).includes(selectedPlan)

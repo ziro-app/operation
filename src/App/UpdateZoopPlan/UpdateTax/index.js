@@ -125,7 +125,7 @@ const UpdateTax = ({ fee, setFee }) => {
       <ToastNotification openToastRoot={openToast} setOpenToastRoot={setOpenToast} messageToastRoot={messageToast} type={typeOfToast} />
       <Header type="icon-link" title={`Editar ${translateFees(fee)}`} navigateTo={`atualizar-plano-venda/${sellerId}`} icon="back" />
       {supplier.fantasia && <Details blocks={blocks} />}
-      <div style={{ marginTop: '35px'}}>
+      <div style={{ marginTop: '35px' }}>
         {fees !== null &&
           fees.map(
             feeMap =>
@@ -147,6 +147,7 @@ const UpdateTax = ({ fee, setFee }) => {
                               >{`${translateInstallments(item.split(' ')[0])} `}</label>
 
                               <FormInput
+                                label=""
                                 name="percentage"
                                 input={
                                   card[0].toUpperCase() === 'AMERICANEXPRESS' && item.split(' ')[0] === 'installment0' ? (
@@ -192,7 +193,7 @@ const UpdateTax = ({ fee, setFee }) => {
                   const actualInstallment = installment[0].split(card[0])[1]
                     ? installment[0].split(card[0])[1].split(':')[0]
                     : installment[0].split(card[0])[1]
-                  let actualInstallmentPercentage = installment[1] ? parseFloat(installment[1]) / 100 : installment[1]
+                  let actualInstallmentPercentage = installment[1] // ? parseFloat(installment[1]) / 100 : installment[1]
                   if (!actualInstallmentPercentage) actualInstallmentPercentage = 0
                   const actualCard = card[0]
                   // console.log('actualInstallment,actualInstallmentPercentage', actualInstallment, actualInstallmentPercentage)
@@ -201,7 +202,7 @@ const UpdateTax = ({ fee, setFee }) => {
                     const newItem = sellerZoopPlanForFirebase
                     // newItem[actualCard] = {}
                     if (!Object.prototype.hasOwnProperty.call(newItem, actualCard)) newItem[actualCard] = {}
-                    newItem[actualCard][actualInstallment] = parseFloat(actualInstallmentPercentage)
+                    newItem[actualCard][actualInstallment] = actualInstallmentPercentage
                     setSellerZoopPlanForFirebase(prevState => ({ ...prevState, ...newItem }))
                     const newZoopPlan = sellerZoopPlan
                     newZoopPlan[selectedPlan][fee] = sellerZoopPlanForFirebase

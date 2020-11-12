@@ -14,9 +14,7 @@ const InputPercentage = ({ defaultValue, id, value, setValue, style = inline, cs
         {...inputProps}
         className="input-text"
         value={
-          value !== undefined
-            ? `% ${currencyFormat(value).replace(/[R$]/g, '')}`
-            : setValue(prev => ({ ...prev, [id]: sanitizeValue(defaultValue) }))
+          value !== undefined ? `% ${currencyFormat(value).replace(/[R$]/g, '')}` : setValue(prev => ({ ...prev, [id]: sanitizeValue(defaultValue) }))
         }
         onChange={({ target: { value } }) => {
           setValue(prev => ({ ...prev, [id]: sanitizeValue(value) }))
