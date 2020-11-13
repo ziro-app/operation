@@ -107,7 +107,7 @@ const UpdateTax = ({ fee, setFee }) => {
     otherPlansForFirebase,
     sellerActualZoopPlanForFirebase,
   }
-
+  const sequenceOfCards = ['mastercard','visa','elo','americaexpress','hipercard']
   if (nothing || (Object.keys(fee).length === 0 && fee.constructor === Object))
     return (
       <Error

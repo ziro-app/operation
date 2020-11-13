@@ -93,7 +93,7 @@
         "@welldone-software/why-did-you-render": "^4.2.5",
         "@ziro/array-object": "^1.0.0",
         "@ziro/capitalize": "^1.0.0",
-        "@ziro/currency-format": "1.0.0",
+        "@ziro/currency-format": "1.0.2",
         "@ziro/format-date-utc3": "^2.0.1",
         "@ziro/mask-input": "^1.0.0",
         "@ziro/remove-duplicates": "^1.0.1",
