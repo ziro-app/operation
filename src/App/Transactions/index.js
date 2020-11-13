@@ -1,17 +1,15 @@
 import React, { useContext, useEffect, useState } from 'react';
-import Spinner from '@bit/vitorbarbosa19.ziro.spinner';
+import Spinner from '@bit/vitorbarbosa19.ziro.spinner-with-div';
 import Error from '@bit/vitorbarbosa19.ziro.error';
 import Dropdown from '@bit/vitorbarbosa19.ziro.dropdown';
 import TransactionsList from './TransactionsList/index';
 import TransactionDetails from './TransactionDetails/index';
 import ReceivableDetails from './ReceivableDetails/index';
-import { spinner } from './styles';
 import fetch from './fetch';
 import { userContext } from '../appContext';
-import { useQuery } from '../UserCart/SearchCart/useQuery';
 import { Menu } from '../Menu/index';
 
-const Transactions = ({ transactionId, receivableId, carts, storeowners, setQueryStr }) => {
+const Transactions = ({ transactionId, receivableId }) => {
     const storageFilterStatus = localStorage.getItem('statusFilter')
     const storageFilterSeller = localStorage.getItem('sellerFilter')
     const [isLoading, setIsLoading] = useState(true);
@@ -22,46 +20,19 @@ const Transactions = ({ transactionId, receivableId, carts, storeowners, setQuer
     const [lastDoc, setLastDoc] = useState(null);
     const [isLoadingResults, setIsLoadingResults] = useState(false);
     const { listStatusForFilter, listSellersForFilter } = useContext(userContext);
-    const useQuerySelector = useQuery();
     const [statusFilter, setStatusFilter] = useState(storageFilterStatus || '');
     const [sellerFilter, setSellerFilter] = useState(storageFilterSeller || '');
     const [limitFetch, setLimitFetch] = useState(10);
     const [isLoadingMore, setIsLoadingMore] = useState(true);
     const [transaction, setTransaction] = useState({});
-    const [buyerStoreownerId, setBuyerStoreownerId] = useQuerySelector('buyerStoreownerId');
-    const [seller, setSeller] = useQuerySelector('seller');
-    const [status, setStatus] = useQuerySelector('status');
-    const zoopId = '93fb596c44384485b7ece404de0e3584';
+    const state = {setIsLoading,setErrorLoading,payments,setPayments,setLastDoc,setTotalTransactions,setLoadingMore,setIsLoadingResults,limitFetch,setIsLoadingMore}
     useEffect(() => {
         if (loadingMore || isLoadingResults) {
-            fetch(
-                setIsLoading,
-                setErrorLoading,
-                payments,
-                setPayments,
-                zoopId,
-                10,
-                lastDoc,
-                setLastDoc,
-                setTotalTransactions,
-                setLoadingMore,
-                setStatusFilter,
-                statusFilter,
-                setSellerFilter,
-                sellerFilter,
-                setIsLoadingResults,
-                limitFetch,
-                setIsLoadingMore,
-            );
+            fetch(state);
         }
     }, [statusFilter, sellerFilter, payments, limitFetch]);
 
-    if (isLoading)
-        return (
-            <div style={spinner}>
-                <Spinner size="5.5rem" />
-            </div>
-        );
+    if (isLoading) return <Spinner />
     if (errorLoading) return <Error />;
     if (transactionId && receivableId)
         return (
@@ -121,9 +92,7 @@ const Transactions = ({ transactionId, receivableId, carts, storeowners, setQuer
                 />
             </div>
             {isLoadingResults ? (
-                <div style={spinner}>
-                    <Spinner size="5.5rem" />
-                </div>
+                    <Spinner />
             ) : (
                     <TransactionsList
                         transactions={payments.map(payment => {

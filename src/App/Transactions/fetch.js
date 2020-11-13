@@ -1,63 +1,21 @@
 import currencyFormat from '@ziro/currency-format'
-import { dateFormat } from './utils'
 import { db } from '../../Firebase/index'
 import matchStatusColor from './matchStatusColor'
+import {queryGerate, dateFormat} from './utils'
 
-const fetch = (
-  setIsLoading,
-  setErrorLoading,
-  payments,
-  setPayments,
-  zoopId,
-  limit,
-  lastDoc,
-  setLastDoc,
-  setTotalTransactions,
-  setLoadingMore,
-  setStatusFilter,
-  statusFilter,
-  setSellerFilter,
-  sellerFilter,
-  setIsLoadingResults,
-  limitFetch,
-  setIsLoadingMore,
-) => {
+const fetch = (state) => {
+  const {setIsLoading,setErrorLoading,payments,setPayments,setLastDoc,setTotalTransactions,setLoadingMore,setIsLoadingResults,limitFetch,setIsLoadingMore} = state
   const storageFilterSeller =  localStorage.getItem('sellerFilter')
   const storageFilterStatus = localStorage.getItem('statusFilter')
-  console.log(storageFilterStatus, storageFilterSeller)
   if (payments) setIsLoadingMore(true)
   else setIsLoadingMore(false)
-  let query = ''
-  if (!storageFilterSeller && !storageFilterStatus) {
-    console.log('primeiro')
-    query = db.collection('credit-card-payments').orderBy('dateLastUpdate', 'desc').limit(limitFetch)
-  }
-  if (storageFilterSeller && !storageFilterStatus) {
-    console.log('segundo')
-    query = db.collection('credit-card-payments').orderBy('dateLastUpdate', 'desc').where('seller', '==', `${storageFilterSeller}`).limit(limitFetch)
-  }
-  if (!storageFilterSeller && storageFilterStatus) {
-    console.log('terceiro')
-    query = db.collection('credit-card-payments').orderBy('dateLastUpdate', 'desc').where('status', '==', `${storageFilterStatus}`).limit(limitFetch)
-  }
-  if (storageFilterSeller && storageFilterStatus) {
-    console.log('quarto')
-    query = db
-      .collection('credit-card-payments')
-      .orderBy('dateLastUpdate', 'desc')
-      .where('seller', '==', `${storageFilterSeller}`)
-      .where('status', '==', `${storageFilterStatus}`)
-      .limit(limitFetch)
-  }
+  const query = queryGerate(storageFilterSeller, storageFilterStatus, limitFetch)
   const run = async () => {
     try {
-      const snapShot = await query.get()
-      console.log(snapShot.docs.length)
       await query.onSnapshot(
         async snapshot => {
           const storageFilterSeller =  localStorage.getItem('sellerFilter')
           const storageFilterStatus = localStorage.getItem('statusFilter')
-          console.log(storageFilterSeller, storageFilterStatus)
           let collectionData = ''
           if (!storageFilterSeller && !storageFilterStatus) {
             collectionData = await db.collection('credit-card-payments').get()
@@ -75,7 +33,6 @@ const fetch = (
               .where('status', '==', `${storageFilterStatus}`)
               .get()
           }
-
           setTotalTransactions(collectionData.docs.length)
           if (!collectionData.docs.length) {
             setPayments([])
@@ -139,7 +96,6 @@ const fetch = (
             setPayments([...paymentDoc])
             setIsLoadingMore(false)
             setIsLoadingResults(false)
-          } else {
           }
           setIsLoading(false)
           setLoadingMore(false)
