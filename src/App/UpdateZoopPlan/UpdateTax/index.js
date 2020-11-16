@@ -18,6 +18,7 @@ import sendToBackend from './sendToBackend'
 import { userContext } from '../../appContext'
 import { db } from '../../../Firebase'
 import ToastNotification from '../../ToastNotification'
+import SpinnerWithDiv from '@bit/vitorbarbosa19.ziro.spinner-with-div'
 
 const UpdateTax = ({ fee, setFee }) => {
   const { nickname } = useContext(userContext)
@@ -30,6 +31,7 @@ const UpdateTax = ({ fee, setFee }) => {
   const [sellerActualZoopPlanForFirebase, setActualZoopPlanForFirebase] = useState({})
   const [otherPlansForFirebase, setOtherPlansForFirebase] = useState({})
   const [selectedPlanForFirebase, setSelectedPlanForFirebase] = useState('')
+  const [isLoading, setIsLoading] = useState(true)
   const [openToast, setOpenToast] = useState(false)
   const [messageToast, setMessageToast] = useState('')
   const [fees, setFees] = useState(null)
@@ -65,6 +67,7 @@ const UpdateTax = ({ fee, setFee }) => {
       },
     ]
   }
+  console.log('fees',fees)
   useEffect(() => {
     if (countLoop < 4) {
       const newCount = countLoop + 1
@@ -74,11 +77,11 @@ const UpdateTax = ({ fee, setFee }) => {
       }
       setNothing(false)
 
-      async function getFee(setSellerZoopPlan, setFees, sellerId, selectedPlanForFirebase, fees) {
-        await fetch(setSellerZoopPlan, setFees, sellerId, selectedPlanForFirebase, fees, setSupplier)
+      async function getFee(setSellerZoopPlan, setFees, sellerId, selectedPlanForFirebase, fees,setIsLoading) {
+        await fetch(setSellerZoopPlan, setFees, sellerId, selectedPlanForFirebase, fees, setSupplier,setIsLoading)
       }
 
-      getFee(setSellerZoopPlan, setFees, sellerId, selectedPlanForFirebase, fees)
+      getFee(setSellerZoopPlan, setFees, sellerId, selectedPlanForFirebase, fees,setIsLoading)
     }
   }, [fee, error, selectedPlanForFirebase])
   // console.log('supplier', supplier)
@@ -107,6 +110,7 @@ const UpdateTax = ({ fee, setFee }) => {
     otherPlansForFirebase,
     sellerActualZoopPlanForFirebase,
   }
+  if (isLoading||fee === null) return <SpinnerWithDiv size="5rem" />
   const sequenceOfCards = ['mastercard','visa','elo','americaexpress','hipercard']
   if (nothing || (Object.keys(fee).length === 0 && fee.constructor === Object))
     return (
@@ -130,15 +134,15 @@ const UpdateTax = ({ fee, setFee }) => {
           fees.map(
             feeMap =>
               feeMap[0] === fee && (
-                <div style={wrapper}>
+                <div key={feeMap[0]} style={wrapper}>
                   {Object.entries(feeMap[1])
                     .sort()
                     .map(card => (
-                      <div style={item}>
-                        <div style={cardTitle}>{card[0].toUpperCase()}</div>
+                      <div key={card} style={item}>
+                        <div key={card} style={cardTitle}>{card[0].toUpperCase()}</div>
                         <div>
                           {returnInstallmentsWithFee(card).map(item => (
-                            <div style={content}>
+                            <div key={item} style={content}>
                               <label
                                 style={{
                                   paddingBottom: '20px',
@@ -146,7 +150,7 @@ const UpdateTax = ({ fee, setFee }) => {
                                 }}
                               >{`${translateInstallments(item.split(' ')[0])} `}</label>
 
-                              <FormInput
+                              <FormInput key={item}
                                 label=""
                                 name="percentage"
                                 input={

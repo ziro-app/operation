@@ -12,14 +12,16 @@ const fetch = (setIsLoading, setErrorLoading, setSuppliers, setSellerZoopPlan2, 
       const suppliersFetch = []
       if (supplier.docId) {
         fetchedPlan = db.collection('suppliers').doc(supplier.docId)
-        await fetchedPlan.onSnapshot(sup => {
+        fetchedPlan.get().then(sup => {
           if (Object.prototype.hasOwnProperty.call(sup.data(), 'sellerZoopPlan2')) {
+              console.log('sup.data().sellerZoopPlan2',sup.data().sellerZoopPlan2)
             setSellerZoopPlan2(sup.data().sellerZoopPlan2)
             if (selectedPlan) {
               const sellerZoopPlanObjectForIteration = sup.data().sellerZoopPlan2[selectedPlan]
               // console.log('sellerZoopPlanObjectForIteration', sellerZoopPlanObjectForIteration)
               // console.log('sellerZoopPlanObjectForIteration entries', Object.entries(sellerZoopPlanObjectForIteration))
-              const feesFiltered = Object.entries(sellerZoopPlanObjectForIteration) // .filter()
+
+              const feesFiltered = sellerZoopPlanObjectForIteration ? Object.entries(sellerZoopPlanObjectForIteration) : null // .filter()
               // console.log('feesFiltered', feesFiltered)
               setFees(feesFiltered)
             }
