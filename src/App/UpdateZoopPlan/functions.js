@@ -307,7 +307,7 @@ export const defaultValues = {
     },
     mastercard: {
       installment0: '1.32',
-      installment1: '2.3',
+      installment1: '2.30',
       installment2: '2.54',
       installment3: '2.54',
       installment4: '2.54',
