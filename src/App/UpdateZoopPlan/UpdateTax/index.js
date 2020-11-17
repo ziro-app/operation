@@ -10,6 +10,7 @@ import FormInput from '@bit/vitorbarbosa19.ziro.form-input'
 import Button from '@bit/vitorbarbosa19.ziro.button'
 import { useForm } from 'react-hook-form'
 import Details from '@bit/vitorbarbosa19.ziro.details'
+import SpinnerWithDiv from '@bit/vitorbarbosa19.ziro.spinner-with-div'
 import InputPercentage from './InputPercentage/index'
 import { returnInstallmentsWithFee, translateFees, translateInstallments, testInstallments } from './functions'
 import fetch from './fetch'
@@ -18,7 +19,6 @@ import sendToBackend from './sendToBackend'
 import { userContext } from '../../appContext'
 import { db } from '../../../Firebase'
 import ToastNotification from '../../ToastNotification'
-import SpinnerWithDiv from '@bit/vitorbarbosa19.ziro.spinner-with-div'
 
 const UpdateTax = ({ fee, setFee }) => {
   const { nickname } = useContext(userContext)
@@ -67,7 +67,6 @@ const UpdateTax = ({ fee, setFee }) => {
       },
     ]
   }
-  console.log('fees',fees)
   useEffect(() => {
     if (countLoop < 4) {
       const newCount = countLoop + 1
@@ -77,11 +76,11 @@ const UpdateTax = ({ fee, setFee }) => {
       }
       setNothing(false)
 
-      async function getFee(setSellerZoopPlan, setFees, sellerId, selectedPlanForFirebase, fees,setIsLoading) {
-        await fetch(setSellerZoopPlan, setFees, sellerId, selectedPlanForFirebase, fees, setSupplier,setIsLoading)
+      async function getFee(setSellerZoopPlan, setFees, sellerId, selectedPlanForFirebase, fees, setIsLoading) {
+        await fetch(setSellerZoopPlan, setFees, sellerId, selectedPlanForFirebase, fees, setSupplier, setIsLoading)
       }
 
-      getFee(setSellerZoopPlan, setFees, sellerId, selectedPlanForFirebase, fees,setIsLoading)
+      getFee(setSellerZoopPlan, setFees, sellerId, selectedPlanForFirebase, fees, setIsLoading)
     }
   }, [fee, error, selectedPlanForFirebase])
   // console.log('supplier', supplier)
@@ -110,8 +109,7 @@ const UpdateTax = ({ fee, setFee }) => {
     otherPlansForFirebase,
     sellerActualZoopPlanForFirebase,
   }
-  if (isLoading||fee === null) return <SpinnerWithDiv size="5rem" />
-  const sequenceOfCards = ['mastercard','visa','elo','americaexpress','hipercard']
+  if (isLoading || fee === null) return <SpinnerWithDiv size="5rem" />
   if (nothing || (Object.keys(fee).length === 0 && fee.constructor === Object))
     return (
       <Error
@@ -124,6 +122,7 @@ const UpdateTax = ({ fee, setFee }) => {
         }}
       />
     )
+  const order = { mastercard: 1, visa: 2, elo: 3, americanexpress: 4, hipercard: 5, default: 1000 }
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={containerWithPadding}>
       <ToastNotification openToastRoot={openToast} setOpenToastRoot={setOpenToast} messageToastRoot={messageToast} type={typeOfToast} />
@@ -136,10 +135,14 @@ const UpdateTax = ({ fee, setFee }) => {
               feeMap[0] === fee && (
                 <div key={feeMap[0]} style={wrapper}>
                   {Object.entries(feeMap[1])
-                    .sort()
+                    .sort(function (a, b) {
+                      return (order[a[0]] || order.default) - (order[b[0]] || order.default)
+                    })
                     .map(card => (
                       <div key={card} style={item}>
-                        <div key={card} style={cardTitle}>{card[0].toUpperCase()}</div>
+                        <div key={card} style={cardTitle}>
+                          {card[0].toUpperCase()}
+                        </div>
                         <div>
                           {returnInstallmentsWithFee(card).map(item => (
                             <div key={item} style={content}>
@@ -150,7 +153,8 @@ const UpdateTax = ({ fee, setFee }) => {
                                 }}
                               >{`${translateInstallments(item.split(' ')[0])} `}</label>
 
-                              <FormInput key={item}
+                              <FormInput
+                                key={item}
                                 label=""
                                 name="percentage"
                                 input={

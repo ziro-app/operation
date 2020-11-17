@@ -1,17 +1,15 @@
 import { db } from '../../../Firebase/index'
 
-const fetch = (setSellerZoopPlan, setFees, sellerId, selectedPlanForFirebase, fees, setSupplier,setIsLoading) => {
+const fetch = (setSellerZoopPlan, setFees, sellerId, selectedPlanForFirebase, fees, setSupplier, setIsLoading) => {
   const run = async () => {
     try {
-        setIsLoading(true)
+      setIsLoading(true)
       if (selectedPlanForFirebase !== '' && fees === null) {
         const query = await db.collection('suppliers').doc(sellerId)
         if (!query.empty) {
           await query.onSnapshot(sup => {
             const docId = sup.id
             const { sellerZoopPlan2 } = sup.data()
-
-            console.log(sellerZoopPlan2)
             setSupplier(sup.data())
             setSellerZoopPlan(sellerZoopPlan2)
             // if (sellerZoopPlan2) {

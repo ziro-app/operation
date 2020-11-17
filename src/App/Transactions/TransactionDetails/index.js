@@ -43,18 +43,20 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
       ? `http://localhost:8080/pagamento/${transactionId}/finalizar-sem-cadastro`
       : `http://localhost:8080/pagamento/${transactionId}/escolher-cartao?doc`
     : transaction.checkoutWithoutRegister
-      ? `https://ziro.app/pagamento/${transactionId}/finalizar-sem-cadastro`
-      : `https://ziro.app/pagamento/${transactionId}/escolher-cartao?doc`
+    ? `https://ziro.app/pagamento/${transactionId}/finalizar-sem-cadastro`
+    : `https://ziro.app/pagamento/${transactionId}/escolher-cartao?doc`
   const [blocksStoreowner, setBlocksStoreowner] = useState([])
   const [validationMessage, setValidationMessage] = useState('')
   const [loadingButton, setLoadingButton] = useState(false)
   const [olderTransaction, setOlderTransaction] = useState(false)
   const [remakeBlockTransaction, setRemakeBlockTransaction] = useState(false)
+  let markupTransaction = {}
+  let antiFraudTransaction = {}
+
   async function getTransaction(transactionId, setTransaction, setError, transaction) {
     await fetch(transactionId, setTransaction, setError, transaction)
-    if (Object.prototype.hasOwnProperty.call(transaction, 'sellerZoopPlan')) {
-      if (transaction.sellerZoopPlan === '' || (transaction.sellerZoopPlan.markup.percentage === 0 && transaction.sellerZoopPlan.markup.amount === 0))
-        setOlderTransaction(true)
+    if (Object.prototype.hasOwnProperty.call(transaction, 'splitTransaction')) {
+      if (transaction.splitTransaction === '' || (markupTransaction.percentage === 0 && markupTransaction.amount === 0)) setOlderTransaction(true)
       else setOlderTransaction(false)
     } else setOlderTransaction(false)
   }
@@ -181,16 +183,16 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
   }
 
   function handleInsurance(transaction) {
-    if (transaction.insurance === true && transaction.sellerZoopPlan) {
-      if (transaction.sellerZoopPlan.antiFraud.receivable_amount)
-        return `- ${parseFloat(transaction.sellerZoopPlan.antiFraud.receivable_amount)
+    if (transaction.insurance === true && (transaction.splitTransaction || transaction.sellerZoopPlan)) {
+      if (antiFraudTransaction.receivable_amount)
+        return `- ${parseFloat(antiFraudTransaction.receivable_amount)
           .toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })
           .replace(/\s/g, '')}`
       return '-'
     }
   }
   function handleMarkup(transaction) {
-    return `- ${parseFloat(transaction.sellerZoopPlan.markup.receivable_amount).toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}`
+    return `- ${parseFloat(markupTransaction.receivable_amount).toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}`
   }
 
   useEffect(() => {
@@ -199,240 +201,234 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
       if (error) {
         setNothing(true)
       }
-      {
-        if (transaction !== {} && !nothing) {
-          let block
-          let dataTable
-          let feesFormatted =
-            transaction.status !== 'Cancelado' && transaction.fees
-              ? ` ${transaction.sellerZoopPlan && (transaction.sellerZoopPlan.markup.amount || transaction.sellerZoopPlan.markup.percentage)
-                ? '- '.concat(
-                  parseFloat(parseFloat(transaction.sellerZoopPlan.markup.receivable_gross_amount) + parseFloat(transaction.fees))
-                    .toLocaleString('pt-br', {
-                      style: 'currency',
-                      currency: 'BRL',
-                    })
-                    .replace(/\s/g, ''),
-                )
-                : '- '.concat(
-                  parseFloat(transaction.fees)
-                    .toLocaleString('pt-br', {
-                      style: 'currency',
-                      currency: 'BRL',
-                    })
-                    .replace(/\s/g, ''),
-                )
+
+      if (transaction !== {} && !nothing) {
+        markupTransaction = transaction.isNewPlan ? transaction.splitTransaction.markup : transaction.sellerZoopPlan.markup
+        antiFraudTransaction = transaction.isNewPlan ? transaction.splitTransaction.antiFraud : transaction.sellerZoopPlan.antiFraud
+
+        let block
+        let dataTable
+        let feesFormatted =
+          transaction.status !== 'Cancelado' && transaction.fees
+            ? ` ${
+                (transaction.isNewPlan ? transaction.splitTransaction : transaction.sellerZoopPlan) &&
+                (markupTransaction.amount || markupTransaction.percentage)
+                  ? '- '.concat(
+                      parseFloat(parseFloat(markupTransaction.receivable_gross_amount) + parseFloat(transaction.fees))
+                        .toLocaleString('pt-br', {
+                          style: 'currency',
+                          currency: 'BRL',
+                        })
+                        .replace(/\s/g, ''),
+                    )
+                  : '- '.concat(
+                      parseFloat(transaction.fees)
+                        .toLocaleString('pt-br', {
+                          style: 'currency',
+                          currency: 'BRL',
+                        })
+                        .replace(/\s/g, ''),
+                    )
               }`
-              : '-'
-          let insuranceValueFormatted =
-            transaction.status !== 'Cancelado' &&
-              transaction.insurance === true &&
-              Object.prototype.hasOwnProperty.call(transaction, 'receivables') &&
-              Object.prototype.hasOwnProperty.call(transaction, 'sellerZoopPlan') &&
-              Object.prototype.hasOwnProperty.call(transaction.sellerZoopPlan, 'antiFraud') &&
-              feesFormatted !== '-' &&
-              (transaction.sellerZoopPlan.antiFraud.amount || transaction.sellerZoopPlan.antiFraud.percentage)
-              ? handleInsurance(transaction)
-              : '-'
-          let markupValueFormatted =
-            Object.prototype.hasOwnProperty.call(transaction, 'receivables') &&
-              feesFormatted !== '-' &&
-              transaction.sellerZoopPlan &&
-              (transaction.sellerZoopPlan.markup.amount || transaction.sellerZoopPlan.markup.percentage)
-              ? handleMarkup(transaction)
-              : '-'
-          let sumOfFees = 0
-          if (transaction.status === 'Aprovado') {
-            sumOfFees = transaction.fee_details.reduce(function (sum, item) {
-              return (sum += parseFloat(item.amount))
-            }, 0)
-          }
-          let liquidFormatted =
-            transaction.status !== 'Cancelado' &&
-              transaction.status !== 'Pré Autorizado' &&
-              transaction.status !== 'Atualizando' &&
-              transaction.totalFees !== '-'
-              ? parseFloat(`${stringToFloat(transaction.charge) - parseFloat(transaction.totalFees)}`)
+            : '-'
+        let insuranceValueFormatted =
+          transaction.status !== 'Cancelado' &&
+          transaction.insurance === true &&
+          Object.prototype.hasOwnProperty.call(transaction, 'receivables') &&
+          Object.prototype.hasOwnProperty.call(transaction, 'splitTransaction') &&
+          Object.prototype.hasOwnProperty.call(transaction.isNewPlan ? transaction.splitTransaction : transaction.sellerZoopPlan, 'antiFraud') &&
+          feesFormatted !== '-' &&
+          (antiFraudTransaction.amount || antiFraudTransaction.percentage)
+            ? handleInsurance(transaction)
+            : '-'
+        let markupValueFormatted =
+          Object.prototype.hasOwnProperty.call(transaction, 'receivables') &&
+          feesFormatted !== '-' &&
+          (transaction.isNewPlan ? transaction.splitTransaction : transaction.sellerZoopPlan) &&
+          (markupTransaction.amount || markupTransaction.percentage)
+            ? handleMarkup(transaction)
+            : '-'
+        let sumOfFees = 0
+        if (transaction.status === 'Aprovado') {
+          sumOfFees = transaction.fee_details.reduce(function (sum, item) {
+            return (sum += parseFloat(item.amount))
+          }, 0)
+        }
+        console.log(stringToFloat(insuranceValueFormatted.replace('- R$', '')))
+        console.log(stringToFloat(feesFormatted.replace('- R$', '')))
+        let liquidFormatted =
+          transaction.status !== 'Cancelado' &&
+          transaction.status !== 'Pré Autorizado' &&
+          transaction.status !== 'Atualizando' &&
+          transaction.totalFees !== '-'
+            ? parseFloat(`${stringToFloat(transaction.charge) - parseFloat(transaction.totalFees)}`)
                 .toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })
                 .replace(/\s/g, '')
-              : transaction.fees
-                ? currencyFormat(parseFloat(`${(stringToFloat(transaction.charge) - sumOfFees).toFixed(2)}`.replace(/[R$\.,]/g, '')))
-                : '-'
+            : transaction.fees
+            ? currencyFormat(
+                parseFloat(
+                  `${(
+                    stringToFloat(transaction.charge) -
+                    stringToFloat(feesFormatted.replace('- R$', '')) -
+                    stringToFloat(insuranceValueFormatted.replace('- R$', ''))
+                  ).toFixed(2)}`.replace(/[R$\.,]/g, ''),
+                ),
+              )
+            : '-'
 
-          block = [
-            {
-              header: 'Venda',
-              body: [
-                {
-                  title: 'Lojista',
-                  content: transaction.buyerRazao ? transaction.buyerRazao : '-',
-                },
-                {
-                  title: 'Valor',
-                  content: transaction.charge,
-                },
-                {
-                  title: 'Tarifa Ziro Pay',
-                  content: feesFormatted,
-                },
-                {
-                  title: 'Tarifa Ziro Seguro Antifraude',
-                  content: insuranceValueFormatted,
-                },
-                {
-                  title: 'Valor líquido',
-                  content: transaction.status !== 'Cancelado' ? liquidFormatted : '-',
-                },
-                {
-                  title: 'Parcela máxima',
-                  content: `${transaction.installmentsMax}`.startsWith('0')
-                    ? `${parseInt(transaction.installmentsMax)}x`
-                    : `${transaction.installmentsMax}x`,
-                },
-                {
-                  title: 'Parcela escolhida',
-                  content: transaction.installments ? `${transaction.installments}x` : '-',
-                },
-                {
-                  title: 'Data de pagamento',
-                  content: transaction.datePaid ? `${transaction.datePaid}` : '-',
-                },
-                {
-                  title: 'Data de criação do link',
-                  content: transaction.dateLinkCreated ? `${transaction.dateLinkCreated}` : '-',
-                },
-                {
-                  title: 'Status',
-                  content: transaction.status,
-                  color: transaction.statusColor,
-                },
-              ],
-            },
-          ]
-          if (transaction.collaboratorName) {
-            block[0].body.splice(8, 0, {
-              title: 'Link criado por',
-              content: transaction.collaboratorName,
-            })
-          }
-          if (transaction.observations) {
-            block[0].body.splice(transaction.collaboratorName ? 9 : 8, 0, {
-              title: 'Observações',
-              content: transaction.observations,
-            })
-          }
+        block = [
+          {
+            header: 'Venda',
+            body: [
+              {
+                title: 'Lojista',
+                content: transaction.buyerRazao ? transaction.buyerRazao : '-',
+              },
+              {
+                title: 'Valor',
+                content: transaction.charge,
+              },
+              {
+                title: 'Tarifa Ziro Pay',
+                content: feesFormatted,
+              },
+              {
+                title: 'Tarifa Ziro Seguro Antifraude',
+                content: insuranceValueFormatted,
+              },
+              {
+                title: 'Valor líquido',
+                content: transaction.status !== 'Cancelado' ? liquidFormatted : '-',
+              },
+              {
+                title: 'Parcela máxima',
+                content: `${transaction.installmentsMax}`.startsWith('0')
+                  ? `${parseInt(transaction.installmentsMax)}x`
+                  : `${transaction.installmentsMax}x`,
+              },
+              {
+                title: 'Parcela escolhida',
+                content: transaction.installments ? `${transaction.installments}x` : '-',
+              },
+              {
+                title: 'Data de pagamento',
+                content: transaction.datePaid ? `${transaction.datePaid}` : '-',
+              },
+              {
+                title: 'Data de criação do link',
+                content: transaction.dateLinkCreated ? `${transaction.dateLinkCreated}` : '-',
+              },
+              {
+                title: 'Status',
+                content: transaction.status,
+                color: transaction.statusColor,
+              },
+            ],
+          },
+        ]
+        if (transaction.collaboratorName) {
+          block[0].body.splice(8, 0, {
+            title: 'Link criado por',
+            content: transaction.collaboratorName,
+          })
+        }
+        if (transaction.observations) {
+          block[0].body.splice(transaction.collaboratorName ? 9 : 8, 0, {
+            title: 'Observações',
+            content: transaction.observations,
+          })
+        }
 
-          if (typeof transaction.receivables !== 'undefined' && transaction.receivables.length) {
-            const sortedTransactions = transaction.receivables.sort((a, b) => b.installment - a.installment).filter(item => item.split_rule === null)
-            const sortedSplitAmount = Object.prototype.hasOwnProperty.call(transaction.receivables[0], 'split_rule')
-              ? transaction.receivables
+        if (typeof transaction.receivables !== 'undefined' && transaction.receivables.length) {
+          const sortedTransactions = transaction.receivables.sort((a, b) => b.installment - a.installment).filter(item => item.split_rule === null)
+          const sortedSplitAmount = Object.prototype.hasOwnProperty.call(transaction.receivables[0], 'split_rule')
+            ? transaction.receivables
                 .sort((a, b) => b.installment - a.installment)
                 .filter(item => item.split_rule !== null)
                 .reverse()
-              : transaction.receivables.sort((a, b) => b.installment - a.installment).reverse()
-            const paidRows = []
-            const paidClicks = []
-            let paidAmount = 0
-            let paidAmountWithoutFees = 0
-            const unpaidRows = []
-            const unpaidClicks = []
-            let unpaidAmount = 0
-            let unpaidAmountWithoutFees = 0
-            sortedTransactions.map(transaction => {
-              const sumSplit =
-                sortedSplitAmount.length > 0
-                  ? sortedSplitAmount
+            : transaction.receivables.sort((a, b) => b.installment - a.installment).reverse()
+          const paidRows = []
+          const paidClicks = []
+          let paidAmount = 0
+          let paidAmountWithoutFees = 0
+          const unpaidRows = []
+          const unpaidClicks = []
+          let unpaidAmount = 0
+          let unpaidAmountWithoutFees = 0
+          sortedTransactions.map(transaction => {
+            const sumSplit =
+              sortedSplitAmount.length > 0
+                ? sortedSplitAmount
                     .filter(item => item.installment === transaction.installment)
                     .reduce((acc, val) => {
                       return parseFloat(acc) + parseFloat(val.gross_amount)
                     }, 0)
-                  : 0
-              if (!transaction.paid_at) {
-                let upAm = round(parseFloat(transaction.gross_amount) + (sortedSplitAmount.length > 0 ? sumSplit : 0), 2)
-                let upAmw = round(parseFloat(transaction.amount), 2)
-                unpaidRows.push([
-                  `${transaction.installment}`,
-                  `${parcelFormat(upAm)}`,
-                  `${parcelFormat(upAmw)}`,
-                  `${dateFormat(transaction.expected_on)}`,
-                  <Icon type="chevronRight" size={14} />,
-                ])
+                : 0
+            if (!transaction.paid_at) {
+              let upAm = round(parseFloat(transaction.gross_amount) + (sortedSplitAmount.length > 0 ? sumSplit : 0), 2)
+              let upAmw = round(parseFloat(transaction.amount), 2)
+              unpaidRows.push([
+                `${transaction.installment}`,
+                `${parcelFormat(upAm)}`,
+                `${parcelFormat(upAmw)}`,
+                `${dateFormat(transaction.expected_on)}`,
+                <Icon type="chevronRight" size={14} />,
+              ])
 
-                unpaidClicks.push(() => setLocation(`/transacoes/${transactionId}/${transaction.receivableZoopId}`))
-                unpaidAmount += parseFloat(upAm)
-                unpaidAmountWithoutFees += parseFloat(upAmw)
-              } else {
-                let upAm = round(parseFloat(transaction.gross_amount), 2)
-                let upAmw = round(parseFloat(transaction.amount), 2)
-                paidRows.push([
-                  `${transaction.installment}`,
-                  `${parcelFormat(upAm)}`,
-                  `${parcelFormat(upAmw)}`,
-                  `${dateFormat(transaction.paid_at)}`,
-                  <Icon type="chevronRight" size={14} />,
-                ])
-                paidClicks.push(() => setLocation(`/transacoes/${transactionId}/${transaction.receivableZoopId}`))
-                paidAmount += parseFloat(upAm)
-                paidAmountWithoutFees += parseFloat(upAmw)
-              }
-            })
-            dataTable = [
-              {
-                title: 'Lançamentos Pagos',
-                header: ['Parc.', 'Bruto', 'Líquido', 'Data', ''],
-                rows: paidRows.reverse(),
-                rowsClicks: paidClicks.reverse(),
-                totals: ['-', `${parcelFormat(round(paidAmount, 2))}`, `${parcelFormat(round(paidAmountWithoutFees, 2))}`, '-', ''],
-              },
-              {
-                title: 'Lançamentos Futuros',
-                header: ['Parc.', 'Bruto', 'Líquido', 'Data', ''],
-                rows: unpaidRows.reverse(),
-                rowsClicks: unpaidClicks.reverse(),
-                totals: ['-', `${parcelFormat(round(unpaidAmount, 2))}`, `${parcelFormat(round(unpaidAmountWithoutFees, 2))}`, '-', ''],
-              },
-            ]
-          }
-          if (transaction.onBehalfOfBrand && transaction.seller.includes('Ziro')) {
-            block[0].body.splice(1, 0, {
-              title: 'Marca',
-              content: transaction.onBehalfOfBrand,
-            })
-          } else
-            block[0].body.splice(1, 0, {
-              title: 'Marca',
-              content: transaction.seller,
-            })
-
-          setBlocks(block)
-          setData(dataTable || [])
-
-          {
-            let blockStoreowner
-            if (transaction.status === 'Aprovada' || transaction.status === 'Pré Autorizado' || transaction.status === 'Cancelado') {
-              const installmentsNumber = parseInt(transaction.installments)
-              if (transaction.installments > 0) {
-                blockStoreowner = [
-                  {
-                    header: 'Cartão',
-                    body: [
-                      {
-                        title: 'Bandeira',
-                        content: transaction.cardBrand ? transaction.cardBrand : '-',
-                      },
-                      {
-                        title: 'Número',
-                        content: transaction.cardFirstFour ? `${transaction.cardFirstFour}...${transaction.cardLastFour}` : '-',
-                      },
-                      {
-                        title: 'Portador',
-                        content: transaction.cardholder ? transaction.cardholder.toUpperCase() : '-',
-                      },
-                    ],
-                  },
-                ]
-              }
+              unpaidClicks.push(() => setLocation(`/transacoes/${transactionId}/${transaction.receivableZoopId}`))
+              unpaidAmount += parseFloat(upAm)
+              unpaidAmountWithoutFees += parseFloat(upAmw)
             } else {
+              let upAm = round(parseFloat(transaction.gross_amount), 2)
+              let upAmw = round(parseFloat(transaction.amount), 2)
+              paidRows.push([
+                `${transaction.installment}`,
+                `${parcelFormat(upAm)}`,
+                `${parcelFormat(upAmw)}`,
+                `${dateFormat(transaction.paid_at)}`,
+                <Icon type="chevronRight" size={14} />,
+              ])
+              paidClicks.push(() => setLocation(`/transacoes/${transactionId}/${transaction.receivableZoopId}`))
+              paidAmount += parseFloat(upAm)
+              paidAmountWithoutFees += parseFloat(upAmw)
+            }
+          })
+          dataTable = [
+            {
+              title: 'Lançamentos Pagos',
+              header: ['Parc.', 'Bruto', 'Líquido', 'Data', ''],
+              rows: paidRows.reverse(),
+              rowsClicks: paidClicks.reverse(),
+              totals: ['-', `${parcelFormat(round(paidAmount, 2))}`, `${parcelFormat(round(paidAmountWithoutFees, 2))}`, '-', ''],
+            },
+            {
+              title: 'Lançamentos Futuros',
+              header: ['Parc.', 'Bruto', 'Líquido', 'Data', ''],
+              rows: unpaidRows.reverse(),
+              rowsClicks: unpaidClicks.reverse(),
+              totals: ['-', `${parcelFormat(round(unpaidAmount, 2))}`, `${parcelFormat(round(unpaidAmountWithoutFees, 2))}`, '-', ''],
+            },
+          ]
+        }
+        if (transaction.onBehalfOfBrand && transaction.seller.includes('Ziro')) {
+          block[0].body.splice(1, 0, {
+            title: 'Marca',
+            content: transaction.onBehalfOfBrand,
+          })
+        } else
+          block[0].body.splice(1, 0, {
+            title: 'Marca',
+            content: transaction.seller,
+          })
+
+        setBlocks(block)
+        setData(dataTable || [])
+
+        {
+          let blockStoreowner
+          if (transaction.status === 'Aprovada' || transaction.status === 'Pré Autorizado' || transaction.status === 'Cancelado') {
+            const installmentsNumber = parseInt(transaction.installments)
+            if (transaction.installments > 0) {
               blockStoreowner = [
                 {
                   header: 'Cartão',
@@ -453,8 +449,28 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
                 },
               ]
             }
-            setBlocksStoreowner(blockStoreowner)
+          } else {
+            blockStoreowner = [
+              {
+                header: 'Cartão',
+                body: [
+                  {
+                    title: 'Bandeira',
+                    content: transaction.cardBrand ? transaction.cardBrand : '-',
+                  },
+                  {
+                    title: 'Número',
+                    content: transaction.cardFirstFour ? `${transaction.cardFirstFour}...${transaction.cardLastFour}` : '-',
+                  },
+                  {
+                    title: 'Portador',
+                    content: transaction.cardholder ? transaction.cardholder.toUpperCase() : '-',
+                  },
+                ],
+              },
+            ]
           }
+          setBlocksStoreowner(blockStoreowner)
         }
       }
     }
@@ -503,13 +519,13 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
                       <Spinner size="3.5rem" />
                     </div>
                   ) : (
-                      <Button
-                        type="button"
-                        cta="Sim"
-                        click={() => postCapture(transaction.transactionZoopId, transaction.sellerZoopId, transaction.charge)}
-                        template="regular"
-                      />
-                    )}
+                    <Button
+                      type="button"
+                      cta="Sim"
+                      click={() => postCapture(transaction.transactionZoopId, transaction.sellerZoopId, transaction.charge)}
+                      template="regular"
+                    />
+                  )}
                   <Button type="button" cta="Não" click={() => setCaptureModal(false)} template="light" />
                 </div>
                 {validationMessage && <label style={{ color: alertColor }}>{validationMessage}</label>}
@@ -529,13 +545,13 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
                       <Spinner size="3.5rem" />
                     </div>
                   ) : (
-                      <Button
-                        type="button"
-                        cta="Sim"
-                        click={() => cancelTransaction(transaction.transactionZoopId, transaction.sellerZoopId, transaction.charge)}
-                        template="regular"
-                      />
-                    )}
+                    <Button
+                      type="button"
+                      cta="Sim"
+                      click={() => cancelTransaction(transaction.transactionZoopId, transaction.sellerZoopId, transaction.charge)}
+                      template="regular"
+                    />
+                  )}
                   <Button type="button" cta="Não" click={() => setCancelModal(false)} template="light" />
                 </div>
                 {validationMessage && <label style={{ color: alertColor }}>{validationMessage}</label>}
@@ -569,8 +585,8 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
                   <span>{copyResultText}</span>
                 </div>
               ) : (
-                  <div style={{ padding: '0 0 5px', height: '24px' }}>&nbsp;</div>
-                )}
+                <div style={{ padding: '0 0 5px', height: '24px' }}>&nbsp;</div>
+              )}
               <Button style={btn} type="button" cta="Copiar link" click={copyToClipboard} template="regular" />
             </div>
             <div>

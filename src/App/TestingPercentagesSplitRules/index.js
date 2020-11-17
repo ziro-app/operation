@@ -7,13 +7,13 @@ import { container, dropDowns } from './styles'
 
 const TestingPercentagesSplitRules = () => {
   const [sellerZoopPlan2, setSellerZoopPlan2] = useState({})
-  const [fees, setFees] = useState(null)
+  const [fees, setFees] = useState('')
   const [feesUpdate, setFeesUpdate] = useState(null)
   const [feesFormatted, setFeesFormatted] = useState(null)
   const [card, setCard] = useState('')
   const [insurance, setInsurance] = useState(false)
   const [installment, setInstallment] = useState('')
-  const [selectedPlan, setSelectedPlan] = useState(null)
+  const [selectedPlan, setSelectedPlan] = useState('')
   const [allPlans, setAllPlans] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [errorLoading, setErrorLoading] = useState(false)

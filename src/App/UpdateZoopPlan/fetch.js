@@ -14,7 +14,6 @@ const fetch = (setIsLoading, setErrorLoading, setSuppliers, setSellerZoopPlan2, 
         fetchedPlan = db.collection('suppliers').doc(supplier.docId)
         fetchedPlan.get().then(sup => {
           if (Object.prototype.hasOwnProperty.call(sup.data(), 'sellerZoopPlan2')) {
-              console.log('sup.data().sellerZoopPlan2',sup.data().sellerZoopPlan2)
             setSellerZoopPlan2(sup.data().sellerZoopPlan2)
             if (selectedPlan) {
               const sellerZoopPlanObjectForIteration = sup.data().sellerZoopPlan2[selectedPlan]
