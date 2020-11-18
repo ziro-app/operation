@@ -20,7 +20,7 @@ const fetch = (
     console.log('suppliers', suppliers) */
     try {
       let fetchedPlan = {}
-      let fetchedCurrentZoopFee = {}
+      let fetchedStandardPlans = {}
       const fantasyList = []
       const suppliersFetch = []
       if (supplier.docId) {
@@ -39,14 +39,14 @@ const fetch = (
             }
           }
         })
-        fetchedCurrentZoopFee = db.collection('utilities').doc(process.env.DOCUMENT_ID_FOR_UTILITIES_MAIN)
-        fetchedCurrentZoopFee.get().then(currentFee => {
+        fetchedStandardPlans = db.collection('utilities').doc(process.env.DOCUMENT_ID_FOR_UTILITIES_MAIN)
+        fetchedStandardPlans.get().then(currentFee => {
           if (selectedPlan) {
             const sellerZoopPlanObjectForIteration = currentFee.data().main.currentZoopFee[selectedPlan]
             // console.log('sellerZoopPlanObjectForIteration', sellerZoopPlanObjectForIteration)
             // console.log('sellerZoopPlanObjectForIteration entries', Object.entries(sellerZoopPlanObjectForIteration))
             setCurrentZoopFee(sellerZoopPlanObjectForIteration)
-            console.log(currentFee.data().main.currentZoopFee)
+            // console.log(currentFee.data().main.currentZoopFee)
           }
           setPlansFromCurrentZoopFee(currentFee.data().main.currentZoopFee)
         })

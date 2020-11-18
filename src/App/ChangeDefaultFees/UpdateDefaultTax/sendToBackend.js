@@ -20,8 +20,8 @@ const sendToBackend = (state, newPlan) => {
   return new Promise(async (resolve, reject) => {
     try {
       if (process.env.HOMOLOG ? true : allowedUsers.includes(nome)) {
-        const currentZoopFee = newPlan
-        const main = { currentZoopFee }
+        const standardPlans = newPlan
+        const main = { standardPlans }
         await db.collection('utilities').doc(process.env.DOCUMENT_ID_FOR_UTILITIES_MAIN).update({
           main,
         })

@@ -13,7 +13,7 @@ import ToastNotification from '../ToastNotification'
 import sendToBackend from './sendToBackend'
 import fetch from './fetch'
 import { userContext } from '../appContext'
-import { defaultValues, createNewPlan } from './functions'
+import { createNewPlan, translateFirebaseToFees, translateFeesToFirebase } from './functions'
 import Modal from '../utils/Modal/Modal'
 import updatePlan from './updatePlan'
 
@@ -116,7 +116,7 @@ const UpdateZoopPlan = () => {
           },
           {
             title: 'Plano Ativo',
-            content: activePlan,
+            content: translateFirebaseToFees(activePlan),
           },
         ],
       },
@@ -345,51 +345,56 @@ const UpdateZoopPlan = () => {
           }
         }}
         readOnly
-        list={Object.keys(plansFromCurrentZoopFee)} // Object.keys(sellerZoopPlan2).filter(item => item !== 'activePlan') : ['']}
+        list={Object.keys(plansFromCurrentZoopFee).map(tax => translateFirebaseToFees(tax))} // Object.keys(sellerZoopPlan2).filter(item => item !== 'activePlan') : ['']}
         placeholder="Escolha ou adicione um plano"
       />
       <Button
         type="button"
         cta="Editar Taxa Antifraude"
         template="regular"
-        submitting={isLoadingFunction === true || !selectedPlan || !Object.keys(sellerZoopPlan2).includes(selectedPlan)}
+        submitting={isLoadingFunction === true || !selectedPlan || !Object.keys(sellerZoopPlan2).includes(translateFeesToFirebase(selectedPlan))}
         click={() => {
-          setLocation(`/atualizar-plano-venda/${supplier.docId}/ziroAntifraudFee/${selectedPlan}`)
+          setLocation(`/atualizar-plano-venda/${supplier.docId}/ziroAntifraudFee/${translateFeesToFirebase(selectedPlan)}`)
         }}
       />
       <Button
         type="button"
         cta="Editar Taxa Markup"
         template="regular"
-        submitting={isLoadingFunction === true || !selectedPlan || !Object.keys(sellerZoopPlan2).includes(selectedPlan)}
+        submitting={isLoadingFunction === true || !selectedPlan || !Object.keys(sellerZoopPlan2).includes(translateFeesToFirebase(selectedPlan))}
         click={() => {
-          setLocation(`/atualizar-plano-venda/${supplier.docId}/ziroMarkupFee/${selectedPlan}`)
+          setLocation(`/atualizar-plano-venda/${supplier.docId}/ziroMarkupFee/${translateFeesToFirebase(selectedPlan)}`)
         }}
       />
       <Button
         type="button"
         cta="Editar Taxa Zoop"
         template="regular"
-        submitting={isLoadingFunction === true || !selectedPlan || !Object.keys(sellerZoopPlan2).includes(selectedPlan)}
+        submitting={isLoadingFunction === true || !selectedPlan || !Object.keys(sellerZoopPlan2).includes(translateFeesToFirebase(selectedPlan))}
         click={() => {
-          setLocation(`/atualizar-plano-venda/${supplier.docId}/zoopFee/${selectedPlan}`)
+          setLocation(`/atualizar-plano-venda/${supplier.docId}/zoopFee/${translateFeesToFirebase(selectedPlan)}`)
         }}
       />
       <Button
         type="button"
         cta="Adicionar novo plano"
         template="regular"
-        submitting={isLoadingFunction === true || selectedPlan === '' || !supplier.docId || Object.keys(sellerZoopPlan2).includes(selectedPlan)}
+        submitting={
+          isLoadingFunction === true ||
+          selectedPlan === '' ||
+          !supplier.docId ||
+          Object.keys(sellerZoopPlan2).includes(translateFeesToFirebase(selectedPlan))
+        }
         click={async () => {
-          if (sellerZoopPlan2 === null || !Object.keys(sellerZoopPlan2).includes(selectedPlan)) {
+          if (sellerZoopPlan2 === null || !Object.keys(sellerZoopPlan2).includes(translateFeesToFirebase(selectedPlan))) {
             let sellerZoopPlanForFirebase = sellerZoopPlan2
 
             if (sellerZoopPlan2 !== null) {
-              sellerZoopPlanForFirebase[selectedPlan] = {}
-              sellerZoopPlanForFirebase[selectedPlan] = plansFromCurrentZoopFee[selectedPlan]
+              sellerZoopPlanForFirebase[translateFeesToFirebase(selectedPlan)] = {}
+              sellerZoopPlanForFirebase[translateFeesToFirebase(selectedPlan)] = plansFromCurrentZoopFee[translateFeesToFirebase(selectedPlan)]
             } else {
               sellerZoopPlanForFirebase = {}
-              sellerZoopPlanForFirebase[selectedPlan] = plansFromCurrentZoopFee[selectedPlan]
+              sellerZoopPlanForFirebase[translateFeesToFirebase(selectedPlan)] = plansFromCurrentZoopFee[translateFeesToFirebase(selectedPlan)]
             }
             if (createNewPlan && Object.keys(sellerZoopPlanForFirebase).length !== 0) {
               setIsLoadingFunction(true)
@@ -417,10 +422,10 @@ const UpdateZoopPlan = () => {
         template="regular"
         submitting={
           isLoadingFunction === true ||
-          sellerZoopPlan2.activePlan === selectedPlan ||
+          sellerZoopPlan2.activePlan === translateFeesToFirebase(selectedPlan) ||
           selectedPlan === '' ||
           !supplier.docId ||
-          !Object.keys(sellerZoopPlan2).includes(selectedPlan)
+          !Object.keys(sellerZoopPlan2).includes(translateFeesToFirebase(selectedPlan))
         }
         click={async () => {
           setIsLoadingFunction(true)
@@ -444,9 +449,14 @@ const UpdateZoopPlan = () => {
         type="button"
         cta="Excluir plano"
         template="light"
-        submitting={isLoadingFunction === true || selectedPlan === '' || !supplier.docId || !Object.keys(sellerZoopPlan2).includes(selectedPlan)}
+        submitting={
+          isLoadingFunction === true ||
+          selectedPlan === '' ||
+          !supplier.docId ||
+          !Object.keys(sellerZoopPlan2).includes(translateFeesToFirebase(selectedPlan))
+        }
         click={() => {
-          if (selectedPlan !== sellerZoopPlan2.activePlan) {
+          if (translateFeesToFirebase(selectedPlan) !== sellerZoopPlan2.activePlan) {
             setOpenModalDeletePlan(true)
           } else {
             setTypeOfToast('warning')
@@ -456,7 +466,7 @@ const UpdateZoopPlan = () => {
         }}
       />
       <Modal
-        onClickFunction={() => deletePlan(selectedPlan)}
+        onClickFunction={() => deletePlan(translateFeesToFirebase(selectedPlan))}
         openState={openModalDeletePlan}
         setOpenState={setOpenModalDeletePlan}
         states={{ selectedPlan, supplier }}

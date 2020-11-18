@@ -9,10 +9,10 @@ const fetch = (setSellerZoopPlan, setFees, selectedPlanForFirebase, fees, setIsL
         if (!query.empty) {
           await query.onSnapshot(sup => {
             const docId = sup.id
-            const { currentZoopFee } = sup.data().main
-            setSellerZoopPlan(currentZoopFee)
+            const { standardPlans } = sup.data().main
+            setSellerZoopPlan(standardPlans)
             const selectedPlan = selectedPlanForFirebase || false
-            const entries = currentZoopFee[selectedPlan] ? Object.entries(currentZoopFee[selectedPlan]) : null
+            const entries = standardPlans[selectedPlan] ? Object.entries(standardPlans[selectedPlan]) : null
             setFees(entries)
 
             // }

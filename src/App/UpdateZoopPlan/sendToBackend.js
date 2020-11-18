@@ -1,18 +1,19 @@
 import currencyFormat from '@ziro/currency-format'
+import Error from '@bit/vitorbarbosa19.ziro.error'
 import { db } from '../../Firebase/index'
+import { translateFeesToFirebase, translateFirebaseToFees } from './functions'
 
 const sendToBackend = async state => {
   const { docId, selectedPlan, nickname, sellerZoopPlan2, setSettingActivePlan } = state
   const nome = nickname ? nickname.trim() : ''
   const allowedUsers = ['Uiller', 'Vitor', 'Alessandro', 'Wermeson', 'Ale']
-
   return new Promise(async (resolve, reject) => {
     try {
       if (process.env.HOMOLOG ? true : allowedUsers.includes(nome)) {
         const sellerPlanWithNewActivePlan = sellerZoopPlan2
-        sellerPlanWithNewActivePlan.activePlan = selectedPlan
+        sellerPlanWithNewActivePlan.activePlan = translateFeesToFirebase(selectedPlan)
         // console.log('sellerPlanWithNewActivePlan', sellerPlanWithNewActivePlan)
-        setSettingActivePlan(selectedPlan)
+        setSettingActivePlan(translateFirebaseToFees(selectedPlan))
         await db.collection('suppliers').doc(docId).update({
           sellerZoopPlan2: sellerPlanWithNewActivePlan,
         })
