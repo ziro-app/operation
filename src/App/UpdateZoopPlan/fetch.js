@@ -30,11 +30,9 @@ const fetch = (
             setSellerZoopPlan2(sup.data().sellerZoopPlan2)
             if (selectedPlan) {
               const sellerZoopPlanObjectForIteration = sup.data().sellerZoopPlan2[selectedPlan]
-              // console.log('sellerZoopPlanObjectForIteration', sellerZoopPlanObjectForIteration)
-              // console.log('sellerZoopPlanObjectForIteration entries', Object.entries(sellerZoopPlanObjectForIteration))
 
               const feesFiltered = sellerZoopPlanObjectForIteration ? Object.entries(sellerZoopPlanObjectForIteration) : null // .filter()
-              // console.log('feesFiltered', feesFiltered)
+
               setFees(feesFiltered)
             }
           }
@@ -42,13 +40,10 @@ const fetch = (
         fetchedStandardPlans = db.collection('utilities').doc(process.env.DOCUMENT_ID_FOR_UTILITIES_MAIN)
         fetchedStandardPlans.get().then(currentFee => {
           if (selectedPlan) {
-            const sellerZoopPlanObjectForIteration = currentFee.data().main.currentZoopFee[selectedPlan]
-            // console.log('sellerZoopPlanObjectForIteration', sellerZoopPlanObjectForIteration)
-            // console.log('sellerZoopPlanObjectForIteration entries', Object.entries(sellerZoopPlanObjectForIteration))
+            const sellerZoopPlanObjectForIteration = currentFee.data().main.standardPlans[selectedPlan]
             setCurrentZoopFee(sellerZoopPlanObjectForIteration)
-            // console.log(currentFee.data().main.currentZoopFee)
           }
-          setPlansFromCurrentZoopFee(currentFee.data().main.currentZoopFee)
+          setPlansFromCurrentZoopFee(currentFee.data().main.standardPlans)
         })
       }
       const query = db.collection('suppliers').where('tipoCadastro', '==', 'Completo')

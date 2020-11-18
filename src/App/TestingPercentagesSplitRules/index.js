@@ -29,6 +29,25 @@ const TestingPercentagesSplitRules = () => {
   const allCards = ['americanexpress', 'elo', 'hipercard', 'mastercard', 'visa']
   const allInstallments = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
 
+  function translateFirebaseToFees(text) {
+    const financed30 = 'd+30'
+    const financed14 = 'd+14'
+    const standard = 'fluxo'
+    if (text === 'financed30') return financed30
+    if (text === 'financed14') return financed14
+    if (text === 'standard') return standard
+    return text
+  }
+  function translateFeesToFirebase(text) {
+    const d30 = 'financed30'
+    const d14 = 'financed14'
+    const fluxo = 'standard'
+    if (text === 'd+30') return d30
+    if (text === 'd+14') return d14
+    if (text === 'fluxo') return fluxo
+    return 'Taxa sem nome cadastrado'
+  }
+
   const clear = () => {
     setSearchedName('')
     setSelectedPlan('')
@@ -62,6 +81,8 @@ const TestingPercentagesSplitRules = () => {
     //
 
     if (supplier.docId && supplier.name && supplier.reason && selectedPlan && card && installment) {
+      const translatedSelectedPlan = translateFeesToFirebase(selectedPlan)
+
       const {
         percentageZiroMarkup: percentageZiroMarkupWithInsurance,
         percentageZiroAntifraud: percentageZiroAntifraudWithInsurance,
@@ -71,7 +92,7 @@ const TestingPercentagesSplitRules = () => {
         insurance: true,
         sellerZoopPlan: sellerZoopPlan2,
         test: true,
-        selectedPlan,
+        selectedPlan: translatedSelectedPlan,
       })
       const {
         percentageZiroMarkup: percentageZiroMarkupWithoutInsurance,
@@ -82,9 +103,10 @@ const TestingPercentagesSplitRules = () => {
         insurance: false,
         sellerZoopPlan: sellerZoopPlan2,
         test: true,
-        selectedPlan,
+        selectedPlan: translatedSelectedPlan,
       })
-      if (selectedPlan && card && installment) setZoopPercentage(sellerZoopPlan2[selectedPlan]['zoopFee'][card][`installment${installment}`])
+      if (selectedPlan && card && installment)
+        setZoopPercentage(sellerZoopPlan2[translatedSelectedPlan]['zoopFee'][card][`installment${installment}`])
       setMarkupPercentageWithInsurance(percentageZiroMarkupWithInsurance)
       setAntifraudPercentageWithInsurance(percentageZiroAntifraudWithInsurance)
 
@@ -131,7 +153,7 @@ const TestingPercentagesSplitRules = () => {
             onChange={({ target: { value } }) => setSelectedPlan(value)}
             onChangeKeyboard={element => (element ? setSelectedPlan(element.value) : null)}
             readOnly
-            list={allPlans}
+            list={allPlans.map(item => translateFirebaseToFees(item))}
             placeholder="Escolha o plano"
           />
         )}

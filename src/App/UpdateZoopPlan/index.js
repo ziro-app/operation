@@ -345,7 +345,7 @@ const UpdateZoopPlan = () => {
           }
         }}
         readOnly
-        list={Object.keys(plansFromCurrentZoopFee).map(tax => translateFirebaseToFees(tax))} // Object.keys(sellerZoopPlan2).filter(item => item !== 'activePlan') : ['']}
+        list={plansFromCurrentZoopFee ? Object.keys(plansFromCurrentZoopFee).map(tax => translateFirebaseToFees(tax)) : ['']} // Object.keys(sellerZoopPlan2).filter(item => item !== 'activePlan') : ['']}
         placeholder="Escolha ou adicione um plano"
       />
       <Button
