@@ -1,38 +1,24 @@
 import currencyFormat from '@ziro/currency-format'
-import { db } from '../../Firebase/index'
 import matchStatusColor from './matchStatusColor'
-import { queryGerate, dateFormat } from './utils'
+import { getFilterQuery, dateFormat } from './utils'
 
 const fetch = (state) => {
     const { setIsLoading, setErrorLoading, payments, setPayments, setLastDoc, setTotalTransactions, setLoadingMore, setIsLoadingResults, limitFetch, setIsLoadingMore } = state
     const storageFilterSeller = localStorage.getItem('sellerFilter')
     const storageFilterStatus = localStorage.getItem('statusFilter')
+    const storageFilterMonth = localStorage.getItem('monthFilter')
     if (payments) setIsLoadingMore(true)
     else setIsLoadingMore(false)
-    const query = queryGerate(storageFilterSeller, storageFilterStatus, limitFetch)
+    const query = getFilterQuery({storageFilterSeller, storageFilterStatus, storageFilterMonth, limit:limitFetch})
     const run = async () => {
         try {
             await query.onSnapshot(
                 async snapshot => {
                     const storageFilterSeller = localStorage.getItem('sellerFilter')
                     const storageFilterStatus = localStorage.getItem('statusFilter')
-                    let collectionData = ''
-                    if (!storageFilterSeller && !storageFilterStatus) {
-                        collectionData = await db.collection('credit-card-payments').get()
-                    }
-                    if (storageFilterSeller && !storageFilterStatus) {
-                        collectionData = await db.collection('credit-card-payments').where('seller', '==', `${storageFilterSeller}`).get()
-                    }
-                    if (!storageFilterSeller && storageFilterStatus) {
-                        collectionData = await db.collection('credit-card-payments').where('status', '==', `${storageFilterStatus}`).get()
-                    }
-                    if (storageFilterSeller && storageFilterStatus) {
-                        collectionData = await db
-                            .collection('credit-card-payments')
-                            .where('seller', '==', `${storageFilterSeller}`)
-                            .where('status', '==', `${storageFilterStatus}`)
-                            .get()
-                    }
+                    const storageFilterMonth = localStorage.getItem('monthFilter')
+                    const query = getFilterQuery({storageFilterSeller, storageFilterStatus, storageFilterMonth, limit:null})
+                    const collectionData = await query.get()
                     setTotalTransactions(collectionData.docs.length)
                     if (!collectionData.docs.length) {
                         setPayments([])

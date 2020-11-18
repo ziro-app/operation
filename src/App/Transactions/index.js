@@ -8,10 +8,12 @@ import ReceivableDetails from './ReceivableDetails/index';
 import fetch from './fetch';
 import { userContext } from '../appContext';
 import { Menu } from '../Menu/index';
+import {listMonth} from './utils'
 
 const Transactions = ({ transactionId, receivableId }) => {
     const storageFilterStatus = localStorage.getItem('statusFilter')
     const storageFilterSeller = localStorage.getItem('sellerFilter')
+    const storageFilterMonth = localStorage.getItem('monthFilter')
     const [isLoading, setIsLoading] = useState(true);
     const [errorLoading, setErrorLoading] = useState(false);
     const [loadingMore, setLoadingMore] = useState(true);
@@ -22,7 +24,9 @@ const Transactions = ({ transactionId, receivableId }) => {
     const { listStatusForFilter, listSellersForFilter } = useContext(userContext);
     const [statusFilter, setStatusFilter] = useState(storageFilterStatus || '');
     const [sellerFilter, setSellerFilter] = useState(storageFilterSeller || '');
+    const [monthFilter, setMonthFilter] = useState(storageFilterMonth || '');
     const [limitFetch, setLimitFetch] = useState(10);
+    const [dataInicioFilter, setDataInicioFilter] = useState(new Date(2019,5,1))
     const [isLoadingMore, setIsLoadingMore] = useState(true);
     const [transaction, setTransaction] = useState({});
     const state = {setIsLoading,setErrorLoading,payments,setPayments,setLastDoc,setTotalTransactions,setLoadingMore,setIsLoadingResults,limitFetch,setIsLoadingMore}
@@ -30,8 +34,7 @@ const Transactions = ({ transactionId, receivableId }) => {
         if (loadingMore || isLoadingResults) {
             fetch(state);
         }
-    }, [statusFilter, sellerFilter, payments, limitFetch]);
-
+    }, [statusFilter, sellerFilter, monthFilter, payments, limitFetch]);
     if (isLoading) return <Spinner />
     if (errorLoading) return <Error />;
     if (transactionId && receivableId)
@@ -88,6 +91,25 @@ const Transactions = ({ transactionId, receivableId }) => {
                             localStorage.setItem('statusFilter', e.value);
                         }
                         setStatusFilter(e.value);
+                    }}
+                />
+                <Dropdown
+                    value={monthFilter || ''}
+                    list={listMonth(dataInicioFilter)}
+                    placeholder="Filtrar mês"
+                    onChange={({ target: { value } }) => {
+                        if (listMonth(dataInicioFilter).includes(value) || value === '') {
+                            setIsLoadingResults(true);
+                            localStorage.setItem('monthFilter', value);
+                        }
+                        setMonthFilter(value);
+                    }}
+                    onChangeKeyboard={e => {
+                        if (listMonth(dataInicioFilter).includes(e.value) || e.value === '') {
+                            setIsLoadingResults(true);
+                            localStorage.setItem('monthFilter', e.value);
+                        }
+                        setMonthFilter(e.value);
                     }}
                 />
             </div>
