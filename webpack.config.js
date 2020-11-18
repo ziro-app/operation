@@ -62,7 +62,8 @@ module.exports = (env, { mode }) => {
       sheet_id_form_duplicates,
       sheet_id_transito,
       sheet_id_pessoas,
-      homolog
+      document_id_for_utilities_main,
+      homolog,
     } = require('./credentials')
     config.devtool = 'cheap-module-eval-source-map'
     config.devServer = { historyApiFallback: true, hot: true, port: 9090 }
@@ -99,9 +100,10 @@ module.exports = (env, { mode }) => {
           URL_PROVIDERS: JSON.stringify(url_providers),
           TOKEN_PROVIDERS: JSON.stringify(token_providers),
           SHEET_ID_PICKUP: JSON.stringify(sheet_id_pickup),
-          SHEET_ID_FORM_DUPLICATES : JSON.stringify(sheet_id_form_duplicates),
-          SHEET_ID_TRANSITO : JSON.stringify(sheet_id_transito),
-          SHEET_ID_PESSOAS : JSON.stringify(sheet_id_pessoas),
+          SHEET_ID_FORM_DUPLICATES: JSON.stringify(sheet_id_form_duplicates),
+          SHEET_ID_TRANSITO: JSON.stringify(sheet_id_transito),
+          SHEET_ID_PESSOAS: JSON.stringify(sheet_id_pessoas),
+          DOCUMENT_ID_FOR_UTILITIES_MAIN: JSON.stringify(document_id_for_utilities_main),
           // FOR DEV TESTS ONLY
           HOMOLOG: JSON.stringify(homolog),
         },
@@ -157,9 +159,10 @@ module.exports = (env, { mode }) => {
           URL_PROVIDERS: JSON.stringify(process.env.URL_PROVIDERS),
           SHEET_ID_PICKUP: JSON.stringify(process.env.SHEET_ID_PICKUP),
           TOKEN_PROVIDERS: JSON.stringify(process.env.TOKEN_PROVIDERS),
-          SHEET_ID_FORM_DUPLICATES : JSON.stringify(process.env.SHEET_ID_FORM_DUPLICATES),
-          SHEET_ID_TRANSITO : JSON.stringify(process.env.SHEET_ID_TRANSITO),
-          SHEET_ID_PESSOAS : JSON.stringify(process.env.SHEET_ID_PESSOAS)
+          SHEET_ID_FORM_DUPLICATES: JSON.stringify(process.env.SHEET_ID_FORM_DUPLICATES),
+          SHEET_ID_TRANSITO: JSON.stringify(process.env.SHEET_ID_TRANSITO),
+          SHEET_ID_PESSOAS: JSON.stringify(process.env.SHEET_ID_PESSOAS),
+          DOCUMENT_ID_FOR_UTILITIES_MAIN: JSON.stringify(process.env.DOCUMENT_ID_FOR_UTILITIES_MAIN),
         },
       }),
     )

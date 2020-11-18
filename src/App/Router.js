@@ -24,6 +24,7 @@ import { HeaderBack } from './HeaderBack/index'
 import ImageUpload from './ImageUpload/index'
 import LinkRequest from './LinkRequest/index'
 import Login from './Login/index'
+import LoginSupportPage from "./LoginSupportPage"
 import MaterialRequest from './MaterialRequest/index'
 import { Menu } from './Menu/index'
 import Register from './Register/index'
@@ -50,9 +51,11 @@ import UploadBillet from './UploadBillet'
 import UploadImages from './UploadImages/index'
 import ValidateEmail from './ValidateEmail/index'
 import UpdateTax from './UpdateZoopPlan/UpdateTax'
+import UpdateDefaultTax from './ChangeDefaultFees/UpdateDefaultTax'
 import CreateAndUpdate from './UpdateZoopPlan/CreateUpdateZoopPlan'
 import NewZoopPlan from './UpdateZoopPlan/NewZoopPlan'
 import TestingPercentagesSplitRules from './TestingPercentagesSplitRules'
+import ChangeDefaultFees from './ChangeDefaultFees'
 import Adjustment from './Adjustment/index'
 import Pickup from './Pickup/index'
 import CommissionManagement from './CommissionManagement/index'
@@ -68,6 +71,7 @@ const Router = ({ isLogged }) => {
   const [matchSeller, paramsSeller] = useRoute('/atualizar-plano-venda/:sellerId?')
   const [matchSellerNewPlan, paramsSellerNewPlan] = useRoute('/atualizar-plano-venda/:sellerId?/newPlan')
   const [matchFee, paramsFee] = useRoute('/atualizar-plano-venda/:sellerId?/:fee?/:selectedPlan?')
+  const [matchDefaultFee, paramsDefaultFee] = useRoute('/alterar-tarifas-padrao/:fee?/:selectedPlan?')
   const { nickname } = useContext(userContext)
   const allowedUsers = ['Vitor']
 
@@ -77,11 +81,12 @@ const Router = ({ isLogged }) => {
     '/login': <Login />,
     '/cadastrar': <Register />,
     '/problemas-acesso': <LoginTrouble navigateTo="/login" />,
+    '/pagina-suporte': <LoginSupportPage />,
     '/reenviar-email': <ResendEmail />,
     '/resetar-senha': <ResetPass />,
     '/confirmar-email': <ConfirmEmail />,
     '/show-info': <ShowInfo />,
-    '/show-attendance': <ShowAttendance />
+    '/show-attendance': <ShowAttendance />,
   }
   const privateRoutes = {
     // Menu can't be put inside the components because then it'll unmount on transition
@@ -104,6 +109,7 @@ const Router = ({ isLogged }) => {
     [matchTransactionsSplit ? location : null]: <SplitPayment {...paramsTransactionsSplit} />,
     // [matchFee ? location : null]: <CreateAndUpdate {...paramsFee} />,
     [matchFee ? location : null]: <UpdateTax {...paramsFee} />,
+    [matchDefaultFee ? location : null]: <UpdateDefaultTax {...paramsDefaultFee} />,
     [matchSeller ? location : null]: (
       <HeaderBack title="Alterar Plano de Venda" navigateTo="/suporte">
         <UpdateZoopPlan {...paramsSeller} />
@@ -171,6 +177,7 @@ const Router = ({ isLogged }) => {
               ['Alterar email do usuário', '/alterar-email'],
               ['Atualizar Plano Zoop do usuário antigo', '/atualizar-plano-zoop-old'],
               ['Alterar Plano de Venda', '/atualizar-plano-venda'],
+              ['Alterar tarifas padrão', '/alterar-tarifas-padrao'],
             ]}
           />
         </motion.div>
@@ -204,6 +211,11 @@ const Router = ({ isLogged }) => {
     '/testar-tarifas': (
       <HeaderBack title="Testar Tarifas do Plano" navigateTo="/atualizar-plano-venda">
         <TestingPercentagesSplitRules />
+      </HeaderBack>
+    ),
+    '/alterar-tarifas-padrao': (
+      <HeaderBack title="Alterar tarifas padrão" navigateTo="/suporte">
+        <ChangeDefaultFees />
       </HeaderBack>
     ),
     '/cadastrar-boleto': (
@@ -287,7 +299,7 @@ const Router = ({ isLogged }) => {
         <PostDuplicata />
       </HeaderBack>
     ),
-    '/visualizar-pagamentos':(
+    '/visualizar-pagamentos': (
       <HeaderBack title="Visualizar pagamentos" navigateTo="/administrativo">
         <Pagamentos />
       </HeaderBack>

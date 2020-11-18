@@ -1,5 +1,4 @@
 import React from 'react'
-import { db } from '../../Firebase'
 
 const collator = new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' })
 
@@ -11,7 +10,7 @@ export function returnInstallmentAndFee(fees) {
 export function translateInstallments(text) {
   const installmentName = text.match(/[\d\.]+|\D+/g)[0]
   const installmentNumber = text.match(/[\d\.]+|\D+/g)[1]
-  return `${installmentName === 'installment' ? `x  ${installmentNumber}` : 'Débito'}`
+  return `${installmentName === 'installment' ? `x${installmentNumber}` : 'Débito'}`
 }
 export function translateFees(text) {
   const ziroMarkupFee = 'Taxa Ziro'
@@ -75,50 +74,9 @@ export function returnUniqueKey(card) {
     })
     .sort(collator.compare)
 }
-
-export const createNewPlan = async (sellerZoopPlanForFirebase, nickname, sellerId) => {
-  const allowedUsers = ['Uiller', 'Vitor', 'Alessandro', 'Wermeson', 'Ale']
-  const nome = nickname ? nickname.trim() : ''
-  return new Promise(async (resolve, reject) => {
-    try {
-      if (process.env.HOMOLOG ? true : allowedUsers.includes(nome)) {
-        // console.log('entrou 1')
-        // if (Object.keys(sellerZoopPlanForFirebase).length !== 0) {
-        // console.log('newPlan dentro do backend', sellerZoopPlanForFirebase)
-        await db.collection('suppliers').doc(sellerId).update({
-          sellerZoopPlan2: sellerZoopPlanForFirebase, // newPlan, // sellerActualZoopPlanForFirebase,
-        })
-        // console.log('entrou 3')
-        resolve('Plano atualizado')
-        // } else throw { msg: 'Atualize ao menos um campo', customError: true }
-      } else throw { msg: 'Permissão insuficiente', customError: true }
-    } catch (error) {
-      console.log(error)
-      if (error.customError) reject(error)
-      else if (error.response && error.response.data) {
-        const { erro, message } = error.response.data
-        console.log(message)
-        reject({ msg: erro, customError: true })
-      } else reject(error)
-    }
-  })
-}
-
-export function translateFirebaseToFees(text) {
-  const financed30 = 'd+30'
-  const financed14 = 'd+14'
-  const standard = 'fluxo'
-  if (text === 'financed30') return financed30
-  if (text === 'financed14') return financed14
-  if (text === 'standard') return standard
-  return text
-}
-export function translateFeesToFirebase(text) {
-  const d30 = 'financed30'
-  const d14 = 'financed14'
-  const fluxo = 'standard'
-  if (text === 'd+30') return d30
-  if (text === 'd+14') return d14
-  if (text === 'fluxo') return fluxo
-  return 'Taxa sem nome cadastrado'
+export function testInstallments(card, item, sellerZoopPlanObject) {
+  console.log('teste', item.split(' ')[0])
+  // console.log('teste do functions', `${card[0]}${item.split(' ')[0]}${item.split(' ')[1]}${item.split(' ')[2]}`)
+  // console.log('test:', item.split(' ')[2] || '')
+  // console.log(sellerZoopPlanObject[`${card[0]}${item.split(' ')[0]}${item.split(' ')[1]}${item.split(' ')[2]}`])
 }

@@ -17,6 +17,8 @@ const ReceivableDetails = ({ transactions, transactionId, receivableId, transact
     const [, setLocation] = useLocation()
     const [nothing, setNothing] = useState(false)
     const [error, setError] = useState(false)
+    let markupTransaction = {}
+    let antiFraudTransaction = {}
 
     async function getTransaction(transactionId, setTransaction, setError, transaction) {
         if (Object.keys(transaction).length === 0 && transaction.constructor === Object) await fetch(transactionId, setTransaction, setError, transaction)
@@ -37,11 +39,13 @@ const ReceivableDetails = ({ transactions, transactionId, receivableId, transact
                     .filter(item => item.split_rule !== null)
                     .reverse()
                 : []
-            setReceivable(effectReceivable)
+            setReceivable(effectReceivable);
+            markupTransaction = transaction.splitTransaction?.markup ?? transaction.sellerZoopPlan.markup
+            antiFraudTransaction = transaction.splitTransaction?.antiFraud ?? transaction.sellerZoopPlan.antiFraud
             const sumReceivablesSplitAntiFraud =
                 sortedSplitAmount.length > 0
                     ? sortedSplitAmount
-                        .filter(item => item.split_rule === transaction.sellerZoopPlan.antiFraud.id)
+                        .filter(item => item.split_rule === antiFraudTransaction.id)
                         .filter(item => item.installment === effectReceivable.installment)
                         .reduce((acc, { gross_amount }) => acc + parseFloat(gross_amount), 0)
                     : 0
@@ -49,7 +53,7 @@ const ReceivableDetails = ({ transactions, transactionId, receivableId, transact
             const sumReceivablesSplitZiro =
                 sortedSplitAmount.length > 0
                     ? sortedSplitAmount
-                        .filter(item => item.split_rule === transaction.sellerZoopPlan.markup.id)
+                        .filter(item => item.split_rule === markupTransaction.id)
                         .filter(item => item.installment === effectReceivable.installment)
                         .reduce((acc, { gross_amount }) => acc + parseFloat(gross_amount), 0)
                     : 0
@@ -66,6 +70,7 @@ const ReceivableDetails = ({ transactions, transactionId, receivableId, transact
                             .toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })
                             .replace(/\s/g, '')}`
                         : '-'
+                const { sellerZoopPlan: { activePlan } } = transaction;
                 block = [
                     {
                         header: 'Informações adicionais',
@@ -82,11 +87,11 @@ const ReceivableDetails = ({ transactions, transactionId, receivableId, transact
                             },
                             {
                                 title: 'Tarifa Ziro Pay',
-                                content: feesFormatted,
+                                content: feesFormatted !== '- R$0,00' ? feesFormatted : '-',
                             },
                             {
                                 title: 'Tarifa Ziro Seguro Antifraude',
-                                content: zoopSplitFormatted,
+                                content: zoopSplitFormatted !== '- R$0,00' ? zoopSplitFormatted : '-',
                             },
                             {
                                 title: 'Valor líquido',
@@ -94,7 +99,7 @@ const ReceivableDetails = ({ transactions, transactionId, receivableId, transact
                             },
                             {
                                 title: 'Recebimento',
-                                content: transaction.receivement,
+                                content: activePlan ?? 'Fluxo',
                             },
                             {
                                 title: 'Data recebimento',

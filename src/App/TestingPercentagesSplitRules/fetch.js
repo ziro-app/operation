@@ -1,6 +1,16 @@
 import capitalize from '@ziro/capitalize'
 import { db } from '../../Firebase/index'
 
+function translateFeesToFirebase(text) {
+  const d30 = 'financed30'
+  const d14 = 'financed14'
+  const fluxo = 'standard'
+  if (text === 'd+30') return d30
+  if (text === 'd+14') return d14
+  if (text === 'fluxo') return fluxo
+  return 'Taxa sem nome cadastrado'
+}
+
 const fetch = (setIsLoading, setErrorLoading, setSuppliers, setSellerZoopPlan2, setFees, selectedPlan, supplier) => {
   const run = async () => {
     try {
@@ -13,14 +23,14 @@ const fetch = (setIsLoading, setErrorLoading, setSuppliers, setSellerZoopPlan2, 
         fetchedPlan = await db.collection('suppliers').doc(supplier.docId).get()
         setSellerZoopPlan2(fetchedPlan.data().sellerZoopPlan2)
         if (!selectedPlan) selectedPlan = Object.keys(fetchedPlan.data().sellerZoopPlan2)[0]
-        const whichPlan = selectedPlan || 'standard'
+        const whichPlan = translateFeesToFirebase(selectedPlan) || 'standard'
         const sellerZoopPlanObjectForIteration = fetchedPlan.data().sellerZoopPlan2[whichPlan]
-        setFees(Object.entries(sellerZoopPlanObjectForIteration))
+        sellerZoopPlanObjectForIteration ? setFees(Object.entries(sellerZoopPlanObjectForIteration)) : null
       }
       if (!query.empty) {
         query.forEach(sup => {
           const docId = sup.id
-          const { fantasia, razao, sellerZoopPlan, nome, sobrenome, sellerZoopPlan2 } = sup.data()
+          const { fantasia, razao, nome, sobrenome, sellerZoopPlan2 } = sup.data()
           const name = fantasia
             ? fantasyList.includes(fantasia)
               ? capitalize(`${fantasia} - ${nome}`)

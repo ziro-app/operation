@@ -19,9 +19,8 @@ import sendToBackend from './sendToBackend'
 import { userContext } from '../../appContext'
 import { db } from '../../../Firebase'
 import ToastNotification from '../../ToastNotification'
-import { translateFirebaseToFees } from '../functions'
 
-const UpdateTax = ({ fee, setFee }) => {
+const UpdateDefaulTax = () => {
   const { nickname } = useContext(userContext)
 
   const [countLoop, setCountLoop] = useState(0)
@@ -40,34 +39,10 @@ const UpdateTax = ({ fee, setFee }) => {
   const [nothing, setNothing] = useState(false)
   const [supplier, setSupplier] = useState({ docId: '', name: '', reason: '', markupPercentage: '', antifraudPercentage: '', sellerZoopPlan: '' })
   const [error, setError] = useState(false)
-  const [matchSellerId, paramsSellerId] = useRoute('/atualizar-plano-venda/:sellerId?/:fee?/:selectedPlan?')
-  const { sellerId, selectedPlan } = paramsSellerId
-  const { activePlan } = sellerZoopPlan
-  const otherPlans = Object.entries(sellerZoopPlan).filter(item => item[0] !== selectedPlan && item[0] !== 'activePlan')
+  const [matchSellerId, paramsSellerId] = useRoute('/alterar-tarifas-padrao/:fee?/:selectedPlan?')
   const typeOfToast = 'alert'
+  const { selectedPlan, fee } = paramsSellerId
   let newPlan = {}
-  const mountBlock = (name, reason, activePlan, plans = []) => {
-    const plansFormatted = plans ? plans.join(' , ') : ''
-    return [
-      {
-        header: 'Detalhes',
-        body: [
-          {
-            title: 'Fabricante',
-            content: name,
-          },
-          {
-            title: 'Razão',
-            content: reason,
-          },
-          {
-            title: 'Plano selecionado',
-            content: translateFirebaseToFees(activePlan),
-          },
-        ],
-      },
-    ]
-  }
   useEffect(() => {
     if (countLoop < 4) {
       const newCount = countLoop + 1
@@ -77,57 +52,45 @@ const UpdateTax = ({ fee, setFee }) => {
       }
       setNothing(false)
 
-      async function getFee(setSellerZoopPlan, setFees, sellerId, selectedPlanForFirebase, fees, setIsLoading) {
-        await fetch(setSellerZoopPlan, setFees, sellerId, selectedPlanForFirebase, fees, setSupplier, setIsLoading)
+      async function getFee(setSellerZoopPlan, setFees, selectedPlanForFirebase, fees, setIsLoading) {
+        await fetch(setSellerZoopPlan, setFees, selectedPlanForFirebase, fees, setIsLoading)
       }
 
-      getFee(setSellerZoopPlan, setFees, sellerId, selectedPlanForFirebase, fees, setIsLoading)
+      getFee(setSellerZoopPlan, setFees, selectedPlanForFirebase, fees, setIsLoading)
     }
   }, [fee, error, selectedPlanForFirebase])
-  // console.log('supplier', supplier)
-  // console.log('blocks', blocks)
-  if (supplier.fantasia && blocks.length === 0) {
-    setBlocks(mountBlock(supplier.fantasia, supplier.razao, selectedPlan))
-
-    // console.log('blocks', blocks)
-  }
-  if (otherPlans.length > 0 && Object.keys(otherPlansForFirebase).length !== 0 && otherPlansForFirebase.constructor !== Object) {
-    otherPlans.map(plan => {
-      const newItem = { [plan[0]]: plan[1] }
-      setOtherPlansForFirebase(prevState => ({ ...prevState, ...newItem }))
-    })
-  }
 
   const state = {
-    sellerId,
     sellerZoopPlanForFirebase,
     fee,
     setSellerZoopPlanForFirebase,
     nickname,
     selectedPlan,
-    activePlan,
     sellerZoopPlan,
     otherPlansForFirebase,
     sellerActualZoopPlanForFirebase,
   }
   if (isLoading || fee === null) return <SpinnerWithDiv size="5rem" />
-  if (nothing || (Object.keys(fee).length === 0 && fee.constructor === Object))
-    return (
-      <Error
-        message="Taxa inválida ou não encontrada, retorne e tente novamente."
-        type="noData"
-        title="Erro ao buscar detalhes da transação"
-        backRoute="/atualizar-plano-venda"
-        backRouteFunction={route => {
-          setLocation(route)
-        }}
-      />
-    )
+  if (typeof fee !== 'undefined') {
+    if (nothing || (Object.keys(fee).length === 0 && fee.constructor === Object)) {
+      return (
+        <Error
+          message="Taxa inválida ou não encontrada, retorne e tente novamente."
+          type="noData"
+          title="Erro ao buscar detalhes da transação"
+          backRoute="/atualizar-plano-venda"
+          backRouteFunction={route => {
+            setLocation(route)
+          }}
+        />
+      )
+    }
+  }
   const order = { mastercard: 1, visa: 2, elo: 3, americanexpress: 4, hipercard: 5, default: 1000 }
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={containerWithPadding}>
       <ToastNotification openToastRoot={openToast} setOpenToastRoot={setOpenToast} messageToastRoot={messageToast} type={typeOfToast} />
-      <Header type="icon-link" title={`Editar ${translateFees(fee)}`} navigateTo={`atualizar-plano-venda/${sellerId}`} icon="back" />
+      <Header type="icon-link" title={`Editar ${translateFees(fee)} Padrão`} navigateTo="/alterar-tarifas-padrao" icon="back" />
       {supplier.fantasia && <Details blocks={blocks} />}
       <div style={{ marginTop: '35px' }}>
         {fees !== null &&
@@ -195,9 +158,9 @@ const UpdateTax = ({ fee, setFee }) => {
           fees.map(
             feeMap =>
               feeMap[0] === fee &&
+              // eslint-disable-next-line array-callback-return
               Object.entries(feeMap[1]).map(card => {
-                // console.log('card', card[0])
-                // console.log('sellerZoopPlan', sellerZoopPlan)
+                // eslint-disable-next-line array-callback-return
                 Object.entries(sellerZoopPlanObject).map(installment => {
                   const actualInstallment = installment[0].split(card[0])[1]
                     ? installment[0].split(card[0])[1].split(':')[0]
@@ -236,4 +199,4 @@ const UpdateTax = ({ fee, setFee }) => {
   )
 }
 
-export default memo(UpdateTax)
+export default memo(UpdateDefaulTax)

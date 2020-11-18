@@ -10,17 +10,15 @@ import { fontTitle } from '@ziro/theme'
 import { useMessage, useMessagePromise } from '@bit/vitorbarbosa19.ziro.message-modal'
 import { ZiroPromptMessage, ZiroWaitingMessage } from 'ziro-messages'
 import ToastNotification from '../ToastNotification'
-import sendToBackend from './sendToBackend'
 import fetch from './fetch'
 import { userContext } from '../appContext'
-import { createNewPlan, translateFirebaseToFees, translateFeesToFirebase } from './functions'
+import { translateFeesToFirebase, translateFirebaseToFees } from './functions'
 import Modal from '../utils/Modal/Modal'
-import updatePlan from './updatePlan'
+// import updatePlan from './updatePlan'
 
-const UpdateZoopPlan = () => {
+const ChangeDefaultFees = () => {
   const [blocks, setBlocks] = useState([])
   const [sellerZoopPlan2, setSellerZoopPlan2] = useState({})
-  const [currentZoopFee, setCurrentZoopFee] = useState({})
   const [fees, setFees] = useState(null)
   const [selectedPlan, setSelectedPlan] = useState('')
   const [allPlans, setAllPlans] = useState('')
@@ -34,7 +32,6 @@ const UpdateZoopPlan = () => {
   const [markupPercentage, setMarkupPercentage] = useState('')
   const [antifraudPercentage, setAntifraudPercentage] = useState('')
   const [suppliers, setSuppliers] = useState([])
-  const [plansFromCurrentZoopFee, setPlansFromCurrentZoopFee] = useState([])
   const [typeOfToast, setTypeOfToast] = useState('alert')
   const [supplier, setSupplier] = useState({ docId: '', name: '', reason: '', markupPercentage: '', antifraudPercentage: '', sellerZoopPlan: '' })
   const [, setLocation] = useLocation()
@@ -116,7 +113,7 @@ const UpdateZoopPlan = () => {
           },
           {
             title: 'Plano Ativo',
-            content: translateFirebaseToFees(activePlan),
+            content: activePlan,
           },
         ],
       },
@@ -130,41 +127,10 @@ const UpdateZoopPlan = () => {
     setSupplier({ docId: '', name: '', reason: '', markupPercentage: '', antifraudPercentage: '', sellerZoopPlan: '' })
     setBlocks(mountBlock('', '', '', ''))
   }
-  const deletePlan = async planName => {
-    setIsLoadingFunction(true)
-    const newAllPlans = allPlans
-    delete sellerZoopPlan2[planName]
-    const index = newAllPlans.indexOf(planName)
-    if (index > -1) {
-      newAllPlans.splice(index)
-    }
-    localStorage.removeItem('selectedPlan')
-    setOpenModalDeletePlan(false)
-    await updatePlan(sellerZoopPlan2, nickname, supplier.docId)
-    setAllPlans(newAllPlans)
-    setSelectedPlan('')
-    setLocation('/atualizar-plano-venda')
-    setTypeOfToast('alert')
-    setMessageToast('Plano foi excluido!')
-    setOpenToast(true)
-    setIsLoadingFunction(false)
-  }
   useEffect(() => {
     async function fetchData() {
       setIsLoading(true)
-      await fetch(
-        setIsLoading,
-        setErrorLoading,
-        setSuppliers,
-        setSellerZoopPlan2,
-        setFees,
-        selectedPlan,
-        supplier,
-        suppliers,
-        currentZoopFee,
-        setCurrentZoopFee,
-        setPlansFromCurrentZoopFee,
-      )
+      await fetch(setIsLoading, setErrorLoading, setSuppliers, setSellerZoopPlan2, setFees, selectedPlan, supplier, suppliers)
       if (localStorage.getItem('sellerName')) setSearchedName(localStorage.getItem('sellerName'))
       if (localStorage.getItem('selectedPlan')) setSelectedPlan(localStorage.getItem('selectedPlan'))
       if (localStorage.getItem('sellerObject')) setSupplier(JSON.parse(localStorage.getItem('sellerObject')))
@@ -192,19 +158,7 @@ const UpdateZoopPlan = () => {
   }, [])
   useEffect(() => {
     async function fetchData() {
-      await fetch(
-        setIsLoading,
-        setErrorLoading,
-        setSuppliers,
-        setSellerZoopPlan2,
-        setFees,
-        selectedPlan,
-        supplier,
-        suppliers,
-        currentZoopFee,
-        setCurrentZoopFee,
-        setPlansFromCurrentZoopFee,
-      )
+      await fetch(setIsLoading, setErrorLoading, setSuppliers, setSellerZoopPlan2, setFees, selectedPlan, supplier, suppliers)
       const person = suppliers.find(storeowner => storeowner.name === localStorage.getItem('sellerName'))
       if (person) {
         setSupplier(person)
@@ -224,29 +178,29 @@ const UpdateZoopPlan = () => {
     fetchData()
   }, [supplier, settingActivePlan, suppliers])
   /*
-  const { sellerZoopPlan } = supplier
-  async function asyncCall() {
-    if (
-      supplier.name &&
-      blocks.length === 0 &&
-      Object.prototype.hasOwnProperty.call(supplier, 'sellerZoopPlan') &&
-      sellerZoopPlan !== null &&
-      Object.prototype.hasOwnProperty.call(sellerZoopPlan, 'activePlan')
-    ) {
-      await fetch(setIsLoading, setErrorLoading, setSuppliers, setSellerZoopPlan2, setFees, selectedPlan, supplier, suppliers)
-      setBlocks(
-        mountBlock(
-          supplier.name,
-          supplier.reason,
-          settingActivePlan || supplier.sellerZoopPlan.activePlan || 'Nenhum plano ativo',
-          Object.keys(sellerZoopPlan2),
-        ),
-      )
-    } else if (supplier.name && blocks.length === 0) {
-      setBlocks(mountBlock(supplier.name, supplier.reason, 'Nenhum plano ativo'))
+    const { sellerZoopPlan } = supplier
+    async function asyncCall() {
+      if (
+        supplier.name &&
+        blocks.length === 0 &&
+        Object.prototype.hasOwnProperty.call(supplier, 'sellerZoopPlan') &&
+        sellerZoopPlan !== null &&
+        Object.prototype.hasOwnProperty.call(sellerZoopPlan, 'activePlan')
+      ) {
+        await fetch(setIsLoading, setErrorLoading, setSuppliers, setSellerZoopPlan2, setFees, selectedPlan, supplier, suppliers)
+        setBlocks(
+          mountBlock(
+            supplier.name,
+            supplier.reason,
+            settingActivePlan || supplier.sellerZoopPlan.activePlan || 'Nenhum plano ativo',
+            Object.keys(sellerZoopPlan2),
+          ),
+        )
+      } else if (supplier.name && blocks.length === 0) {
+        setBlocks(mountBlock(supplier.name, supplier.reason, 'Nenhum plano ativo'))
+      }
     }
-  }
-  asyncCall() */
+    asyncCall() */
   const asyncClick = React.useCallback(async planName => {
     try {
       await setPromiseMessage(PromptMessage)
@@ -263,64 +217,6 @@ const UpdateZoopPlan = () => {
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={{ display: 'grid', gridTemplateRows: 'auto 1fr auto', gridRowGap: '20px' }}>
       <ToastNotification openToastRoot={openToast} setOpenToastRoot={setOpenToast} messageToastRoot={messageToast} type={typeOfToast} />
 
-      <Dropdown
-        value={searchedName}
-        submitting={isLoadingFunction === true}
-        onChange={({ target: { value } }) => {
-          if (value !== '') {
-            setSearchedName(value)
-            const person = suppliers.find(element => element.name === value)
-            if (person) {
-              localStorage.setItem('sellerName', person.name)
-              localStorage.setItem('sellerObject', JSON.stringify(person))
-              setSupplier(person)
-            } else {
-              clear()
-              localStorage.removeItem('sellerName')
-              localStorage.removeItem('selectedPlan')
-              localStorage.removeItem('sellerObject')
-            }
-          } else {
-            localStorage.removeItem('sellerName')
-            localStorage.removeItem('selectedPlan')
-            localStorage.removeItem('sellerObject')
-            setSearchedName('')
-            setSelectedPlan('')
-            clear()
-          }
-        }}
-        onChangeKeyboard={element => {
-          if (element) {
-            setSearchedName(element.value)
-            const person = suppliers.find(storeowner => storeowner.name === element.value)
-            if (person) {
-              setSupplier(person)
-              localStorage.setItem('sellerName', person.name)
-              localStorage.setItem('sellerObject', JSON.stringify(person))
-              if (person.sellerZoopPlan) setAllPlans(Object.keys(person.sellerZoopPlan).filter(item => item !== 'activePlan'))
-              else {
-                setAllPlans([''])
-                setSelectedPlan('')
-              }
-            } else {
-              clear()
-              localStorage.removeItem('sellerName')
-              localStorage.removeItem('selectedPlan')
-              localStorage.removeItem('sellerObject')
-            }
-          } else {
-            clear()
-            setSearchedName('')
-            setSelectedPlan('')
-            localStorage.removeItem('selectedPlan')
-            localStorage.removeItem('sellerName')
-            localStorage.removeItem('sellerObject')
-          }
-        }}
-        list={suppliers.map(supplier => supplier.name).sort()}
-        placeholder="Escolha o fabricante"
-      />
-      {searchedName && <Details blocks={blocks} />}
       <Dropdown
         value={selectedPlan}
         submitting={isLoadingFunction === true}
@@ -344,8 +240,7 @@ const UpdateZoopPlan = () => {
             localStorage.setItem('selectedPlan', element.value)
           }
         }}
-        readOnly
-        list={plansFromCurrentZoopFee ? Object.keys(plansFromCurrentZoopFee).map(tax => translateFirebaseToFees(tax)) : ['']} // Object.keys(sellerZoopPlan2).filter(item => item !== 'activePlan') : ['']}
+        list={sellerZoopPlan2 ? Object.keys(sellerZoopPlan2).map(tax => translateFirebaseToFees(tax)) : ['']}
         placeholder="Escolha ou adicione um plano"
       />
       <Button
@@ -354,16 +249,7 @@ const UpdateZoopPlan = () => {
         template="regular"
         submitting={isLoadingFunction === true || !selectedPlan || !Object.keys(sellerZoopPlan2).includes(translateFeesToFirebase(selectedPlan))}
         click={() => {
-          setLocation(`/atualizar-plano-venda/${supplier.docId}/ziroAntifraudFee/${translateFeesToFirebase(selectedPlan)}`)
-        }}
-      />
-      <Button
-        type="button"
-        cta="Editar Taxa Markup"
-        template="regular"
-        submitting={isLoadingFunction === true || !selectedPlan || !Object.keys(sellerZoopPlan2).includes(translateFeesToFirebase(selectedPlan))}
-        click={() => {
-          setLocation(`/atualizar-plano-venda/${supplier.docId}/ziroMarkupFee/${translateFeesToFirebase(selectedPlan)}`)
+          setLocation(`/alterar-tarifas-padrao/ziroAntifraudFee/${translateFeesToFirebase(selectedPlan)}`)
         }}
       />
       <Button
@@ -372,105 +258,8 @@ const UpdateZoopPlan = () => {
         template="regular"
         submitting={isLoadingFunction === true || !selectedPlan || !Object.keys(sellerZoopPlan2).includes(translateFeesToFirebase(selectedPlan))}
         click={() => {
-          setLocation(`/atualizar-plano-venda/${supplier.docId}/zoopFee/${translateFeesToFirebase(selectedPlan)}`)
+          setLocation(`/alterar-tarifas-padrao/zoopFee/${translateFeesToFirebase(selectedPlan)}`)
         }}
-      />
-      <Button
-        type="button"
-        cta="Adicionar novo plano"
-        template="regular"
-        submitting={
-          isLoadingFunction === true ||
-          selectedPlan === '' ||
-          !supplier.docId ||
-          Object.keys(sellerZoopPlan2).includes(translateFeesToFirebase(selectedPlan))
-        }
-        click={async () => {
-          if (sellerZoopPlan2 === null || !Object.keys(sellerZoopPlan2).includes(translateFeesToFirebase(selectedPlan))) {
-            let sellerZoopPlanForFirebase = sellerZoopPlan2
-
-            if (sellerZoopPlan2 !== null) {
-              sellerZoopPlanForFirebase[translateFeesToFirebase(selectedPlan)] = {}
-              sellerZoopPlanForFirebase[translateFeesToFirebase(selectedPlan)] = plansFromCurrentZoopFee[translateFeesToFirebase(selectedPlan)]
-            } else {
-              sellerZoopPlanForFirebase = {}
-              sellerZoopPlanForFirebase[translateFeesToFirebase(selectedPlan)] = plansFromCurrentZoopFee[translateFeesToFirebase(selectedPlan)]
-            }
-            if (createNewPlan && Object.keys(sellerZoopPlanForFirebase).length !== 0) {
-              setIsLoadingFunction(true)
-              await createNewPlan(sellerZoopPlanForFirebase, nickname, supplier.docId)
-              setTypeOfToast('alert')
-              setMessageToast('Plano criado!')
-              setOpenToast(true)
-              setIsLoadingFunction(false)
-            } else {
-              setTypeOfToast('warning')
-              setMessageToast('Não é possivel adicionar um plano que já exista!')
-              setOpenToast(true)
-              return () => null
-            }
-          } else {
-            setTypeOfToast('warning')
-            setMessageToast('Não é possivel adicionar um plano que já exista!')
-            setOpenToast(true)
-          }
-        }}
-      />
-      <Button
-        type="button"
-        cta="Ativar plano selecionado"
-        template="regular"
-        submitting={
-          isLoadingFunction === true ||
-          sellerZoopPlan2.activePlan === translateFeesToFirebase(selectedPlan) ||
-          selectedPlan === '' ||
-          !supplier.docId ||
-          !Object.keys(sellerZoopPlan2).includes(translateFeesToFirebase(selectedPlan))
-        }
-        click={async () => {
-          setIsLoadingFunction(true)
-          await sendToBackend(state)
-          setTypeOfToast('alert')
-          setMessageToast('Plano ativado!')
-          setOpenToast(true)
-          setIsLoadingFunction(false)
-        }}
-      />
-      <Button
-        type="button"
-        cta="Testar tarifas do plano"
-        template="regular"
-        submitting={isLoadingFunction === true}
-        click={() => {
-          setLocation(`/testar-tarifas`)
-        }}
-      />
-      <Button
-        type="button"
-        cta="Excluir plano"
-        template="light"
-        submitting={
-          isLoadingFunction === true ||
-          selectedPlan === '' ||
-          !supplier.docId ||
-          !Object.keys(sellerZoopPlan2).includes(translateFeesToFirebase(selectedPlan))
-        }
-        click={() => {
-          if (translateFeesToFirebase(selectedPlan) !== sellerZoopPlan2.activePlan) {
-            setOpenModalDeletePlan(true)
-          } else {
-            setTypeOfToast('warning')
-            setMessageToast('Não é possivel apagar o plano ativo!')
-            setOpenToast(true)
-          }
-        }}
-      />
-      <Modal
-        onClickFunction={() => deletePlan(translateFeesToFirebase(selectedPlan))}
-        openState={openModalDeletePlan}
-        setOpenState={setOpenModalDeletePlan}
-        states={{ selectedPlan, supplier }}
-        labelText="Deseja realmente apagar o plano?"
       />
       {isLoadingFunction && (
         <div
@@ -491,4 +280,4 @@ const UpdateZoopPlan = () => {
   )
 }
 
-export default memo(UpdateZoopPlan)
+export default memo(ChangeDefaultFees)
