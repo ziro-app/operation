@@ -19,6 +19,7 @@ import sendToBackend from './sendToBackend'
 import { userContext } from '../../appContext'
 import { db } from '../../../Firebase'
 import ToastNotification from '../../ToastNotification'
+import { translateFirebaseToFees } from '../functions'
 
 const UpdateTax = ({ fee, setFee }) => {
   const { nickname } = useContext(userContext)
@@ -61,7 +62,7 @@ const UpdateTax = ({ fee, setFee }) => {
           },
           {
             title: 'Plano selecionado',
-            content: activePlan,
+            content: translateFirebaseToFees(activePlan),
           },
         ],
       },
