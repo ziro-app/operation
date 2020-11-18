@@ -1,13 +1,26 @@
 import capitalize from '@ziro/capitalize'
 import { db } from '../../Firebase/index'
 
-const fetch = (setIsLoading, setErrorLoading, setSuppliers, setSellerZoopPlan2, setFees, selectedPlan, supplier, suppliers) => {
+const fetch = (
+  setIsLoading,
+  setErrorLoading,
+  setSuppliers,
+  setSellerZoopPlan2,
+  setFees,
+  selectedPlan,
+  supplier,
+  suppliers,
+  currentZoopFee,
+  setCurrentZoopFee,
+  setPlansFromCurrentZoopFee,
+) => {
   const run = async () => {
     /* console.log('selectedPlan', selectedPlan)
     console.log('supplier', supplier)
     console.log('suppliers', suppliers) */
     try {
       let fetchedPlan = {}
+      let fetchedCurrentZoopFee = {}
       const fantasyList = []
       const suppliersFetch = []
       if (supplier.docId) {
@@ -25,6 +38,17 @@ const fetch = (setIsLoading, setErrorLoading, setSuppliers, setSellerZoopPlan2, 
               setFees(feesFiltered)
             }
           }
+        })
+        fetchedCurrentZoopFee = db.collection('utilities').doc(process.env.DOCUMENT_ID_FOR_UTILITIES_MAIN)
+        fetchedCurrentZoopFee.get().then(currentFee => {
+          if (selectedPlan) {
+            const sellerZoopPlanObjectForIteration = currentFee.data().main.currentZoopFee[selectedPlan]
+            // console.log('sellerZoopPlanObjectForIteration', sellerZoopPlanObjectForIteration)
+            // console.log('sellerZoopPlanObjectForIteration entries', Object.entries(sellerZoopPlanObjectForIteration))
+            setCurrentZoopFee(sellerZoopPlanObjectForIteration)
+            console.log(currentFee.data().main.currentZoopFee)
+          }
+          setPlansFromCurrentZoopFee(currentFee.data().main.currentZoopFee)
         })
       }
       const query = db.collection('suppliers').where('tipoCadastro', '==', 'Completo')
