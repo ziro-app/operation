@@ -24,6 +24,7 @@ import { HeaderBack } from './HeaderBack/index'
 import ImageUpload from './ImageUpload/index'
 import LinkRequest from './LinkRequest/index'
 import Login from './Login/index'
+import LoginSupportPage from "./LoginSupportPage"
 import MaterialRequest from './MaterialRequest/index'
 import { Menu } from './Menu/index'
 import Register from './Register/index'
@@ -80,6 +81,7 @@ const Router = ({ isLogged }) => {
     '/login': <Login />,
     '/cadastrar': <Register />,
     '/problemas-acesso': <LoginTrouble navigateTo="/login" />,
+    '/pagina-suporte': <LoginSupportPage />,
     '/reenviar-email': <ResendEmail />,
     '/resetar-senha': <ResetPass />,
     '/confirmar-email': <ConfirmEmail />,
