@@ -1,5 +1,6 @@
 import capitalize from '@ziro/capitalize'
 import { db } from '../../Firebase/index'
+import { translateFeesToFirebase, translateFirebaseToFees } from './functions'
 
 const fetch = (setIsLoading, setErrorLoading, setSuppliers, setSellerZoopPlan2, setFees, selectedPlan, supplier, suppliers) => {
   const run = async () => {

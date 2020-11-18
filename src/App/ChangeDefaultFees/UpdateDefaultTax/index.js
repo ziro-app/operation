@@ -90,7 +90,7 @@ const UpdateDefaulTax = () => {
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={containerWithPadding}>
       <ToastNotification openToastRoot={openToast} setOpenToastRoot={setOpenToast} messageToastRoot={messageToast} type={typeOfToast} />
-      <Header type="icon-link" title={`Editar ${translateFees(fee)}`} navigateTo="/alterar-tarifas-padrao" icon="back" />
+      <Header type="icon-link" title={`Editar ${translateFees(fee)} Padrão`} navigateTo="/alterar-tarifas-padrao" icon="back" />
       {supplier.fantasia && <Details blocks={blocks} />}
       <div style={{ marginTop: '35px' }}>
         {fees !== null &&

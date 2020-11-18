@@ -12,7 +12,7 @@ import { ZiroPromptMessage, ZiroWaitingMessage } from 'ziro-messages'
 import ToastNotification from '../ToastNotification'
 import fetch from './fetch'
 import { userContext } from '../appContext'
-import { defaultValues, createNewPlan } from './functions'
+import { translateFeesToFirebase, translateFirebaseToFees } from './functions'
 import Modal from '../utils/Modal/Modal'
 // import updatePlan from './updatePlan'
 
@@ -240,25 +240,25 @@ const ChangeDefaultFees = () => {
             localStorage.setItem('selectedPlan', element.value)
           }
         }}
-        list={sellerZoopPlan2 ? Object.keys(sellerZoopPlan2).filter(item => item !== 'activePlan') : ['']}
+        list={sellerZoopPlan2 ? Object.keys(sellerZoopPlan2).map(tax => translateFirebaseToFees(tax)) : ['']}
         placeholder="Escolha ou adicione um plano"
       />
       <Button
         type="button"
         cta="Editar Taxa Antifraude"
         template="regular"
-        submitting={isLoadingFunction === true || !selectedPlan || !Object.keys(sellerZoopPlan2).includes(selectedPlan)}
+        submitting={isLoadingFunction === true || !selectedPlan || !Object.keys(sellerZoopPlan2).includes(translateFeesToFirebase(selectedPlan))}
         click={() => {
-          setLocation(`/alterar-tarifas-padrao/ziroAntifraudFee/${selectedPlan}`)
+          setLocation(`/alterar-tarifas-padrao/ziroAntifraudFee/${translateFeesToFirebase(selectedPlan)}`)
         }}
       />
       <Button
         type="button"
         cta="Editar Taxa Zoop"
         template="regular"
-        submitting={isLoadingFunction === true || !selectedPlan || !Object.keys(sellerZoopPlan2).includes(selectedPlan)}
+        submitting={isLoadingFunction === true || !selectedPlan || !Object.keys(sellerZoopPlan2).includes(translateFeesToFirebase(selectedPlan))}
         click={() => {
-          setLocation(`/alterar-tarifas-padrao/zoopFee/${selectedPlan}`)
+          setLocation(`/alterar-tarifas-padrao/zoopFee/${translateFeesToFirebase(selectedPlan)}`)
         }}
       />
       {isLoadingFunction && (
