@@ -203,8 +203,8 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
             }
 
             if (transaction !== {} && !nothing) {
-                markupTransaction = transaction.splitTransaction.markup ?? transaction.sellerZoopPlan.markup
-                antiFraudTransaction = transaction.splitTransaction.antiFraud ?? transaction.sellerZoopPlan.antiFraud
+                markupTransaction = transaction.splitTransaction?.markup ?? transaction.sellerZoopPlan.markup
+                antiFraudTransaction = transaction.splitTransaction?.antiFraud ?? transaction.sellerZoopPlan.antiFraud
 
                 let block
                 let dataTable
