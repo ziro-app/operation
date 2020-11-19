@@ -24,7 +24,7 @@ import { HeaderBack } from './HeaderBack/index'
 import ImageUpload from './ImageUpload/index'
 import LinkRequest from './LinkRequest/index'
 import Login from './Login/index'
-import LoginSupportPage from "./LoginSupportPage"
+import LoginSupportPage from './LoginSupportPage'
 import MaterialRequest from './MaterialRequest/index'
 import { Menu } from './Menu/index'
 import Register from './Register/index'
@@ -38,6 +38,7 @@ import ResetPass from './ResetPass/index'
 import ShowInfo from './ShowInfo/index'
 import SplitPayment from './SplitPayment/index'
 import Transactions from './Transactions/index'
+import SellersPlans from './SellersPlans/index'
 import UpdateAffiliate from './UpdateAffiliate/index'
 import UpdateBrandsInfos from './UpdateBrandsInfos'
 import UpdateEmail from './UpdateEmail/index'
@@ -105,13 +106,18 @@ const Router = ({ isLogged }) => {
     '/trocar-email': <UpdateEmail />,
     '/trocar-senha': <UpdatePass />,
     '/transacoes': <Transactions {...paramsTransactions} />,
+    '/planos-fabricantes': (
+      <HeaderBack title="Planos dos Fabricantes" navigateTo="/suporte">
+        <SellersPlans {...paramsTransactions} />
+      </HeaderBack>
+    ),
     [matchTransactions ? location : null]: <Transactions {...paramsTransactions} />,
     [matchTransactionsSplit ? location : null]: <SplitPayment {...paramsTransactionsSplit} />,
     // [matchFee ? location : null]: <CreateAndUpdate {...paramsFee} />,
     [matchFee ? location : null]: <UpdateTax {...paramsFee} />,
     [matchDefaultFee ? location : null]: <UpdateDefaultTax {...paramsDefaultFee} />,
     [matchSeller ? location : null]: (
-      <HeaderBack title="Alterar Plano de Venda" navigateTo="/suporte">
+      <HeaderBack title="Alterar Plano de Venda" navigateTo={localStorage.getItem('voltar') || '/suporte'}>
         <UpdateZoopPlan {...paramsSeller} />
       </HeaderBack>
     ),
@@ -178,6 +184,7 @@ const Router = ({ isLogged }) => {
               ['Atualizar Plano Zoop do usuário antigo', '/atualizar-plano-zoop-old'],
               ['Alterar Plano de Venda', '/atualizar-plano-venda'],
               ['Alterar tarifas padrão', '/alterar-tarifas-padrao'],
+              ['Visualizar planos ativos dos fabricantes', '/planos-fabricantes'],
             ]}
           />
         </motion.div>

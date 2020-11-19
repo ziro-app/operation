@@ -5,7 +5,7 @@ import Details from '@bit/vitorbarbosa19.ziro.details'
 import SpinnerWithDiv from '@bit/vitorbarbosa19.ziro.spinner-with-div'
 import Error from '@bit/vitorbarbosa19.ziro.error'
 import Button from '@bit/vitorbarbosa19.ziro.button'
-import { useLocation } from 'wouter'
+import { useLocation, useRoute } from 'wouter'
 import { fontTitle } from '@ziro/theme'
 import { useMessage, useMessagePromise } from '@bit/vitorbarbosa19.ziro.message-modal'
 import { ZiroPromptMessage, ZiroWaitingMessage } from 'ziro-messages'
@@ -30,6 +30,7 @@ const UpdateZoopPlan = () => {
   const [isLoadingFunction, setIsLoadingFunction] = useState(false)
   const [errorLoading, setErrorLoading] = useState(false)
   const [openModalDeletePlan, setOpenModalDeletePlan] = useState(false)
+  const [fetchFromSellerPlan, setFetchFromSellerPlan] = useState(false)
   const [searchedName, setSearchedName] = useState('')
   const [markupPercentage, setMarkupPercentage] = useState('')
   const [antifraudPercentage, setAntifraudPercentage] = useState('')
@@ -38,6 +39,9 @@ const UpdateZoopPlan = () => {
   const [typeOfToast, setTypeOfToast] = useState('alert')
   const [supplier, setSupplier] = useState({ docId: '', name: '', reason: '', markupPercentage: '', antifraudPercentage: '', sellerZoopPlan: '' })
   const [, setLocation] = useLocation()
+  const [matchSellerId, paramsSellerId] = useRoute('/atualizar-plano-venda/:sellerId?/:fee?/:selectedPlan?')
+  const { sellerId } = paramsSellerId
+  const existSupplierId = supplier.docId || sellerId
   const [settingActivePlan, setSettingActivePlan] = useState('')
   const setPromiseMessage = useMessagePromise()
   const setMessage = useMessage()
@@ -149,6 +153,9 @@ const UpdateZoopPlan = () => {
     setOpenToast(true)
     setIsLoadingFunction(false)
   }
+  if (sellerId && fetchFromSellerPlan === false) {
+    setFetchFromSellerPlan(true)
+  }
   useEffect(() => {
     async function fetchData() {
       setIsLoading(true)
@@ -164,12 +171,15 @@ const UpdateZoopPlan = () => {
         currentZoopFee,
         setCurrentZoopFee,
         setPlansFromCurrentZoopFee,
+        sellerId,
       )
       if (localStorage.getItem('sellerName')) setSearchedName(localStorage.getItem('sellerName'))
       if (localStorage.getItem('selectedPlan')) setSelectedPlan(localStorage.getItem('selectedPlan'))
       if (localStorage.getItem('sellerObject')) setSupplier(JSON.parse(localStorage.getItem('sellerObject')))
       if (localStorage.getItem('sellerName')) {
-        const person = suppliers.find(storeowner => storeowner.name === localStorage.getItem('sellerName'))
+        const person = localStorage.getItem('sellerName')
+          ? suppliers.find(storeowner => storeowner.name.toUpperCase() === localStorage.getItem('sellerName').toUpperCase())
+          : null
         if (person) {
           setSupplier(person)
           if (person.sellerZoopPlan) {
@@ -189,7 +199,7 @@ const UpdateZoopPlan = () => {
       }
     }
     fetchData()
-  }, [])
+  }, [fetchFromSellerPlan])
   useEffect(() => {
     async function fetchData() {
       await fetch(
@@ -205,7 +215,9 @@ const UpdateZoopPlan = () => {
         setCurrentZoopFee,
         setPlansFromCurrentZoopFee,
       )
-      const person = suppliers.find(storeowner => storeowner.name === localStorage.getItem('sellerName'))
+      const person = localStorage.getItem('sellerName')
+        ? suppliers.find(storeowner => storeowner.name.toUpperCase() === localStorage.getItem('sellerName').toUpperCase())
+        : null
       if (person) {
         setSupplier(person)
         localStorage.setItem('sellerObject', JSON.stringify(person))
@@ -223,30 +235,6 @@ const UpdateZoopPlan = () => {
     }
     fetchData()
   }, [supplier, settingActivePlan, suppliers])
-  /*
-  const { sellerZoopPlan } = supplier
-  async function asyncCall() {
-    if (
-      supplier.name &&
-      blocks.length === 0 &&
-      Object.prototype.hasOwnProperty.call(supplier, 'sellerZoopPlan') &&
-      sellerZoopPlan !== null &&
-      Object.prototype.hasOwnProperty.call(sellerZoopPlan, 'activePlan')
-    ) {
-      await fetch(setIsLoading, setErrorLoading, setSuppliers, setSellerZoopPlan2, setFees, selectedPlan, supplier, suppliers)
-      setBlocks(
-        mountBlock(
-          supplier.name,
-          supplier.reason,
-          settingActivePlan || supplier.sellerZoopPlan.activePlan || 'Nenhum plano ativo',
-          Object.keys(sellerZoopPlan2),
-        ),
-      )
-    } else if (supplier.name && blocks.length === 0) {
-      setBlocks(mountBlock(supplier.name, supplier.reason, 'Nenhum plano ativo'))
-    }
-  }
-  asyncCall() */
   const asyncClick = React.useCallback(async planName => {
     try {
       await setPromiseMessage(PromptMessage)
@@ -354,7 +342,7 @@ const UpdateZoopPlan = () => {
         template="regular"
         submitting={isLoadingFunction === true || !selectedPlan || !Object.keys(sellerZoopPlan2).includes(translateFeesToFirebase(selectedPlan))}
         click={() => {
-          setLocation(`/atualizar-plano-venda/${supplier.docId}/ziroAntifraudFee/${translateFeesToFirebase(selectedPlan)}`)
+          setLocation(`/atualizar-plano-venda/${existSupplierId}/ziroAntifraudFee/${translateFeesToFirebase(selectedPlan)}`)
         }}
       />
       <Button
@@ -363,7 +351,7 @@ const UpdateZoopPlan = () => {
         template="regular"
         submitting={isLoadingFunction === true || !selectedPlan || !Object.keys(sellerZoopPlan2).includes(translateFeesToFirebase(selectedPlan))}
         click={() => {
-          setLocation(`/atualizar-plano-venda/${supplier.docId}/ziroMarkupFee/${translateFeesToFirebase(selectedPlan)}`)
+          setLocation(`/atualizar-plano-venda/${existSupplierId}/ziroMarkupFee/${translateFeesToFirebase(selectedPlan)}`)
         }}
       />
       <Button
@@ -372,7 +360,7 @@ const UpdateZoopPlan = () => {
         template="regular"
         submitting={isLoadingFunction === true || !selectedPlan || !Object.keys(sellerZoopPlan2).includes(translateFeesToFirebase(selectedPlan))}
         click={() => {
-          setLocation(`/atualizar-plano-venda/${supplier.docId}/zoopFee/${translateFeesToFirebase(selectedPlan)}`)
+          setLocation(`/atualizar-plano-venda/${existSupplierId}/zoopFee/${translateFeesToFirebase(selectedPlan)}`)
         }}
       />
       <Button
@@ -382,7 +370,7 @@ const UpdateZoopPlan = () => {
         submitting={
           isLoadingFunction === true ||
           selectedPlan === '' ||
-          !supplier.docId ||
+          !existSupplierId ||
           Object.keys(sellerZoopPlan2).includes(translateFeesToFirebase(selectedPlan))
         }
         click={async () => {
@@ -398,7 +386,7 @@ const UpdateZoopPlan = () => {
             }
             if (createNewPlan && Object.keys(sellerZoopPlanForFirebase).length !== 0) {
               setIsLoadingFunction(true)
-              await createNewPlan(sellerZoopPlanForFirebase, nickname, supplier.docId)
+              await createNewPlan(sellerZoopPlanForFirebase, nickname, existSupplierId)
               setTypeOfToast('alert')
               setMessageToast('Plano criado!')
               setOpenToast(true)

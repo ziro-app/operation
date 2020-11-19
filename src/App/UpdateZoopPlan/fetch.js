@@ -13,18 +13,16 @@ const fetch = (
   currentZoopFee,
   setCurrentZoopFee,
   setPlansFromCurrentZoopFee,
+  sellerId,
 ) => {
   const run = async () => {
-    /* console.log('selectedPlan', selectedPlan)
-    console.log('supplier', supplier)
-    console.log('suppliers', suppliers) */
     try {
       let fetchedPlan = {}
       let fetchedStandardPlans = {}
       const fantasyList = []
       const suppliersFetch = []
-      if (supplier.docId) {
-        fetchedPlan = db.collection('suppliers').doc(supplier.docId)
+      if (supplier.docId || sellerId) {
+        fetchedPlan = db.collection('suppliers').doc(supplier.docId || sellerId)
         fetchedPlan.get().then(sup => {
           if (Object.prototype.hasOwnProperty.call(sup.data(), 'sellerZoopPlan2')) {
             setSellerZoopPlan2(sup.data().sellerZoopPlan2)

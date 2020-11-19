@@ -245,7 +245,7 @@ const ChangeDefaultFees = () => {
       />
       <Button
         type="button"
-        cta="Editar Taxa Antifraude"
+        cta="Editar Taxa Antifraude Padrão"
         template="regular"
         submitting={isLoadingFunction === true || !selectedPlan || !Object.keys(sellerZoopPlan2).includes(translateFeesToFirebase(selectedPlan))}
         click={() => {
@@ -254,7 +254,16 @@ const ChangeDefaultFees = () => {
       />
       <Button
         type="button"
-        cta="Editar Taxa Zoop"
+        cta="Editar Taxa Markup Padrão"
+        template="regular"
+        submitting={isLoadingFunction === true || !selectedPlan || !Object.keys(sellerZoopPlan2).includes(translateFeesToFirebase(selectedPlan))}
+        click={() => {
+          setLocation(`/alterar-tarifas-padrao/ziroMarkupFee/${translateFeesToFirebase(selectedPlan)}`)
+        }}
+      />
+      <Button
+        type="button"
+        cta="Editar Taxa Zoop Padrão"
         template="regular"
         submitting={isLoadingFunction === true || !selectedPlan || !Object.keys(sellerZoopPlan2).includes(translateFeesToFirebase(selectedPlan))}
         click={() => {

@@ -12,7 +12,7 @@ const fetch = (setIsLoading, setErrorLoading, setSuppliers, setSellerZoopPlan2, 
         fetchedPlan = db.collection('utilities').doc(process.env.DOCUMENT_ID_FOR_UTILITIES_MAIN)
         fetchedPlan.get().then(sup => {
           if (Object.prototype.hasOwnProperty.call(sup.data(), 'main')) {
-            setSellerZoopPlan2(sup.data().main.currentZoopFee)
+            setSellerZoopPlan2(sup.data().main.standardPlans)
           }
         })
       }
