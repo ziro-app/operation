@@ -11,7 +11,7 @@ import fetch from './fetch';
 import { userContext } from '../appContext';
 import { Menu } from '../Menu/index';
 import {listMonth} from './utils'
-import {containerClearAll, btnClearAll, textClearAll} from './styles'
+import {containerClearAll, btnClearAll, textClearAll, container} from './styles'
 
 const Transactions = ({ transactionId, receivableId }) => {
     const storageFilterStatus = localStorage.getItem('statusFilter')
@@ -67,7 +67,9 @@ const Transactions = ({ transactionId, receivableId }) => {
     const listSellers = listSellersForFilter;
     return (
         <Menu title="Transações">
-            <div style={{ display: 'grid', gridGap: '8px', marginBottom: '40px' }}>
+            <div style={container}>
+                <form>
+                <label aria-label='filtro por fabricante'/>
                 <Dropdown
                     value={sellerFilter || ''}
                     list={listSellers}
@@ -89,6 +91,9 @@ const Transactions = ({ transactionId, receivableId }) => {
                         }
                     }}
                 />
+                </form>
+                <form>
+                <label aria-label='filtro por status'/>
                 <Dropdown
                     value={statusFilter || ''}
                     list={listStatus}
@@ -110,6 +115,9 @@ const Transactions = ({ transactionId, receivableId }) => {
                         }
                     }}
                 />
+                </form>
+                <form>
+                <label aria-label='filtro por mês e ano'/>
                 <Dropdown
                     value={monthFilter || ''}
                     list={listMonth(dataInicioFilter)}
@@ -132,6 +140,7 @@ const Transactions = ({ transactionId, receivableId }) => {
                         }
                     }}
                 />
+                </form>
                 <div style={containerClearAll}>
                     <button
                         style={btnClearAll}

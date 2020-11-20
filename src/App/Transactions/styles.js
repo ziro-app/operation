@@ -1,3 +1,9 @@
+export const container = { 
+    display: 'grid',
+    gridGap: '8px',
+    marginBottom: '40px'
+}
+
 export const containerClearAll = {
     display:'flex',
     justifyContent:"flex-end"
