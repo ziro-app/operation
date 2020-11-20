@@ -90,6 +90,7 @@ const Transactions = ({ transactionId, receivableId }) => {
                     onChangeKeyboard={e => {
                         if(e){
                             if (listStatus.includes(e.value) || e.value === '') {
+                                setIsLoadingResults(true);
                                 localStorage.setItem('statusFilter', e.value);
                             }
                             setStatusFilter(e.value);

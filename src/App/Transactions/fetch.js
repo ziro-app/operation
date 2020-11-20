@@ -3,7 +3,7 @@ import matchStatusColor from './matchStatusColor'
 import { getFilterQuery, dateFormat } from './utils'
 
 const fetch = (state) => {
-    const { setIsLoading, setErrorLoading, payments, setPayments, setLastDoc, setTotalTransactions, setLoadingMore, setIsLoadingResults, limitFetch, setIsLoadingMore } = state
+    const { statusFilter, sellerFilter, monthFilter, setIsLoading, setErrorLoading, payments, setPayments, setLastDoc, setTotalTransactions, setLoadingMore, setIsLoadingResults, limitFetch, setIsLoadingMore } = state
     const storageFilterSeller = localStorage.getItem('sellerFilter')
     const storageFilterStatus = localStorage.getItem('statusFilter')
     const storageFilterMonth = localStorage.getItem('monthFilter')
