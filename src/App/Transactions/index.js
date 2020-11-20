@@ -26,7 +26,7 @@ const Transactions = ({ transactionId, receivableId }) => {
     const [sellerFilter, setSellerFilter] = useState(storageFilterSeller || '');
     const [monthFilter, setMonthFilter] = useState(storageFilterMonth || '');
     const [limitFetch, setLimitFetch] = useState(10);
-    const [dataInicioFilter, setDataInicioFilter] = useState(new Date(2019,5,1))
+    const [dataInicioFilter, setDataInicioFilter] = useState(new Date(2019,10,1))
     const [isLoadingMore, setIsLoadingMore] = useState(true);
     const [transaction, setTransaction] = useState({});
     const state = {setIsLoading,setErrorLoading,payments,setPayments,setLastDoc,setTotalTransactions,setLoadingMore,setIsLoadingResults,limitFetch,setIsLoadingMore}
