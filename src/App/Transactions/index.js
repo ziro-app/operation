@@ -1,7 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
+
 import Spinner from '@bit/vitorbarbosa19.ziro.spinner-with-div';
 import Error from '@bit/vitorbarbosa19.ziro.error';
 import Dropdown from '@bit/vitorbarbosa19.ziro.dropdown';
+
 import TransactionsList from './TransactionsList/index';
 import TransactionDetails from './TransactionDetails/index';
 import ReceivableDetails from './ReceivableDetails/index';
@@ -9,6 +11,7 @@ import fetch from './fetch';
 import { userContext } from '../appContext';
 import { Menu } from '../Menu/index';
 import {listMonth} from './utils'
+import {containerClearAll, btnClearAll, textClearAll} from './styles'
 
 const Transactions = ({ transactionId, receivableId }) => {
     const storageFilterStatus = localStorage.getItem('statusFilter')
@@ -29,6 +32,16 @@ const Transactions = ({ transactionId, receivableId }) => {
     const [dataInicioFilter, setDataInicioFilter] = useState(new Date(2019,10,1))
     const [isLoadingMore, setIsLoadingMore] = useState(true);
     const [transaction, setTransaction] = useState({});
+    const hadleClearAll = () => {
+        setIsLoadingResults(true);
+        setStatusFilter('')
+        setSellerFilter('')
+        setMonthFilter('')
+        setLimitFetch(20)
+        localStorage.removeItem('statusFilter')
+        localStorage.removeItem('sellerFilter')
+        localStorage.removeItem('monthFilter')
+    }
     const state = {statusFilter, sellerFilter, monthFilter, setIsLoading,setErrorLoading,payments,setPayments,setLastDoc,setTotalTransactions,setLoadingMore,setIsLoadingResults,limitFetch,setIsLoadingMore}
     useEffect(() => {
         if (loadingMore || isLoadingResults) {
@@ -119,6 +132,17 @@ const Transactions = ({ transactionId, receivableId }) => {
                         }
                     }}
                 />
+                <div style={containerClearAll}>
+                    <button
+                        style={btnClearAll}
+                        type='submit'
+                        onClick={hadleClearAll}
+                    >
+                        <span style={textClearAll}>
+                            Limpar Tudo
+                        </span>
+                    </button>
+                </div>
             </div>
             {isLoadingResults ? (
                     <Spinner />
