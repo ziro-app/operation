@@ -16,8 +16,13 @@ const fetch = state => {
               const { fantasia, sellerZoopPlan2, uid } = doc.data()
               const objForDataTable = {
                 title: fantasia.toUpperCase(),
-                header: ['Plano Ativo:'],
-                rows: [['Ir para plano de venda']],
+                header: [
+                  'Plano Ativo:',
+                  typeof sellerZoopPlan2 !== 'undefined' && sellerZoopPlan2 && sellerZoopPlan2.activePlan
+                    ? translateFirebaseToFees(sellerZoopPlan2.activePlan)
+                    : ['-'],
+                ],
+                rows: [['Ver tarifas']],
                 rowsClicks: [
                   () => {
                     localStorage.setItem('voltar', '/planos-fabricantes')
@@ -27,11 +32,7 @@ const fetch = state => {
                     setLocation(`/atualizar-plano-venda/${uid}`)
                   },
                 ],
-                totals: [
-                  typeof sellerZoopPlan2 !== 'undefined' && sellerZoopPlan2 && sellerZoopPlan2.activePlan
-                    ? translateFirebaseToFees(sellerZoopPlan2.activePlan)
-                    : ['-'],
-                ],
+                totals: [null],
               }
               allSellersPlans.push(objForDataTable)
             } else {
@@ -44,7 +45,12 @@ const fetch = state => {
           setErrorLoading(true)
           setIsLoading(false)
         })
-      setData(allSellersPlans)
+      const sortedAllSellersPlans = allSellersPlans.sort(function (a, b) {
+        const textA = a.title.toUpperCase()
+        const textB = b.title.toUpperCase()
+        return textA < textB ? -1 : textA > textB ? 1 : 0
+      })
+      setData(sortedAllSellersPlans)
       setErrorLoading(false)
       setIsLoading(false)
     } catch (error) {

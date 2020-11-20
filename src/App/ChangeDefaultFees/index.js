@@ -230,6 +230,7 @@ const ChangeDefaultFees = () => {
             localStorage.setItem('selectedPlan', value)
           }
         }}
+        readOnly
         onChangeKeyboard={element => {
           if (element && element.value === '') {
             const newValue = element.value.replace(/\s/g, '')

@@ -29,7 +29,7 @@ const SellersPlans = () => {
     <Table
       data={data}
       customGrid={{
-        gridTemplateColumns: 'auto auto',
+        gridTemplateColumns: '1fr 1fr 1fr',
         gridRowGap: '10px',
       }}
     />
