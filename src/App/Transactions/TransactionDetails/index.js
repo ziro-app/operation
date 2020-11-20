@@ -210,8 +210,8 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
         let feesFormatted =
           transaction.status !== 'Cancelado' && transaction.fees
             ? ` ${
-                (transaction.isNewPlan ? transaction.splitTransaction : transaction.sellerZoopPlan) &&
-                (markupTransaction.amount || markupTransaction.percentage)
+                (transaction.isNewPlan && transaction.splitTransaction ? transaction.splitTransaction : transaction.sellerZoopPlan) &&
+                (markupTransaction?.amount || markupTransaction?.percentage)
                   ? '- '.concat(
                       parseFloat(parseFloat(markupTransaction.receivable_gross_amount) + parseFloat(transaction.fees))
                         .toLocaleString('pt-br', {
@@ -240,13 +240,13 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
           (antiFraudTransaction.amount || antiFraudTransaction.percentage)
             ? handleInsurance(transaction)
             : '-'
-        let markupValueFormatted =
+        /*let markupValueFormatted =
           Object.prototype.hasOwnProperty.call(transaction, 'receivables') &&
           feesFormatted !== '-' &&
           (transaction.isNewPlan ? transaction.splitTransaction : transaction.sellerZoopPlan) &&
           (markupTransaction.amount || markupTransaction.percentage)
             ? handleMarkup(transaction)
-            : '-'
+            : '-'*/
         let sumOfFees = 0
         if (transaction.status === 'Aprovado') {
           sumOfFees = transaction.fee_details.reduce(function (sum, item) {
