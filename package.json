@@ -86,7 +86,7 @@
         "@bit/vitorbarbosa19.ziro.submenu": "0.0.9",
         "@bit/vitorbarbosa19.ziro.support-page": "0.0.1",
         "@bit/vitorbarbosa19.ziro.table": "0.0.13",
-        "@bit/vitorbarbosa19.ziro.timeline": "0.1.54",
+        "@bit/vitorbarbosa19.ziro.timeline": "^0.1.80",
         "@bit/vitorbarbosa19.ziro.toast-notification": "0.0.9",
         "@bit/vitorbarbosa19.ziro.toggle-button": "0.0.5",
         "@bit/vitorbarbosa19.ziro.update-email": "0.1.89",
