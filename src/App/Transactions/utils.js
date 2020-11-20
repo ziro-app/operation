@@ -19,7 +19,7 @@ export const toMMMYYY = (date) => {
             '12': 'DEZ',
         }
         const newMonth = MMToMMM[month]
-        return `${newMonth}/${fullYear}`
+        return `${newMonth}/${fullYear[2]}${fullYear[3]}`
     }
     return null
 }
@@ -42,7 +42,7 @@ export const toMMYYYY = (date) => {
             'DEZ': '12',
         }
         const newMonth = MMMToMM[month]
-        return `${newMonth}/${fullYear}`
+        return `${newMonth}/20${fullYear}`
     }
     return null
 }
@@ -81,7 +81,7 @@ export const listMonth = (dataEntrada) => {
         }
       }
     }
-    return result.map((date) => toMMMYYY(date));
+    return result.map((date) => toMMMYYY(date)).reverse()
   };
 
 export const getRangeMonth = (date) => {

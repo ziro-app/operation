@@ -25,16 +25,16 @@ const Transactions = ({ transactionId, receivableId }) => {
     const [statusFilter, setStatusFilter] = useState(storageFilterStatus || '');
     const [sellerFilter, setSellerFilter] = useState(storageFilterSeller || '');
     const [monthFilter, setMonthFilter] = useState(storageFilterMonth || '');
-    const [limitFetch, setLimitFetch] = useState(10);
+    const [limitFetch, setLimitFetch] = useState(20);
     const [dataInicioFilter, setDataInicioFilter] = useState(new Date(2019,10,1))
     const [isLoadingMore, setIsLoadingMore] = useState(true);
     const [transaction, setTransaction] = useState({});
-    const state = {setIsLoading,setErrorLoading,payments,setPayments,setLastDoc,setTotalTransactions,setLoadingMore,setIsLoadingResults,limitFetch,setIsLoadingMore}
+    const state = {statusFilter, sellerFilter, monthFilter, setIsLoading,setErrorLoading,payments,setPayments,setLastDoc,setTotalTransactions,setLoadingMore,setIsLoadingResults,limitFetch,setIsLoadingMore}
     useEffect(() => {
         if (loadingMore || isLoadingResults) {
             fetch(state);
         }
-    }, [statusFilter, sellerFilter, monthFilter, payments, limitFetch]);
+    }, [statusFilter, sellerFilter, monthFilter, payments, limitFetch, isLoadingResults]);
     if (isLoading) return <Spinner />
     if (errorLoading) return <Error />;
     if (transactionId && receivableId)
@@ -67,11 +67,13 @@ const Transactions = ({ transactionId, receivableId }) => {
                         setSellerFilter(value);
                     }}
                     onChangeKeyboard={e => {
-                        if (listSellers.includes(e.value) || e.value === '') {
-                            setIsLoadingResults(true);
-                            localStorage.setItem('sellerFilter', e.value);
+                        if(e){
+                            if (listSellers.includes(e.value) || e.value === '') {
+                                setIsLoadingResults(true);
+                                localStorage.setItem('sellerFilter', e.value);
+                            }
+                            setSellerFilter(e.value);
                         }
-                        setSellerFilter(e.value);
                     }}
                 />
                 <Dropdown
@@ -86,11 +88,12 @@ const Transactions = ({ transactionId, receivableId }) => {
                         setStatusFilter(value);
                     }}
                     onChangeKeyboard={e => {
-                        if (listStatus.includes(e.value) || e.value === '') {
-                            setIsLoadingResults(true);
-                            localStorage.setItem('statusFilter', e.value);
+                        if(e){
+                            if (listStatus.includes(e.value) || e.value === '') {
+                                localStorage.setItem('statusFilter', e.value);
+                            }
+                            setStatusFilter(e.value);
                         }
-                        setStatusFilter(e.value);
                     }}
                 />
                 <Dropdown
@@ -105,11 +108,14 @@ const Transactions = ({ transactionId, receivableId }) => {
                         setMonthFilter(value);
                     }}
                     onChangeKeyboard={e => {
-                        if (listMonth(dataInicioFilter).includes(e.value) || e.value === '') {
-                            setIsLoadingResults(true);
-                            localStorage.setItem('monthFilter', e.value);
+                        if(e){
+                            if (listMonth(dataInicioFilter).includes(e.value) || e.value === '') {
+                                setIsLoadingResults(true);
+                                localStorage.setItem('monthFilter', e.value);
+                            }
+                            setMonthFilter(e.value);
+                        
                         }
-                        setMonthFilter(e.value);
                     }}
                 />
             </div>
@@ -131,7 +137,7 @@ const Transactions = ({ transactionId, receivableId }) => {
                         })}
                         btnMoreClick={() => {
                             setLoadingMore(true);
-                            setLimitFetch(limitFetch + 10);
+                            setLimitFetch(limitFetch + 20);
                         }}
                         hasMore={!(payments.length === totalTransactions)}
                         isSearching={isLoadingMore}
