@@ -68,14 +68,18 @@ export const listMonth = (dataEntrada) => {
           }
         }
       } else if (yearEntrada === nowYear) {
-          for (let month = 1; month <= monthEntrada; month++) {
-            result.push(`${month}/${year}`);
-          }
-        } else {
-          for (let month = 1; month <= 12; month++) {
-            result.push(`${month}/${year}`);
-          }
+        for (let month = 1; month <= monthEntrada; month++) {
+          result.push(`${month}/${year}`);
         }
+      } else if (yearEntrada !== year) {
+        for (let month = 1; month <= 12; month++) {
+          result.push(`${month}/${year}`);
+        }
+      } else {
+        for (let month = monthEntrada; month <= 12; month++) {
+          result.push(`${month}/${year}`);
+        }
+      }
     }
     return result.map((date) => toMMMYYY(date));
   };
