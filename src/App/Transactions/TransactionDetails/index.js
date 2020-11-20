@@ -337,9 +337,10 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
             content: transaction.observations,
           })
         }
-
         if (typeof transaction.receivables !== 'undefined' && transaction.receivables.length) {
-          const sortedTransactions = transaction.receivables.sort((a, b) => b.installment - a.installment).filter(item => item.split_rule === null)
+          const sortedTransactions = transaction.receivables
+            .sort((a, b) => b.installment - a.installment)
+            .filter(item => item.split_rule === null || typeof item.split_rule === 'undefined')
           const sortedSplitAmount = Object.prototype.hasOwnProperty.call(transaction.receivables[0], 'split_rule')
             ? transaction.receivables
                 .sort((a, b) => b.installment - a.installment)
