@@ -60,7 +60,7 @@ const Register = () => {
     const [confirmPass, setConfirmPass] = useState('')
     const [searchingCep, isSearchingCep] = useState(false)
     const maritalStatusList = ['Casado(a)', 'Divorciado(a)', 'Separado(a)', 'Solteiro(a)', 'Viúvo(a)']
-    const scopeList = ['Assessoria', 'Dados', 'Dev', 'Logística', 'Processos', 'Vendas']
+    const scopeList = ['Assessoria','Customer Success','Dados','Dev','Financeiro','Logística','Processos','Produto','Sócio','Vendas','escopo']
     const paymentModelList = ['nenhum', 'assessoria2019', 'assessoria2020', 'cobranca2019', 'logistica2019', 'vendas2019', 'vendas2020', 'atendimento2020']
     const statesList = ['AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA', 'MT', 'MS', 'MG', 'PA', 'PB', 'PR', 'PE', 'PI', 'RJ', 'RN', 'RS', 'RO', 'RR', 'SC', 'SP', 'SE', 'TO']
 
