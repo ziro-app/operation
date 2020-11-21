@@ -1,7 +1,7 @@
 export const container = { 
     display: 'grid',
     gridGap: '8px',
-    marginBottom: '40px'
+    marginBottom: '25px'
 }
 
 export const containerClearAll = {
@@ -20,6 +20,7 @@ export const btnClearAll = {
 }
 
 export const textClearAll = {
+    fontSize: '1.2rem',
     fontWeight:'700',
     textDecoration:'underline'
 }

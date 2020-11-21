@@ -148,7 +148,7 @@ const Transactions = ({ transactionId, receivableId }) => {
                         onClick={hadleClearAll}
                     >
                         <span style={textClearAll}>
-                            Limpar Tudo
+                            Limpar filtros
                         </span>
                     </button>
                 </div>
