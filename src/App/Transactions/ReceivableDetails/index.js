@@ -17,6 +17,11 @@ const ReceivableDetails = ({ transactions, transactionId, receivableId, transact
     const [, setLocation] = useLocation()
     const [nothing, setNothing] = useState(false)
     const [error, setError] = useState(false)
+    const matchPlan = {
+        'standard': 'Fluxo',
+        'financed30': 'D+30',
+        'financed14': 'D+14'
+    }
     let markupTransaction = {}
     let antiFraudTransaction = {}
 
@@ -99,7 +104,7 @@ const ReceivableDetails = ({ transactions, transactionId, receivableId, transact
                             },
                             {
                                 title: 'Recebimento',
-                                content: activePlan ?? 'Fluxo',
+                                content: matchPlan[activePlan] ?? 'Fluxo',
                             },
                             {
                                 title: 'Data recebimento',
