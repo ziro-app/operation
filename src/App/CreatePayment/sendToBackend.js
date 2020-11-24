@@ -49,7 +49,9 @@ const sendToBackend = state => () => {
                     try {
                         const doc = await docRef.get()
                         if (doc) {
-                            await navigator.clipboard.writeText(`${baseUrl}${doc.id}`)
+                            checkoutWithoutRegister
+                                ? await navigator.clipboard.writeText(`${baseUrl}${doc.id}/resumo?doc&cwr`)
+                                : await navigator.clipboard.writeText(`${baseUrl}${doc.id}/resumo?doc`)
                         }
                     } catch (error) {
                         throw { msg: 'Erro ao realizar a cópia', copyError: true }
