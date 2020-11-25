@@ -13,12 +13,21 @@ export function translateInstallments(text) {
   return `${installmentName === 'installment' ? `x${installmentNumber}` : 'Débito'}`
 }
 export function translateFees(text) {
-  const ziroMarkupFee = 'Taxa Ziro'
-  const zoopFee = 'Taxa Zoop'
-  const ziroAntifraudFee = 'Taxa Antifraude'
+  const ziroMarkupFee = 'Markup'
+  const zoopFee = 'Zoop'
+  const ziroAntifraudFee = 'Antifraude'
   if (text === 'ziroMarkupFee') return ziroMarkupFee
   if (text === 'zoopFee') return zoopFee
   if (text === 'ziroAntifraudFee') return ziroAntifraudFee
+  return 'Taxa sem nome cadastrado'
+}
+export function translateTaxes(text) {
+  const standard = 'Fluxo'
+  const financed14 = 'D+14'
+  const financed30 = 'D+30'
+  if (text === 'standard') return standard
+  if (text === 'financed14') return financed14
+  if (text === 'financed30') return financed30
   return 'Taxa sem nome cadastrado'
 }
 export function alphanum(a, b) {

@@ -12,7 +12,7 @@ import { useForm } from 'react-hook-form'
 import Details from '@bit/vitorbarbosa19.ziro.details'
 import SpinnerWithDiv from '@bit/vitorbarbosa19.ziro.spinner-with-div'
 import InputPercentage from './InputPercentage/index'
-import { returnInstallmentsWithFee, translateFees, translateInstallments, testInstallments } from './functions'
+import { returnInstallmentsWithFee, translateFees, translateInstallments, translateTaxes } from './functions'
 import fetch from './fetch'
 import { wrapper, item, content, cardTitle } from './styles'
 import sendToBackend from './sendToBackend'
@@ -90,7 +90,12 @@ const UpdateDefaulTax = () => {
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={containerWithPadding}>
       <ToastNotification openToastRoot={openToast} setOpenToastRoot={setOpenToast} messageToastRoot={messageToast} type={typeOfToast} />
-      <Header type="icon-link" title={`Editar ${translateFees(fee)} Padrão`} navigateTo="/alterar-tarifas-padrao" icon="back" />
+      <Header
+        type="icon-link"
+        title={`Editar ${translateTaxes(selectedPlan)} ${translateFees(fee)}`}
+        navigateTo="/alterar-tarifas-padrao"
+        icon="back"
+      />
       {supplier.fantasia && <Details blocks={blocks} />}
       <div style={{ marginTop: '35px' }}>
         {fees !== null &&
