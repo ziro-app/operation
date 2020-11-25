@@ -124,6 +124,6 @@
         "uuid": "^8.2.0",
         "webfontloader": "^1.6.28",
         "wouter": "^2.4.0",
-        "ziro-messages": "0.0.63"
+        "ziro-messages": "0.0.71"
     }
 }
