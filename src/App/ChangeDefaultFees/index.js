@@ -132,7 +132,7 @@ const ChangeDefaultFees = () => {
       setIsLoading(true)
       await fetch(setIsLoading, setErrorLoading, setSuppliers, setSellerZoopPlan2, setFees, selectedPlan, supplier, suppliers)
       if (localStorage.getItem('sellerName')) setSearchedName(localStorage.getItem('sellerName'))
-      if (localStorage.getItem('selectedPlan')) setSelectedPlan(localStorage.getItem('selectedPlan'))
+      if (localStorage.getItem('selectedPlanDefault')) setSelectedPlan(localStorage.getItem('selectedPlanDefault'))
       if (localStorage.getItem('sellerObject')) setSupplier(JSON.parse(localStorage.getItem('sellerObject')))
       if (localStorage.getItem('sellerName')) {
         const person = suppliers.find(storeowner => storeowner.name === localStorage.getItem('sellerName'))
@@ -140,8 +140,8 @@ const ChangeDefaultFees = () => {
           setSupplier(person)
           if (person.sellerZoopPlan) {
             setAllPlans(Object.keys(person.sellerZoopPlan).filter(item => item !== 'activePlan'))
-            if (!allPlans.includes(localStorage.getItem('selectedPlan'))) {
-              localStorage.removeItem('selectedPlan')
+            if (!allPlans.includes(localStorage.getItem('selectedPlanDefault'))) {
+              localStorage.removeItem('selectedPlanDefault')
               setSelectedPlan('')
             }
             if (Object.prototype.hasOwnProperty.call(person.sellerZoopPlan, 'activePlan')) {
@@ -191,10 +191,10 @@ const ChangeDefaultFees = () => {
           if (value.includes(' ')) {
             const newValue = value.replace(/\s/g, '')
             setSelectedPlan(newValue)
-            localStorage.setItem('selectedPlan', newValue)
+            localStorage.setItem('selectedPlanDefault', newValue)
           } else {
             setSelectedPlan(value)
-            localStorage.setItem('selectedPlan', value)
+            localStorage.setItem('selectedPlanDefault', value)
           }
         }}
         readOnly
@@ -202,10 +202,10 @@ const ChangeDefaultFees = () => {
           if (element && element.value === '') {
             const newValue = element.value.replace(/\s/g, '')
             setSelectedPlan(newValue)
-            localStorage.setItem('selectedPlan', newValue)
+            localStorage.setItem('selectedPlanDefault', newValue)
           } else if (element) {
             setSelectedPlan(element.value)
-            localStorage.setItem('selectedPlan', element.value)
+            localStorage.setItem('selectedPlanDefault', element.value)
           }
         }}
         list={sellerZoopPlan2 ? Object.keys(sellerZoopPlan2).map(tax => translateFirebaseToFees(tax)) : ['']}

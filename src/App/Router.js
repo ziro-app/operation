@@ -182,9 +182,9 @@ const Router = ({ isLogged }) => {
               ['Aprovar confirmação de email', '/validar-email'],
               ['Alterar email do usuário', '/alterar-email'],
               ['Atualizar Plano Zoop do usuário antigo', '/atualizar-plano-zoop-old'],
-              ['Alterar Plano de Venda', '/atualizar-plano-venda'],
-              ['Alterar tarifas padrão', '/alterar-tarifas-padrao'],
-              ['Visualizar planos ativos dos fabricantes', '/planos-fabricantes'],
+              ['Fabricantes: Alterar plano de venda', '/atualizar-plano-venda'],
+              ['Fabricantes: Alterar tarifas padrão', '/alterar-tarifas-padrao'],
+              ['Fabricantes: Visualizar planos ativos', '/planos-fabricantes'],
             ]}
           />
         </motion.div>
