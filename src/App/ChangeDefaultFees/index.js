@@ -132,7 +132,7 @@ const ChangeDefaultFees = () => {
       setIsLoading(true)
       await fetch(setIsLoading, setErrorLoading, setSuppliers, setSellerZoopPlan2, setFees, selectedPlan, supplier, suppliers)
       if (localStorage.getItem('sellerName')) setSearchedName(localStorage.getItem('sellerName'))
-      if (localStorage.getItem('selectedPlan')) setSelectedPlan(localStorage.getItem('selectedPlan'))
+      if (localStorage.getItem('selectedPlanDefault')) setSelectedPlan(localStorage.getItem('selectedPlanDefault'))
       if (localStorage.getItem('sellerObject')) setSupplier(JSON.parse(localStorage.getItem('sellerObject')))
       if (localStorage.getItem('sellerName')) {
         const person = suppliers.find(storeowner => storeowner.name === localStorage.getItem('sellerName'))
@@ -140,8 +140,8 @@ const ChangeDefaultFees = () => {
           setSupplier(person)
           if (person.sellerZoopPlan) {
             setAllPlans(Object.keys(person.sellerZoopPlan).filter(item => item !== 'activePlan'))
-            if (!allPlans.includes(localStorage.getItem('selectedPlan'))) {
-              localStorage.removeItem('selectedPlan')
+            if (!allPlans.includes(localStorage.getItem('selectedPlanDefault'))) {
+              localStorage.removeItem('selectedPlanDefault')
               setSelectedPlan('')
             }
             if (Object.prototype.hasOwnProperty.call(person.sellerZoopPlan, 'activePlan')) {
@@ -159,48 +159,15 @@ const ChangeDefaultFees = () => {
   useEffect(() => {
     async function fetchData() {
       await fetch(setIsLoading, setErrorLoading, setSuppliers, setSellerZoopPlan2, setFees, selectedPlan, supplier, suppliers)
-      const person = suppliers.find(storeowner => storeowner.name === localStorage.getItem('sellerName'))
-      if (person) {
-        setSupplier(person)
-        localStorage.setItem('sellerObject', JSON.stringify(person))
-        let activePlan = 'Nenhum plano ativo'
-        const { sellerZoopPlan } = supplier
-        if (sellerZoopPlan && Object.prototype.hasOwnProperty.call(sellerZoopPlan, 'activePlan'))
-          activePlan = settingActivePlan || supplier.sellerZoopPlan.activePlan || 'Nenhum plano ativo'
-        if (supplier.name) setBlocks(mountBlock(supplier.name, supplier.reason, activePlan, Object.keys(sellerZoopPlan2)))
-        if (person.sellerZoopPlan) setAllPlans(Object.keys(person.sellerZoopPlan).filter(item => item !== 'activePlan'))
-        else {
-          setAllPlans([''])
-          setSelectedPlan('')
-        }
-      }
+
+      let activePlan = 'Nenhum plano ativo'
+      const { sellerZoopPlan } = supplier
+      if (sellerZoopPlan && Object.prototype.hasOwnProperty.call(sellerZoopPlan, 'activePlan'))
+        activePlan = settingActivePlan || supplier.sellerZoopPlan.activePlan || 'Nenhum plano ativo'
+      if (supplier.name) setBlocks(mountBlock(supplier.name, supplier.reason, activePlan, Object.keys(sellerZoopPlan2)))
     }
     fetchData()
   }, [supplier, settingActivePlan, suppliers])
-  /*
-    const { sellerZoopPlan } = supplier
-    async function asyncCall() {
-      if (
-        supplier.name &&
-        blocks.length === 0 &&
-        Object.prototype.hasOwnProperty.call(supplier, 'sellerZoopPlan') &&
-        sellerZoopPlan !== null &&
-        Object.prototype.hasOwnProperty.call(sellerZoopPlan, 'activePlan')
-      ) {
-        await fetch(setIsLoading, setErrorLoading, setSuppliers, setSellerZoopPlan2, setFees, selectedPlan, supplier, suppliers)
-        setBlocks(
-          mountBlock(
-            supplier.name,
-            supplier.reason,
-            settingActivePlan || supplier.sellerZoopPlan.activePlan || 'Nenhum plano ativo',
-            Object.keys(sellerZoopPlan2),
-          ),
-        )
-      } else if (supplier.name && blocks.length === 0) {
-        setBlocks(mountBlock(supplier.name, supplier.reason, 'Nenhum plano ativo'))
-      }
-    }
-    asyncCall() */
   const asyncClick = React.useCallback(async planName => {
     try {
       await setPromiseMessage(PromptMessage)
@@ -224,10 +191,10 @@ const ChangeDefaultFees = () => {
           if (value.includes(' ')) {
             const newValue = value.replace(/\s/g, '')
             setSelectedPlan(newValue)
-            localStorage.setItem('selectedPlan', newValue)
+            localStorage.setItem('selectedPlanDefault', newValue)
           } else {
             setSelectedPlan(value)
-            localStorage.setItem('selectedPlan', value)
+            localStorage.setItem('selectedPlanDefault', value)
           }
         }}
         readOnly
@@ -235,10 +202,10 @@ const ChangeDefaultFees = () => {
           if (element && element.value === '') {
             const newValue = element.value.replace(/\s/g, '')
             setSelectedPlan(newValue)
-            localStorage.setItem('selectedPlan', newValue)
+            localStorage.setItem('selectedPlanDefault', newValue)
           } else if (element) {
             setSelectedPlan(element.value)
-            localStorage.setItem('selectedPlan', element.value)
+            localStorage.setItem('selectedPlanDefault', element.value)
           }
         }}
         list={sellerZoopPlan2 ? Object.keys(sellerZoopPlan2).map(tax => translateFirebaseToFees(tax)) : ['']}
