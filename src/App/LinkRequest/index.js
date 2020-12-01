@@ -243,7 +243,7 @@ const LinkRequest = () => {
                                         if (searchedBank) {
                                             setBank(searchedBank)
                                             setBeneficiary(searchedBank.razao)
-                                            const mask = value.length <= 14 ? '###.###.###-##' : '##.###.###/####-##'
+                                            const mask = /^\d{3}.?\d{3}.?\d{3}-?\d{2}$/.test(searchedBank.cnpj) ? '###.###.###-##' : '##.###.###/####-##'
                                             setBeneficiaryDocument(maskInput(searchedBank.cnpj, mask, true))
                                             setBankName(searchedBank.banco)
                                             setAccountNumber(searchedBank.conta)
@@ -269,7 +269,7 @@ const LinkRequest = () => {
                                         if (searchedBank) {
                                             setBank(searchedBank)
                                             setBeneficiary(searchedBank.razao)
-                                            const mask = value.length <= 14 ? '###.###.###-##' : '##.###.###/####-##'
+                                            const mask = /^\d{3}.?\d{3}.?\d{3}-?\d{2}$/.test(searchedBank.cnpj) ? '###.###.###-##' : '##.###.###/####-##'
                                             setBeneficiaryDocument(maskInput(searchedBank.cnpj, mask, true))
                                             setBankName(searchedBank.banco)
                                             setAccountNumber(searchedBank.conta)
