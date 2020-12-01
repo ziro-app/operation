@@ -14,6 +14,7 @@ const fetch = (state) => {
         try {
             await query.onSnapshot(
                 async snapshot => {
+                    console.log(snapshot)
                     const storageFilterSeller = localStorage.getItem('sellerFilter')
                     const storageFilterStatus = localStorage.getItem('statusFilter')
                     const storageFilterMonth = localStorage.getItem('monthFilter')
