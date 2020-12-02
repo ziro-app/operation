@@ -104,6 +104,7 @@ export function getFilterQuery({storageFilterSeller, storageFilterStatus, storag
     const newFilterMonth = toMMYYYY(storageFilterMonth)
     const [dataInicio, dataFim] = newFilterMonth ? getRangeMonth(newFilterMonth) : [null, null]
     const type = filterName({storageFilterSeller, storageFilterStatus, storageFilterMonth})
+    console.log(type)
     if(!limit){
         switch (type) {
             case 'allFilters':
