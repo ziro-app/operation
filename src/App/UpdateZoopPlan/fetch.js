@@ -19,8 +19,6 @@ const fetch = (
     try {
       let fetchedPlan = {}
       let fetchedStandardPlans = {}
-      const fantasyList = []
-      const suppliersFetch = []
       if (supplier.docId || sellerId) {
         fetchedPlan = db.collection('suppliers').doc(supplier.docId || sellerId)
         fetchedPlan.get().then(sup => {
@@ -43,29 +41,6 @@ const fetch = (
           }
           setPlansFromCurrentZoopFee(currentFee.data().main.standardPlans)
         })
-      }
-      const query = db.collection('suppliers').where('tipoCadastro', '==', 'Completo')
-
-      if (!query.empty && suppliers.length === 0) {
-        query.onSnapshot(snapshot => {
-          snapshot.forEach(sup => {
-            const docId = sup.id
-            const { fantasia, razao, sellerZoopPlan, nome, sobrenome, sellerZoopPlan2 } = sup.data()
-            const name = fantasia
-              ? fantasyList.includes(fantasia)
-                ? capitalize(`${fantasia} - ${nome}`)
-                : capitalize(fantasia)
-              : `${nome} ${sobrenome}`
-            fantasyList.push(fantasia)
-            suppliersFetch.push({
-              docId,
-              name,
-              reason: razao ? capitalize(razao) : '-',
-              sellerZoopPlan: sellerZoopPlan2 || null,
-            })
-          })
-          setSuppliers(suppliersFetch)
-        }) // até aqui
       }
       setErrorLoading(false)
       setIsLoading(false)

@@ -9,6 +9,7 @@ import { useLocation, useRoute } from 'wouter'
 import { fontTitle } from '@ziro/theme'
 import { useMessage, useMessagePromise } from '@bit/vitorbarbosa19.ziro.message-modal'
 import { ZiroPromptMessage, ZiroWaitingMessage } from 'ziro-messages'
+import capitalize from '@ziro/capitalize'
 import ToastNotification from '../ToastNotification'
 import sendToBackend from './sendToBackend'
 import fetch from './fetch'
@@ -16,6 +17,7 @@ import { userContext } from '../appContext'
 import { createNewPlan, translateFirebaseToFees, translateFeesToFirebase } from './functions'
 import Modal from '../utils/Modal/Modal'
 import updatePlan from './updatePlan'
+import { db } from '../../Firebase'
 
 const UpdateZoopPlan = () => {
   const [blocks, setBlocks] = useState([])
@@ -128,7 +130,7 @@ const UpdateZoopPlan = () => {
   }
   const clear = () => {
     setAllPlans('')
-    setSellerZoopPlan2('')
+    setSellerZoopPlan2({})
     setMarkupPercentage('')
     setAntifraudPercentage('')
     setSupplier({ docId: '', name: '', reason: '', markupPercentage: '', antifraudPercentage: '', sellerZoopPlan: '' })
@@ -156,6 +158,28 @@ const UpdateZoopPlan = () => {
   if (sellerId && fetchFromSellerPlan === false) {
     setFetchFromSellerPlan(true)
   }
+  useEffect(() => {
+    const query = db.collection('suppliers').where('tipoCadastro', '==', 'Completo')
+    query.onSnapshot(snapshot => {
+      const fantasyList = []
+      const suppliersFetch = []
+      snapshot.forEach(sup => {
+        const docId = sup.id
+        const { fantasia, razao, nome, sobrenome, sellerZoopPlan2 } = sup.data()
+        const name = fantasia ? (fantasyList.includes(fantasia) ? capitalize(`${fantasia} - ${nome}`) : capitalize(fantasia)) : `${nome} ${sobrenome}`
+        fantasyList.push(fantasia)
+        suppliersFetch.push({
+          docId,
+          name,
+          reason: razao ? capitalize(razao) : '-',
+          sellerZoopPlan: sellerZoopPlan2 || null,
+        })
+        if (snapshot.size === suppliersFetch.length) {
+          setSuppliers(suppliersFetch)
+        }
+      })
+    }) // até aqui
+  }, [])
   useEffect(() => {
     async function fetchData() {
       setIsLoading(true)
@@ -214,6 +238,7 @@ const UpdateZoopPlan = () => {
         currentZoopFee,
         setCurrentZoopFee,
         setPlansFromCurrentZoopFee,
+        sellerId,
       )
       const person = localStorage.getItem('sellerName')
         ? suppliers.find(storeowner => storeowner.name.toUpperCase() === localStorage.getItem('sellerName').toUpperCase())
@@ -333,7 +358,13 @@ const UpdateZoopPlan = () => {
           }
         }}
         readOnly
-        list={plansFromCurrentZoopFee ? Object.keys(plansFromCurrentZoopFee).map(tax => translateFirebaseToFees(tax)) : ['']} // Object.keys(sellerZoopPlan2).filter(item => item !== 'activePlan') : ['']}
+        list={
+          plansFromCurrentZoopFee
+            ? Object.keys(plansFromCurrentZoopFee)
+                .map(tax => translateFirebaseToFees(tax))
+                .sort()
+            : ['']
+        } // Object.keys(sellerZoopPlan2).filter(item => item !== 'activePlan') : ['']}
         placeholder="Escolha ou adicione um plano"
       />
       <Button
@@ -377,7 +408,7 @@ const UpdateZoopPlan = () => {
           if (sellerZoopPlan2 === null || !Object.keys(sellerZoopPlan2).includes(translateFeesToFirebase(selectedPlan))) {
             let sellerZoopPlanForFirebase = sellerZoopPlan2
 
-            if (sellerZoopPlan2 !== null) {
+            if (sellerZoopPlan2 !== null || sellerZoopPlan2 !== '') {
               sellerZoopPlanForFirebase[translateFeesToFirebase(selectedPlan)] = {}
               sellerZoopPlanForFirebase[translateFeesToFirebase(selectedPlan)] = plansFromCurrentZoopFee[translateFeesToFirebase(selectedPlan)]
             } else {
