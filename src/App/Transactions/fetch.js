@@ -10,15 +10,17 @@ const fetch = (state) => {
     if (payments) setIsLoadingMore(true)
     else setIsLoadingMore(false)
     const query = getFilterQuery({storageFilterSeller, storageFilterStatus, storageFilterMonth, limit:limitFetch})
+    console.log('query outside:',query)
     const run = async () => {
         try {
             await query.onSnapshot(
                 async snapshot => {
-                    console.log(snapshot)
+                    console.log('snapshot:',snapshot)
                     const storageFilterSeller = localStorage.getItem('sellerFilter')
                     const storageFilterStatus = localStorage.getItem('statusFilter')
                     const storageFilterMonth = localStorage.getItem('monthFilter')
                     const query = getFilterQuery({storageFilterSeller, storageFilterStatus, storageFilterMonth, limit:null})
+                    console.log('query inside:',query)
                     const collectionData = await query.get()
                     setTotalTransactions(collectionData.docs.length)
                     if (!collectionData.docs.length) {
