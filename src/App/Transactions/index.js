@@ -72,7 +72,7 @@ const Transactions = ({ transactionId, receivableId }) => {
                 <label aria-label='filtro por fabricante'/>
                 <Dropdown
                     value={sellerFilter || ''}
-                    list={listSellers}
+                    list={listSellers.sort()}
                     placeholder="Filtrar fabricante"
                     onChange={({ target: { value } }) => {
                         if (listSellers.includes(value) || value === '') {
