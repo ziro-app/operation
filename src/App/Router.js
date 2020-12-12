@@ -23,6 +23,8 @@ import DeleteUser from './DeleteUser/index'
 import { HeaderBack } from './HeaderBack/index'
 import ImageUpload from './ImageUpload/index'
 import LinkRequest from './LinkRequest/index'
+import BankCheckEntry from './BankCheckEntry/index'
+import CreateCharge from './CreateCharge/index'
 import Login from './Login/index'
 import LoginSupportPage from './LoginSupportPage'
 import MaterialRequest from './MaterialRequest/index'
@@ -156,6 +158,8 @@ const Router = ({ isLogged }) => {
               ['Lojista: Ver/Editar', '/visualizar-lojista'],
               ['Afiliado: Cadastrar', '/cadastrar-afiliado'],
               ['Afiliado: Ver/Editar', '/visualizar-afiliado'],
+              ['Lançamento de Cheque', '/lancamento-cheque'],
+              ['Criação de Cobrança', '/criar-cobranca'],
             ]}
           />
         </motion.div>
@@ -263,6 +267,16 @@ const Router = ({ isLogged }) => {
     '/upload-imagens': (
       <HeaderBack title="Upload de imagens" navigateTo="/assessoria">
         <UploadImages withIcon imgExtension={['.jpg', '.gif', '.png', '.gif']} maxFileSize={5242880} />
+      </HeaderBack>
+    ),
+    '/lancamento-cheque': (
+      <HeaderBack title="Lançamento de Cheque" navigateTo="/assessoria">
+        <BankCheckEntry />
+      </HeaderBack>
+    ),
+    '/criar-cobranca': (
+      <HeaderBack title="Criação de cobrança" navigateTo="/assessoria">
+        <CreateCharge />
       </HeaderBack>
     ),
     '/update': (
