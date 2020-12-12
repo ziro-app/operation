@@ -17,7 +17,10 @@ const sendToBackend = state => () => new Promise(async (resolve, reject) => {
                     throw error
                 }
                 resolve('Enviado com sucesso!')
-            } else throw { msg: 'E-mail já validado!', customError: true }
+            } else {
+                await auth.signOut()
+                throw { msg: 'E-mail já validado!', customError: true }
+            }
         } catch (error) {
             if (error.code) {
                 switch (error.code) {
