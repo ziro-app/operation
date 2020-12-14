@@ -165,14 +165,14 @@ const UpdateZoopPlan = () => {
       const suppliersFetch = []
       snapshot.forEach(sup => {
         const docId = sup.id
-        const { fantasia, razao, nome, sobrenome, sellerZoopPlan2 } = sup.data()
+        const { fantasia, razao, nome, sobrenome, sellerZoopPlan } = sup.data()
         const name = fantasia ? (fantasyList.includes(fantasia) ? capitalize(`${fantasia} - ${nome}`) : capitalize(fantasia)) : `${nome} ${sobrenome}`
         fantasyList.push(fantasia)
         suppliersFetch.push({
           docId,
           name,
           reason: razao ? capitalize(razao) : '-',
-          sellerZoopPlan: sellerZoopPlan2 || null,
+          sellerZoopPlan: sellerZoopPlan || null,
         })
         if (snapshot.size === suppliersFetch.length) {
           setSuppliers(suppliersFetch)

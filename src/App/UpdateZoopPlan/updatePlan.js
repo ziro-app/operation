@@ -7,7 +7,7 @@ const updatePlan = (sellerZoopPlanForFirebase, nickname, sellerId) => {
     try {
       if (process.env.HOMOLOG ? true : allowedUsers.includes(nome)) {
         await db.collection('suppliers').doc(sellerId).update({
-          sellerZoopPlan2: sellerZoopPlanForFirebase, // newPlan, // sellerActualZoopPlanForFirebase,
+          sellerZoopPlan: sellerZoopPlanForFirebase, // newPlan, // sellerActualZoopPlanForFirebase,
         })
         resolve('Plano atualizado')
 

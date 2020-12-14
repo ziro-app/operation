@@ -86,7 +86,7 @@ export const createNewPlan = async (sellerZoopPlanForFirebase, nickname, sellerI
         // if (Object.keys(sellerZoopPlanForFirebase).length !== 0) {
         // console.log('newPlan dentro do backend', sellerZoopPlanForFirebase)
         await db.collection('suppliers').doc(sellerId).update({
-          sellerZoopPlan2: sellerZoopPlanForFirebase, // newPlan, // sellerActualZoopPlanForFirebase,
+          sellerZoopPlan: sellerZoopPlanForFirebase, // newPlan, // sellerActualZoopPlanForFirebase,
         })
         // console.log('entrou 3')
         resolve('Plano atualizado')

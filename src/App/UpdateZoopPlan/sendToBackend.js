@@ -15,7 +15,7 @@ const sendToBackend = async state => {
         // console.log('sellerPlanWithNewActivePlan', sellerPlanWithNewActivePlan)
         setSettingActivePlan(translateFirebaseToFees(selectedPlan))
         await db.collection('suppliers').doc(docId).update({
-          sellerZoopPlan2: sellerPlanWithNewActivePlan,
+          sellerZoopPlan: sellerPlanWithNewActivePlan,
         })
         resolve('Plano atualizado')
       } else throw { msg: 'Permissão insuficiente', customError: true }

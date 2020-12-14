@@ -22,10 +22,10 @@ const fetch = (
       if (supplier.docId || sellerId) {
         fetchedPlan = db.collection('suppliers').doc(supplier.docId || sellerId)
         fetchedPlan.get().then(sup => {
-          if (Object.prototype.hasOwnProperty.call(sup.data(), 'sellerZoopPlan2')) {
+          if (Object.prototype.hasOwnProperty.call(sup.data(), 'sellerZoopPlan')) {
             setSellerZoopPlan2(sup.data().sellerZoopPlan2)
             if (selectedPlan) {
-              const sellerZoopPlanObjectForIteration = sup.data().sellerZoopPlan2[selectedPlan]
+              const sellerZoopPlanObjectForIteration = sup.data().sellerZoopPlan[selectedPlan]
 
               const feesFiltered = sellerZoopPlanObjectForIteration ? Object.entries(sellerZoopPlanObjectForIteration) : null // .filter()
 

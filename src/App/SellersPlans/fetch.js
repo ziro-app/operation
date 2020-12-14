@@ -13,13 +13,13 @@ const fetch = state => {
         .then(doc =>
           doc.docs.map(doc => {
             if (doc.exists) {
-              const { fantasia, sellerZoopPlan2, uid } = doc.data()
+              const { fantasia, sellerZoopPlan, uid } = doc.data()
               const objForDataTable = {
                 title: fantasia.toUpperCase(),
                 header: [
                   'Plano Ativo:',
-                  typeof sellerZoopPlan2 !== 'undefined' && sellerZoopPlan2 && sellerZoopPlan2.activePlan
-                    ? translateFirebaseToFees(sellerZoopPlan2.activePlan)
+                  typeof sellerZoopPlan !== 'undefined' && sellerZoopPlan && sellerZoopPlan.activePlan
+                    ? translateFirebaseToFees(sellerZoopPlan.activePlan)
                     : ['-'],
                 ],
                 rows: [['Ver tarifas']],

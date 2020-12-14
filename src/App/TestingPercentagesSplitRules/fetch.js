@@ -17,20 +17,20 @@ const fetch = (setIsLoading, setErrorLoading, setSuppliers, setSellerZoopPlan2, 
       const fantasyList = []
       const suppliers = []
       let fetchedPlan = {}
-      const query = await db.collection('suppliers').orderBy('sellerZoopPlan2', 'asc').get()
+      const query = await db.collection('suppliers').orderBy('sellerZoopPlan', 'asc').get()
 
       if (supplier.docId) {
         fetchedPlan = await db.collection('suppliers').doc(supplier.docId).get()
-        setSellerZoopPlan2(fetchedPlan.data().sellerZoopPlan2)
-        if (!selectedPlan) selectedPlan = Object.keys(fetchedPlan.data().sellerZoopPlan2)[0]
+        setSellerZoopPlan2(fetchedPlan.data().sellerZoopPlan)
+        if (!selectedPlan) selectedPlan = Object.keys(fetchedPlan.data().sellerZoopPlan)[0]
         const whichPlan = translateFeesToFirebase(selectedPlan) || 'standard'
-        const sellerZoopPlanObjectForIteration = fetchedPlan.data().sellerZoopPlan2[whichPlan]
+        const sellerZoopPlanObjectForIteration = fetchedPlan.data().sellerZoopPlan[whichPlan]
         sellerZoopPlanObjectForIteration ? setFees(Object.entries(sellerZoopPlanObjectForIteration)) : null
       }
       if (!query.empty) {
         query.forEach(sup => {
           const docId = sup.id
-          const { fantasia, razao, nome, sobrenome, sellerZoopPlan2 } = sup.data()
+          const { fantasia, razao, nome, sobrenome, sellerZoopPlan } = sup.data()
           const name = fantasia
             ? fantasyList.includes(fantasia)
               ? capitalize(`${fantasia} - ${nome}`)
