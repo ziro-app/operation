@@ -54,19 +54,7 @@ const cardForm = ({
       label="Foto do Romaneio"
       input={<SingleImageUpload setFile={setRomaneio} filename={filename || ''} setFilename={setFilename} indexOfFile={0} />}
     />,
-    <FormInput
-      name="installment"
-      label="Parcelas"
-      input={
-        <Dropdown
-          value={installment}
-          onChange={({ target: { value } }) => setInstallment(value)}
-          onChangeKeyboard={element => (element ? setInstallment(element.value) : null)}
-          list={installments}
-          placeholder="Quantidade de parcelas"
-        />
-      }
-    />,
+    <FormInput name="installment" label="Parcelas" input={<InputText value={4} inputMode="numeric" readyOnly disabled />} />,
     <FormInput
       name="discount"
       label="Desconto à vista"
@@ -195,8 +183,8 @@ const cardForm = ({
           readOnly
           onChange={({ target: { value } }) => setPaymentType(value)}
           onChangeKeyboard={element => (element ? setPaymentType(element.value) : null)}
-          list={['TED', 'Cheque']}
-          placeholder="TED ou Cheque"
+          list={['Transferência', 'Cheque']}
+          placeholder="Transferência ou Cheque"
         />
       }
     />,
@@ -326,11 +314,12 @@ const pixForm = ({
       label="Parcelas"
       input={
         <Dropdown
-          value={installment}
+          value={4}
           onChange={({ target: { value } }) => setInstallment(value)}
           onChangeKeyboard={element => (element ? setInstallment(element.value) : null)}
           list={installments}
           placeholder="Quantidade de parcelas"
+          readonly
         />
       }
     />,

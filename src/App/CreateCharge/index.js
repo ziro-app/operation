@@ -164,14 +164,8 @@ const CreateCharge = () => {
       message: 'Formatos válidos: .png, .jpg e .jpeg',
     },
     {
-      name: 'installment',
-      validation: value => (type === 'Cartão de Crédito' ? value !== '' && installments.includes(value) : true),
-      value: installment,
-      message: 'Campo obrigatório',
-    },
-    {
       name: 'paymentType',
-      validation: value => ['TED', 'Cheque'].includes(value),
+      validation: value => ['TED', 'Cheque', 'Transferência'].includes(value),
       value: paymentType,
       message: 'Meio de pagamento inválido',
     },
@@ -292,43 +286,6 @@ const CreateCharge = () => {
               />
             }
           />,
-          type !== '' ? (
-            <FormInput
-              name="hasCommission"
-              label="Descontado comissão?"
-              input={
-                <Dropdown
-                  value={hasCommission}
-                  onChange={({ target: { value } }) => setHasCommission(value)}
-                  onChangeKeyboard={element => (element ? setHasCommission(element.value) : null)}
-                  list={['Sim', 'Não']}
-                  placeholder="Sim ou Não"
-                  readOnly
-                />
-              }
-            />
-          ) : (
-            <FormInput name="" label="" input={<></>} />
-          ),
-          hasCommission === 'Sim' ? (
-            <FormInput
-              name="commissionValue"
-              label="Valor da comissão"
-              input={
-                <InputText
-                  value={commissionValue ? `% ${commissionValue}` : ''}
-                  onChange={({ target: { value } }) => {
-                    const newPrctg = value.replace(/\s/g, '').replace('%', '').replace(',', '.')
-                    setCommissionValue(newPrctg)
-                  }}
-                  placeholder="% 0.00"
-                  inputMode="numeric"
-                />
-              }
-            />
-          ) : (
-            <FormInput name="" label="" input={<></>} />
-          ),
           ...matchForm(state),
         ]}
       />
