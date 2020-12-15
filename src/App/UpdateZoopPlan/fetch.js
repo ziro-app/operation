@@ -23,7 +23,7 @@ const fetch = (
         fetchedPlan = db.collection('suppliers').doc(supplier.docId || sellerId)
         fetchedPlan.get().then(sup => {
           if (Object.prototype.hasOwnProperty.call(sup.data(), 'sellerZoopPlan')) {
-            setSellerZoopPlan2(sup.data().sellerZoopPlan2)
+            setSellerZoopPlan2(sup.data().sellerZoopPlan)
             if (selectedPlan) {
               const sellerZoopPlanObjectForIteration = sup.data().sellerZoopPlan[selectedPlan]
 
