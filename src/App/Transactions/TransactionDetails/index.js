@@ -300,6 +300,14 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
                 content: transaction.status !== 'Cancelado' ? liquidFormatted : '-',
               },
               {
+                title: 'Transação com seguro',
+                content: transaction.insurance ? 'Sim' : 'Não',
+              },
+              {
+                title: 'Transação com cadastro',
+                content: transaction.checkoutWithoutRegister ? 'Não' : 'Sim',
+              },
+              {
                 title: 'Parcela máxima',
                 content: `${transaction.installmentsMax}`.startsWith('0')
                   ? `${parseInt(transaction.installmentsMax)}x`
@@ -318,6 +326,14 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
                 content: transaction.dateLinkCreated ? `${transaction.dateLinkCreated}` : '-',
               },
               {
+                title: 'Link criado por',
+                content: transaction.collaboratorName ? `${transaction.collaboratorName}` : 'Admin',
+              },
+              {
+                title: 'Observações',
+                content: transaction.observations ? `${transaction.observations}` : '-',
+              },
+              {
                 title: 'Status',
                 content: transaction.status,
                 color: transaction.statusColor,
@@ -325,18 +341,7 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
             ],
           },
         ]
-        if (transaction.collaboratorName) {
-          block[0].body.splice(8, 0, {
-            title: 'Link criado por',
-            content: transaction.collaboratorName,
-          })
-        }
-        if (transaction.observations) {
-          block[0].body.splice(transaction.collaboratorName ? 9 : 8, 0, {
-            title: 'Observações',
-            content: transaction.observations,
-          })
-        }
+
         if (typeof transaction.receivables !== 'undefined' && transaction.receivables.length) {
           const sortedTransactions = transaction.receivables
             .sort((a, b) => b.installment - a.installment)
@@ -412,12 +417,12 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
         }
         if (transaction.onBehalfOfBrand && transaction.seller.includes('Ziro')) {
           block[0].body.splice(1, 0, {
-            title: 'Marca',
+            title: 'Fabricante',
             content: transaction.onBehalfOfBrand,
           })
         } else
           block[0].body.splice(1, 0, {
-            title: 'Marca',
+            title: 'Fabricante',
             content: transaction.seller,
           })
 
@@ -481,7 +486,7 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
         <Spinner size="5.5rem" />
       </div>
     )
-  if (nothing)
+  if (!transaction.hasOwnProperty('transactionId'))
     return (
       <Error
         message="Transação inválida ou não encontrada, retorne e tente novamente."
