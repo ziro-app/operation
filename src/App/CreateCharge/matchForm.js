@@ -48,23 +48,10 @@ const cardForm = ({
   setFilename,
   setUid,
   suppliersTrends,
+  paymentTypeReceivable,
+  setPaymentTypeReceivable,
 }) => {
   const fields = [
-    <FormInput
-      name="paymentType"
-      label="Tipo de Pagamento"
-      input={
-        <Dropdown
-          disabled={isLoadingFunction}
-          value={paymentType}
-          readOnly
-          onChange={({ target: { value } }) => setPaymentType(value)}
-          onChangeKeyboard={element => (element ? setPaymentType(element.value) : null)}
-          list={['Transferência', 'Cheque']}
-          placeholder="Transferência ou Cheque"
-        />
-      }
-    />,
     <FormInput name="totalAmount" label="Valor do romaneio sem desconto" input={<InputMoney value={totalAmount} setValue={setTotalAmount} />} />,
     <FormInput
       name="romaneio"
@@ -124,7 +111,7 @@ const cardForm = ({
     />,
     <FormInput
       name="fabricante"
-      label="Fabricante do Trends"
+      label="Fabricante"
       input={
         <Dropdown
           value={supplierName.split(' - ')[0]}
@@ -162,6 +149,39 @@ const cardForm = ({
         />
       }
     />,
+    <FormInput
+      name="paymentType"
+      label="Tipo de Pagamento"
+      input={
+        <Dropdown
+          disabled={isLoadingFunction}
+          value={paymentType}
+          readOnly
+          onChange={({ target: { value } }) => setPaymentType(value)}
+          onChangeKeyboard={element => (element ? setPaymentType(element.value) : null)}
+          list={['Transferência', 'Cheque']}
+          placeholder="Transferência ou Cheque"
+        />
+      }
+    />,
+    paymentType === 'Transferência' ? (
+      <FormInput
+        name="paymentType"
+        label="Tipo de Recebimento do Fabricante"
+        input={
+          <Dropdown
+            value={paymentTypeReceivable}
+            readOnly
+            onChange={({ target: { value } }) => setPaymentTypeReceivable(value)}
+            onChangeKeyboard={element => (element ? setPaymentTypeReceivable(element.value) : null)}
+            list={['TED', 'PIX']}
+            placeholder="TED ou PIX"
+          />
+        }
+      />
+    ) : (
+      <FormInput name="" label="" input={<></>} />
+    ),
     <FormInput
       name="supplier"
       label="Fabricantes dos Dados Bancários"
@@ -557,44 +577,6 @@ const tedForm = ({
 }) => {
   // console.log('isLoadingFunction', isLoadingFunction)
   const fields = [
-    <FormInput
-      name="paymentType"
-      label="Tipo de Pagamento"
-      input={
-        <Dropdown
-          value={paymentType}
-          disabled={isLoadingFunction}
-          readOnly
-          onChange={({ target: { value } }) => {
-            setPaymentTypeReceivable('')
-            setPaymentType(value)
-          }}
-          onChangeKeyboard={element => {
-            setPaymentTypeReceivable('')(element ? setPaymentType(element.value) : null)
-          }}
-          list={['Transferência', 'Cheque']}
-          placeholder="Transferência ou Cheque"
-        />
-      }
-    />,
-    paymentType === 'Transferência' ? (
-      <FormInput
-        name="paymentType"
-        label="Tipo de Recebimento"
-        input={
-          <Dropdown
-            value={paymentTypeReceivable}
-            readOnly
-            onChange={({ target: { value } }) => setPaymentTypeReceivable(value)}
-            onChangeKeyboard={element => (element ? setPaymentTypeReceivable(element.value) : null)}
-            list={['TED', 'PIX']}
-            placeholder="TED ou PIX"
-          />
-        }
-      />
-    ) : (
-      <FormInput name="" label="" input={<></>} />
-    ),
     <FormInput name="totalAmount" label="Valor da transferência recebida" input={<InputMoney value={totalAmount} setValue={setTotalAmount} />} />,
     <FormInput
       name="storeowner"
@@ -633,7 +615,7 @@ const tedForm = ({
     />,
     <FormInput
       name="fabricante"
-      label="Fabricante do Trends"
+      label="Fabricante"
       input={
         <Dropdown
           value={supplierName.split(' - ')[0]}
@@ -671,6 +653,44 @@ const tedForm = ({
         />
       }
     />,
+    <FormInput
+      name="paymentType"
+      label="Tipo de Pagamento"
+      input={
+        <Dropdown
+          value={paymentType}
+          disabled={isLoadingFunction}
+          readOnly
+          onChange={({ target: { value } }) => {
+            setPaymentTypeReceivable('')
+            setPaymentType(value)
+          }}
+          onChangeKeyboard={element => {
+            setPaymentTypeReceivable('')(element ? setPaymentType(element.value) : null)
+          }}
+          list={['Transferência', 'Cheque']}
+          placeholder="Transferência ou Cheque"
+        />
+      }
+    />,
+    paymentType === 'Transferência' ? (
+      <FormInput
+        name="paymentType"
+        label="Tipo de Recebimento do Fabricante"
+        input={
+          <Dropdown
+            value={paymentTypeReceivable}
+            readOnly
+            onChange={({ target: { value } }) => setPaymentTypeReceivable(value)}
+            onChangeKeyboard={element => (element ? setPaymentTypeReceivable(element.value) : null)}
+            list={['TED', 'PIX']}
+            placeholder="TED ou PIX"
+          />
+        }
+      />
+    ) : (
+      <FormInput name="" label="" input={<></>} />
+    ),
     <FormInput
       name="supplier"
       label="Fabricantes dos Dados Bancários"

@@ -286,7 +286,7 @@ const CreateCharge = () => {
         inputs={[
           <FormInput
             name="type"
-            label="Tipo"
+            label="Tipo de recebimento"
             input={
               <Dropdown
                 value={type}
