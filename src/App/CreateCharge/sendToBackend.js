@@ -141,7 +141,15 @@ const sendToBackend = state => () => {
       let arrayUpdate = {}
       const supplierNameFormatted = supplierName.split(' -')[0]
       const tab = pixKey ? 'PIX' : 'TED'
-      if (!suppliers.find(supplier => supplier.fabricante === supplierNameFormatted)) {
+      console.log('supplierNameFormatted', supplierNameFormatted)
+      console.log('suppliers', suppliers)
+      console.log('Object.keys(bank).length', Object.keys(bank).length)
+      console.log(
+        'suppliers.find(supplier => supplier.fabricante === supplierNameFormatted)',
+        suppliers.find(supplier => supplier.fabricante === supplierNameFormatted),
+      )
+      if (Object.keys(suppliers.find(supplier => supplier.fabricante === supplierNameFormatted)).length > 0 && Object.keys(bank).length === 0) {
+        console.log('entrou onde não encontrou')
         arrayUpdate = pixKey
           ? [supplierNameFormatted, pixKey, time]
           : [supplierNameFormatted, bankName, agencia, conta, beneficiary, beneficiaryDocument, time]
@@ -237,6 +245,7 @@ const sendToBackend = state => () => {
             await navigator.clipboard.writeText(`${baseUrl}${doc.id}`)
           }
         } catch (error) {
+          console.log('error', error)
           throw { msg: 'Erro ao realizar a cópia', copyError: true }
         }
       }

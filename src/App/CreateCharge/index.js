@@ -268,7 +268,7 @@ const CreateCharge = () => {
       ),
     [paymentTypeReceivable],
   )
-  console.log('uid', uid)
+  console.log(' bank.keys.count', Object.keys(bank).length)
   // console.log('states', state.supplierName.split(' -')[0])
 
   if (isLoading)

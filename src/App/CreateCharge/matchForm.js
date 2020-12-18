@@ -65,45 +65,6 @@ const cardForm = ({
         />
       }
     />,
-    paymentType === 'Transferência' ? (
-      <FormInput
-        name="beneficiary"
-        label="Beneficiário"
-        input={
-          <InputText
-            value={beneficiary}
-            onChange={({ target: { value } }) => (bank.razao ? () => null : setBeneficiary(capitalize(value)))}
-            placeholder="Nome do beneficiário"
-            disabled={!!bank.razao}
-          />
-        }
-      />
-    ) : (
-      <FormInput name="" label="" input={<></>} />
-    ),
-    paymentType === 'Transferência' ? (
-      <FormInput
-        name="beneficiaryDocument"
-        label="Documento"
-        input={
-          <InputText
-            value={beneficiaryDocument}
-            onChange={({ target: { value } }) => {
-              if (bank.cnpj) () => null
-              else {
-                const mask = value.length <= 14 ? '###.###.###-##' : '##.###.###/####-##'
-                setBeneficiaryDocument(maskInput(value, mask, true))
-              }
-            }}
-            placeholder="CPF ou CNPJ"
-            inputMode="numeric"
-            disabled={!!bank.cnpj}
-          />
-        }
-      />
-    ) : (
-      <FormInput name="" label="" input={<></>} />
-    ),
     <FormInput name="totalAmount" label="Valor do romaneio sem desconto" input={<InputMoney value={totalAmount} setValue={setTotalAmount} />} />,
     <FormInput
       name="romaneio"
@@ -191,7 +152,7 @@ const cardForm = ({
           }}
           onChangeKeyboard={element => {
             if (element && element.value !== '') {
-              setStoreownerName(element.value.split(' - ')[0])
+              setSupplierName(element.value.split(' - ')[0])
             } else {
               setSupplierName('')
             }
@@ -292,6 +253,45 @@ const cardForm = ({
         />
       }
     />,
+    paymentType === 'Transferência' ? (
+      <FormInput
+        name="beneficiary"
+        label="Beneficiário"
+        input={
+          <InputText
+            value={beneficiary}
+            onChange={({ target: { value } }) => (bank.razao ? () => null : setBeneficiary(capitalize(value)))}
+            placeholder="Nome do beneficiário"
+            disabled={!!bank.razao}
+          />
+        }
+      />
+    ) : (
+      <FormInput name="" label="" input={<></>} />
+    ),
+    paymentType === 'Transferência' ? (
+      <FormInput
+        name="beneficiaryDocument"
+        label="Documento"
+        input={
+          <InputText
+            value={beneficiaryDocument}
+            onChange={({ target: { value } }) => {
+              if (bank.cnpj) () => null
+              else {
+                const mask = value.length <= 14 ? '###.###.###-##' : '##.###.###/####-##'
+                setBeneficiaryDocument(maskInput(value, mask, true))
+              }
+            }}
+            placeholder="CPF ou CNPJ"
+            inputMode="numeric"
+            disabled={!!bank.cnpj}
+          />
+        }
+      />
+    ) : (
+      <FormInput name="" label="" input={<></>} />
+    ),
     paymentType === 'Transferência' ? (
       <FormInput
         name="bankName"
