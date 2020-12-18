@@ -90,6 +90,7 @@ const sendToBackend = state => () => {
     setNeedUpdateBankAccount,
     nickname,
     hasSellerZoopPlan,
+    uid,
   } = state
   const linkValue = type === 'Cartão de Crédito' ? internalFormat(defineCardValue(state)) : internalFormat(defineTEDValue(state))
 
@@ -120,10 +121,13 @@ const sendToBackend = state => () => {
       const body = {}
       const baseUrl = process.env.HOMOLOG ? 'http://localhost:8080/pagamento/' : 'https://ziro.app/pagamento/'
       const nowDate = fs.FieldValue.serverTimestamp()
-      const requestSheet = pixKey ? await axios(getSheet(['PIX!A:F'])) : await axios(getSheet(['TED!A:F']))
+      const requestSheet = pixKey ? await axios(getSheet(['PIX!A:C'])) : await axios(getSheet(['TED!A:F']))
+      console.log('pixKey', pixKey)
+      console.log('requestSheet', requestSheet)
       const objectSheet = await arrayObject(requestSheet.data.valueRanges[0])
       const discountedValue = total - total * (discount / 100)
-      console.log(discountedValue)
+      console.log('objectSheet', objectSheet)
+      console.log('requestSheet.data', requestSheet.data)
       const updateObj = pixKey
         ? { chave: pixKey, uid: time }
         : {
@@ -135,14 +139,16 @@ const sendToBackend = state => () => {
             uid: time,
           }
       let arrayUpdate = {}
-      if (!suppliers.find(supplier => supplier.fabricante === supplierName)) {
-        arrayUpdate = pixKey ? [supplierName, pixKey, time] : [supplierName, bankName, agencia, conta, beneficiary, beneficiaryDocument, time]
-        await axios(postSheet(arrayUpdate, 'append'))
-      } else {
+      const supplierNameFormatted = supplierName.split(' -')[0]
+      const tab = pixKey ? 'PIX' : 'TED'
+      if (!suppliers.find(supplier => supplier.fabricante === supplierNameFormatted)) {
         arrayUpdate = pixKey
-          ? dataPostBatch(objectSheet, 'Fabricante', supplierName, updateObj, 'PIX')
-          : dataPostBatch(objectSheet, 'Fabricante', supplierName, updateObj, 'TED')
-        await axios(postSheet(arrayUpdate))
+          ? [supplierNameFormatted, pixKey, time]
+          : [supplierNameFormatted, bankName, agencia, conta, beneficiary, beneficiaryDocument, time]
+        await axios(postSheet(arrayUpdate, tab, 'append'))
+      } else {
+        arrayUpdate = pixKey ? dataPostBatch(objectSheet, 'uid', uid, updateObj, 'PIX') : dataPostBatch(objectSheet, 'uid', uid, updateObj, 'TED')
+        await axios(postSheet(arrayUpdate, tab))
       }
       /* teste */
       let bodyLinkPayment = {}
@@ -157,7 +163,7 @@ const sendToBackend = state => () => {
               [
                 formatDateUTC3(new Date()),
                 storeownerName,
-                supplierName,
+                supplierNameFormatted,
                 linkValue,
                 total,
                 installment,
@@ -187,7 +193,7 @@ const sendToBackend = state => () => {
               [
                 formatDateUTC3(new Date()),
                 storeownerName,
-                supplierName,
+                supplierNameFormatted,
                 total,
                 linkValue,
                 imgUrl,
@@ -214,7 +220,7 @@ const sendToBackend = state => () => {
           dateLinkCreated: nowDate,
           dateLastUpdate: nowDate,
           seller: 'Ziro',
-          onBehalfOfBrand: supplierName,
+          onBehalfOfBrand: supplierNameFormatted,
           sellerZoopId: '13c09ab817014ae6843634493177afb2',
           charge: totalAmount,
           installmentsMax: '4',

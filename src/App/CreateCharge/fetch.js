@@ -3,10 +3,22 @@ import arrayObject from '@ziro/array-object'
 import { db } from '../../Firebase'
 import getSheet from './utils/getSheet'
 
-const fetch = (setIsLoading, setIsLoadingFunction, setIsError, setStoreowners, setBanks, setSuppliers, paymentTypeReceivable = 'TED') => {
+const fetch = (
+  setIsLoading,
+  setIsLoadingFunction,
+  setIsError,
+  setStoreowners,
+  setBanks,
+  setSuppliers,
+  suppliersTrends,
+  setSuppliersTrends,
+  paymentTypeReceivable = 'TED',
+) => {
   setIsLoadingFunction(true)
   const storeowners = []
   const reasonsStoreowners = []
+  const suppliersTrendsFetch = []
+  const reasonsSuppliersTrends = []
   const banks = []
   const suppliers = []
   const suppliersNames = []
@@ -35,8 +47,24 @@ const fetch = (setIsLoading, setIsLoadingFunction, setIsError, setStoreowners, s
       },
       cancelToken: source.token,
     }
-    let config = {}
-    config = {
+    let configSupplierTrends = {}
+    configSupplierTrends = {
+      method: 'POST',
+      url: process.env.SHEET_URL,
+      data: {
+        apiResource: 'values',
+        apiMethod: 'get',
+        spreadsheetId: process.env.SHEET_ID_BRANDS, // process.env.SHEET_STOREOWNERS_ID,
+        range: 'Consulta!A:A', // 'Base!K:K',
+      },
+      headers: {
+        Authorization: process.env.SHEET_TOKEN,
+        'Content-Type': 'application/json',
+      },
+      cancelToken: source.token,
+    }
+    let configBanKData = {}
+    configBanKData = {
       method: 'POST',
       url: process.env.SHEET_URL,
       data: {
@@ -52,7 +80,7 @@ const fetch = (setIsLoading, setIsLoadingFunction, setIsError, setStoreowners, s
       cancelToken: source.token,
     }
     if (paymentTypeReceivable === 'PIX') {
-      config = {
+      configBanKData = {
         method: 'POST',
         url: process.env.SHEET_URL,
         data: {
@@ -71,10 +99,12 @@ const fetch = (setIsLoading, setIsLoadingFunction, setIsError, setStoreowners, s
     const queryStoreowners = db.collection('storeowners')
     const querySuppliers = db.collection('suppliers').where('tipoCadastro', '==', 'Completo')
     try {
-      const data = await axios(config)
+      const data = await axios(configBanKData)
+      const dataSupplierTrends = await axios(configSupplierTrends)
       const dataStoreowners = await axios(configStoreOwner)
       if (data.data.values) {
         const [, ...list] = data.data.values
+        const [, ...listSupplierTrends] = dataSupplierTrends.data.values
         const [, ...listStoreOwners] = dataStoreowners.data.values
         const resultStoreowners = await queryStoreowners.get()
         resultStoreowners.forEach(doc => storeowners.push(doc.data()))
@@ -86,9 +116,21 @@ const fetch = (setIsLoading, setIsLoadingFunction, setIsError, setStoreowners, s
             storeowners.push(store)
           }
         })
+        listSupplierTrends.map(data => {
+          if (data[0]) {
+            const store = { razao: data[0] ? data[0] : '', duplicate: reasonsStoreowners.includes(data[0]) }
+            reasonsSuppliersTrends.push(data[0])
+            suppliersTrendsFetch.push(store)
+          }
+        })
         list.map(data => {
           if (data[0]) {
-            const sup = { fabricante: data[0] ? data[0] : '', duplicate: suppliersNames.includes(data[0]) }
+            const sup = {
+              fabricante: data[0] ? data[0] : '',
+              duplicate: suppliersNames.includes(data[0]),
+              uid: data[6],
+              banco: data[1] ? data[1] : '',
+            }
             suppliersNames.push(data[0])
             suppliers.push(sup)
           }
@@ -108,6 +150,7 @@ const fetch = (setIsLoading, setIsLoadingFunction, setIsError, setStoreowners, s
         // setStoreowners(storeowners)
         setBanks(banks)
         setSuppliers(suppliers)
+        setSuppliersTrends(suppliersTrendsFetch)
       } else {
         const resultSuppliers = await querySuppliers.get()
         resultSuppliers.forEach(doc => suppliers.push(doc.data()))

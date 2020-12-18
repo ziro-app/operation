@@ -12,15 +12,10 @@ const fetch = (setSellerZoopPlan, setFees, sellerId, selectedPlanForFirebase, fe
             const { sellerZoopPlan } = sup.data()
             setSupplier(sup.data())
             setSellerZoopPlan(sellerZoopPlan)
-            // if (sellerZoopPlan2) {
             const whichPlan = sellerZoopPlan.activePlan
             const selectedPlan = selectedPlanForFirebase || false
-            // const sellerZoopPlanObjectForIteration = sellerZoopPlan2[selectedPlan]
             const entries = sellerZoopPlan[selectedPlan] ? Object.entries(sellerZoopPlan[selectedPlan]) : null
-            // const entries2 = Object.entries(sellerZoopPlan2[whichPlan])
             setFees(entries)
-
-            // }
           })
         }
 

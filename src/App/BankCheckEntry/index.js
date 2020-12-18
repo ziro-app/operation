@@ -46,7 +46,7 @@ const BankCheckEntry = () => {
   const [bankCheckDate, setBankCheckDate] = useState(
     `${workDate.getFullYear()}-${`0${workDate.getMonth() + 1}`.slice(-2)}-${`0${workDate.getDate()}`.slice(-2)}`,
   )
-
+  console.log('const timestamp = Date.now()', Date.now())
   // DADOS DO CARTÃO
   const [installment, setInstallment] = useState('')
   const installments = ['1', '2', '3', '4', '5', '6']

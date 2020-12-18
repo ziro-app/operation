@@ -46,8 +46,64 @@ const cardForm = ({
   setRomaneio,
   filename,
   setFilename,
+  setUid,
+  suppliersTrends,
 }) => {
   const fields = [
+    <FormInput
+      name="paymentType"
+      label="Tipo de Pagamento"
+      input={
+        <Dropdown
+          disabled={isLoadingFunction}
+          value={paymentType}
+          readOnly
+          onChange={({ target: { value } }) => setPaymentType(value)}
+          onChangeKeyboard={element => (element ? setPaymentType(element.value) : null)}
+          list={['Transferência', 'Cheque']}
+          placeholder="Transferência ou Cheque"
+        />
+      }
+    />,
+    paymentType === 'Transferência' ? (
+      <FormInput
+        name="beneficiary"
+        label="Beneficiário"
+        input={
+          <InputText
+            value={beneficiary}
+            onChange={({ target: { value } }) => (bank.razao ? () => null : setBeneficiary(capitalize(value)))}
+            placeholder="Nome do beneficiário"
+            disabled={!!bank.razao}
+          />
+        }
+      />
+    ) : (
+      <FormInput name="" label="" input={<></>} />
+    ),
+    paymentType === 'Transferência' ? (
+      <FormInput
+        name="beneficiaryDocument"
+        label="Documento"
+        input={
+          <InputText
+            value={beneficiaryDocument}
+            onChange={({ target: { value } }) => {
+              if (bank.cnpj) () => null
+              else {
+                const mask = value.length <= 14 ? '###.###.###-##' : '##.###.###/####-##'
+                setBeneficiaryDocument(maskInput(value, mask, true))
+              }
+            }}
+            placeholder="CPF ou CNPJ"
+            inputMode="numeric"
+            disabled={!!bank.cnpj}
+          />
+        }
+      />
+    ) : (
+      <FormInput name="" label="" input={<></>} />
+    ),
     <FormInput name="totalAmount" label="Valor do romaneio sem desconto" input={<InputMoney value={totalAmount} setValue={setTotalAmount} />} />,
     <FormInput
       name="romaneio"
@@ -106,19 +162,69 @@ const cardForm = ({
       }
     />,
     <FormInput
+      name="fabricante"
+      label="Fabricante do Trends"
+      input={
+        <Dropdown
+          value={supplierName.split(' - ')[0]}
+          onChange={({ target: { value } }) => {
+            if (value !== '') {
+              const count = suppliers
+                .map((supplier, index) => `${supplier.fabricante} - ${supplier.banco}`)
+                .sort()
+                .filter(function (str) {
+                  return str.includes(supplierName)
+                }).length
+              if (count === 0) {
+                setBank('')
+                setBeneficiary('')
+                setBeneficiaryDocument('')
+                setBankName('')
+                setAccountNumber('')
+                setAgency('')
+              }
+              console.log('count', count)
+              setSupplierName(value.split(' - ')[0])
+            } else {
+              setSupplierName('')
+            }
+          }}
+          onChangeKeyboard={element => {
+            if (element && element.value !== '') {
+              setStoreownerName(element.value.split(' - ')[0])
+            } else {
+              setSupplierName('')
+            }
+          }}
+          list={suppliersTrends.map((supplier, index) => (supplier.duplicate ? `${supplier.razao} - ${index}` : supplier.razao)).sort()}
+          placeholder="Nome do Fabricante"
+        />
+      }
+    />,
+    <FormInput
       name="supplier"
-      label="Fabricante"
+      label="Fabricantes dos Dados Bancários"
       input={
         <Dropdown
           value={supplierName}
           onChange={({ target: { value } }) => {
-            console.log('entrou')
             if (value !== '') {
               setSupplierName(value)
-              const searched = suppliers.find(supplier => supplier.fabricante === value)
+              const searched = suppliers.find(supplier => supplier.fabricante === value.split(' -')[0])
+              console.log('searched', searched)
+              console.log('searched banks', banks)
+
+              setBank('')
+              setBeneficiary('')
+              setBeneficiaryDocument('')
+              setBankName('')
+              setAccountNumber('')
+              setAgency('')
+
               if (searched) {
+                setUid(searched.uid)
                 setSupplier(searched)
-                const searchedBank = banks.find(bank => bank.fabricante === value)
+                const searchedBank = banks.find(bank => bank.fabricante === value.split(' - ')[0] && bank.banco === value.split(' - ')[1])
                 if (searchedBank) {
                   setBank(searchedBank)
                   setBeneficiary(searchedBank.razao)
@@ -139,16 +245,23 @@ const cardForm = ({
               setSupplierName('')
               setSupplier({})
               setBank({})
+              setBeneficiary('')
+              setBeneficiaryDocument('')
+              setBankName('')
+              setAccountNumber('')
+              setAgency('')
+              setNeedUpdateBankAccount(false)
             }
           }}
           onChangeKeyboard={element => {
             console.log('entrou 2')
             if (element && element.value !== '') {
               setSupplierName(element.value)
-              const searched = suppliers.find(supplier => supplier.fabricante === element.value)
+              const searched = suppliers.find(supplier => supplier.fabricante === element.value.split(' -')[0])
               if (searched) {
+                setUid(searched.uid)
                 setSupplier(searched)
-                const searchedBank = banks.find(bank => bank.fabricante === element.value)
+                const searchedBank = banks.find(bank => bank.fabricante === element.value.split(' -')[0])
                 if (searchedBank) {
                   setBank(searchedBank)
                   setBeneficiary(searchedBank.razao)
@@ -168,66 +281,18 @@ const cardForm = ({
               setBank({})
             }
           }}
-          list={suppliers.map((supplier, index) => (supplier.duplicate ? `${supplier.fabricante} - ${index}` : supplier.fabricante)).sort()}
-          placeholder="Nome do fabricante"
-        />
-      }
-    />,
-    <FormInput
-      name="paymentType"
-      label="Tipo de Pagamento"
-      input={
-        <Dropdown
-          disabled={isLoadingFunction}
-          value={paymentType}
           readOnly
-          onChange={({ target: { value } }) => setPaymentType(value)}
-          onChangeKeyboard={element => (element ? setPaymentType(element.value) : null)}
-          list={['Transferência', 'Cheque']}
-          placeholder="Transferência ou Cheque"
+          list={suppliers
+            .map((supplier, index) => `${supplier.fabricante} - ${supplier.banco}`)
+            .sort()
+            .filter(function (str) {
+              return str.includes(supplierName)
+            })}
+          placeholder="Selecione a conta ou deixe em branco!"
         />
       }
     />,
-    paymentType === 'TED' ? (
-      <FormInput
-        name="beneficiary"
-        label="Beneficiário"
-        input={
-          <InputText
-            value={beneficiary}
-            onChange={({ target: { value } }) => (bank.razao ? () => null : setBeneficiary(capitalize(value)))}
-            placeholder="Nome do beneficiário"
-            disabled={!!bank.razao}
-          />
-        }
-      />
-    ) : (
-      <FormInput name="" label="" input={<></>} />
-    ),
-    paymentType === 'TED' ? (
-      <FormInput
-        name="beneficiaryDocument"
-        label="Documento"
-        input={
-          <InputText
-            value={beneficiaryDocument}
-            onChange={({ target: { value } }) => {
-              if (bank.cnpj) () => null
-              else {
-                const mask = value.length <= 14 ? '###.###.###-##' : '##.###.###/####-##'
-                setBeneficiaryDocument(maskInput(value, mask, true))
-              }
-            }}
-            placeholder="CPF ou CNPJ"
-            inputMode="numeric"
-            disabled={!!bank.cnpj}
-          />
-        }
-      />
-    ) : (
-      <FormInput name="" label="" input={<></>} />
-    ),
-    paymentType === 'TED' ? (
+    paymentType === 'Transferência' ? (
       <FormInput
         name="bankName"
         label="Banco"
@@ -245,7 +310,7 @@ const cardForm = ({
     ) : (
       <FormInput name="" label="" input={<></>} />
     ),
-    paymentType === 'TED' ? (
+    paymentType === 'Transferência' ? (
       <FormInput
         name="agency"
         label="Número da Agência"
@@ -262,7 +327,7 @@ const cardForm = ({
     ) : (
       <FormInput name="" label="" input={<></>} />
     ),
-    paymentType === 'TED' ? (
+    paymentType === 'Transferência' ? (
       <FormInput
         name="accountNumber"
         label="Número da Conta"
@@ -306,6 +371,7 @@ const pixForm = ({
   setTotalAmount,
   note,
   setNote,
+  setUid,
 }) => {
   const fields = [
     <FormInput name="totalAmount" label="Valor recebido" input={<InputMoney value={totalAmount} setValue={setTotalAmount} />} />,
@@ -485,9 +551,50 @@ const tedForm = ({
   needUpdateBankAccount,
   setNeedUpdateBankAccount,
   isLoadingFunction,
+  suppliersTrends,
+  setSuppliersTrends,
+  setUid,
 }) => {
   // console.log('isLoadingFunction', isLoadingFunction)
   const fields = [
+    <FormInput
+      name="paymentType"
+      label="Tipo de Pagamento"
+      input={
+        <Dropdown
+          value={paymentType}
+          disabled={isLoadingFunction}
+          readOnly
+          onChange={({ target: { value } }) => {
+            setPaymentTypeReceivable('')
+            setPaymentType(value)
+          }}
+          onChangeKeyboard={element => {
+            setPaymentTypeReceivable('')(element ? setPaymentType(element.value) : null)
+          }}
+          list={['Transferência', 'Cheque']}
+          placeholder="Transferência ou Cheque"
+        />
+      }
+    />,
+    paymentType === 'Transferência' ? (
+      <FormInput
+        name="paymentType"
+        label="Tipo de Recebimento"
+        input={
+          <Dropdown
+            value={paymentTypeReceivable}
+            readOnly
+            onChange={({ target: { value } }) => setPaymentTypeReceivable(value)}
+            onChangeKeyboard={element => (element ? setPaymentTypeReceivable(element.value) : null)}
+            list={['TED', 'PIX']}
+            placeholder="TED ou PIX"
+          />
+        }
+      />
+    ) : (
+      <FormInput name="" label="" input={<></>} />
+    ),
     <FormInput name="totalAmount" label="Valor da transferência recebida" input={<InputMoney value={totalAmount} setValue={setTotalAmount} />} />,
     <FormInput
       name="storeowner"
@@ -525,15 +632,55 @@ const tedForm = ({
       }
     />,
     <FormInput
+      name="fabricante"
+      label="Fabricante do Trends"
+      input={
+        <Dropdown
+          value={supplierName.split(' - ')[0]}
+          onChange={({ target: { value } }) => {
+            if (value !== '') {
+              const count = suppliers
+                .map((supplier, index) => `${supplier.fabricante} - ${supplier.banco}`)
+                .sort()
+                .filter(function (str) {
+                  return str.includes(supplierName)
+                }).length
+              if (count === 0) {
+                setBank('')
+                setBeneficiary('')
+                setBeneficiaryDocument('')
+                setBankName('')
+                setAccountNumber('')
+                setAgency('')
+              }
+              console.log('count', count)
+              setSupplierName(value.split(' - ')[0])
+            } else {
+              setSupplierName('')
+            }
+          }}
+          onChangeKeyboard={element => {
+            if (element && element.value !== '') {
+              setSupplierName(element.value.split(' - ')[0])
+            } else {
+              setSupplierName('')
+            }
+          }}
+          list={suppliersTrends.map((supplier, index) => (supplier.duplicate ? `${supplier.razao} - ${index}` : supplier.razao)).sort()}
+          placeholder="Nome do Fabricante"
+        />
+      }
+    />,
+    <FormInput
       name="supplier"
-      label="Fabricante"
+      label="Fabricantes dos Dados Bancários"
       input={
         <Dropdown
           value={supplierName}
           onChange={({ target: { value } }) => {
             if (value !== '') {
               setSupplierName(value)
-              const searched = suppliers.find(supplier => supplier.fabricante === value)
+              const searched = suppliers.find(supplier => supplier.fabricante === value.split(' -')[0])
               console.log('searched', searched)
               console.log('searched banks', banks)
 
@@ -545,8 +692,9 @@ const tedForm = ({
               setAgency('')
 
               if (searched) {
+                setUid(searched.uid)
                 setSupplier(searched)
-                const searchedBank = banks.find(bank => bank.fabricante === value)
+                const searchedBank = banks.find(bank => bank.fabricante === value.split(' - ')[0] && bank.banco === value.split(' - ')[1])
                 if (searchedBank) {
                   setBank(searchedBank)
                   setBeneficiary(searchedBank.razao)
@@ -579,10 +727,11 @@ const tedForm = ({
             console.log('entrou 2')
             if (element && element.value !== '') {
               setSupplierName(element.value)
-              const searched = suppliers.find(supplier => supplier.fabricante === element.value)
+              const searched = suppliers.find(supplier => supplier.fabricante === element.value.split(' -')[0])
               if (searched) {
+                setUid(searched.uid)
                 setSupplier(searched)
-                const searchedBank = banks.find(bank => bank.fabricante === element.value)
+                const searchedBank = banks.find(bank => bank.fabricante === element.value.split(' -')[0])
                 if (searchedBank) {
                   setBank(searchedBank)
                   setBeneficiary(searchedBank.razao)
@@ -602,8 +751,14 @@ const tedForm = ({
               setBank({})
             }
           }}
-          list={suppliers.map((supplier, index) => (supplier.duplicate ? `${supplier.fabricante} - ${index}` : supplier.fabricante)).sort()}
-          placeholder="Nome do fabricante"
+          readOnly
+          list={suppliers
+            .map((supplier, index) => `${supplier.fabricante} - ${supplier.banco}`)
+            .sort()
+            .filter(function (str) {
+              return str.includes(supplierName)
+            })}
+          placeholder="Selecione a conta ou deixe em branco!"
         />
       }
     />,
@@ -617,44 +772,6 @@ const tedForm = ({
       label="Foto do Romaneio"
       input={<SingleImageUpload setFile={setRomaneio} filename={filename || ''} setFilename={setFilename} indexOfFile={0} />}
     />,
-    <FormInput
-      name="paymentType"
-      label="Tipo de Pagamento"
-      input={
-        <Dropdown
-          value={paymentType}
-          disabled={isLoadingFunction}
-          readOnly
-          onChange={({ target: { value } }) => {
-            setPaymentTypeReceivable('')
-            setPaymentType(value)
-          }}
-          onChangeKeyboard={element => {
-            setPaymentTypeReceivable('')(element ? setPaymentType(element.value) : null)
-          }}
-          list={['TED', 'Cheque']}
-          placeholder="TED ou Cheque"
-        />
-      }
-    />,
-    paymentType === 'TED' ? (
-      <FormInput
-        name="paymentType"
-        label="Tipo de Recebimento"
-        input={
-          <Dropdown
-            value={paymentTypeReceivable}
-            readOnly
-            onChange={({ target: { value } }) => setPaymentTypeReceivable(value)}
-            onChangeKeyboard={element => (element ? setPaymentTypeReceivable(element.value) : null)}
-            list={['TED', 'PIX']}
-            placeholder="TED ou PIX"
-          />
-        }
-      />
-    ) : (
-      <FormInput name="" label="" input={<></>} />
-    ),
     paymentTypeReceivable === 'PIX' ? (
       <FormInput
         name="pix"
@@ -764,7 +881,7 @@ const matchForm = state => {
   if (type === '') return [<FormInput name="" label="" input={<></>} />]
   if (type === 'Cartão de Crédito') return cardForm(state)
   if (type === 'PIX') return pixForm(state)
-  if (type === 'TED') return tedForm(state)
+  if (type === 'Transferência') return tedForm(state)
 }
 
 export default matchForm

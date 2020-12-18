@@ -99,7 +99,7 @@ const sendToBackend = state => () => {
         spreadsheetId: process.env.SHEET_ID_LINK_PAYMENTS,
         range: 'Link Cheques!A1',
         resource: {
-          values: [[formatDateUTC3(new Date()), billet, storeownerName, supplierName, total, imgUrlBankCheckEntry, obs]],
+          values: [[formatDateUTC3(new Date()), billet, storeownerName, supplierName, total, imgUrlBankCheckEntry, obs, timestamp]],
         },
         valueInputOption: 'user_entered',
       }

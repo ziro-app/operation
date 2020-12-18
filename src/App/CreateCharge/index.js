@@ -21,19 +21,21 @@ const CreateCharge = () => {
   const [isLoading, setIsLoading] = useState(true)
   const [isLoadingFunction, setIsLoadingFunction] = useState(true)
   const [isError, setIsError] = useState(false)
+  const [uid, setUid] = useState('')
   const workDate = new Date()
   const { nickname } = useContext(userContext)
   // APLICADO NOS DOIS
   const [totalAmount, setTotalAmount] = useState('')
   const [receivableAmount, setReceivableAmount] = useState('')
   const [type, setType] = useState('')
-  const typeList = ['TED', 'Cartão de Crédito']
+  const typeList = ['Transferência', 'Cartão de Crédito']
   const [storeowners, setStoreowners] = useState([])
   const [storeowner, setStoreowner] = useState({ razao: '' })
   const [storeownerName, setStoreownerName] = useState('')
   const [banks, setBanks] = useState([])
   const [bank, setBank] = useState({ fabricante: '', banco: '', agencia: '', conta: '', razao: '', cnpj: '' })
   const [suppliers, setSuppliers] = useState([])
+  const [suppliersTrends, setSuppliersTrends] = useState([])
   const [supplier, setSupplier] = useState({ fabricante: '' })
   const [supplierName, setSupplierName] = useState('')
   const [bankCheckEntry, setBankCheckEntry] = useState('')
@@ -96,6 +98,7 @@ const CreateCharge = () => {
     setNeedUpdateBankAccount,
     setIsLoadingFunction,
     setHasSellerZoopPlan,
+    setSuppliersTrends,
   }
   const state = {
     nickname,
@@ -129,6 +132,9 @@ const CreateCharge = () => {
     storeowners,
     setStoreowner,
     setSupplierName,
+    setUid,
+    uid,
+    suppliersTrends,
     suppliers,
     pixKey,
     needUpdateBankAccount,
@@ -247,9 +253,23 @@ const CreateCharge = () => {
     getSellerZoopPlan()
   }, [])
 
-  useEffect(() => fetch(setIsLoading, setIsLoadingFunction, setIsError, setStoreowners, setBanks, setSuppliers, paymentTypeReceivable), [
-    paymentTypeReceivable,
-  ])
+  useEffect(
+    () =>
+      fetch(
+        setIsLoading,
+        setIsLoadingFunction,
+        setIsError,
+        setStoreowners,
+        setBanks,
+        setSuppliers,
+        suppliersTrends,
+        setSuppliersTrends,
+        paymentTypeReceivable,
+      ),
+    [paymentTypeReceivable],
+  )
+  console.log('uid', uid)
+  // console.log('states', state.supplierName.split(' -')[0])
 
   if (isLoading)
     return (
@@ -282,7 +302,7 @@ const CreateCharge = () => {
                 }}
                 readOnly
                 list={typeList}
-                placeholder="Tipo de recebimento"
+                placeholder="Tipo de pagamento"
               />
             }
           />,

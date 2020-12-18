@@ -213,8 +213,6 @@ const NewZoopPlan = () => {
                 sellerZoopPlanForFirebase = {}
                 sellerZoopPlanForFirebase[planName] = defaultValues
               }
-              // sellerZoopPlan2[defaultValue] // defaultValuesForNewPlanWithNumber
-              // console.log('teste 2', sellerZoopPlanForFirebase.teste2)
 
               sendToBackend && Object.keys(sellerZoopPlanForFirebase).length !== 0
                 ? sendToBackend(sellerZoopPlanForFirebase, nickname, sellerId, setPlanName)

@@ -1,6 +1,6 @@
 import { formatDateUTC3 } from '@ziro/format-date-utc3'
 
-const configPost = (arrayUpdate, apiMethod = 'batchUpdate') => {
+const configPost = (arrayUpdate, tab, apiMethod = 'batchUpdate') => {
   if (apiMethod === 'append') {
     return {
       method: 'POST',
@@ -9,7 +9,7 @@ const configPost = (arrayUpdate, apiMethod = 'batchUpdate') => {
         apiResource: 'values',
         apiMethod,
         spreadsheetId: process.env.SHEET_ID_BANK_DATA,
-        range: 'TED!A1',
+        range: `${tab}!A1`,
         resource: {
           values: [arrayUpdate],
         },

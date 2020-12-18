@@ -7,7 +7,7 @@ const sendToBackend = (sellerZoopPlanForFirebase, nickname, sellerId, setPlanNam
     try {
       if (process.env.HOMOLOG ? true : allowedUsers.includes(nome)) {
         await db.collection('suppliers').doc(sellerId).update({
-          sellerZoopPlan2: sellerZoopPlanForFirebase, // newPlan, // sellerActualZoopPlanForFirebase,
+          sellerZoopPlan: sellerZoopPlanForFirebase, // newPlan, // sellerActualZoopPlanForFirebase,
         })
         setPlanName('')
         resolve('Plano atualizado')
