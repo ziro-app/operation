@@ -26,7 +26,7 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
   const [amount, setAmount] = useState('')
   const [receipt_id, setReceipt_id] = useState('')
   const [error, setError] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
   const [data, setData] = useState([])
   const [blocks, setBlocks] = useState([])
   const [nothing, setNothing] = useState(false)
@@ -53,19 +53,24 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
   let antiFraudTransaction = {}
 
   async function getTransaction(transactionId, setTransaction, setError, transaction) {
-    await fetch(transactionId, setTransaction, setError, transaction)
+    await fetch(transactionId, setTransaction, setError, transaction, setNothing, setIsLoading)
+
     if (Object.prototype.hasOwnProperty.call(transaction, 'splitTransaction')) {
       if (transaction.splitTransaction === '' || (markupTransaction.percentage === 0 && markupTransaction.amount === 0)) setOlderTransaction(true)
       else setOlderTransaction(false)
     } else setOlderTransaction(false)
   }
+
   useEffect(() => {
     setTransaction({})
   }, [])
+
   useEffect(() => {
     setValidationMessage('')
   }, [splitTransactionModal, captureModal, cancelModal])
+
   const nowDate = fs.FieldValue.serverTimestamp()
+
   const postCapture = async (transaction_id, on_behalf_of, amount) => {
     try {
       const snapRef = db.collection('credit-card-payments').doc(transactionId)
@@ -190,12 +195,14 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
       return '-'
     }
   }
+
   function handleMarkup(transaction) {
     return `- ${parseFloat(markupTransaction.receivable_amount).toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}`
   }
 
   useEffect(() => {
     getTransaction(transactionId, setTransaction, setError, transaction)
+
     if (Object.prototype.hasOwnProperty.call(transaction, 'dateLinkCreated')) {
       if (error) {
         setNothing(true)
@@ -480,13 +487,15 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
       }
     }
   }, [transaction, nothing])
+
   if (isLoading)
     return (
       <div style={spinner}>
         <Spinner size="5.5rem" />
       </div>
     )
-  if (!transaction.hasOwnProperty('transactionId'))
+
+  if (nothing)
     return (
       <Error
         message="Transação inválida ou não encontrada, retorne e tente novamente."
@@ -499,6 +508,7 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
         }}
       />
     )
+
   const isApproved = transaction.status === 'Aprovado' || transaction.status === 'Pago' || transaction.status === 'Pré Autorizado'
   const isCanceled = transaction.status === 'Cancelado' || transaction.status === 'Falhado'
   const isWaiting = transaction.status === 'Aguardando Pagamento' || transaction.status === 'Aprovação Pendente'
