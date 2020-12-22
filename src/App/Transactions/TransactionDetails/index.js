@@ -40,10 +40,10 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
   const paymentLink = process.env.HOMOLOG
     ? transaction.checkoutWithoutRegister
       ? `http://localhost:8080/pagamento/${transactionId}/finalizar-sem-cadastro`
-      : `http://localhost:8080/pagamento/${transactionId}/escolher-cartao?doc`
+      : `http://localhost:8080/pagamento/${transactionId}/escolher-cartao`
     : transaction.checkoutWithoutRegister
     ? `https://ziro.app/pagamento/${transactionId}/finalizar-sem-cadastro`
-    : `https://ziro.app/pagamento/${transactionId}/escolher-cartao?doc`
+    : `https://ziro.app/pagamento/${transactionId}/escolher-cartao`
   const [blocksStoreowner, setBlocksStoreowner] = useState([])
   const [validationMessage, setValidationMessage] = useState('')
   const [loadingButton, setLoadingButton] = useState(false)
@@ -580,7 +580,7 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
                 click={() => setLocation(`/transacoes/${transactionId}/split`)}
                 template="regular"
               /> */}
-              <Button style={btnRed} type="button" cta="Cancelar transação" click={() => setCancelModal(true)} template="destructive" />
+              <Button type="button" cta="Cancelar transação" click={() => setCancelModal(true)} template="destructive" />
             </div>
           </>
         )}
@@ -629,7 +629,7 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
                 gridRowGap: '15px',
               }}
             />
-            <span style={{ fontFamily: 'Rubik', fontSize: '12px' }}>* Os valores das parcelas foram arredondados para a segunda casa decimal</span>
+            <span style={{ fontFamily: 'Rubik', fontSize: '12px' }}>* Valores arredondados para a segunda casa decimal</span>
           </>
         )}
         {isCanceled && (
