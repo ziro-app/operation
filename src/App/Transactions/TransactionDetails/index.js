@@ -38,12 +38,8 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
   const [splitTransactionModal, setSplitTransactionModal] = useState(false)
   const textAreaRef = useRef(null)
   const paymentLink = process.env.HOMOLOG
-    ? transaction.checkoutWithoutRegister
-      ? `http://localhost:8080/pagamento/${transactionId}/finalizar-sem-cadastro`
-      : `http://localhost:8080/pagamento/${transactionId}/escolher-cartao`
-    : transaction.checkoutWithoutRegister
-    ? `https://ziro.app/pagamento/${transactionId}/finalizar-sem-cadastro`
-    : `https://ziro.app/pagamento/${transactionId}/escolher-cartao`
+    ? `http://localhost:8080/pagamento/${transactionId}`
+    : `https://ziro.app/pagamento/${transactionId}`
   const [blocksStoreowner, setBlocksStoreowner] = useState([])
   const [validationMessage, setValidationMessage] = useState('')
   const [loadingButton, setLoadingButton] = useState(false)
