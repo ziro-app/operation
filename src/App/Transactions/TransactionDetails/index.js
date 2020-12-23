@@ -576,7 +576,7 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
                 click={() => setLocation(`/transacoes/${transactionId}/split`)}
                 template="regular"
               /> */}
-              <Button type="button" cta="Cancelar transação" click={() => setCancelModal(true)} template="destructive" />
+              <Button style={transaction.status === 'Pré Autorizado' && btnRed} type="button" cta="Cancelar transação" click={() => setCancelModal(true)} template="destructive" />
             </div>
           </>
         )}
