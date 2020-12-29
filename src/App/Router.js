@@ -159,7 +159,7 @@ const Router = ({ isLogged }) => {
               ['Afiliado: Cadastrar', '/cadastrar-afiliado'],
               ['Afiliado: Ver/Editar', '/visualizar-afiliado'],
               ['Lançamento de Cheque', '/lancamento-cheque'],
-              ['Criação de Cobrança', '/criar-cobranca'],
+              ['Criação de Cobrança', '/criar-cobranca-assessoria'],
             ]}
           />
         </motion.div>
@@ -274,7 +274,7 @@ const Router = ({ isLogged }) => {
         <BankCheckEntry />
       </HeaderBack>
     ),
-    '/criar-cobranca': (
+    '/criar-cobranca-assessoria': (
       <HeaderBack title="Criação de cobrança" navigateTo="/assessoria">
         <CreateCharge />
       </HeaderBack>
@@ -289,7 +289,7 @@ const Router = ({ isLogged }) => {
         <UpdateBrandsInfos />
       </HeaderBack>
     ),
-    '/criar-pagamento': <CreatePayment />,
+    '/criar-cobranca': <CreatePayment />,
     '/entrada-saida': (
       <HeaderBack title="Entrada/Saída do Caixa" navigateTo="/administrativo">
         <RegisterInputOutput />

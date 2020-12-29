@@ -34,7 +34,7 @@ export const Menu = ({ title, children }) => {
               text: 'Transações',
             },
             {
-              path: 'criar-pagamento',
+              path: 'criar-cobranca',
               onClick: () => setIsOpen(false),
               icon: <Icon type="money" size={15} strokeWidth={2} />,
               text: 'Criar Cobrança',
@@ -103,7 +103,7 @@ export const Menu = ({ title, children }) => {
               text: 'Transações',
             },
             {
-              path: 'criar-pagamento',
+              path: 'criar-cobranca',
               onClick: () => setIsOpen(false),
               icon: <Icon type="money" size={15} strokeWidth={2} />,
               text: 'Criar Cobrança',
