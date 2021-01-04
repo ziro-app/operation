@@ -1,5 +1,6 @@
 import axios from 'axios'
 import arrayMonth from './utils/arrayMonth'
+import fetchGraph from './fetchGraph'
 import {convertMMMToMM} from './utils/convertToMMM'
 
 const removeDuplicates = arrayWithDuplicates => {
@@ -63,7 +64,8 @@ const fetch = (state) => {
                 })
                 setSeries(geralParcela2)
             }
-            setData(object)
+            fetchGraph(state)
+            setData(object.filter(item => item.ano))
             setSectores(setores)
         } catch (error) {
             setError(true)

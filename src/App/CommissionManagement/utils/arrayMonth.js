@@ -1,17 +1,17 @@
 import {convertMMToMMM} from './convertToMMM'
 
-const arrayMonth = () => {
+const arrayMonthYear = () => {
   const monthToday = new Date().getMonth() + 1
-  if(monthToday === 3){
-    return [convertMMToMMM(monthToday-2), convertMMToMMM(monthToday-1), convertMMToMMM(monthToday),]
+  const thisYear = String(new Date().getFullYear()).slice(2,4)
+  const year = (monthNumber) => {
+    return monthNumber > 0 ? thisYear : String(Number(thisYear)-1)
   }
-  if(monthToday === 2){
-    return [convertMMToMMM(monthToday-1), convertMMToMMM(monthToday)]
-  }
-  if(monthToday === 1){
-    return [convertMMToMMM(monthToday)]
-  }
-  return [convertMMToMMM(monthToday-3),convertMMToMMM(monthToday-2), convertMMToMMM(monthToday-1), convertMMToMMM(monthToday) ]
+  return [
+    {mes:convertMMToMMM(monthToday-3), ano: year(monthToday-3)},
+    {mes:convertMMToMMM(monthToday-2), ano: year(monthToday-2)},
+    {mes:convertMMToMMM(monthToday-1), ano: year(monthToday-1)},
+    {mes: convertMMToMMM(monthToday), ano: year(monthToday)}
+  ]
 }
 
-export default arrayMonth
+export default arrayMonthYear

@@ -1,5 +1,8 @@
 export const convertMMToMMM = (number) => {
     const objConvert = {
+        '-2': 'out',
+        '-1': 'nov',
+        0: 'dez',
         1:'jan',
         2:'fev',
         3:'mar',
@@ -31,5 +34,5 @@ export const convertMMMToMM = (str) => {
         'nov':11,
         'dez':12
     }
-    return objConvert[str]
+    return objConvert[String(str)]
 }
