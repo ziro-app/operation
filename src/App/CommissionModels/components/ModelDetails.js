@@ -103,7 +103,7 @@ const ModelDetails = ({dataProviders, block, arrayInputs, blockCalc, modeloParce
                                 <Dropdown
                                 value={provider || ''}
                                 list={arrayProviders}
-                                placeholder="Escolha um assessor"
+                                placeholder="Escolha uma pessoa"
                                 onChange={({ target: { value } }) => {setProvider(value)}}
                                 onChangeKeyboard={element => element ? setProvider(element.value) : null}
                                 />
