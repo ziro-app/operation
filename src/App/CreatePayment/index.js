@@ -18,7 +18,7 @@ import { userContext } from '../appContext'
 import { inline, center } from './styles'
 
 const CreatePayment = () => {
-  const allowedUsersToTest = ['Uiller', 'Vitor', 'João', 'Ale']
+  const allowedUsersToTest = ['Uiller', 'Vitor', 'João', 'Ale', 'Antonio']
   const [isLoading, setIsLoading] = useState(true)
   const [errorLoading, setErrorLoading] = useState(false)
   const [suppliers, setSuppliers] = useState([])

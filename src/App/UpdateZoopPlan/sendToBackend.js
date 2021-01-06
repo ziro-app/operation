@@ -6,7 +6,7 @@ import { translateFeesToFirebase, translateFirebaseToFees } from './functions'
 const sendToBackend = async state => {
   const { docId, selectedPlan, nickname, sellerZoopPlan2, setSettingActivePlan } = state
   const nome = nickname ? nickname.trim() : ''
-  const allowedUsers = ['Uiller', 'Vitor', 'Alessandro', 'Wermeson', 'Ale']
+  const allowedUsers = ['Uiller', 'Vitor', 'Alessandro', 'Wermeson', 'Ale', 'Antonio']
   return new Promise(async (resolve, reject) => {
     try {
       if (process.env.HOMOLOG ? true : allowedUsers.includes(nome)) {

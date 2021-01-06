@@ -2,7 +2,7 @@ import currencyFormat from '@ziro/currency-format'
 import { db } from '../../../Firebase/index'
 
 const sendToBackend = (sellerZoopPlanForFirebase, nickname, sellerId, setPlanName) => {
-  const allowedUsers = ['Uiller', 'Vitor', 'Alessandro', 'Wermeson', 'Ale']
+  const allowedUsers = ['Uiller', 'Vitor', 'Alessandro', 'Wermeson', 'Ale', 'Antonio']
   const nome = nickname ? nickname.trim() : ''
   return new Promise(async (resolve, reject) => {
     try {
