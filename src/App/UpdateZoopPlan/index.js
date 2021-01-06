@@ -14,7 +14,7 @@ import ToastNotification from '../ToastNotification'
 import sendToBackend from './sendToBackend'
 import fetch from './fetch'
 import { userContext } from '../appContext'
-import { createNewPlan, translateFirebaseToFees, translateFeesToFirebase } from './functions'
+import { createNewPlan, translateFirebaseToFees, translateFeesToFirebase, translateFeesToZoop } from './functions'
 import Modal from '../utils/Modal/Modal'
 import updatePlan from './updatePlan'
 import { db } from '../../Firebase'
@@ -49,6 +49,7 @@ const UpdateZoopPlan = () => {
   const setMessage = useMessage()
   const { nickname } = useContext(userContext)
   const setState = { setAntifraudPercentage, setSupplier, setMarkupPercentage }
+  console.log(`selectedPlan`,selectedPlan,translateFeesToZoop(selectedPlan))
   const state = {
     docId: supplier.docId,
     selectedPlan,
@@ -57,6 +58,7 @@ const UpdateZoopPlan = () => {
     antifraudPercentage,
     supplier,
     markupPercentage,
+    sellerId,
     setSettingActivePlan,
     ...setState,
   }
@@ -146,7 +148,7 @@ const UpdateZoopPlan = () => {
     }
     localStorage.removeItem('selectedPlan')
     setOpenModalDeletePlan(false)
-    await updatePlan(sellerZoopPlan2, nickname, supplier.docId)
+    await updatePlan(sellerZoopPlan2, nickname, supplier.docId,translateFeesToZoop(selectedPlan))
     setAllPlans(newAllPlans)
     setSelectedPlan('')
     setLocation('/atualizar-plano-venda')

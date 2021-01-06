@@ -65,6 +65,7 @@ module.exports = (env, { mode }) => {
       sheet_id_pessoas,
       document_id_for_utilities_main,
       homolog,
+      zoop_token
     } = require('./credentials')
     config.devtool = 'cheap-module-eval-source-map'
     config.devServer = { historyApiFallback: true, hot: true, port: 9090 }
@@ -106,6 +107,7 @@ module.exports = (env, { mode }) => {
           SHEET_ID_TRANSITO: JSON.stringify(sheet_id_transito),
           SHEET_ID_PESSOAS: JSON.stringify(sheet_id_pessoas),
           DOCUMENT_ID_FOR_UTILITIES_MAIN: JSON.stringify(document_id_for_utilities_main),
+          ZOOP_TOKEN: JSON.stringify(zoop_token),
           // FOR DEV TESTS ONLY
           HOMOLOG: JSON.stringify(homolog),
         },
@@ -166,6 +168,7 @@ module.exports = (env, { mode }) => {
           SHEET_ID_TRANSITO: JSON.stringify(process.env.SHEET_ID_TRANSITO),
           SHEET_ID_PESSOAS: JSON.stringify(process.env.SHEET_ID_PESSOAS),
           DOCUMENT_ID_FOR_UTILITIES_MAIN: JSON.stringify(process.env.DOCUMENT_ID_FOR_UTILITIES_MAIN),
+          ZOOP_TOKEN: JSON.stringify(process.env.ZOOP_TOKEN)
         },
       }),
     )
