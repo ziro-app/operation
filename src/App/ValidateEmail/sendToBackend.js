@@ -4,7 +4,7 @@ import { post } from 'axios'
 const sendToBackend = state => () => {
   const { email, setEmail, setUid, setIsOpen, setResendingEmail, setResendStatus, setFinished, nickname } = state
   const nome = nickname ? nickname.trim() : ''
-  const allowedUsers = ['Uiller', 'Vitor', 'Cesar', 'Wermeson', 'Ronaldo']
+  const allowedUsers = ['Uiller', 'Vitor', 'Cesar', 'Wermeson', 'Ronaldo', 'Claudia', 'Fernanda']
   const url = `${process.env.FIREBASE_AUTH_URL}checkEmail`
   const config = {
     headers: {
