@@ -49,8 +49,8 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
   let markupTransaction = {}
   let antiFraudTransaction = {}
 
-  async function getTransaction(transactionId, setTransaction, setError, transaction) {
-    await fetch(transactionId, setTransaction, setError, transaction, setNothing, setIsLoading)
+  async function getTransaction(transactionId, setTransaction, setError, transaction, setIsLoading, setNothing) {
+    await fetch(transactionId, setTransaction, setError, transaction, setIsLoading, setNothing)
 
     if (Object.prototype.hasOwnProperty.call(transaction, 'splitTransaction')) {
       if (transaction.splitTransaction === '' || (markupTransaction.percentage === 0 && markupTransaction.amount === 0)) setOlderTransaction(true)
@@ -199,7 +199,7 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
   }
 
   useEffect(() => {
-    getTransaction(transactionId, setTransaction, setError, transaction)
+    getTransaction(transactionId, setTransaction, setError, transaction, setIsLoading, setNothing)
 
     if (Object.prototype.hasOwnProperty.call(transaction, 'dateLinkCreated')) {
       if (error) {
