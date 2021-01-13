@@ -10,8 +10,8 @@ import ReceivableDetails from './ReceivableDetails/index';
 import fetch from './fetch';
 import { userContext } from '../appContext';
 import { Menu } from '../Menu/index';
-import {listMonth} from './utils'
-import {containerClearAll, btnClearAll, textClearAll, container} from './styles'
+import { listMonth } from './utils'
+import { containerClearAll, btnClearAll, textClearAll, container } from './styles'
 
 const Transactions = ({ transactionId, receivableId }) => {
     const storageFilterStatus = localStorage.getItem('statusFilter')
@@ -29,7 +29,7 @@ const Transactions = ({ transactionId, receivableId }) => {
     const [sellerFilter, setSellerFilter] = useState(storageFilterSeller || '');
     const [monthFilter, setMonthFilter] = useState(storageFilterMonth || '');
     const [limitFetch, setLimitFetch] = useState(20);
-    const [dataInicioFilter, setDataInicioFilter] = useState(new Date(2019,10,1))
+    const [dataInicioFilter, setDataInicioFilter] = useState(new Date(2019, 10, 1))
     const [isLoadingMore, setIsLoadingMore] = useState(true);
     const [transaction, setTransaction] = useState({});
     const hadleClearAll = () => {
@@ -42,7 +42,7 @@ const Transactions = ({ transactionId, receivableId }) => {
         localStorage.removeItem('sellerFilter')
         localStorage.removeItem('monthFilter')
     }
-    const state = {statusFilter, sellerFilter, monthFilter, setIsLoading,setErrorLoading,payments,setPayments,setLastDoc,setTotalTransactions,setLoadingMore,setIsLoadingResults,limitFetch,setIsLoadingMore}
+    const state = { statusFilter, sellerFilter, monthFilter, setIsLoading, setErrorLoading, payments, setPayments, setLastDoc, setTotalTransactions, setLoadingMore, setIsLoadingResults, limitFetch, setIsLoadingMore }
     useEffect(() => {
         if (loadingMore || isLoadingResults) {
             fetch(state);
@@ -69,77 +69,77 @@ const Transactions = ({ transactionId, receivableId }) => {
         <Menu title="Transações">
             <div style={container}>
                 <form>
-                <label aria-label='filtro por fabricante'/>
-                <Dropdown
-                    value={sellerFilter || ''}
-                    list={listSellers.sort()}
-                    placeholder="Filtrar fabricante"
-                    onChange={({ target: { value } }) => {
-                        if (listSellers.includes(value) || value === '') {
-                            setIsLoadingResults(true);
-                            localStorage.setItem('sellerFilter', value);
-                        }
-                        setSellerFilter(value);
-                    }}
-                    onChangeKeyboard={e => {
-                        if(e){
-                            if (listSellers.includes(e.value) || e.value === '') {
+                    <label aria-label='filtro por fabricante' />
+                    <Dropdown
+                        value={sellerFilter || ''}
+                        list={listSellers.sort()}
+                        placeholder="Filtrar fabricante"
+                        onChange={({ target: { value } }) => {
+                            if (listSellers.includes(value) || value === '') {
                                 setIsLoadingResults(true);
-                                localStorage.setItem('sellerFilter', e.value);
+                                localStorage.setItem('sellerFilter', value);
                             }
-                            setSellerFilter(e.value);
-                        }
-                    }}
-                />
+                            setSellerFilter(value);
+                        }}
+                        onChangeKeyboard={e => {
+                            if (e) {
+                                if (listSellers.includes(e.value) || e.value === '') {
+                                    setIsLoadingResults(true);
+                                    localStorage.setItem('sellerFilter', e.value);
+                                }
+                                setSellerFilter(e.value);
+                            }
+                        }}
+                    />
                 </form>
                 <form>
-                <label aria-label='filtro por status'/>
-                <Dropdown
-                    value={statusFilter || ''}
-                    list={listStatus}
-                    placeholder="Filtrar status"
-                    onChange={({ target: { value } }) => {
-                        if (listStatus.includes(value) || value === '') {
-                            setIsLoadingResults(true);
-                            localStorage.setItem('statusFilter', value);
-                        }
-                        setStatusFilter(value);
-                    }}
-                    onChangeKeyboard={e => {
-                        if(e){
-                            if (listStatus.includes(e.value) || e.value === '') {
+                    <label aria-label='filtro por status' />
+                    <Dropdown
+                        value={statusFilter || ''}
+                        list={listStatus}
+                        placeholder="Filtrar status"
+                        onChange={({ target: { value } }) => {
+                            if (listStatus.includes(value) || value === '') {
                                 setIsLoadingResults(true);
-                                localStorage.setItem('statusFilter', e.value);
+                                localStorage.setItem('statusFilter', value);
                             }
-                            setStatusFilter(e.value);
-                        }
-                    }}
-                />
+                            setStatusFilter(value);
+                        }}
+                        onChangeKeyboard={e => {
+                            if (e) {
+                                if (listStatus.includes(e.value) || e.value === '') {
+                                    setIsLoadingResults(true);
+                                    localStorage.setItem('statusFilter', e.value);
+                                }
+                                setStatusFilter(e.value);
+                            }
+                        }}
+                    />
                 </form>
                 <form>
-                <label aria-label='filtro por mês e ano'/>
-                <Dropdown
-                    value={monthFilter || ''}
-                    list={listMonth(dataInicioFilter)}
-                    placeholder="Filtrar mês"
-                    onChange={({ target: { value } }) => {
-                        if (listMonth(dataInicioFilter).includes(value) || value === '') {
-                            setIsLoadingResults(true);
-                            localStorage.setItem('monthFilter', value);
-                        }
-                        setMonthFilter(value);
-                    }}
-                    onChangeKeyboard={e => {
-                        if(e){
-                            if (listMonth(dataInicioFilter).includes(e.value) || e.value === '') {
+                    <label aria-label='filtro por mês e ano' />
+                    <Dropdown
+                        value={monthFilter || ''}
+                        list={listMonth(dataInicioFilter)}
+                        placeholder="Filtrar mês"
+                        onChange={({ target: { value } }) => {
+                            if (listMonth(dataInicioFilter).includes(value) || value === '') {
                                 setIsLoadingResults(true);
-                                localStorage.setItem('monthFilter', e.value);
+                                localStorage.setItem('monthFilter', value);
                             }
-                            setMonthFilter(e.value);
-                        
-                        }
-                    }}
-                />
+                            setMonthFilter(value);
+                        }}
+                        onChangeKeyboard={e => {
+                            if (e) {
+                                if (listMonth(dataInicioFilter).includes(e.value) || e.value === '') {
+                                    setIsLoadingResults(true);
+                                    localStorage.setItem('monthFilter', e.value);
+                                }
+                                setMonthFilter(e.value);
+
+                            }
+                        }}
+                    />
                 </form>
                 <div style={containerClearAll}>
                     <button
@@ -154,7 +154,7 @@ const Transactions = ({ transactionId, receivableId }) => {
                 </div>
             </div>
             {isLoadingResults ? (
-                    <Spinner />
+                <Spinner />
             ) : (
                     <TransactionsList
                         transactions={payments.map(payment => {
