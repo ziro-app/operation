@@ -30,6 +30,7 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
   const [data, setData] = useState([])
   const [blocks, setBlocks] = useState([])
   const [nothing, setNothing] = useState(false)
+  const [isDeleting, setIsDeleting] = useState(false)
   const [, setLocation] = useLocation()
   const [copyResultText, setCopyResultText] = useState('')
   const [copyResultStatus, setCopyResultStatus] = useState(true)
@@ -141,6 +142,7 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
 
   const deleteTransaction = async () => {
     setIsLoading(true)
+    setIsDeleting(true)
     try {
       await db.collection('credit-card-payments').doc(transactionId).delete()
       setLocation('/transacoes')
@@ -421,7 +423,7 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
         if (transaction.onBehalfOfBrand && transaction.seller.includes('Ziro')) {
           block[0].body.splice(1, 0, {
             title: 'Fabricante',
-            content: transaction.onBehalfOfBrand,
+            content: `${transaction.onBehalfOfBrand} - Ziro`,
           })
         } else
           block[0].body.splice(1, 0, {
@@ -491,7 +493,7 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
       </div>
     )
 
-  if (nothing)
+  if (nothing && !isLoading && !isDeleting)
     return (
       <Error
         message="Transação inválida ou não encontrada, retorne e tente novamente."
