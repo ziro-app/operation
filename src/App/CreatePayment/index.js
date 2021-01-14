@@ -88,7 +88,9 @@ const CreatePayment = () => {
       validation: value => (
         (hasSellerZoopPlan && isNewPlan)
             ? true
-            : (hasSellerZoopPlan.antiFraud.amount !== null || hasSellerZoopPlan.antiFraud.percentage !== null)
+            : (hasSellerZoopPlan
+                ? (hasSellerZoopPlan.antiFraud.amount !== null || hasSellerZoopPlan.antiFraud.percentage !== null)
+                : true)
         )
         ? value !== ''
         : true,
