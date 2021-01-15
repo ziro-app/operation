@@ -211,6 +211,7 @@ const cardForm = ({
                 setUid(searched.uid)
                 setSupplier(searched)
                 const searchedBank = banks.find(bank => bank.fabricante === value.split(' - ')[0] && bank.banco === value.split(' - ')[1])
+                if(paymentTypeReceivable === 'PIX') setPixKey(value.split(' - ')[1])
                 if (searchedBank) {
                   setBank(searchedBank)
                   setBeneficiary(searchedBank.razao)
@@ -229,6 +230,7 @@ const cardForm = ({
               }
             } else {
               setSupplierName('')
+              setPixKey('')
               setSupplier({})
               setBank({})
               setBeneficiary('')
@@ -244,6 +246,7 @@ const cardForm = ({
             if (element && element.value !== '') {
               setSupplierName(element.value)
               const searched = suppliers.find(supplier => supplier.fabricante === element.value.split(' -')[0])
+              if(paymentTypeReceivable === 'PIX') setPixKey(element.value.split(' - ')[1])
               if (searched) {
                 setUid(searched.uid)
                 setSupplier(searched)
@@ -260,6 +263,7 @@ const cardForm = ({
               } else {
                 setSupplier({})
                 setBank({})
+                setPixKey('')
               }
             } else {
               setSupplierName('')
@@ -285,7 +289,8 @@ const cardForm = ({
       <FormInput
         name="pix"
         label="Chave PIX"
-        input={<InputText value={pixKey} onChange={({ target: { value } }) => setPixKey(capitalize(value))} placeholder="Chave do PIX" />}
+        input={<InputText value={pixKey} onChange={({ target: { value } }) => setPixKey(capitalize(value))} placeholder="Chave do PIX"
+        disabled={!!supplierName.split(' - ')[0]}  />}
       />
     ) : (
       <FormInput name="" label="" input={<></>} />
@@ -722,7 +727,8 @@ const tedForm = ({
       <FormInput
         name="pix"
         label="Chave PIX"
-        input={<InputText value={pixKey} onChange={({ target: { value } }) => setPixKey(capitalize(value))} placeholder="Chave do PIX" />}
+        input={<InputText value={pixKey} onChange={({ target: { value } }) => setPixKey(capitalize(value))} placeholder="Chave do PIX"
+        disabled={!!supplierName.split(' - ')[0]} />}
       />
     ) : (
       <FormInput name="" label="" input={<></>} />
