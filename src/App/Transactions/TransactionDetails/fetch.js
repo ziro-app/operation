@@ -75,6 +75,7 @@ const fetch = (transactionId, setTransaction, setError, transaction, setNothing,
                             fee_details: fee_details || '-',
                             checkoutWithoutRegister: checkoutWithoutRegister || false,
                         })
+                        setNothing(false)
                         setIsLoading(false)
 
                         if (transaction.status !== paymentDoc[0].status) {

@@ -85,13 +85,7 @@ const CreatePayment = () => {
     },
     {
       name: 'insurance',
-      validation: value =>
-        // eslint-disable-next-line no-nested-ternary
-        !isNewPlan
-          ? checkoutWithoutRegister && hasSellerZoopPlan && (hasSellerZoopPlan.antiFraud.amount || hasSellerZoopPlan.antiFraud.percentage)
-            ? value !== ''
-            : true
-          : true,
+      validation: value => hasSellerZoopPlan ? value !== '' : true,
       value: insurenceDropdownValue,
       message: 'Opção inválida',
     },
