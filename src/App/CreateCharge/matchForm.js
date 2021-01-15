@@ -47,9 +47,13 @@ const cardForm = ({
   filename,
   setFilename,
   setUid,
+  note,
+  setNote,
   suppliersTrends,
   paymentTypeReceivable,
   setPaymentTypeReceivable,
+  pixKey,
+  setPixKey
 }) => {
   const fields = [
     <FormInput name="totalAmount" label="Valor do romaneio sem desconto" input={<InputMoney value={totalAmount} setValue={setTotalAmount} />} />,
@@ -182,6 +186,7 @@ const cardForm = ({
     ) : (
       <FormInput name="" label="" input={<></>} />
     ),
+    paymentType === 'Transferência' ? (
     <FormInput
       name="supplier"
       label="Fabricantes dos Dados Bancários"
@@ -272,8 +277,20 @@ const cardForm = ({
           placeholder="Selecione a conta ou deixe em branco!"
         />
       }
-    />,
-    paymentType === 'Transferência' ? (
+    />
+    ) : (
+      <FormInput name="" label="" input={<></>} />
+    ),
+    paymentTypeReceivable === 'PIX' ? (
+      <FormInput
+        name="pix"
+        label="Chave PIX"
+        input={<InputText value={pixKey} onChange={({ target: { value } }) => setPixKey(capitalize(value))} placeholder="Chave do PIX" />}
+      />
+    ) : (
+      <FormInput name="" label="" input={<></>} />
+    ),
+    paymentTypeReceivable === 'TED' ? (
       <FormInput
         name="beneficiary"
         label="Beneficiário"
@@ -289,7 +306,7 @@ const cardForm = ({
     ) : (
       <FormInput name="" label="" input={<></>} />
     ),
-    paymentType === 'Transferência' ? (
+    paymentTypeReceivable === 'TED' ? (
       <FormInput
         name="beneficiaryDocument"
         label="Documento"
@@ -312,7 +329,7 @@ const cardForm = ({
     ) : (
       <FormInput name="" label="" input={<></>} />
     ),
-    paymentType === 'Transferência' ? (
+    paymentTypeReceivable === 'TED' ? (
       <FormInput
         name="bankName"
         label="Banco"
@@ -330,7 +347,7 @@ const cardForm = ({
     ) : (
       <FormInput name="" label="" input={<></>} />
     ),
-    paymentType === 'Transferência' ? (
+    paymentTypeReceivable === 'TED' ? (
       <FormInput
         name="agency"
         label="Número da Agência"
@@ -347,7 +364,7 @@ const cardForm = ({
     ) : (
       <FormInput name="" label="" input={<></>} />
     ),
-    paymentType === 'Transferência' ? (
+    paymentTypeReceivable === 'TED' ? (
       <FormInput
         name="accountNumber"
         label="Número da Conta"
@@ -364,6 +381,11 @@ const cardForm = ({
     ) : (
       <FormInput name="" label="" input={<></>} />
     ),
+    <FormInput
+      name="note"
+      label="Observação"
+      input={<InputText value={note} onChange={({ target: { value } }) => setNote(value)} placeholder="Observações sobre o link" />}
+      />,
   ]
   return fields
 }
@@ -579,6 +601,11 @@ const tedForm = ({
   const fields = [
     <FormInput name="totalAmount" label="Valor da transferência recebida" input={<InputMoney value={totalAmount} setValue={setTotalAmount} />} />,
     <FormInput
+      name="romaneio"
+      label="Foto do Romaneio"
+      input={<SingleImageUpload setFile={setRomaneio} filename={filename || ''} setFilename={setFilename} indexOfFile={0} />}
+    />,
+    <FormInput
       name="storeowner"
       label="Lojista"
       input={
@@ -691,7 +718,16 @@ const tedForm = ({
     ) : (
       <FormInput name="" label="" input={<></>} />
     ),
-    <FormInput
+    paymentTypeReceivable === 'PIX' ? (
+      <FormInput
+        name="pix"
+        label="Chave PIX"
+        input={<InputText value={pixKey} onChange={({ target: { value } }) => setPixKey(capitalize(value))} placeholder="Chave do PIX" />}
+      />
+    ) : (
+      <FormInput name="" label="" input={<></>} />
+    ),
+    paymentType === 'Transferência' ? (<FormInput
       name="supplier"
       label="Fabricantes dos Dados Bancários"
       input={
@@ -781,117 +817,105 @@ const tedForm = ({
           placeholder="Selecione a conta ou deixe em branco!"
         />
       }
-    />,
+    />
+    ) : (
+      <FormInput name="" label="" input={<></>} />
+    ),!isLoadingFunction && paymentTypeReceivable === 'TED' ? (
+        <FormInput
+          name="beneficiary"
+          label="Beneficiário"
+          input={
+            <InputText
+              value={beneficiary}
+              onChange={({ target: { value } }) => (bank.razao ? () => null : setBeneficiary(capitalize(value)))}
+              placeholder="Nome do beneficiário"
+              disabled={!!bank.razao}
+            />
+          }
+        />
+      ) : (
+        <FormInput name="" label="" input={<></>} />
+      ),
+      !isLoadingFunction && paymentTypeReceivable === 'TED' ? (
+        <FormInput
+          name="beneficiaryDocument"
+          label="Documento"
+          input={
+            <InputText
+              value={beneficiaryDocument}
+              onChange={({ target: { value } }) => {
+                if (bank.cnpj) () => null
+                else {
+                  const mask = value.length <= 14 ? '###.###.###-##' : '##.###.###/####-##'
+                  setBeneficiaryDocument(maskInput(value, mask, true))
+                }
+              }}
+              placeholder="CPF ou CNPJ"
+              inputMode="numeric"
+              disabled={!!bank.cnpj}
+            />
+          }
+        />
+      ) : (
+        <FormInput name="" label="" input={<></>} />
+      ),
+      !isLoadingFunction && paymentTypeReceivable === 'TED' ? (
+        <FormInput
+          name="bankName"
+          label="Banco"
+          input={
+            <Dropdown
+              value={bankName}
+              onChange={({ target: { value } }) => (bank.banco ? () => null : setBankName(value))}
+              onChangeKeyboard={element => (bank.banco ? () => null : element.value ? setBankName(element.value) : null)}
+              submitting={!!bank.banco}
+              list={banksList.map(bank => bank.split(' - ')[1])}
+              placeholder="Ex.: Banco do Brasil"
+            />
+          }
+        />
+      ) : (
+        <FormInput name="" label="" input={<></>} />
+      ),
+      !isLoadingFunction && paymentTypeReceivable === 'TED' ? (
+        <FormInput
+          name="agency"
+          label="Número da Agência"
+          input={
+            <InputText
+              value={agency}
+              onChange={({ target: { value } }) => (bank.agencia ? () => null : setAgency(value))}
+              placeholder="Ex.: 1463-8"
+              inputMode="numeric"
+              disabled={!!bank.agencia}
+            />
+          }
+        />
+      ) : (
+        <FormInput name="" label="" input={<></>} />
+      ),
+      !isLoadingFunction && paymentTypeReceivable === 'TED' ? (
+        <FormInput
+          name="accountNumber"
+          label="Número da Conta"
+          input={
+            <InputText
+              value={accountNumber}
+              onChange={({ target: { value } }) => (bank.conta ? () => null : setAccountNumber(value))}
+              placeholder="Ex.: 14637-8"
+              inputMode="numeric"
+              disabled={!!bank.conta}
+            />
+          }
+        />
+      ) : (
+        <FormInput name="" label="" input={<></>} />
+      ),
     <FormInput
       name="note"
       label="Observação"
       input={<InputText value={note} onChange={({ target: { value } }) => setNote(value)} placeholder="Observações sobre o link" />}
-    />,
-    <FormInput
-      name="romaneio"
-      label="Foto do Romaneio"
-      input={<SingleImageUpload setFile={setRomaneio} filename={filename || ''} setFilename={setFilename} indexOfFile={0} />}
-    />,
-    paymentTypeReceivable === 'PIX' ? (
-      <FormInput
-        name="pix"
-        label="Chave PIX"
-        input={<InputText value={pixKey} onChange={({ target: { value } }) => setPixKey(capitalize(value))} placeholder="Chave do PIX" />}
-      />
-    ) : (
-      <FormInput name="" label="" input={<></>} />
-    ),
-    !isLoadingFunction && paymentTypeReceivable === 'TED' ? (
-      <FormInput
-        name="beneficiary"
-        label="Beneficiário"
-        input={
-          <InputText
-            value={beneficiary}
-            onChange={({ target: { value } }) => (bank.razao ? () => null : setBeneficiary(capitalize(value)))}
-            placeholder="Nome do beneficiário"
-            disabled={!!bank.razao}
-          />
-        }
-      />
-    ) : (
-      <FormInput name="" label="" input={<></>} />
-    ),
-    !isLoadingFunction && paymentTypeReceivable === 'TED' ? (
-      <FormInput
-        name="beneficiaryDocument"
-        label="Documento"
-        input={
-          <InputText
-            value={beneficiaryDocument}
-            onChange={({ target: { value } }) => {
-              if (bank.cnpj) () => null
-              else {
-                const mask = value.length <= 14 ? '###.###.###-##' : '##.###.###/####-##'
-                setBeneficiaryDocument(maskInput(value, mask, true))
-              }
-            }}
-            placeholder="CPF ou CNPJ"
-            inputMode="numeric"
-            disabled={!!bank.cnpj}
-          />
-        }
-      />
-    ) : (
-      <FormInput name="" label="" input={<></>} />
-    ),
-    !isLoadingFunction && paymentTypeReceivable === 'TED' ? (
-      <FormInput
-        name="bankName"
-        label="Banco"
-        input={
-          <Dropdown
-            value={bankName}
-            onChange={({ target: { value } }) => (bank.banco ? () => null : setBankName(value))}
-            onChangeKeyboard={element => (bank.banco ? () => null : element.value ? setBankName(element.value) : null)}
-            submitting={!!bank.banco}
-            list={banksList.map(bank => bank.split(' - ')[1])}
-            placeholder="Ex.: Banco do Brasil"
-          />
-        }
-      />
-    ) : (
-      <FormInput name="" label="" input={<></>} />
-    ),
-    !isLoadingFunction && paymentTypeReceivable === 'TED' ? (
-      <FormInput
-        name="agency"
-        label="Número da Agência"
-        input={
-          <InputText
-            value={agency}
-            onChange={({ target: { value } }) => (bank.agencia ? () => null : setAgency(value))}
-            placeholder="Ex.: 1463-8"
-            inputMode="numeric"
-            disabled={!!bank.agencia}
-          />
-        }
-      />
-    ) : (
-      <FormInput name="" label="" input={<></>} />
-    ),
-    !isLoadingFunction && paymentTypeReceivable === 'TED' ? (
-      <FormInput
-        name="accountNumber"
-        label="Número da Conta"
-        input={
-          <InputText
-            value={accountNumber}
-            onChange={({ target: { value } }) => (bank.conta ? () => null : setAccountNumber(value))}
-            placeholder="Ex.: 14637-8"
-            inputMode="numeric"
-            disabled={!!bank.conta}
-          />
-        }
-      />
-    ) : (
-      <FormInput name="" label="" input={<></>} />
-    ),
+      />,
   ]
   return fields
 }
