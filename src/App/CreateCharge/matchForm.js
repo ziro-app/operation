@@ -388,11 +388,6 @@ const cardForm = ({
     ) : (
       <FormInput name="" label="" input={<></>} />
     ),
-    <FormInput
-      name="note"
-      label="Observação"
-      input={<InputText value={note} onChange={({ target: { value } }) => setNote(value)} placeholder="Observações sobre o link" />}
-      />,
   ]
   return fields
 }
@@ -613,6 +608,11 @@ const tedForm = ({
       input={<SingleImageUpload setFile={setRomaneio} filename={filename || ''} setFilename={setFilename} indexOfFile={0} />}
     />,
     <FormInput
+      name="note"
+      label="Observação"
+      input={<InputText value={note} onChange={({ target: { value } }) => setNote(value)} placeholder="Observações sobre o link" />}
+      />,
+    <FormInput
       name="storeowner"
       label="Lojista"
       input={
@@ -726,16 +726,6 @@ const tedForm = ({
     ) : (
       <FormInput name="" label="" input={<></>} />
     ),
-    paymentTypeReceivable === 'PIX' ? (
-      <FormInput
-        name="pix"
-        label="Chave PIX"
-        input={<InputText value={pixKey} onChange={({ target: { value } }) => setPixKey(capitalize(value))} placeholder="Chave do PIX"
-        disabled={!!supplierName.split(' - ')[1]} />}
-      />
-    ) : (
-      <FormInput name="" label="" input={<></>} />
-    ),
     paymentType === 'Transferência' ? (<FormInput
       name="supplier"
       label="Fabricantes dos Dados Bancários"
@@ -830,7 +820,18 @@ const tedForm = ({
     />
     ) : (
       <FormInput name="" label="" input={<></>} />
-    ),!isLoadingFunction && paymentTypeReceivable === 'TED' ? (
+    ),
+    paymentTypeReceivable === 'PIX' ? (
+      <FormInput
+        name="pix"
+        label="Chave PIX"
+        input={<InputText value={pixKey} onChange={({ target: { value } }) => setPixKey(capitalize(value))} placeholder="Chave do PIX"
+        disabled={!!supplierName.split(' - ')[1]} />}
+      />
+    ) : (
+      <FormInput name="" label="" input={<></>} />
+    ),
+    !isLoadingFunction && paymentTypeReceivable === 'TED' ? (
         <FormInput
           name="beneficiary"
           label="Beneficiário"
@@ -921,11 +922,6 @@ const tedForm = ({
       ) : (
         <FormInput name="" label="" input={<></>} />
       ),
-    <FormInput
-      name="note"
-      label="Observação"
-      input={<InputText value={note} onChange={({ target: { value } }) => setNote(value)} placeholder="Observações sobre o link" />}
-      />,
   ]
   return fields
 }

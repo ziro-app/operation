@@ -9,7 +9,7 @@ const sendToBackend = state => () => {
   const descricao = description ? description.trim() : ''
   const url = process.env.SHEET_URL
   const data = formatDateUTC3(new Date())
-  const allowedUsers = ['Claudia', 'Vitor', 'Uiller', 'Guilherme']
+  const allowedUsers = ['Claudia', 'Vitor', 'Uiller', 'Guilherme','Carolina']
 
   const body = {
     apiResource: 'values',
