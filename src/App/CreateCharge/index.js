@@ -5,6 +5,7 @@ import Error from '@bit/vitorbarbosa19.ziro.error'
 import Dropdown from '@bit/vitorbarbosa19.ziro.dropdown'
 import Form from '@bit/vitorbarbosa19.ziro.form'
 import FormInput from '@bit/vitorbarbosa19.ziro.form-input'
+import SpinnerWithDiv from '@bit/vitorbarbosa19.ziro.spinner-with-div'
 import InputText from '@bit/vitorbarbosa19.ziro.input-text'
 import InputMoney from '@bit/vitorbarbosa19.ziro.input-money'
 import maskInput from '@ziro/mask-input'
@@ -51,7 +52,8 @@ const CreateCharge = () => {
   const [billet, setBillet] = useState('')
   const [needUpdateBankAccount, setNeedUpdateBankAccount] = useState(false)
   const [hasSellerZoopPlan, setHasSellerZoopPlan] = useState(null)
-
+  console.log('isLoading',isLoading)
+  console.log('isLoadingFunction',isLoadingFunction)
   // DADOS DO CARTÃO
   const [installment, setInstallment] = useState('')
   const installments = ['1', '2', '3', '4', '5', '6']
@@ -309,9 +311,14 @@ const CreateCharge = () => {
           ...matchForm(state),
         ]}
       />
-      {isLoadingFunction && (
-        <div style={{ display: 'grid' }}>
-          <Spinner size="5rem" />
+      {isLoadingFunction || isLoading && (
+        <div
+          style={{
+            zIndex: '9999',
+            marginTop:'-60%'
+          }}
+        >
+          <SpinnerWithDiv size="5rem" />
         </div>
       )}
     </motion.div>

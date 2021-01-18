@@ -180,6 +180,7 @@ const cardForm = ({
             onChangeKeyboard={element => (element ? setPaymentTypeReceivable(element.value) : null)}
             list={['TED', 'PIX']}
             placeholder="TED ou PIX"
+            disabled={isLoadingFunction}
           />
         }
       />
@@ -271,6 +272,7 @@ const cardForm = ({
               setBank({})
             }
           }}
+          disabled={isLoadingFunction}
           readOnly
           list={suppliers
             .map((supplier, index) => `${supplier.fabricante} - ${supplier.banco}`)
@@ -290,7 +292,7 @@ const cardForm = ({
         name="pix"
         label="Chave PIX"
         input={<InputText value={pixKey} onChange={({ target: { value } }) => setPixKey(capitalize(value))} placeholder="Chave do PIX"
-        disabled={!!supplierName.split(' - ')[0]}  />}
+        disabled={!!supplierName.split(' - ')[1]}  />}
       />
     ) : (
       <FormInput name="" label="" input={<></>} />
@@ -717,6 +719,7 @@ const tedForm = ({
             onChangeKeyboard={element => (element ? setPaymentTypeReceivable(element.value) : null)}
             list={['TED', 'PIX']}
             placeholder="TED ou PIX"
+            disabled={isLoadingFunction}
           />
         }
       />
@@ -728,7 +731,7 @@ const tedForm = ({
         name="pix"
         label="Chave PIX"
         input={<InputText value={pixKey} onChange={({ target: { value } }) => setPixKey(capitalize(value))} placeholder="Chave do PIX"
-        disabled={!!supplierName.split(' - ')[0]} />}
+        disabled={!!supplierName.split(' - ')[1]} />}
       />
     ) : (
       <FormInput name="" label="" input={<></>} />
@@ -813,6 +816,7 @@ const tedForm = ({
               setBank({})
             }
           }}
+          disabled={isLoadingFunction}
           readOnly
           list={suppliers
             .map((supplier, index) => `${supplier.fabricante} - ${supplier.banco}`)

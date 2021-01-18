@@ -108,12 +108,27 @@ const fetch = (
         const [, ...listStoreOwners] = dataStoreowners.data.values
         const resultStoreowners = await queryStoreowners.get()
         resultStoreowners.forEach(doc => storeowners.push(doc.data()))
-        setStoreowners(storeowners)
+        console.log('storeowners',storeowners);
+        var unique = [];
+        var distinct = [];
+        for( let i = 0; i < storeowners.length; i++ ){
+            if(!unique[storeowners[i].razao] && !unique[storeowners[i].fantasia] && !unique[storeowners[i].cnpj] && !unique[storeowners[i].uid]){
+                distinct.push(storeowners[i]);
+                unique[storeowners[i].fantasia] = 1;
+            }
+        }
+        console.log('distinct',distinct)
+        setStoreowners(distinct)
         listStoreOwners.map(data => {
           if (data[0]) {
             const store = { razao: data[0] ? data[0] : '', duplicate: reasonsStoreowners.includes(data[0]) }
-            reasonsStoreowners.push(data[0])
-            storeowners.push(store)
+            //console.log('store',store)
+            //console.log('data[0]',data[0])
+            //console.log('teste includes',reasonsStoreowners.includes(data[0]))
+            if(!reasonsStoreowners.includes(data[0]) && !storeowners.includes(store)){
+                reasonsStoreowners.push(data[0])
+                storeowners.push(store)
+            }
           }
         })
         listSupplierTrends.map(data => {

@@ -150,10 +150,16 @@ const sendToBackend = state => () => {
       )
       if (Object.keys(suppliers.find(supplier => supplier.fabricante === supplierNameFormatted)).length > 0 && Object.keys(bank).length === 0) {
         console.log('entrou onde não encontrou')
+        console.log('entrou length',Object.keys(suppliers.find(supplier => supplier.banco === pixKey)).length)
+        console.log('entrou find',suppliers.find(supplier => supplier.banco === pixKey))
+        console.log('entrou pixkey',pixKey)
         arrayUpdate = pixKey
           ? [supplierNameFormatted, pixKey, time]
           : [supplierNameFormatted, bankName, agencia, conta, beneficiary, beneficiaryDocument, time]
-        await axios(postSheet(arrayUpdate, tab, 'append'))
+          if(!suppliers.find(supplier => supplier.banco === pixKey)){
+              console.log('entrou no if',suppliers.find(supplier => supplier.banco === pixKey))
+            await axios(postSheet(arrayUpdate, tab, 'append'))
+          } else if(pixKey === '') await axios(postSheet(arrayUpdate, tab, 'append'))
       } else {
         arrayUpdate = pixKey ? dataPostBatch(objectSheet, 'uid', uid, updateObj, 'PIX') : dataPostBatch(objectSheet, 'uid', uid, updateObj, 'TED')
         await axios(postSheet(arrayUpdate, tab))
