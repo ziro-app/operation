@@ -7,7 +7,9 @@ import { translateFeesToFirebase, translateFirebaseToFees, translateFeesToZoop }
 const sendToBackend = async state => {
   const { docId, selectedPlan, nickname, sellerZoopPlan2, setSettingActivePlan, sellerId } = state
   const nome = nickname ? nickname.trim() : ''
-  const allowedUsers = ['Uiller', 'Vitor', 'Alessandro', 'Wermeson', 'Ale', 'Russi']
+  const allowedUsers = ['Uiller', 'Vitor', 'Wermeson', 'Ale', 'Russi']
+  console.log('allowedUsers',allowedUsers)
+  console.log('actualUser',nome)
   return new Promise(async (resolve, reject) => {
     try {
       if (translateFeesToZoop(selectedPlan) != null) {
