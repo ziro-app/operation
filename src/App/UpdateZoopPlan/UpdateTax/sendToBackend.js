@@ -15,7 +15,7 @@ const sendToBackend = (state, newPlan) => {
     otherPlansForFirebase,
     sellerActualZoopPlanForFirebase,
   } = state
-  const allowedUsers = ['Uiller', 'Vitor', 'Alessandro', 'Wermeson', 'Ale', 'Antonio']
+  const allowedUsers = ['Uiller', 'Vitor', 'Alessandro', 'Wermeson', 'Ale', 'Antonio','Russi']
   const nome = nickname ? nickname.trim() : ''
   return new Promise(async (resolve, reject) => {
     try {

@@ -7,27 +7,31 @@ import { translateFeesToFirebase, translateFirebaseToFees, translateFeesToZoop }
 const sendToBackend = async state => {
   const { docId, selectedPlan, nickname, sellerZoopPlan2, setSettingActivePlan, sellerId } = state
   const nome = nickname ? nickname.trim() : ''
-  const allowedUsers = ['Uiller', 'Vitor', 'Alessandro', 'Wermeson', 'Ale']
+  const allowedUsers = ['Uiller', 'Vitor', 'Alessandro', 'Wermeson', 'Ale', 'Russi']
   return new Promise(async (resolve, reject) => {
     try {
       if (translateFeesToZoop(selectedPlan) != null) {
         if (process.env.HOMOLOG ? true : allowedUsers.includes(nome)) {
           const sellerPlanWithNewActivePlan = sellerZoopPlan2
           sellerPlanWithNewActivePlan.activePlan = translateFeesToFirebase(selectedPlan)
-          if(nome === 'Ale') {
-          const url = 'https://api.zoop.ws/v1/marketplaces/d3efdd7939974e0dbec700624a741cf6/subscriptions'
-          const config = {
-            method: 'POST',
-            url,
-            data: {
-                plan: translateFeesToZoop(selectedPlan), customer: sellerId
-            },
-            headers: {
-              Authorization: process.env.ZOOP_TOKEN,
-              'Content-Type': 'application/json',
-            },
-          }
-          await axios(config)
+          if (nome === 'Ale') {
+            const url = 'https://api.zoop.ws/v1/marketplaces/d3efdd7939974e0dbec700624a741cf6/subscriptions'
+
+
+            fetch(url, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: process.env.ZOOP_TOKEN,
+              },
+              body: {"plan":translateFeesToZoop(selectedPlan),"customer":sellerId},
+            })
+              .then(response => {
+                console.log(response)
+              })
+              .catch(err => {
+                throw { msg: 'Erro na troca do plano com a Zoop', customError: true }
+              })
           }
           setSettingActivePlan(translateFirebaseToFees(selectedPlan))
           await db.collection('suppliers').doc(docId).update({
