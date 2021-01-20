@@ -1,9 +1,20 @@
+import React from 'react'
 import { db } from '../../Firebase/index'
 import { translateFirebaseToFees } from '../UpdateZoopPlan/functions'
 
 const fetch = state => {
-  const allSellersPlans = []
   const { setIsLoading, setErrorLoading, setData, setLocation } = state
+
+  const allSellersPlans = [
+    {
+        title: 'Planos dos Fabricantes',
+        header: ['Fabricante', 'Plano Ativo', 'Tarifas'],
+        rows: [],
+        totals: [],
+        align: ['left', 'center', 'center']
+    }
+  ]
+
   const run = async () => {
     try {
       await db
@@ -14,27 +25,27 @@ const fetch = state => {
           doc.docs.map(doc => {
             if (doc.exists) {
               const { fantasia, sellerZoopPlan, uid } = doc.data()
-              const objForDataTable = {
-                title: fantasia.toUpperCase(),
-                header: [
-                  'Plano Ativo:',
-                  typeof sellerZoopPlan !== 'undefined' && sellerZoopPlan && sellerZoopPlan.activePlan
-                    ? translateFirebaseToFees(sellerZoopPlan.activePlan)
-                    : ['-'],
-                ],
-                rows: [['Ver tarifas']],
-                rowsClicks: [
-                  () => {
-                    localStorage.setItem('voltar', '/planos-fabricantes')
-                    localStorage.setItem('sellerName', fantasia)
-                    localStorage.removeItem('selectedPlan')
-                    localStorage.removeItem('sellerObject')
-                    setLocation(`/atualizar-plano-venda/${uid}`)
-                  },
-                ],
-                totals: [null],
-              }
-              allSellersPlans.push(objForDataTable)
+
+              allSellersPlans[0].rows.push([
+                      fantasia,
+                      typeof sellerZoopPlan !== 'undefined' && sellerZoopPlan && sellerZoopPlan.activePlan
+                        ? translateFirebaseToFees(sellerZoopPlan.activePlan)
+                        : ['-'],
+                        (<label
+                            style={{cursor: 'pointer', fontSize: '1.4rem'}}
+                            onClick={
+                                () => {
+                                    localStorage.setItem('voltar', '/planos-fabricantes')
+                                    localStorage.setItem('sellerName', fantasia)
+                                    localStorage.removeItem('selectedPlan')
+                                    localStorage.removeItem('sellerObject')
+                                    setLocation(`/atualizar-plano-venda/${uid}`)
+                                }
+                            }
+                        >
+                            Ver
+                        </label>)
+                    ])
             } else {
               console.log('No such document!')
             }
@@ -45,12 +56,13 @@ const fetch = state => {
           setErrorLoading(true)
           setIsLoading(false)
         })
-      const sortedAllSellersPlans = allSellersPlans.sort(function (a, b) {
-        const textA = a.title.toUpperCase()
-        const textB = b.title.toUpperCase()
+      allSellersPlans[0].rows.sort((a, b) => {
+        const textA = a[0].toUpperCase()
+        const textB = b[0].toUpperCase()
         return textA < textB ? -1 : textA > textB ? 1 : 0
       })
-      setData(sortedAllSellersPlans)
+
+      setData(allSellersPlans)
       setErrorLoading(false)
       setIsLoading(false)
     } catch (error) {
