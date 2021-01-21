@@ -34,7 +34,7 @@ const CreatePayment = () => {
   const { nickname } = useContext(userContext)
   const [hasSellerZoopPlan, setHasSellerZoopPlan] = useState(null)
   const [insurance, setInsurance] = useState(null)
-  const [isNewPlan, setIsNewPlan] = useState(false)
+  const [isNewPlan, setIsNewPlan] = useState(true)
   const [checkoutWithoutRegister, setCheckoutWithoutRegister] = useState(false)
   const [insurenceDropdownValue, setInsurenceDropdownValue] = useState('')
   const options = ['Com seguro', 'Sem seguro']
@@ -66,7 +66,7 @@ const CreatePayment = () => {
       async function getSellerZoopPlan() {
         const getSupplierData = await db.collection('suppliers').where('fantasia', '==', fantasy.toUpperCase()).get()
         getSupplierData.forEach(doc => {
-          isNewPlan ? setHasSellerZoopPlan(doc.data().sellerZoopPlan2 || null) : setHasSellerZoopPlan(doc.data().sellerZoopPlan || null)
+          setHasSellerZoopPlan(doc.data().sellerZoopPlan)
         })
         console.log(hasSellerZoopPlan)
       }
@@ -76,14 +76,6 @@ const CreatePayment = () => {
 
   console.log('states', state)
   const validations = [
-    {
-      name: 'newCheckout',
-      validation: () =>
-        // eslint-disable-next-line no-nested-ternary
-        isNewPlan && process.env.HOMOLOG ? true : isNewPlan ? allowedUsersToTest.includes(nickname) : true,
-      value: insurenceDropdownValue,
-      message: 'Você não tem permissão para testar o novo plano',
-    },
     {
       name: 'insurance',
       validation: value => hasSellerZoopPlan ? value !== '' : true,
@@ -283,24 +275,6 @@ const CreatePayment = () => {
                         />
                         }
                         />,
-                        <FormInput
-                        name="newCheckout"
-                        label="Deseja testar novo plano de venda?"
-                        input={
-                        <div style={center}>
-                        <div style={inline}>Não</div>
-                        <ToggleButton
-                            size={30}
-                            template="primary"
-                            active={isNewPlan}
-                            onClick={() => {
-                            setIsNewPlan(!isNewPlan)
-                            }}
-                        />
-                        <div style={inline}>Sim</div>
-                        </div>
-                        }
-                        />,
                         ]}
                     />
                 ) : (
@@ -480,24 +454,6 @@ const CreatePayment = () => {
                             </div>
                             }
                         />,
-                        <FormInput
-                            name="newCheckout"
-                            label="Deseja testar novo plano de venda?"
-                            input={
-                            <div style={center}>
-                                <div style={inline}>Não</div>
-                                <ToggleButton
-                                size={30}
-                                template="primary"
-                                active={isNewPlan}
-                                onClick={() => {
-                                    setIsNewPlan(!isNewPlan)
-                                }}
-                                />
-                                <div style={inline}>Sim</div>
-                            </div>
-                            }
-                        />,
                         ]}
                     />
                 )
@@ -627,24 +583,6 @@ const CreatePayment = () => {
                                     onChange={({ target: { value } }) => setObservations(value)}
                                     placeholder="Romaneio, nome do cliente, etc"
                                 />
-                                }
-                            />,
-                            <FormInput
-                                name="newCheckout"
-                                label="Deseja testar novo plano de venda?"
-                                input={
-                                <div style={center}>
-                                    <div style={inline}>Não</div>
-                                    <ToggleButton
-                                    size={30}
-                                    template="primary"
-                                    active={isNewPlan}
-                                    onClick={() => {
-                                        setIsNewPlan(!isNewPlan)
-                                    }}
-                                    />
-                                    <div style={inline}>Sim</div>
-                                </div>
                                 }
                             />,
                             ]}
@@ -795,24 +733,6 @@ const CreatePayment = () => {
                                 </div>
                                 }
                             />,
-                            <FormInput
-                                name="newCheckout"
-                                label="Deseja testar novo plano de venda?"
-                                input={
-                                <div style={center}>
-                                    <div style={inline}>Não</div>
-                                    <ToggleButton
-                                    size={30}
-                                    template="primary"
-                                    active={isNewPlan}
-                                    onClick={() => {
-                                        setIsNewPlan(!isNewPlan)
-                                    }}
-                                    />
-                                    <div style={inline}>Sim</div>
-                                </div>
-                                }
-                            />,
                             ]}
                         />
                     )
@@ -897,24 +817,6 @@ const CreatePayment = () => {
                                 onChange={({ target: { value } }) => setObservations(value)}
                                 placeholder="Romaneio, nome do cliente, etc"
                             />
-                            }
-                        />,
-                        <FormInput
-                            name="newCheckout"
-                            label="Deseja testar novo plano de venda?"
-                            input={
-                            <div style={center}>
-                                <div style={inline}>Não</div>
-                                <ToggleButton
-                                size={30}
-                                template="primary"
-                                active={isNewPlan}
-                                onClick={() => {
-                                    setIsNewPlan(!isNewPlan)
-                                }}
-                                />
-                                <div style={inline}>Sim</div>
-                            </div>
                             }
                         />,
                         ]}
