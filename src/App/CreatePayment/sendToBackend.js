@@ -47,7 +47,7 @@ const sendToBackend = state => () => {
             status: 'Aguardando Pagamento',
             observations,
             insurance: insurance !== null ? insurance : true,
-            isNewPlan,
+            isNewPlan:true,
             sellerZoopPlan: sellerZoopPlan || null,
             checkoutWithoutRegister: checkoutWithoutRegister || false,
           })
