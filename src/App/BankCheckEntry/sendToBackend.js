@@ -94,13 +94,18 @@ const sendToBackend = state => () => {
       const imageBankCheckEntry = storage.child(`Cheques/${nameOfFileBankCheckEntry}-${timestamp}`)
       const uploadTaskBankCheckEntry = await imageBankCheckEntry.put(compressedBankCheckEntry)
       const imgUrlBankCheckEntry = await uploadTaskBankCheckEntry.ref.getDownloadURL()
+      const yearBankCheckDate = bankCheckDate.split('-')[0]
+      const monthBankCheckDate = bankCheckDate.split('-')[1]
+      const dayBankCheckDate = bankCheckDate.split('-')[2]
+      const newDateBankCheck = `${dayBankCheckDate}/${monthBankCheckDate}/${yearBankCheckDate}`
+      const bankCheckDateFormatted = newDateBankCheck//bankCheckDate.replace(/-/g, '/')
       const body = {
         apiResource: 'values',
         apiMethod: 'append',
         spreadsheetId: process.env.SHEET_ID_LINK_PAYMENTS,
         range: 'Link Cheques!A1',
         resource: {
-          values: [[formatDateUTC3(new Date()), billet, storeownerName, supplierName, total, imgUrlBankCheckEntry, obs, timestamp,bankCheckDate]],
+          values: [[formatDateUTC3(new Date()), billet, storeownerName, supplierName, total, imgUrlBankCheckEntry, obs, timestamp,bankCheckDateFormatted]],
         },
         valueInputOption: 'user_entered',
       }
