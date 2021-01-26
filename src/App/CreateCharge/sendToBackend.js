@@ -140,6 +140,10 @@ const sendToBackend = state => () => {
           }
       let arrayUpdate = {}
       const supplierNameFormatted = supplierName.split(' -')[0]
+      const supplierNameFormattedBankData = supplierName.split(' - ')[1]
+      console.log('supplierNameFormattedBankData',supplierNameFormattedBankData)
+      console.log('!!supplierNameFormattedBankData',!!supplierNameFormattedBankData)
+      console.log('!!!supplierNameFormattedBankData',!!!supplierNameFormattedBankData)
       const tab = pixKey ? 'PIX' : 'TED'
       console.log('supplierNameFormatted', supplierNameFormatted)
       console.log('suppliers', suppliers)
@@ -148,22 +152,22 @@ const sendToBackend = state => () => {
         'suppliers.find(supplier => supplier.fabricante === supplierNameFormatted)',
         suppliers.find(supplier => supplier.fabricante === supplierNameFormatted),
       )
-      if (Object.keys(suppliers.find(supplier => supplier.fabricante === supplierNameFormatted)).length > 0 && Object.keys(bank).length === 0) {
+      if (paymentType !== 'Cheque' ){//&& typeof suppliers.find(supplier => supplier.fabricante === supplierNameFormatted) !== 'undefined' && Object.keys(suppliers.find(supplier => supplier.fabricante === supplierNameFormatted)).length > 0) {
         console.log('entrou onde não encontrou')
-        console.log('entrou length',Object.keys(suppliers.find(supplier => supplier.banco === pixKey)).length)
-        console.log('entrou find',suppliers.find(supplier => supplier.banco === pixKey))
+        //console.log('entrou length',Object.keys(suppliers.find(supplier => supplier.banco === pixKey)).length)
+        //console.log('entrou find',suppliers.find(supplier => supplier.banco === pixKey))//Object.keys(bank).length === 0
         console.log('entrou pixkey',pixKey)
         arrayUpdate = pixKey
           ? [supplierNameFormatted, pixKey, time]
           : [supplierNameFormatted, bankName, agencia, conta, beneficiary, beneficiaryDocument, time]
-          if(!suppliers.find(supplier => supplier.banco === pixKey)){
+          if(!suppliers.find(supplier => supplier.banco === pixKey) && !!supplierNameFormattedBankData === false){
               console.log('entrou no if',suppliers.find(supplier => supplier.banco === pixKey))
             await axios(postSheet(arrayUpdate, tab, 'append'))
-          } else if(pixKey === '') await axios(postSheet(arrayUpdate, tab, 'append'))
-      } else {
-        arrayUpdate = pixKey ? dataPostBatch(objectSheet, 'uid', uid, updateObj, 'PIX') : dataPostBatch(objectSheet, 'uid', uid, updateObj, 'TED')
-        await axios(postSheet(arrayUpdate, tab))
-      }
+          } else if(pixKey === '' && suppliers.find(supplier => supplier.fabricante === supplierNameFormatted) && !!supplierNameFormattedBankData === false) await axios(postSheet(arrayUpdate, tab, 'append'))
+      } //else if(paymentType !== 'Cheque') {
+        //arrayUpdate = pixKey ? dataPostBatch(objectSheet, 'uid', uid, updateObj, 'PIX') : dataPostBatch(objectSheet, 'uid', uid, updateObj, 'TED')
+        //await axios(postSheet(arrayUpdate, tab))
+      //}
       /* teste */
       let bodyLinkPayment = {}
       if (type === 'Cartão de Crédito') {
@@ -171,7 +175,7 @@ const sendToBackend = state => () => {
           apiResource: 'values',
           apiMethod: 'append',
           spreadsheetId: process.env.SHEET_ID_LINK_PAYMENTS,
-          range: 'Link Pagamentos!A1',
+          range: 'Base Link Pagamentos!A1:R1',
           resource: {
             values: [
               [
@@ -184,7 +188,7 @@ const sendToBackend = state => () => {
                 discount,
                 paymentType,
                 imgUrl,
-                paymentTypeReceivable,
+                paymentTypeReceivable||'Cheque',
                 paymentTypeReceivable === 'TED' ? beneficiary : '-',
                 paymentTypeReceivable === 'TED' ? bankName : '-',
                 paymentTypeReceivable === 'TED' ? agencia : '-',
@@ -203,7 +207,7 @@ const sendToBackend = state => () => {
           apiResource: 'values',
           apiMethod: 'append',
           spreadsheetId: process.env.SHEET_ID_LINK_PAYMENTS,
-          range: 'Link TED!A1',
+          range: 'Link TED!A1:P1',
           resource: {
             values: [
               [

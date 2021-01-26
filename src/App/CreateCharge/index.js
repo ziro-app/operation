@@ -167,7 +167,7 @@ const CreateCharge = () => {
     },
     {
       name: 'romaneio',
-      validation: value => value !== undefined && value !== '' && /(\.jpg|\.jpeg|\.png)$/.test(value.name),
+      validation: value => value !== undefined && value !== '' && /(\.jpg|\.jpeg|\.png|\.PNG|\.JPEG|\.JPG)$/.test(value.name),
       value: romaneio,
       message: 'Formatos válidos: .png, .jpg e .jpeg',
     },
@@ -248,7 +248,7 @@ const CreateCharge = () => {
     async function getSellerZoopPlan() {
       const getSupplierData = await db.collection('suppliers').where('fantasia', '==', 'ZIRO').get()
       getSupplierData.forEach(doc => {
-        setHasSellerZoopPlan(doc.data().sellerZoopPlan2 || null)
+        setHasSellerZoopPlan(doc.data().sellerZoopPlan || null)
       })
       console.log(hasSellerZoopPlan)
     }
