@@ -109,6 +109,7 @@ const BankCheckEntry = () => {
     note,
     billet,
     receivableAmount,
+    bankCheckDate,
     ...setState,
   }
 

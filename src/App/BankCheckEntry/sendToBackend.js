@@ -69,6 +69,7 @@ const sendToBackend = state => () => {
     setCommissionValue,
     setNote,
     setBillet,
+    bankCheckDate
   } = state
   const linkValue = type === 'Cartão de Crédito' ? internalFormat(defineCardValue(state)) : internalFormat(defineTEDValue(state))
   const total = totalAmount ? internalFormat(totalAmount) : ''
@@ -99,7 +100,7 @@ const sendToBackend = state => () => {
         spreadsheetId: process.env.SHEET_ID_LINK_PAYMENTS,
         range: 'Link Cheques!A1',
         resource: {
-          values: [[formatDateUTC3(new Date()), billet, storeownerName, supplierName, total, imgUrlBankCheckEntry, obs, timestamp]],
+          values: [[formatDateUTC3(new Date()), billet, storeownerName, supplierName, total, imgUrlBankCheckEntry, obs, timestamp,bankCheckDate]],
         },
         valueInputOption: 'user_entered',
       }
