@@ -3,7 +3,7 @@ import { render } from 'react-dom';
 import { FirebaseAppProvider } from 'reactfire';
 import { load as FontLoader } from 'webfontloader';
 import { configFirebase } from './Firebase/index';
-import App from './App/index';
+import App from './App/index.tsx';
 import './index.css';
 
 FontLoader({

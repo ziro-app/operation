@@ -65,10 +65,13 @@ import CommissionManagement from './CommissionManagement/index'
 import PostDuplicata from './PostDuplicata/index'
 import ShowAttendance from './ShowAttendance/index'
 import Pagamentos from './Pagamentos'
+import TicketSupport from './TicketSupport'
+import ManualApproval from './ManualApproval'
 // import FirebaseMigration from './FirebaseMigration/index' -> Inacabado
 
 const Router = ({ isLogged }) => {
   const [match, params] = useRoute('/pedidos/:cartId?')
+  const [matchCardManualApproval, paramsCardManualApproval] = useRoute('/aprovacao-manual/:cardId?')
   const [matchTransactions, paramsTransactions] = useRoute('/transacoes/:transactionId?/:receivableId?')
   const [matchTransactionsSplit, paramsTransactionsSplit] = useRoute('/transacoes/:transactionId?/split')
   const [matchSeller, paramsSeller] = useRoute('/atualizar-plano-venda/:sellerId?')
@@ -77,7 +80,7 @@ const Router = ({ isLogged }) => {
   const [matchDefaultFee, paramsDefaultFee] = useRoute('/alterar-tarifas-padrao/:fee?/:selectedPlan?')
   const { nickname } = useContext(userContext)
   const allowedUsers = ['Vitor']
-
+  console.log('paramsCardManualApproval',paramsCardManualApproval)
   const [location] = useLocation()
   const publicRoutes = {
     '/': <Login />,
@@ -111,6 +114,11 @@ const Router = ({ isLogged }) => {
     '/planos-fabricantes': (
       <HeaderBack title="Planos dos Fabricantes" navigateTo="/suporte">
         <SellersPlans {...paramsTransactions} />
+      </HeaderBack>
+    ),
+    [matchCardManualApproval ? location : null]: (
+      <HeaderBack title="Aprovação manual" navigateTo={paramsCardManualApproval ? "/aprovacao-manual" : "/suporte"}>
+        <ManualApproval {...paramsCardManualApproval} />
       </HeaderBack>
     ),
     [matchTransactions ? location : null]: <Transactions {...paramsTransactions} />,
@@ -189,6 +197,7 @@ const Router = ({ isLogged }) => {
               ['Fabricantes: Alterar plano de venda', '/atualizar-plano-venda'],
               ['Fabricantes: Alterar tarifas padrão', '/alterar-tarifas-padrao'],
               ['Fabricantes: Visualizar planos ativos', '/planos-fabricantes'],
+              //['Aprovar Cartões do Catalogo', 'aprovacao-manual'],
             ]}
           />
         </motion.div>
@@ -300,6 +309,11 @@ const Router = ({ isLogged }) => {
         <LinkRequest />
       </HeaderBack>
     ),
+    '/aprovacao-manual': (
+      <HeaderBack title="Aprovação manual" navigateTo="/suporte">
+        <ManualApproval {...paramsCardManualApproval} />
+      </HeaderBack>
+    ),
     '/commission-models': (
       <HeaderBack title="Consulta Parcela 2" navigateTo="/administrativo">
         <CommissionModels />
@@ -338,6 +352,11 @@ const Router = ({ isLogged }) => {
     '/alterar-email': (
       <HeaderBack title="Alterar Email" navigateTo="/suporte">
         <ChangeStoreownerEmail />
+      </HeaderBack>
+    ),
+    '/ticket': (
+      <HeaderBack title="Ticket para desenvolvimento" navigateTo="/suporte">
+        <TicketSupport />
       </HeaderBack>
     ),
     '/atualizar-plano-venda': (

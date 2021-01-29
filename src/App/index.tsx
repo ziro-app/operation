@@ -1,6 +1,6 @@
 import { hot } from 'react-hot-loader/root'
 import React, { useEffect, useState, Suspense } from 'react'
-import { post } from 'axios'
+import axios from 'axios'
 import InitialLoader from '@bit/vitorbarbosa19.ziro.initial-loader'
 import Error from '@bit/vitorbarbosa19.ziro.error'
 import ErrorBoundary from '@bit/vitorbarbosa19.ziro.error-boundary'
@@ -8,6 +8,7 @@ import MessageModal from '@bit/vitorbarbosa19.ziro.message-modal'
 import { userContext } from './appContext'
 import { auth, db } from '../Firebase/index'
 import Router from './Router'
+
 
 const App = () => {
   const [loading, setLoading] = useState(true)
@@ -219,7 +220,7 @@ const App = () => {
               if (userPos === null || userPos === '') {
                 const {
                   data: { values },
-                } = await post(url, body, config)
+                } = await axios.post(url, body, config)
                 values.map((user, index) => {
                   if (user[11] === data.email) {
                     setUserPos(index + 1)
