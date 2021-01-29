@@ -93,7 +93,7 @@ const sendToBackend = state => () => {
     uid,
   } = state
   const linkValue = type === 'Cartão de Crédito' ? internalFormat(defineCardValue(state)) : internalFormat(defineTEDValue(state))
-
+  const linkValueInternal = linkValue.replace(/\./g,'').replace(/\,/g,'').replace(/\R/g,'').replace(/\$/g,'')
   const total = totalAmount ? internalFormat(totalAmount) : ''
   console.log('total', total)
   const doc = beneficiaryDocument.startsWith('0') ? `'${beneficiaryDocument}` : beneficiaryDocument
@@ -237,6 +237,9 @@ const sendToBackend = state => () => {
       /* fim teste */
       console.log('state', state)
       console.log('total', total)
+      console.log('teste totalAmount', totalAmount)
+      console.log('teste linkValueInternal', linkValueInternal)
+      console.log('teste linkValue', linkValue)
       if (type === 'Cartão de Crédito') {
         const docRef = await db.collection('credit-card-payments').add({
           dateLinkCreated: nowDate,
@@ -244,7 +247,7 @@ const sendToBackend = state => () => {
           seller: 'Ziro',
           onBehalfOfBrand: supplierNameFormatted,
           sellerZoopId: '13c09ab817014ae6843634493177afb2',
-          charge: totalAmount,
+          charge: linkValueInternal,
           installmentsMax: '4',
           status: 'Aguardando Pagamento',
           observations: note,
