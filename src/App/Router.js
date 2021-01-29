@@ -352,11 +352,6 @@ const Router = ({ isLogged }) => {
         <ChangeStoreownerEmail />
       </HeaderBack>
     ),
-    '/ticket': (
-      <HeaderBack title="Ticket para desenvolvimento" navigateTo="/suporte">
-        <TicketSupport />
-      </HeaderBack>
-    ),
     '/atualizar-plano-venda': (
       <HeaderBack title="Alterar Plano de Venda" navigateTo="/suporte">
         <UpdateZoopPlan />
