@@ -48,6 +48,11 @@ export default ({ dataRows, cardId, card }) => {
               ],
             },
             {
+              title: 'Porcentagem ',
+              content: [`${(parseFloat(actualCardCollection[whichDocumentType].fileInfo.classifiedAs.probability * 100).toFixed(2))} %`|| '-'
+              ],
+            },
+            {
               title: 'Documento Extraido',
               content: [whichDocumentType.split(' ')[0] || '-'],
             },

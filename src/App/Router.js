@@ -65,7 +65,6 @@ import CommissionManagement from './CommissionManagement/index'
 import PostDuplicata from './PostDuplicata/index'
 import ShowAttendance from './ShowAttendance/index'
 import Pagamentos from './Pagamentos'
-import TicketSupport from './TicketSupport'
 import ManualApproval from './ManualApproval'
 // import FirebaseMigration from './FirebaseMigration/index' -> Inacabado
 
@@ -193,7 +192,6 @@ const Router = ({ isLogged }) => {
               ['Reenviar confirmação de email', '/checar-email'],
               ['Aprovar confirmação de email', '/validar-email'],
               ['Alterar email do usuário', '/alterar-email'],
-              ['Atualizar Plano Zoop do usuário antigo', '/atualizar-plano-zoop-old'],
               ['Fabricantes: Alterar plano de venda', '/atualizar-plano-venda'],
               ['Fabricantes: Alterar tarifas padrão', '/alterar-tarifas-padrao'],
               ['Fabricantes: Visualizar planos ativos', '/planos-fabricantes'],

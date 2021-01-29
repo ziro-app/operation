@@ -5,4 +5,4 @@ export const illustration = {
   empty = {
     display: 'grid',
     textAlign: 'center',
-  };
+  } as React.CSSProperties;

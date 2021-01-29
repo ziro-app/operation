@@ -12,7 +12,7 @@ const fetchZoop = async(
     try {
         setLoading(true)
         if(cardId !== ''){
-            const {data} = await axios.get(`https://api.zoop.ws/v1/marketplaces/d3efdd7939974e0dbec700624a741cf6/cards/${cardId}`,
+            const {data} = await axios.get(`https://api.zoop.ws/v1/marketplaces/${process.env.ZIRO_MARKETPLACE}/cards/${cardId}`,
             {headers:{Authorization:process.env.ZOOP_TOKEN}})
             console.log('data from zoop',data)
             setCard(data)
