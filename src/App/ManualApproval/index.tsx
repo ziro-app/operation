@@ -11,7 +11,6 @@ import { illustration, empty } from './styles'
 const ManualApproval = ({cardId}) => {
   const { blockDetails, dataRows, isLoading, isError, modifyCardId, card } = useLoadManualApproval();
     const [timeout, setTimeoutFunction] = useState(false)
-    console.log('isLoading',isLoading)
     useEffect(() => {
         if(cardId)
       modifyCardId(cardId)
@@ -37,9 +36,6 @@ const ManualApproval = ({cardId}) => {
           </div>
         )
       }
-
-
-  console.log('dataRows',dataRows)
     if(typeof cardId !== 'undefined' && dataRows.length>0){
         return <CardDetail dataRows={dataRows} cardId={cardId} card={card} />
     }

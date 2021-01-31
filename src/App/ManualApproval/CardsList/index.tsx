@@ -14,10 +14,10 @@ export default ({ dataRows, isLoading }) => {
   const dataTableFormatted = dataRows => [
     {
       title: 'Clientes',
-      header: ['Nome', 'Adicionada', 'Antifraude'],
+      header: ['Nome', 'Data', ''],
       rows:
         dataRows.map(data => [
-          <label>{data.extracted.nome || 'NOME NÃO EXTRAÍDO'}</label>,
+          <label>{data.fullName || 'NOME NÃO EXTRAÍDO'}</label>,//aqui é o nome do document, preciso pegar o nome do cliente!
           <label>{getShortDate(new Date(data.added.seconds * 1000))}</label>,
           <label
             style={{ cursor: 'pointer', fontSize: '1.4rem' }}
@@ -35,15 +35,13 @@ export default ({ dataRows, isLoading }) => {
   ]
 
 
-  console.log('teste')
-  console.log(dataRows.map(data => [data.extracted.nome]))
   return (
     <div>
       <div aria-label="table" style={{ marginTop: '20px' }}>
         <Table
           data={dataTableFormatted(dataRows)}
           customGrid={{
-            gridTemplateColumns: '1fr 1fr 1fr',
+            gridTemplateColumns: '3fr 1fr auto',
             gridRowGap: '5px',
           }}
           cellStyle={{
