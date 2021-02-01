@@ -13,7 +13,7 @@ export default ({ dataRows, isLoading }) => {
   if (isLoading || dataRows.length === 0) return <Spinner />
   const dataTableFormatted = dataRows => [
     {
-      title: 'Clientes',
+      title: 'Usuários',
       header: ['Nome', 'Data', ''],
       rows:
         dataRows.map(data => [
@@ -30,7 +30,7 @@ export default ({ dataRows, isLoading }) => {
         ])
       ,
       totals: [],
-      //align: ['left', 'center', 'center']
+      align: ['left', 'center', 'center'],
     },
   ]
 
@@ -41,18 +41,16 @@ export default ({ dataRows, isLoading }) => {
         <Table
           data={dataTableFormatted(dataRows)}
           customGrid={{
-            gridTemplateColumns: '3fr 1fr auto',
+            gridTemplateColumns: '1fr auto auto',
             gridRowGap: '5px',
           }}
           cellStyle={{
             width: '100%',
             height: '100%',
-            maxWidth: '300px',
             fontSize: '1.4rem',
             textOverflow: 'ellipsis',
             overflow: 'hidden',
             whiteSpace: 'nowrap',
-            textAlign:'center'
           }}
         />
       </div>

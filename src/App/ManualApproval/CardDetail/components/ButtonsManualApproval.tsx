@@ -3,10 +3,21 @@ import Button from '@bit/vitorbarbosa19.ziro.button'
 import { getShortDate } from '../../utils/functions'
 import { labelStyle } from '../style'
 import { db, fs } from '../../../../Firebase/index'
-const ButtonsManualApproval = ({ isLoadingButton, setIsLoading, actualCardCollection }) => {
+
+interface cardCollection {
+    idParent:string;
+    id:string;
+}
+interface Props {
+    isLoadingButton:boolean;
+    setIsLoading:Function;
+    actualCardCollection:cardCollection;
+    marginTop?:string
+}
+const ButtonsManualApproval = ({ isLoadingButton, setIsLoading, actualCardCollection,marginTop }:Props) => {
   return (
     <>
-      <div style={{ marginTop: '40px' }}>
+      <div style={{ marginTop: marginTop || '0px' }}>
         <Button
           type="button"
           cta="Aprovar"

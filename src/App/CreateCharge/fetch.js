@@ -106,19 +106,8 @@ const fetch = (
         const [, ...list] = data.data.values
         const [, ...listSupplierTrends] = dataSupplierTrends.data.values
         const [, ...listStoreOwners] = dataStoreowners.data.values
-        const resultStoreowners = await queryStoreowners.get()
-        resultStoreowners.forEach(doc => storeowners.push(doc.data()))
-        console.log('storeowners',storeowners);
-        var unique = [];
-        var distinct = [];
-        for( let i = 0; i < storeowners.length; i++ ){
-            if(!unique[storeowners[i].razao] && !unique[storeowners[i].fantasia] && !unique[storeowners[i].cnpj] && !unique[storeowners[i].uid]){
-                distinct.push(storeowners[i]);
-                unique[storeowners[i].fantasia] = 1;
-            }
-        }
-        console.log('distinct',distinct)
-        setStoreowners(distinct)
+        //const resultStoreowners = await queryStoreowners.get()
+        //resultStoreowners.forEach(doc => storeowners.push(doc.data()))
         listStoreOwners.map(data => {
           if (data[0]) {
             const store = { razao: data[0] ? data[0] : '', duplicate: reasonsStoreowners.includes(data[0]) }
@@ -162,11 +151,11 @@ const fetch = (
           }
         })
 
-        // setStoreowners(storeowners)
+        setStoreowners(storeowners)
         setBanks(banks)
         setSuppliers(suppliers)
         setSuppliersTrends(suppliersTrendsFetch)
-      } else {
+      } /*else {
         const resultSuppliers = await querySuppliers.get()
         resultSuppliers.forEach(doc => suppliers.push(doc.data()))
         const resultStoreowners = await queryStoreowners.get()
@@ -175,7 +164,7 @@ const fetch = (
         suppliers.map(item => console.log(item.fantasia.toLowerCase()))
         setStoreowners(storeowners)
         setSuppliers(suppliers)
-      }
+      }*/
     } catch (error) {
       if (error.response) console.log(error.response)
       else console.log(error)

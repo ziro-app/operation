@@ -6,8 +6,42 @@ import { motion } from 'framer-motion'
 import { useLocation } from 'wouter'
 import Details from '@bit/vitorbarbosa19.ziro.details'
 import ButtonsManualApproval from './components/ButtonsManualApproval'
+import conditionalBlocks from './conditionalBlocks/index'
 
 export default ({ dataRows, cardId, card }) => {
+  /*var treeWalker = document.createTreeWalker(document.body, NodeFilter.SHOW_ELEMENT)
+  var currentNode = treeWalker.currentNode
+  var emptyNodes = []
+
+  // test if a node has no text, regardless of whitespaces
+  var isNodeEmpty = node => !node.textContent.trim()
+
+  // find all empty nodes
+  while (currentNode) {
+    isNodeEmpty(currentNode) && emptyNodes.push(currentNode)
+    currentNode = treeWalker.nextNode()
+  }
+
+  // remove found empty nodes
+  emptyNodes.forEach(node => node.parentNode.removeChild(node))
+
+
+
+  outro
+
+
+      let nodes = document.querySelector('label').querySelectorAll(':only-child')
+
+      nodes.forEach(node => {
+        if (!node.childNodes.length) {
+          let parent = node.parentNode
+          node.parentNode.removeChild(node)
+          if (!parent.children.length) {
+            parent.parentNode.removeChild(parent)
+          }
+        }
+      })
+  */
   const [isLoadingButton, setIsLoading] = useState(false)
   const [location, setLocation] = useLocation()
   const [blocksDetails, setBlocksDetails] = useState([])
@@ -19,6 +53,11 @@ export default ({ dataRows, cardId, card }) => {
   let howMuchImages = 2
   let whichDocumentF = ''
   let whichDocumentV = ''
+  if (documents.length > 1) {
+    howMuchImages = 3
+    whichDocumentF = documents[0]
+    whichDocumentV = documents[1]
+  }
   useEffect(() => {
     if (Object.keys(card).length > 0 && dataRows.length > 0 && actualCardCollection) {
       const block = [
@@ -29,108 +68,13 @@ export default ({ dataRows, cardId, card }) => {
               title: 'Nome',
               content: [actualCardCollection.extracted.nome || '-'], //aqui é o nome do document, preciso pegar o nome do cliente!
             },
-            howMuchImages === 2 && {
-              title: 'Link documento',
-              content: [
-                (
-                  <label
-                    style={{ cursor: 'pointer', fontSize: '1.4rem' }}
-                    onClick={() => {
-                      const link = document.createElement('a')
-                      link.href = actualCardCollection[whichDocumentType].url
-                      link.setAttribute('rel', 'noopener noreferrer')
-                      link.setAttribute('target', '_blank')
-                      document.body.appendChild(link)
-                      link.click()
-                    }}
-                  >
-                    Ver
-                  </label>
-                ) || '-',
-              ],
-            },
-            howMuchImages === 2 && {
-              title: 'Porcentagem ',
-              content: [`${(actualCardCollection[whichDocumentType].fileInfo.classifiedAs.probability * 100).toFixed(2)} %` || '-'],
-            },
-            howMuchImages !== 2 && {
-              title: 'Link documento frente',
-              content: [
-                (
-                  <label
-                    style={{ cursor: 'pointer', fontSize: '1.4rem' }}
-                    onClick={() => {
-                      const link = document.createElement('a')
-                      link.href = actualCardCollection[whichDocumentF].url
-                      link.setAttribute('rel', 'noopener noreferrer')
-                      link.setAttribute('target', '_blank')
-                      document.body.appendChild(link)
-                      link.click()
-                    }}
-                  >
-                    Ver
-                  </label>
-                ) || '-',
-              ],
-            },
-            howMuchImages !== 2 && {
-              title: 'Porcentagem documento frente',
-              content: [`${(actualCardCollection[whichDocumentF].fileInfo.classifiedAs.probability * 100).toFixed(2)} %` || '-'],
-            },
-            howMuchImages !== 2 && {
-              title: 'Link documento verso',
-              content: [
-                (
-                  <label
-                    style={{ cursor: 'pointer', fontSize: '1.4rem' }}
-                    onClick={() => {
-                      const link = document.createElement('a')
-                      link.href = actualCardCollection[whichDocumentV].url
-                      link.setAttribute('rel', 'noopener noreferrer')
-                      link.setAttribute('target', '_blank')
-                      document.body.appendChild(link)
-                      link.click()
-                    }}
-                  >
-                    Ver
-                  </label>
-                ) || '-',
-              ],
-            },
-            howMuchImages !== 2 && {
-              title: 'Porcentagem documento verso',
-              content: [`${(actualCardCollection[whichDocumentV].fileInfo.classifiedAs.probability * 100).toFixed(2)} %` || '-'],
-            },
+            ...conditionalBlocks(howMuchImages,actualCardCollection,whichDocumentType,whichDocumentF,whichDocumentV),
             {
-              title: 'Link selfie',
-              content: [
-                (
-                  <label
-                    style={{ cursor: 'pointer', fontSize: '1.4rem' }}
-                    onClick={() => {
-                      const link = document.createElement('a')
-                      link.href = actualCardCollection.selfie.url
-                      link.setAttribute('rel', 'noopener noreferrer')
-                      link.setAttribute('target', '_blank')
-                      document.body.appendChild(link)
-                      link.click()
-                    }}
-                  >
-                    Ver
-                  </label>
-                ) || '-',
-              ],
-            },
-            howMuchImages !== 2 && {
-              title: 'Porcentagem selfie',
-              content: [`${(actualCardCollection[whichDocumentV].fileInfo.classifiedAs.probability * 100).toFixed(2)} %` || '-'],
-            },
-            {
-              title: 'Documento Extraído',
+              title: 'Tipo Documento',
               content: [whichDocumentType.split(' ')[0] || '-'],
             },
             {
-              title: 'Número Extraído',
+              title: 'Número Documento',
               content: [actualCardCollection.extracted[whichDocumentType.split(' ')[0].toLowerCase()] || '-'],
             },
             {
@@ -151,19 +95,19 @@ export default ({ dataRows, cardId, card }) => {
           header: 'Cartão',
           body: [
             {
+              title: 'Nome',
+              content: [card.holder_name || '-'],
+            },
+            {
               title: 'Bandeira',
               content: [card.card_brand || '-'],
             },
             {
-              title: 'Nome no Cartão',
-              content: [card.holder_name || '-'],
-            },
-            {
-              title: 'Primeiros 4 números',
+              title: '4 primeiros',
               content: [card.first4_digits || '-'],
             },
             {
-              title: 'Últimos 4 números',
+              title: '4 últimos',
               content: [card.last4_digits || '-'],
             },
             {
@@ -176,7 +120,7 @@ export default ({ dataRows, cardId, card }) => {
           header: 'Negócio',
           body: [
             {
-              title: 'Nome',
+              title: 'Usuário',
               content: [actualCardCollection.fullName || '-'],
             },
             {
@@ -208,6 +152,9 @@ export default ({ dataRows, cardId, card }) => {
         },
       ]
       setBlocksDetails(block)
+      console.log(conditionalBlocks(howMuchImages,actualCardCollection,whichDocumentType,whichDocumentF,whichDocumentV))
+      console.log(...conditionalBlocks(howMuchImages,actualCardCollection,whichDocumentType,whichDocumentF,whichDocumentV))
+
     }
   }, [card])
 
@@ -216,11 +163,6 @@ export default ({ dataRows, cardId, card }) => {
   }
   if (dataRows.length === 0 || actualCardCollection.status !== 'pendingManualApproval') {
     setLocation('aprovacao-manual')
-  }
-  if (documents.length > 1) {
-    howMuchImages = 3
-    whichDocumentF = documents[0]
-    whichDocumentV = documents[1]
   }
   if (actualCardCollection.status !== 'pendingManualApproval') {
     setLocation('aprovacao-manual')
@@ -252,8 +194,10 @@ export default ({ dataRows, cardId, card }) => {
           <RImg src={actualCardCollection.selfie.url} style={{ width: '100%' }} alt="preview" />
         </div>
       )}
+      <div style={{marginTop:'20px'}}>
       <Details blocks={blocksDetails} blockGap={'20px'} />
-      <ButtonsManualApproval isLoadingButton={isLoadingButton} setIsLoading={setIsLoading} actualCardCollection={actualCardCollection} />
+      </div>
+      <ButtonsManualApproval isLoadingButton={isLoadingButton} setIsLoading={setIsLoading} actualCardCollection={actualCardCollection} marginTop={'40px'} />
     </>
   )
 }

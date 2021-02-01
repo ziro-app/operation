@@ -113,7 +113,7 @@ const sendToBackend = state => () => {
       const time = date.getTime().toString()
       if (romaneio.size === 0) throw { msg: 'Imagem com tamanho vazio', customError: true }
       const nameOfFile = md5(`${romaneio.name}${randStr()}`).substr(0, 5)
-      const compressed = await readAndCompressImage(romaneio, { quality: 0.65 })
+      const compressed = await readAndCompressImage(romaneio, { quality: 0.90 })
       const timestamp = Date.now()
       const image = storage.child(`Romaneios/${nameOfFile}-${timestamp}`)
       const uploadTask = await image.put(compressed)

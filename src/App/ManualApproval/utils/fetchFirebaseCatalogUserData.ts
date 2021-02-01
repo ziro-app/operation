@@ -24,7 +24,7 @@ const fetchFirebaseCatalogUserData = async (setLoading, setError, setMessage, se
           const newAntifraudObject = { ...dataFirebase, id, idParent, razao, cnpj, fullName }
           cardsNotApproved.push(newAntifraudObject)
 
-          setDataRows(cardsNotApproved.sort((a, b) => a.added - b.added))
+          setDataRows(cardsNotApproved.sort((a, b) => b.added - a.added))
           setCards(cardsNotApproved)
           setLoading(true)
           setLoading(false)
