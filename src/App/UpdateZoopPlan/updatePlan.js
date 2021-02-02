@@ -1,7 +1,7 @@
 import { db } from '../../Firebase/index'
 
 const updatePlan = (sellerZoopPlanForFirebase, nickname, sellerId) => {
-  const allowedUsers = ['Uiller', 'Vitor', 'Alessandro', 'Wermeson', 'Ale', 'Antonio']
+  const allowedUsers = ['Uiller', 'Vitor', 'Alessandro', 'Wermeson', 'Ale', 'Antonio', 'Russi']
   const nome = nickname ? nickname.trim() : ''
   return new Promise(async (resolve, reject) => {
     try {
