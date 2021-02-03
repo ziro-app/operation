@@ -167,7 +167,7 @@ export default ({ dataRows, cardId, card }) => {
   }
   return (
     <>
-      <ButtonsManualApproval isLoadingButton={isLoadingButton} setIsLoading={setIsLoading} actualCardCollection={actualCardCollection} />
+      <ButtonsManualApproval setLocation={setLocation} isLoadingButton={isLoadingButton} setIsLoading={setIsLoading} actualCardCollection={actualCardCollection} />
       {howMuchImages === 2 ? (
         <div
           style={{
@@ -195,7 +195,7 @@ export default ({ dataRows, cardId, card }) => {
       <div style={{marginTop:'20px'}}>
       <Details blocks={blocksDetails} blockGap={'20px'} />
       </div>
-      <ButtonsManualApproval isLoadingButton={isLoadingButton} setIsLoading={setIsLoading} actualCardCollection={actualCardCollection} marginTop={'40px'} />
+      <ButtonsManualApproval setLocation={setLocation} isLoadingButton={isLoadingButton} setIsLoading={setIsLoading} actualCardCollection={actualCardCollection} marginTop={'40px'} />
     </>
   )
 }

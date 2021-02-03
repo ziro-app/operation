@@ -9,12 +9,13 @@ interface cardCollection {
     id:string;
 }
 interface Props {
+    setLocation:Function;
     isLoadingButton:boolean;
     setIsLoading:Function;
     actualCardCollection:cardCollection;
     marginTop?:string
 }
-const ButtonsManualApproval = ({ isLoadingButton, setIsLoading, actualCardCollection,marginTop }:Props) => {
+const ButtonsManualApproval = ({ setLocation,isLoadingButton, setIsLoading, actualCardCollection,marginTop }:Props) => {
   return (
     <>
       <div style={{ marginTop: marginTop || '0px' }}>
@@ -23,7 +24,7 @@ const ButtonsManualApproval = ({ isLoadingButton, setIsLoading, actualCardCollec
           cta="Aprovar"
           submitting={isLoadingButton}
           click={async () => {
-            //setIsLoading(true)
+            setIsLoading(true)
             await db
               .collection('catalog-user-data')
               .doc(actualCardCollection.idParent)
@@ -31,8 +32,8 @@ const ButtonsManualApproval = ({ isLoadingButton, setIsLoading, actualCardCollec
               .doc(actualCardCollection.id)
               .update({ status: 'approved' })
             setIsLoading(false)
+            setLocation('aprovacao-manual');
             window.location.reload()
-            //setLocation('aprovacao-manual');
           }}
         />
       </div>
@@ -43,7 +44,7 @@ const ButtonsManualApproval = ({ isLoadingButton, setIsLoading, actualCardCollec
           template="destructive"
           submitting={isLoadingButton}
           click={async () => {
-            //setIsLoading(true)
+            setIsLoading(true)
             await db
               .collection('catalog-user-data')
               .doc(actualCardCollection.idParent)
@@ -51,8 +52,8 @@ const ButtonsManualApproval = ({ isLoadingButton, setIsLoading, actualCardCollec
               .doc(actualCardCollection.id)
               .update({ status: 'archived' })
             setIsLoading(false)
+            setLocation('aprovacao-manual');
             window.location.reload()
-            //setLocation('aprovacao-manual');
           }}
         />
       </div>

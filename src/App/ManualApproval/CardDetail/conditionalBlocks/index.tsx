@@ -16,7 +16,7 @@ import React from 'react';
                         content: [
                           (
                             <label
-                              style={{ cursor: 'pointer', fontSize: '1.4rem' }}
+                              style={{ cursor: 'pointer', textDecoration: 'underline', fontSize: '15px', fontWeight: 'bold' }}
                               onClick={() => {
                                 const link = document.createElement('a')
                                 link.href = actualCardCollection[whichDocumentType].url
@@ -36,7 +36,7 @@ import React from 'react';
                         content: [
                           (
                             <label
-                              style={{ cursor: 'pointer', fontSize: '1.4rem' }}
+                              style={{ cursor: 'pointer', textDecoration: 'underline', fontSize: '15px', fontWeight: 'bold' }}
                               onClick={() => {
                                 const link = document.createElement('a')
                                 link.href = actualCardCollection.selfie.url
@@ -70,7 +70,7 @@ import React from 'react';
                       content: [
                         (
                           <label
-                            style={{ cursor: 'pointer', fontSize: '1.4rem' }}
+                            style={{ cursor: 'pointer', textDecoration: 'underline', fontSize: '15px', fontWeight: 'bold' }}
                             onClick={() => {
                               const link = document.createElement('a')
                               link.href = actualCardCollection[whichDocumentF].url
@@ -90,7 +90,7 @@ import React from 'react';
                       content: [
                         (
                           <label
-                            style={{ cursor: 'pointer', fontSize: '1.4rem' }}
+                            style={{ cursor: 'pointer', textDecoration: 'underline', fontSize: '15px', fontWeight: 'bold' }}
                             onClick={() => {
                               const link = document.createElement('a')
                               link.href = actualCardCollection[whichDocumentV].url
@@ -110,7 +110,7 @@ import React from 'react';
                       content: [
                         (
                           <label
-                            style={{ cursor: 'pointer', fontSize: '1.4rem' }}
+                            style={{ cursor: 'pointer', textDecoration: 'underline', fontSize: '15px', fontWeight: 'bold' }}
                             onClick={() => {
                               const link = document.createElement('a')
                               link.href = actualCardCollection.selfie.url

@@ -41,7 +41,7 @@ const fetch = (setIsLoading, setErrorLoading, setSuppliers, setSellerZoopPlan2, 
             docId,
             name,
             reason: razao ? capitalize(razao) : '-',
-            sellerZoopPlan: sellerZoopPlan2 || null,
+            sellerZoopPlan: sellerZoopPlan || null,
           })
         })
       }
