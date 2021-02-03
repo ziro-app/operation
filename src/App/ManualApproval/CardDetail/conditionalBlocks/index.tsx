@@ -4,11 +4,11 @@ import React from 'react';
                 console.log('howMuchImages',howMuchImages,'actualCardCollection',actualCardCollection,'whichDocumentType',whichDocumentType,'whichDocumentF',whichDocumentF,'whichDocumentV',whichDocumentV)
                 return howMuchImages === 2 ? [
                     {
-                      title: 'Porcentagem doc 1',
+                      title: 'Probabilidade doc 1',
                       content: [`${(actualCardCollection[whichDocumentType].fileInfo.classifiedAs.probability * 100).toFixed(2)} %` || '-'],
                     },
                     {
-                      title: 'Porcentagem selfie',
+                      title: 'Probabilidade selfie',
                       content: [`${(actualCardCollection[whichDocumentType].fileInfo.classifiedAs.probability * 100).toFixed(2)} %` || '-'],
                     },
                     {
@@ -54,15 +54,15 @@ import React from 'react';
                 ]
                 : [
                     {
-                      title: 'Porcentagem doc 1',
+                      title: 'Probabilidade doc 1',
                       content: [`${(actualCardCollection[whichDocumentF].fileInfo.classifiedAs.probability * 100).toFixed(2)} %` || '-'],
                     },
                     {
-                      title: 'Porcentagem doc 2',
+                      title: 'Probabilidade doc 2',
                       content: [`${(actualCardCollection[whichDocumentV].fileInfo.classifiedAs.probability * 100).toFixed(2)} %` || '-'],
                     },
                     {
-                      title: 'Porcentagem selfie',
+                      title: 'Probabilidade selfie',
                       content: [`${(actualCardCollection[whichDocumentF].fileInfo.classifiedAs.probability * 100).toFixed(2)} %` || '-'],
                     },
                     {

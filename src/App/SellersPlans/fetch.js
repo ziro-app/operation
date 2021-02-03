@@ -7,12 +7,12 @@ const fetch = state => {
 
   const allSellersPlans = [
     {
-        title: 'Planos dos Fabricantes',
-        header: ['Fabricante', 'Plano Ativo', 'Tarifas'],
-        rows: [],
-        totals: [],
-        align: ['left', 'center', 'center']
-    }
+      title: 'Planos dos Fabricantes',
+      header: ['Fabricante', 'Plano Ativo', 'Tarifas'],
+      rows: [],
+      totals: [],
+      align: ['left', 'center', 'center'],
+    },
   ]
 
   const run = async () => {
@@ -27,25 +27,28 @@ const fetch = state => {
               const { fantasia, sellerZoopPlan, uid } = doc.data()
 
               allSellersPlans[0].rows.push([
-                      fantasia,
-                      typeof sellerZoopPlan !== 'undefined' && sellerZoopPlan && sellerZoopPlan.activePlan
-                        ? translateFirebaseToFees(sellerZoopPlan.activePlan)
-                        : ['-'],
-                        (<label
-                            style={{cursor: 'pointer', fontSize: '1.4rem'}}
-                            onClick={
-                                () => {
-                                    localStorage.setItem('voltar', '/planos-fabricantes')
-                                    localStorage.setItem('sellerName', fantasia)
-                                    localStorage.removeItem('selectedPlan')
-                                    localStorage.removeItem('sellerObject')
-                                    setLocation(`/atualizar-plano-venda/${uid}`)
-                                }
-                            }
-                        >
-                            Ver
-                        </label>)
-                    ])
+                fantasia,
+                typeof sellerZoopPlan !== 'undefined' && sellerZoopPlan && sellerZoopPlan.activePlan
+                  ? translateFirebaseToFees(sellerZoopPlan.activePlan)
+                  : ['-'],
+                <div
+                  style={{
+                    cursor: 'pointer',
+                    textDecoration: 'underline',
+                    fontSize: '15px',
+                    fontWeight: 'bold',
+                  }}
+                  onClick={() => {
+                    localStorage.setItem('voltar', '/planos-fabricantes')
+                    localStorage.setItem('sellerName', fantasia)
+                    localStorage.removeItem('selectedPlan')
+                    localStorage.removeItem('sellerObject')
+                    setLocation(`/atualizar-plano-venda/${uid}`)
+                  }}
+                >
+                  Ver
+                </div>,
+              ])
             } else {
               console.log('No such document!')
             }

@@ -137,23 +137,21 @@ export default ({ dataRows, cardId, card }) => {
           header: 'Pessoa',
           body: [
             {
-              title: 'Data de Nascimento',
+              title: 'Nascimento',
               content: [actualCardCollection.extracted.dataNascimento || '-'],
             },
             {
-              title: 'Pai',
+              title: 'Nome Pai',
               content: [actualCardCollection.extracted.nomePai || '-'],
             },
             {
-              title: 'Mãe',
+              title: 'Nome Mãe',
               content: [actualCardCollection.extracted.nomeMae || '-'],
             },
           ],
         },
       ]
       setBlocksDetails(block)
-      console.log(conditionalBlocks(howMuchImages,actualCardCollection,whichDocumentType,whichDocumentF,whichDocumentV))
-      console.log(...conditionalBlocks(howMuchImages,actualCardCollection,whichDocumentType,whichDocumentF,whichDocumentV))
 
     }
   }, [card])

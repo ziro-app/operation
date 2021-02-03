@@ -195,7 +195,7 @@ const Router = ({ isLogged }) => {
               ['Fabricantes: Alterar plano de venda', '/atualizar-plano-venda'],
               ['Fabricantes: Alterar tarifas padrão', '/alterar-tarifas-padrao'],
               ['Fabricantes: Visualizar planos ativos', '/planos-fabricantes'],
-              //['Aprovar Cartões do Catalogo', 'aprovacao-manual'],
+              ['Aprovação Manual', 'aprovacao-manual'],
             ]}
           />
         </motion.div>

@@ -5,4 +5,10 @@ export const illustration = {
   empty = {
     display: 'grid',
     textAlign: 'center',
-  };
+  },
+  details = {
+    cursor: 'pointer',
+    textDecoration: 'underline',
+    fontSize: '15px',
+    fontWeight: 'bold',
+  }

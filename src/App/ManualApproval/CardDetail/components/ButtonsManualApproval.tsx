@@ -23,8 +23,7 @@ const ButtonsManualApproval = ({ isLoadingButton, setIsLoading, actualCardCollec
           cta="Aprovar"
           submitting={isLoadingButton}
           click={async () => {
-            console.log('click')
-            setIsLoading(true)
+            //setIsLoading(true)
             await db
               .collection('catalog-user-data')
               .doc(actualCardCollection.idParent)
@@ -44,8 +43,7 @@ const ButtonsManualApproval = ({ isLoadingButton, setIsLoading, actualCardCollec
           template="destructive"
           submitting={isLoadingButton}
           click={async () => {
-            console.log('click')
-            setIsLoading(true)
+            //setIsLoading(true)
             await db
               .collection('catalog-user-data')
               .doc(actualCardCollection.idParent)
