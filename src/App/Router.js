@@ -48,7 +48,6 @@ import UpdatePass from './UpdatePass/index'
 import UpdateStoreowner from './UpdateStoreowner/index'
 import UpdateUserInfo from './UpdateUserInfo/index'
 import UpdateZoopPlan from './UpdateZoopPlan/index'
-import UpdateZoopPlanOld from './UpdateZoopPlanOld/index'
 import CommissionModels from './CommissionModels'
 import UploadBillet from './UploadBillet'
 import UploadImages from './UploadImages/index'
@@ -66,6 +65,7 @@ import PostDuplicata from './PostDuplicata/index'
 import ShowAttendance from './ShowAttendance/index'
 import Pagamentos from './Pagamentos'
 import ManualApproval from './ManualApproval'
+import Rates from './Rates'
 // import FirebaseMigration from './FirebaseMigration/index' -> Inacabado
 
 const Router = ({ isLogged }) => {
@@ -74,12 +74,13 @@ const Router = ({ isLogged }) => {
   const [matchTransactions, paramsTransactions] = useRoute('/transacoes/:transactionId?/:receivableId?')
   const [matchTransactionsSplit, paramsTransactionsSplit] = useRoute('/transacoes/:transactionId?/split')
   const [matchSeller, paramsSeller] = useRoute('/atualizar-plano-venda/:sellerId?')
+  const [matchSellerRates, paramsSellerRates] = useRoute('/tarifas/:sellerId?/:sellerName?')
   const [matchSellerNewPlan, paramsSellerNewPlan] = useRoute('/atualizar-plano-venda/:sellerId?/newPlan')
   const [matchFee, paramsFee] = useRoute('/atualizar-plano-venda/:sellerId?/:fee?/:selectedPlan?')
   const [matchDefaultFee, paramsDefaultFee] = useRoute('/alterar-tarifas-padrao/:fee?/:selectedPlan?')
+  const { sellerId, sellerName } = matchSellerRates ? paramsSellerRates : {}
   const { nickname } = useContext(userContext)
   const allowedUsers = ['Vitor']
-  console.log('paramsCardManualApproval',paramsCardManualApproval)
   const [location] = useLocation()
   const publicRoutes = {
     '/': <Login />,
@@ -115,6 +116,13 @@ const Router = ({ isLogged }) => {
         <SellersPlans {...paramsTransactions} />
       </HeaderBack>
     ),
+    '/tarifas': (
+        <Menu title="Tarifas">
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+                <Rates />
+            </motion.div>
+        </Menu>
+    ),
     [matchCardManualApproval ? location : null]: (
       <HeaderBack title="Aprovação manual" navigateTo={paramsCardManualApproval ? "/aprovacao-manual" : "/suporte"}>
         <ManualApproval {...paramsCardManualApproval} />
@@ -125,6 +133,11 @@ const Router = ({ isLogged }) => {
     // [matchFee ? location : null]: <CreateAndUpdate {...paramsFee} />,
     [matchFee ? location : null]: <UpdateTax {...paramsFee} />,
     [matchDefaultFee ? location : null]: <UpdateDefaultTax {...paramsDefaultFee} />,
+    [matchSellerRates ? location : null]: (
+      <HeaderBack title={`Tarifas ${decodeURI(sellerName)}`} navigateTo={'/planos-fabricantes'}>
+        <Rates {...paramsSellerRates} />
+      </HeaderBack>
+    ),
     [matchSeller ? location : null]: (
       <HeaderBack title="Alterar Plano de Venda" navigateTo={localStorage.getItem('voltar') || '/suporte'}>
         <UpdateZoopPlan {...paramsSeller} />
@@ -219,11 +232,6 @@ const Router = ({ isLogged }) => {
     '/cadastrar-despesa': (
       <HeaderBack title="Cadastrar despesa" navigateTo="/administrativo">
         <RegisterExpenses />
-      </HeaderBack>
-    ),
-    '/atualizar-plano-zoop-old': (
-      <HeaderBack title="Atualizar Plano Zoop do usuário antigo" navigateTo="/suporte">
-        <UpdateZoopPlanOld />
       </HeaderBack>
     ),
     '/testar-tarifas': (

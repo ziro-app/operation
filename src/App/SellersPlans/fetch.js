@@ -39,11 +39,11 @@ const fetch = state => {
                     fontWeight: 'bold',
                   }}
                   onClick={() => {
-                    localStorage.setItem('voltar', '/planos-fabricantes')
+                    localStorage.setItem('voltar', `/tarifas/${uid}/${fantasia}`)
                     localStorage.setItem('sellerName', fantasia)
                     localStorage.removeItem('selectedPlan')
                     localStorage.removeItem('sellerObject')
-                    setLocation(`/atualizar-plano-venda/${uid}`)
+                    setLocation(`/tarifas/${uid}/${fantasia}`)
                   }}
                 >
                   Ver
