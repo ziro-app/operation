@@ -134,7 +134,7 @@ const Router = ({ isLogged }) => {
     [matchFee ? location : null]: <UpdateTax {...paramsFee} />,
     [matchDefaultFee ? location : null]: <UpdateDefaultTax {...paramsDefaultFee} />,
     [matchSellerRates ? location : null]: (
-      <HeaderBack title={`Tarifas ${decodeURI(sellerName)}`} navigateTo={'/planos-fabricantes'}>
+      <HeaderBack title={`${decodeURI(sellerName)}`} navigateTo={'/planos-fabricantes'}>
         <Rates {...paramsSellerRates} />
       </HeaderBack>
     ),

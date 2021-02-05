@@ -41,6 +41,7 @@ const fetch = state => {
                   onClick={() => {
                     localStorage.setItem('voltar', `/tarifas/${uid}/${fantasia}`)
                     localStorage.setItem('sellerName', fantasia)
+                    localStorage.setItem('activePlan', translateFirebaseToFees(sellerZoopPlan.activePlan).toUpperCase())
                     localStorage.removeItem('selectedPlan')
                     localStorage.removeItem('sellerObject')
                     setLocation(`/tarifas/${uid}/${fantasia}`)

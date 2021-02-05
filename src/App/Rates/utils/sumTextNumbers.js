@@ -8,8 +8,10 @@ const sumTextNumbers = (arrayTextNumbers) => {
         if(num === 0){
             return '0,00%'
         }
+        console.log('num',num)
         const result = `${String(num).replace('.',',')}`
-        if(result.split(',')[1].length === 2){
+        console.log('result',result)
+        if(result.split(',')[1] && result.split(',')[1].length === 2){
             return `${result}%`
         }
         return `${result}0%`

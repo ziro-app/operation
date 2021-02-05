@@ -42,6 +42,17 @@ const Rates = () => {
 
   return (
     <div>
+        <div style={{
+        textAlign:'center'}}>
+      <label
+        style={{
+          fontFamily: 'Rubik',
+          textTransform: 'uppercase',
+          fontSize: '1.5rem',
+        }}
+      >
+        {localStorage.getItem('activePlan')}
+      </label></div>
       <Button type="button" cta="Alterar Plano de Venda" click={() => setLocation(`/atualizar-plano-venda/${sellerId}`)} />
       {dataRows.map(data => (
         <div aria-label="table" key={data.brand} style={{ marginTop: '20px' }}>
