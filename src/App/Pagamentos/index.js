@@ -30,7 +30,7 @@ const Pagamentos = () => {
                     readOnly={false}
                     value={ano}
                     onChange={({ target: { value } }) => setAno(value)}
-                    list={['2020']}
+                    list={['2020', '2021']}
                     placeholder="Escolha um ano"
                     onChangeKeyboard={element =>
                     element ? setAno(element.value) : null
