@@ -60,13 +60,12 @@ const SellersPlans = () => {
         <Table
           data={data}
           customGrid={{
-            gridTemplateColumns: 'auto 1fr 50px',
+            gridTemplateColumns: '1fr 1fr 50px',
             gridRowGap: '5px',
           }}
           cellStyle={{
             width: '100%',
             height: '100%',
-            maxWidth: '135px',
             fontSize: '1.4rem',
             textOverflow: 'ellipsis',
             overflow: 'hidden',

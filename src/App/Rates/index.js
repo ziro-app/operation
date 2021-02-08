@@ -43,12 +43,13 @@ const Rates = () => {
   return (
     <div>
         <div style={{
-        textAlign:'center'}}>
+        textAlign:'center',
+        margin:'0px 0px 15px'}}>
       <label
         style={{
           fontFamily: 'Rubik',
           textTransform: 'uppercase',
-          fontSize: '1.5rem',
+          fontSize: '1.8rem',
         }}
       >
         {localStorage.getItem('activePlan')}
