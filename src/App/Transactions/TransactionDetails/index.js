@@ -38,9 +38,7 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
   const [captureModal, setCaptureModal] = useState(false)
   const [splitTransactionModal, setSplitTransactionModal] = useState(false)
   const textAreaRef = useRef(null)
-  const paymentLink = process.env.HOMOLOG
-    ? `http://localhost:8080/pagamento/${transactionId}`
-    : `https://ziro.app/pagamento/${transactionId}`
+  const paymentLink = process.env.HOMOLOG ? `http://localhost:8080/pagamento/${transactionId}` : `https://ziro.app/pagamento/${transactionId}`
   const [blocksStoreowner, setBlocksStoreowner] = useState([])
   const [validationMessage, setValidationMessage] = useState('')
   const [loadingButton, setLoadingButton] = useState(false)
@@ -215,7 +213,11 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
         let feesFormatted =
           transaction.status !== 'Cancelado' && transaction.fees
             ? ` ${
-                (transaction.isNewPlan && transaction.splitTransaction ? transaction.splitTransaction : transaction.sellerZoopPlan) &&
+                (Object.prototype.hasOwnProperty.call(transaction, 'sellerZoopPlan') &&
+                Object.prototype.hasOwnProperty.call(transaction.sellerZoopPlan, 'activePlan') &&
+                transaction.splitTransaction
+                  ? transaction.splitTransaction
+                  : transaction.sellerZoopPlan) &&
                 (markupTransaction?.amount || markupTransaction?.percentage)
                   ? '- '.concat(
                       parseFloat(parseFloat(markupTransaction.receivable_gross_amount) + parseFloat(transaction.fees))
@@ -240,18 +242,17 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
           transaction.insurance === true &&
           Object.prototype.hasOwnProperty.call(transaction, 'receivables') &&
           Object.prototype.hasOwnProperty.call(transaction, 'splitTransaction') &&
-          Object.prototype.hasOwnProperty.call(transaction.isNewPlan ? transaction.splitTransaction : transaction.sellerZoopPlan, 'antiFraud') &&
+          Object.prototype.hasOwnProperty.call(transaction, 'sellerZoopPlan') &&
+          Object.prototype.hasOwnProperty.call(
+            Object.prototype.hasOwnProperty.call(transaction.sellerZoopPlan, 'activePlan')
+              ? transaction.splitTransaction
+              : transaction.sellerZoopPlan,
+            'antiFraud',
+          ) &&
           feesFormatted !== '-' &&
           (antiFraudTransaction.amount || antiFraudTransaction.percentage)
             ? handleInsurance(transaction)
             : '-'
-        /*let markupValueFormatted =
-          Object.prototype.hasOwnProperty.call(transaction, 'receivables') &&
-          feesFormatted !== '-' &&
-          (transaction.isNewPlan ? transaction.splitTransaction : transaction.sellerZoopPlan) &&
-          (markupTransaction.amount || markupTransaction.percentage)
-            ? handleMarkup(transaction)
-            : '-'*/
         let sumOfFees = 0
         if (transaction.status === 'Aprovado') {
           sumOfFees = transaction.fee_details.reduce(function (sum, item) {
@@ -578,7 +579,13 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
                 click={() => setLocation(`/transacoes/${transactionId}/split`)}
                 template="regular"
               /> */}
-              <Button style={transaction.status === 'Pré Autorizado' && btnRed} type="button" cta="Cancelar transação" click={() => setCancelModal(true)} template="destructive" />
+              <Button
+                style={transaction.status === 'Pré Autorizado' && btnRed}
+                type="button"
+                cta="Cancelar transação"
+                click={() => setCancelModal(true)}
+                template="destructive"
+              />
             </div>
           </>
         )}

@@ -20,8 +20,6 @@ const sendToBackend = state => () => {
     setInsurance,
     checkoutWithoutRegister,
     setCheckoutWithoutRegister,
-    isNewPlan,
-    setIsNewPlan,
   } = state
   const nome = nickname ? nickname.trim() : ''
   const baseUrl = process.env.HOMOLOG ? 'http://localhost:8080/pagamento/' : 'https://ziro.app/pagamento/'
@@ -47,7 +45,6 @@ const sendToBackend = state => () => {
             status: 'Aguardando Pagamento',
             observations,
             insurance: insurance !== null ? insurance : true,
-            isNewPlan:true,
             sellerZoopPlan: sellerZoopPlan || null,
             checkoutWithoutRegister: checkoutWithoutRegister || false,
           })
@@ -68,7 +65,6 @@ const sendToBackend = state => () => {
           setInsurance(null)
           setInsurenceDropdownValue('')
           setCheckoutWithoutRegister(false)
-          setIsNewPlan(false)
         } else {
           throw { msg: 'Vendedor não encontrado', customError: true }
         }

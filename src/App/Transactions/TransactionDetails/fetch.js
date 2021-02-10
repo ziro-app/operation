@@ -38,7 +38,6 @@ const fetch = (transactionId, setTransaction, setError, transaction, setNothing,
                             totalFees,
                             fee_details,
                             checkoutWithoutRegister,
-                            isNewPlan,
                         } = snapshot.data()
                         const chargeFormatted = currencyFormat(charge)
                         const dateFormatted = datePaid ? dateFormat(datePaid) : ''
@@ -70,7 +69,6 @@ const fetch = (transactionId, setTransaction, setError, transaction, setNothing,
                             insurance: insurance || false,
                             sellerZoopPlan: sellerZoopPlan || '',
                             splitTransaction: splitTransaction || '',
-                            isNewPlan: isNewPlan || false,
                             totalFees: totalFees || '-',
                             fee_details: fee_details || '-',
                             checkoutWithoutRegister: checkoutWithoutRegister || false,

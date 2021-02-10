@@ -252,7 +252,6 @@ const sendToBackend = state => () => {
           status: 'Aguardando Pagamento',
           observations: note,
           insurance: totalAmount > 300000,
-          isNewPlan: true,
           sellerZoopPlan: hasSellerZoopPlan || null,
           checkoutWithoutRegister: false,
         })
