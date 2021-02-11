@@ -98,7 +98,6 @@ const ButtonsManualApproval = ({ setLocation, removeRow, isLoadingButton, setIsL
             await setPromiseMessage(PromptMessage)
             const promise = new Promise(async resolve => {
               try {
-                console.log('entrou')
                 setIsLoading(true)
 
                 await db
@@ -131,7 +130,6 @@ const ButtonsManualApproval = ({ setLocation, removeRow, isLoadingButton, setIsL
             await setPromiseMessage(PromptMessageArchived)
             const promise = new Promise(async resolve => {
               try {
-                console.log('entrou')
                 setIsLoading(true)
 
                 await db
@@ -141,11 +139,15 @@ const ButtonsManualApproval = ({ setLocation, removeRow, isLoadingButton, setIsL
                   .doc(actualCardCollection.id)
                   .update({ status: 'archived' })
                   removeRow(actualCardCollection.id)
+                  setLocation('aprovacao-manual')
                 resolve('Ok')
               } catch (error) {
                 resolve(null)
               }
             })
+            setMessage(WaitingMessage.withPromise(promise))
+            const result = await promise
+            setMessage(result ? SuccessMessage : FailureMessage)
           }}
         />
       </div>
