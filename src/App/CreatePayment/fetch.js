@@ -7,9 +7,9 @@ const fetch = (setIsLoading, setErrorLoading, setSuppliers, setFantasyNames, set
     const fantasy = [];
     const run = async () => {
         try {
-            query.get().then(supplier => {
-                if (!supplier.empty) {
-                    supplier.forEach(doc => {
+            query.onSnapshot(snapshot => {
+                if (!snapshot.empty) {
+                    snapshot.forEach(doc => {
                         const { zoopId, fantasia, maxParcelas } = doc.data();
                         if (fantasia && fantasia !== '********') {
                             fantasy.push(fantasia);
