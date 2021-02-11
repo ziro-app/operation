@@ -23,7 +23,7 @@ function onlyUnique(value, index, self) {
   }
 
 const CreatePayment = () => {
-  const allowedUsersToTest = ['Uiller', 'Vitor', 'João', 'Ale', 'Antonio','Russi', 'Vivian', 'Elisa', 'Paulo']
+  
   const [isLoading, setIsLoading] = useState(true)
   const [errorLoading, setErrorLoading] = useState(false)
   const [suppliers, setSuppliers] = useState([])

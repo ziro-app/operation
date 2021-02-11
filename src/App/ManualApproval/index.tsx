@@ -4,27 +4,30 @@ import Spinner from '@bit/vitorbarbosa19.ziro.spinner-with-div'
 import Error from '@bit/vitorbarbosa19.ziro.error'
 import useLoadManualApproval from './hooks/useLoadManualApproval'
 import Illustration from '@bit/vitorbarbosa19.ziro.illustration'
-import CardsList from './CardsList/index';
-import CardDetail from './CardDetail/index';
+import CardsList from './components/CardsList/index';
+import CardDetail from './components/CardDetail/index';
 import { illustration, empty } from './styles'
 
 const ManualApproval = ({cardId}) => {
-  const { blockDetails, dataRows, isLoading, isError, modifyCardId, card } = useLoadManualApproval();
+  const { removeRow, dataRows, isLoading, isError, modifyCardId, card } = useLoadManualApproval();
     const [timeout, setTimeoutFunction] = useState(false)
+    const [submitMsg, setSubmitMsg] = useState('')
     useEffect(() => {
         if(cardId)
       modifyCardId(cardId)
     },[dataRows,card,cardId])
+    useEffect(() => {
+      // if user start typing on any field, reset submit message after 10 seconds
+      const clearMsg = setTimeout(() => submitMsg ? setSubmitMsg("") : null, 10000);
+      return () => clearTimeout(clearMsg);
+  }, [submitMsg]);
+
   if (isError)
     return (
       <Error />
     )
 
   if (isLoading) return <Spinner />
-  setTimeout(
-    function() {
-      setTimeoutFunction(true)
-    }, 5000);
   //return (<CardsList dataRows={dataRows} />)setTimeout(
     if (dataRows.length === 0 && !isLoading && timeout) {
         return (
@@ -37,7 +40,7 @@ const ManualApproval = ({cardId}) => {
         )
       }
     if(typeof cardId !== 'undefined' && dataRows.length>0){
-        return <CardDetail dataRows={dataRows} cardId={cardId} card={card} />
+        return <CardDetail removeRow={removeRow} dataRows={dataRows} cardId={cardId} card={card} />
     }
     else{
         return <CardsList dataRows={dataRows} isLoading={isLoading} />

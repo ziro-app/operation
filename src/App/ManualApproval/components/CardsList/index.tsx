@@ -1,12 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import Table from '@bit/vitorbarbosa19.ziro.table'
-import { motion } from 'framer-motion'
 import { useLocation } from 'wouter'
-import Illustration from '@bit/vitorbarbosa19.ziro.illustration'
-import Button from '@bit/vitorbarbosa19.ziro.button'
 import Spinner from '@bit/vitorbarbosa19.ziro.spinner-with-div'
-import { getShortDate } from '../utils/functions'
-import { details } from './styles'
+import { getShortDate } from '../../utils/functions'
 
 export default ({ dataRows, isLoading }) => {
   const [, setLocation] = useLocation()
@@ -16,7 +12,7 @@ export default ({ dataRows, isLoading }) => {
       title: 'Usuários',
       header: ['Razão', 'Data', ''],
       rows: dataRows.map(data => [
-        <label>{data.razao || 'NOME NÃO EXTRAÍDO'}</label>, //aqui é o nome do document, preciso pegar o nome do cliente!
+        <label>{data.razao || 'NOME NÃO EXTRAÍDO'}</label>,
         <label>{getShortDate(new Date(data.added.seconds * 1000))}</label>,
         <div
           style={{ cursor: 'pointer', textDecoration: 'underline', fontSize: '15px', fontWeight: 'bold' }}

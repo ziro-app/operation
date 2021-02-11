@@ -8,7 +8,7 @@ import Details from '@bit/vitorbarbosa19.ziro.details'
 import ButtonsManualApproval from './components/ButtonsManualApproval'
 import conditionalBlocks from './conditionalBlocks/index'
 
-export default ({ dataRows, cardId, card }) => {
+export default ({ removeRow, dataRows, cardId, card }) => {
   /*var treeWalker = document.createTreeWalker(document.body, NodeFilter.SHOW_ELEMENT)
   var currentNode = treeWalker.currentNode
   var emptyNodes = []
@@ -167,7 +167,7 @@ export default ({ dataRows, cardId, card }) => {
   }
   return (
     <>
-      <ButtonsManualApproval setLocation={setLocation} isLoadingButton={isLoadingButton} setIsLoading={setIsLoading} actualCardCollection={actualCardCollection} />
+      <ButtonsManualApproval removeRow={removeRow} setLocation={setLocation} isLoadingButton={isLoadingButton} setIsLoading={setIsLoading} actualCardCollection={actualCardCollection} />
       {howMuchImages === 2 ? (
         <div
           style={{
@@ -195,7 +195,7 @@ export default ({ dataRows, cardId, card }) => {
       <div style={{marginTop:'20px'}}>
       <Details blocks={blocksDetails} blockGap={'20px'} />
       </div>
-      <ButtonsManualApproval setLocation={setLocation} isLoadingButton={isLoadingButton} setIsLoading={setIsLoading} actualCardCollection={actualCardCollection} marginTop={'40px'} />
+      <ButtonsManualApproval removeRow={removeRow} setLocation={setLocation} isLoadingButton={isLoadingButton} setIsLoading={setIsLoading} actualCardCollection={actualCardCollection} marginTop={'40px'} />
     </>
   )
 }

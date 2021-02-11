@@ -16,7 +16,7 @@ const useLoadManualApproval = () => {
   const setMessage = useMessage()
 
   useEffect(() => {
-    fetchFirebaseCatalogUserData(setLoading, setError, setMessage, setCardIds, setCards, setDataRows)
+    if(dataRows.length === 0) fetchFirebaseCatalogUserData(setLoading, setError, setMessage, setCardIds, setCards, setDataRows)
     //fetchZoop(setLoading, setError, setMessage, cardId, setCard)
   }, [])
 
@@ -26,10 +26,16 @@ const useLoadManualApproval = () => {
   const modifyCardId = cardId => {
     setCardId(cardId)
   }
+  const removeRow = (idDocument) => {
+    setDataRows(dataRows.filter(function (el) {
+      return el.id !== idDocument
+    }))
+  }
 
   return {
     blockDetails,
     dataRows,
+    removeRow,
     isLoading,
     isError,
     modifyCardId,
