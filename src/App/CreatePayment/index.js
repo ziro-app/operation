@@ -18,7 +18,7 @@ import { userContext } from '../appContext'
 import { inline, center } from './styles'
 
 const CreatePayment = () => {
-  const allowedUsersToTest = ['Uiller', 'Vitor', 'João', 'Ale', 'Antonio','Russi', 'Vivian', 'Elisa', 'Paulo']
+  
   const [isLoading, setIsLoading] = useState(true)
   const [errorLoading, setErrorLoading] = useState(false)
   const [suppliers, setSuppliers] = useState([])
@@ -34,7 +34,6 @@ const CreatePayment = () => {
   const { nickname } = useContext(userContext)
   const [hasSellerZoopPlan, setHasSellerZoopPlan] = useState(null)
   const [insurance, setInsurance] = useState(null)
-  const [isNewPlan, setIsNewPlan] = useState(true)
   const [checkoutWithoutRegister, setCheckoutWithoutRegister] = useState(false)
   const [insurenceDropdownValue, setInsurenceDropdownValue] = useState('')
   const options = ['Com seguro', 'Sem seguro']
@@ -58,8 +57,6 @@ const CreatePayment = () => {
     setInsurenceDropdownValue,
     checkoutWithoutRegister,
     setCheckoutWithoutRegister,
-    isNewPlan,
-    setIsNewPlan,
   }
   useEffect(() => {
     if (fantasy) {
@@ -72,7 +69,7 @@ const CreatePayment = () => {
       }
       getSellerZoopPlan()
     }
-  }, [fantasy, isNewPlan])
+  }, [fantasy])
 
   console.log('states', state)
   const validations = [
