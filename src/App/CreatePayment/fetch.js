@@ -7,7 +7,7 @@ const fetch = (setIsLoading, setErrorLoading, setSuppliers, setFantasyNames, set
     const fantasy = [];
     const run = async () => {
         try {
-            query.onSnapshot(snapshot => {
+            query.get().then(snapshot => {
                 if (!snapshot.empty) {
                     snapshot.forEach(doc => {
                         const { zoopId, fantasia, maxParcelas } = doc.data();
@@ -16,8 +16,8 @@ const fetch = (setIsLoading, setErrorLoading, setSuppliers, setFantasyNames, set
                             suppliers.push({ zoopId, fantasia, maxParcelas });
                         }
                     });
-                    setSuppliers(suppliers);
-                    setFantasyNames(fantasy);
+                    setSuppliers(suppliers.filter((value, index, self) => self.findIndex(m => m.fantasia === value.fantasia) === index));
+                    setFantasyNames(fantasy.filter((value, index, self) => self.findIndex(m => m === value) === index));
                 }
             });
             let list = [];
@@ -26,7 +26,7 @@ const fetch = (setIsLoading, setErrorLoading, setSuppliers, setFantasyNames, set
             snapCollection.forEach(document => {
                 if (document.data().brand !== '') list.push(document.data().brand);
             });
-            setCatalogBrands(list);
+            setCatalogBrands(list.filter((value, index, self) => self.findIndex(m => m === value) === index));
         } catch (error) {
             setErrorLoading(true);
         } finally {

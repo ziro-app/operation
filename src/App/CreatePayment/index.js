@@ -65,13 +65,10 @@ const CreatePayment = () => {
         getSupplierData.forEach(doc => {
           setHasSellerZoopPlan(doc.data().sellerZoopPlan)
         })
-        console.log(hasSellerZoopPlan)
       }
       getSellerZoopPlan()
     }
   }, [fantasy])
-
-  console.log('states', state)
   const validations = [
     {
       name: 'insurance',
