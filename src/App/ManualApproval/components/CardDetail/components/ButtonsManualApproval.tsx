@@ -147,7 +147,7 @@ const ButtonsManualApproval = ({ setLocation, removeRow, isLoadingButton, setIsL
             })
             setMessage(WaitingMessage.withPromise(promise))
             const result = await promise
-            setMessage(result ? SuccessMessage : FailureMessage)
+            setMessage(result ? SuccessMessageArchived : FailureMessage)
           }}
         />
       </div>
