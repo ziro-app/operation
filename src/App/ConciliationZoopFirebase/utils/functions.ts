@@ -4,7 +4,7 @@ export function getShortDate(date:Date) {
     mes  = (date.getMonth()+1).toString(), //+1 pois no getMonth Janeiro começa com zero.
     mesF = (mes.length == 1) ? '0'+mes : mes,
     anoF = date.getFullYear().toString().slice(2, 4)//date.getFullYear();
-return diaF+"/"+mesF+"/"+anoF;
+return diaF+"/"+mesF;//+"/"+anoF;
 };
 export const translateStatus = (status) => {
     switch (status) {

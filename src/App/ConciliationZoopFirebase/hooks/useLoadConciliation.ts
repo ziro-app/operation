@@ -15,7 +15,7 @@ const useLoadConciliation = () => {
   const [isError, setError] = useState(false)
   const [hasMore, setHasMore] = useState(true)
   const [loadingMore, setLoadingMore] = useState(false)
-  const [quantityItems, setQuantityItems] = useState(40)
+  const [quantityItems, setQuantityItems] = useState(100)
   const setMessage = useMessage()
 
   const handleClick = () => {
@@ -38,14 +38,14 @@ const useLoadConciliation = () => {
       setLoadingMore(true)
       zoopData.map(zoopElement => {
         if (firebaseListId.includes(zoopElement.id) && zoopElement.status !== 'failed') {
-          firebaseData.map(firebaseElement => {
+          /*firebaseData.map(firebaseElement => {
             if (zoopElement.id === firebaseElement.transactionZoopId) {
               const { buyerRazao, id } = firebaseElement
               const existFirebase = true
               const newEelement = { ...zoopElement, buyerRazao, id, existFirebase }
               if (Number(zoopElement.amount) > 2) fusionZoopFirebaseData.push(newEelement)
             }
-          })
+          })*/
         } else {
           const existFirebase = false
           const newElement = { ...zoopElement, existFirebase }
@@ -58,14 +58,6 @@ const useLoadConciliation = () => {
         }
       })
       setLoadingMore(false)
-      console.log(
-        'fusionZoopFirebaseData',
-        fusionZoopFirebaseData.filter(element => element.existFirebase === false),
-      )
-      console.log(
-        'fusionZoopFirebaseData todas',
-        fusionZoopFirebaseData,
-      )
     }
   }, [zoopData])
 

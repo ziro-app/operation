@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useContext } from 'react'
 import Table from '@bit/vitorbarbosa19.ziro.table'
 import { useLocation } from 'wouter'
 import useLoadConciliation from '../../hooks/useLoadConciliation'
@@ -6,6 +6,8 @@ import usePinScroll from '../../hooks/usePinScroll'
 import Spinner from '@bit/vitorbarbosa19.ziro.spinner-with-div'
 import { getShortDate, translateStatus } from '../../utils/functions'
 import Button from '@bit/vitorbarbosa19.ziro.button';
+import Empty from '../Empty';
+import { userContext } from '../../../appContext'
 
 interface TableConciliationProps {
   count?: number;
@@ -15,7 +17,8 @@ interface TableConciliationProps {
 }
 
 const TableConciliation: React.FC<TableConciliationProps> = ({ ...props }) => {
-  const [, setLocation] = useLocation()
+  const {device} = useContext(userContext)
+  console.log(device)
   const { dataRows, removeRow, isLoading, isError, hasMore, loadingMore, handleClick } = useLoadConciliation()
   const dataTableFormatted = dataRows => [
     {
@@ -28,17 +31,19 @@ const TableConciliation: React.FC<TableConciliationProps> = ({ ...props }) => {
         <label>{data.existFirebase ? 'Sim' : 'Não'}</label>,
       ]),
       totals: [],
-      align: ['left', 'center', 'center'],
+      align: ['left', 'center', 'center','center'],
     },
   ]
   if (isLoading || dataRows.length === 0) return <Spinner />
+  console.log(dataRows)
+  if (!isLoading && dataRows.length === 0){return <Empty />;}
   return (
     <div>
       <div aria-label="table" style={{ marginTop: '20px' }}>
         <Table
           data={dataTableFormatted(dataRows)}
           customGrid={{
-            gridTemplateColumns: '1fr auto auto auto',
+            gridTemplateColumns: device === 'smallMobile' ? '1fr auto 50px auto' : '1fr auto auto auto',
             gridRowGap: '5px',
             gridColumnGap: '5px',
           }}

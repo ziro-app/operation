@@ -29,7 +29,7 @@ const fetchZoop = async (zoopData, setZoopData, setLoading, setError, setMessage
     if (hasMore) {
       const { items, has_more } = data
       arrayItems = [ ...zoopData, ...items ]
-      if (items.length === 0) setHasMore(false)
+      if (items.length === 0 || has_more === false) setHasMore(false)
       else setHasMore(true)
       setZoopData(arrayItems)
       //setZoopData(data.items)
