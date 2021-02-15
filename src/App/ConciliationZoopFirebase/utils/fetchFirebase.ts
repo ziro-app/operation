@@ -6,8 +6,8 @@ const fetchFirebase = async (setFirebaseData, setLoading, setError, setMessage) 
   const listTransactions = []
   try {
     const newDate = new Date(`${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate()}`)
-    const last7days = new Date(new Date(newDate).setDate(newDate.getDate() - 7))
-    var transactions = db.collection('credit-card-payments').where('dateLinkCreated', '>=', last7days).orderBy('dateLinkCreated', 'desc')
+    const last7days = new Date(new Date(newDate).setDate(newDate.getDate() - 10))
+    var transactions = db.collection('credit-card-payments').where('dateLastUpdate', '>=', last7days).orderBy('dateLastUpdate', 'desc')
     transactions.onSnapshot(function (querySnapshot) {
       querySnapshot.forEach(async function (doc) {
         const dataFirebase = doc.data()

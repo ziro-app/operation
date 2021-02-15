@@ -37,7 +37,7 @@ const useLoadConciliation = () => {
     if (zoopData.length > 0 && firebaseData.length > 0) {
       setLoadingMore(true)
       zoopData.map(zoopElement => {
-        if (firebaseListId.includes(zoopElement.id) && zoopElement.status !== 'failed') {
+        if (firebaseListId.includes(zoopElement.id)) {
           /*firebaseData.map(firebaseElement => {
             if (zoopElement.id === firebaseElement.transactionZoopId) {
               const { buyerRazao, id } = firebaseElement

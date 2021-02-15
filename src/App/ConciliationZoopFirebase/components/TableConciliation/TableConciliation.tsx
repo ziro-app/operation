@@ -18,7 +18,6 @@ interface TableConciliationProps {
 
 const TableConciliation: React.FC<TableConciliationProps> = ({ ...props }) => {
   const {device} = useContext(userContext)
-  console.log(device)
   const { dataRows, removeRow, isLoading, isError, hasMore, loadingMore, handleClick } = useLoadConciliation()
   const dataTableFormatted = dataRows => [
     {
@@ -34,8 +33,7 @@ const TableConciliation: React.FC<TableConciliationProps> = ({ ...props }) => {
       align: ['left', 'center', 'center','center'],
     },
   ]
-  if (isLoading || dataRows.length === 0) return <Spinner />
-  console.log(dataRows)
+  if (isLoading && dataRows.length === 0) return <Spinner />
   if (!isLoading && dataRows.length === 0){return <Empty />;}
   return (
     <div>
