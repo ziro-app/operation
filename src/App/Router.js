@@ -65,6 +65,7 @@ import PostDuplicata from './PostDuplicata/index'
 import ShowAttendance from './ShowAttendance/index'
 import Pagamentos from './Pagamentos'
 import ManualApproval from './ManualApproval'
+import ConciliationZoopFirebase from './ConciliationZoopFirebase'
 import Rates from './Rates'
 // import FirebaseMigration from './FirebaseMigration/index' -> Inacabado
 
@@ -209,6 +210,7 @@ const Router = ({ isLogged }) => {
               ['Fabricantes: Alterar tarifas padrão', '/alterar-tarifas-padrao'],
               ['Fabricantes: Visualizar planos ativos', '/planos-fabricantes'],
               ['Aprovação Manual', 'aprovacao-manual'],
+              ['Conciliação de pagamento', 'conciliacao'],
             ]}
           />
         </motion.div>
@@ -313,6 +315,11 @@ const Router = ({ isLogged }) => {
     '/solicitacao-link': (
       <HeaderBack title="Solicitação de Link" navigateTo="/administrativo">
         <LinkRequest />
+      </HeaderBack>
+    ),
+    '/conciliacao': (
+      <HeaderBack title="Conciliação" navigateTo="/suporte">
+        <ConciliationZoopFirebase {...paramsCardManualApproval} />
       </HeaderBack>
     ),
     '/aprovacao-manual': (
