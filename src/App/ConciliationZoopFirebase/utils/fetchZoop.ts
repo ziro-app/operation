@@ -22,13 +22,15 @@ const fetchZoop = async (zoopData, setZoopData, setLoading, setError, setMessage
     const { data } = await axios.get(
       `https://api.zoop.ws/v1/marketplaces/${
         process.env.ZIRO_MARKETPLACE
-      }/transactions?sort=time-descending&date_range[gte]=${last8DaysSeconds}&offset=${quantityItems}`, //await axios.get(`https://api.zoop.ws/v1/marketplaces/${process.env.ZIRO_MARKETPLACE}/transactions?limit=100&sort=time-descending&status=pre_authorized`,
+      }/transactions?limit=100&sort=time-descending&offset=${quantityItems}`, //await axios.get(`https://api.zoop.ws/v1/marketplaces/${process.env.ZIRO_MARKETPLACE}/transactions?limit=100&sort=time-descending&status=pre_authorized`,
       { headers: { Authorization: process.env.ZOOP_TOKEN } },
     )
-    let arrayItems = {}
+    let arrayItems = []
+    let arrayItems2 = []
     if (hasMore) {
       const { items, has_more } = data
       arrayItems = [ ...zoopData, ...items ]
+      
       if (items.length === 0 || has_more === false) setHasMore(false)
       else setHasMore(true)
       setZoopData(arrayItems)

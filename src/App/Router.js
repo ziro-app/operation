@@ -72,6 +72,7 @@ import Rates from './Rates'
 const Router = ({ isLogged }) => {
   const [match, params] = useRoute('/pedidos/:cartId?')
   const [matchCardManualApproval, paramsCardManualApproval] = useRoute('/aprovacao-manual/:cardId?')
+  const [matchConciliation, paramsConciliationZoop] = useRoute('/conciliacao/:transactionId?')
   const [matchTransactions, paramsTransactions] = useRoute('/transacoes/:transactionId?/:receivableId?')
   const [matchTransactionsSplit, paramsTransactionsSplit] = useRoute('/transacoes/:transactionId?/split')
   const [matchSeller, paramsSeller] = useRoute('/atualizar-plano-venda/:sellerId?')
@@ -145,6 +146,11 @@ const Router = ({ isLogged }) => {
       </HeaderBack>
     ),
     [matchSellerNewPlan ? location : null]: <NewZoopPlan {...paramsSellerNewPlan} />,
+    [matchConciliation ? location : null]: (
+      <HeaderBack title="Conciliação" navigateTo="/conciliacao">
+        <ConciliationZoopFirebase {...paramsConciliationZoop} />
+      </HeaderBack>
+    ),
     '/deletar-conta': <DeleteAccount />,
     '/administrativo': (
       <Menu title="Administrativo">
@@ -319,7 +325,7 @@ const Router = ({ isLogged }) => {
     ),
     '/conciliacao': (
       <HeaderBack title="Conciliação" navigateTo="/suporte">
-        <ConciliationZoopFirebase {...paramsCardManualApproval} />
+        <ConciliationZoopFirebase {...paramsConciliationZoop} />
       </HeaderBack>
     ),
     '/aprovacao-manual': (

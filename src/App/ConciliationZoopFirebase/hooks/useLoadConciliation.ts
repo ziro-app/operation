@@ -5,7 +5,7 @@ import fetchZoop from '../utils/fetchZoop'
 import axios from 'axios'
 import usePinScroll from './usePinScroll'
 
-const arrayTestCards = ["alessandro m gentil",'vitor a barbosa']
+const arrayTestCards = []//"alessandro m gentil",'vitor a barbosa', 'cardholder']
 
 const useLoadConciliation = () => {
   const [dataRows, setDataRows] = useState([])
@@ -15,7 +15,7 @@ const useLoadConciliation = () => {
   const [isError, setError] = useState(false)
   const [hasMore, setHasMore] = useState(true)
   const [loadingMore, setLoadingMore] = useState(false)
-  const [quantityItems, setQuantityItems] = useState(100)
+  const [quantityItems, setQuantityItems] = useState(0)
   const setMessage = useMessage()
 
   const handleClick = () => {
@@ -49,10 +49,14 @@ const useLoadConciliation = () => {
         } else {
           const existFirebase = false
           const newElement = { ...zoopElement, existFirebase }
+          const existVoidPending = zoopElement.history.filter(item => item.operation_type === 'void')
           if (
             Number(zoopElement.amount) > 2 &&
             zoopElement.status !== 'failed' &&
-            (Object.prototype.hasOwnProperty.call(zoopElement, 'payment_method') ? !arrayTestCards.includes(zoopElement.payment_method.holder_name) : true)
+            (existVoidPending[0] ? existVoidPending[0].status !== 'pending' : true )&&
+            (Object.prototype.hasOwnProperty.call(zoopElement, 'payment_method')
+              ? !arrayTestCards.includes(zoopElement.payment_method.holder_name)
+              : true)
           )
             fusionZoopFirebaseData.push(newElement)
         }
@@ -65,12 +69,15 @@ const useLoadConciliation = () => {
     //andleScrollPosition()
     if (fusionZoopFirebaseData.length > 0 && fusionZoopFirebaseData.length !== dataRows.length) {
       setLoadingMore(true)
-      setDataRows(
-        fusionZoopFirebaseData.sort(function (x, y) {
-          if (x.status === 'pre_authorized') return x.status === 'pre_authorized' ? -1 : 1
-          return x.existFirebase === y.existFirebase ? 0 : x.existFirebase ? 1 : -1
-        }),
-      )
+      const sortedFusion = fusionZoopFirebaseData.sort(function (x, y) {
+        if (x.status === 'pre_authorized' || y === 'pre_authorized') return -1
+        return 1
+      })
+      const sortedFusionJSON = sortedFusion.map(object => JSON.stringify(object))
+      const sortedFusionJSONSet = new Set(sortedFusionJSON)
+      const uniqueZoopFirebaseDataJson = Array.from(sortedFusionJSONSet)
+      const uniqueZoopFirebaseDataObject = uniqueZoopFirebaseDataJson.map(json => JSON.parse(json))
+      setDataRows(uniqueZoopFirebaseDataObject)
       setLoadingMore(false)
     }
   }, [quantityItems, fusionZoopFirebaseData])

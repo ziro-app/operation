@@ -5,36 +5,35 @@ import useLoadConciliation from '../../hooks/useLoadConciliation'
 import usePinScroll from '../../hooks/usePinScroll'
 import Spinner from '@bit/vitorbarbosa19.ziro.spinner-with-div'
 import { getShortDate, translateStatus } from '../../utils/functions'
-import Button from '@bit/vitorbarbosa19.ziro.button';
-import Empty from '../Empty';
+import Button from '@bit/vitorbarbosa19.ziro.button'
+import Empty from '../Empty'
 import { userContext } from '../../../appContext'
 
-interface TableConciliationProps {
-  count?: number;
-  height?: number | string;
-  width?: number | string;
-  circle?: boolean;
+interface TableListConciliation {
+  dataRows: Array<Object>
+  loadingMore: Boolean
+  hasMore: Boolean
+  handleClick : Function
 }
-
-const TableConciliation: React.FC<TableConciliationProps> = ({ ...props }) => {
-  const {device} = useContext(userContext)
-  const { dataRows, removeRow, isLoading, isError, hasMore, loadingMore, handleClick } = useLoadConciliation()
+const TableListConciliation: React.FC<TableListConciliation> = ({ dataRows,loadingMore,hasMore,handleClick }) => {
+  const { device } = useContext(userContext)
+  const [_, setLocation] = useLocation()
   const dataTableFormatted = dataRows => [
     {
-      title: 'Pagamentos',
+      title: 'Transações Zoop',
       header: ['Razão', 'Data', 'Status', 'Conciliado'],
       rows: dataRows.map(data => [
         <label>{data.buyerRazao ? String(data.buyerRazao).toUpperCase() : 'NÃO EXISTE NO FIREBASE'}</label>,
         <label>{getShortDate(new Date(data.created_at))}</label>,
         <label>{translateStatus(data.status).toUpperCase()}</label>,
-        <label>{data.existFirebase ? 'Sim' : 'Não'}</label>,
+        <label onClick={() => {
+          setLocation(`/conciliacao/${data.id}`)
+        }}>{data.existFirebase ? 'Sim' : 'Não'}</label>,
       ]),
       totals: [],
-      align: ['left', 'center', 'center','center'],
+      align: ['left', 'center', 'center', 'center'],
     },
   ]
-  if (isLoading && dataRows.length === 0) return <Spinner />
-  if (!isLoading && dataRows.length === 0){return <Empty />;}
   return (
     <div>
       <div aria-label="table" style={{ marginTop: '20px' }}>
@@ -56,11 +55,11 @@ const TableConciliation: React.FC<TableConciliationProps> = ({ ...props }) => {
         />
       </div>
       <div aria-label="table" style={{ marginTop: '20px' }}>
-      {hasMore && <Button submitting={loadingMore} cta="Carregar mais" click={handleClick} type="button" />}
-      {loadingMore && <Spinner size="4rem" />}
-    </div>
+        {hasMore && <Button submitting={loadingMore} cta="Carregar mais" click={handleClick} type="button" />}
+        {loadingMore && <Spinner size="4rem" />}
+      </div>
     </div>
   )
 }
 
-export default TableConciliation
+export default TableListConciliation
