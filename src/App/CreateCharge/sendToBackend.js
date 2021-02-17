@@ -93,9 +93,9 @@ const sendToBackend = state => () => {
     uid,
   } = state
   const linkValue = type === 'Cartão de Crédito' ? internalFormat(defineCardValue(state)) : internalFormat(defineTEDValue(state))
-  const linkValueInternal = linkValue.replace(/\./g,'').replace(/\,/g,'').replace(/\R/g,'').replace(/\$/g,'')
+  const linkValueInternal = linkValue.replace(/\./g, '').replace(/\,/g, '').replace(/\R/g, '').replace(/\$/g, '')
   const total = totalAmount ? internalFormat(totalAmount) : ''
-  console.log('total', total)
+
   const doc = beneficiaryDocument.startsWith('0') ? `'${beneficiaryDocument}` : beneficiaryDocument
   const agencia = agency.startsWith('0') ? `'${agency}` : agency
   const conta = accountNumber.startsWith('0') ? `'${accountNumber}` : accountNumber
@@ -113,7 +113,7 @@ const sendToBackend = state => () => {
       const time = date.getTime().toString()
       if (romaneio.size === 0) throw { msg: 'Imagem com tamanho vazio', customError: true }
       const nameOfFile = md5(`${romaneio.name}${randStr()}`).substr(0, 5)
-      const compressed = romaneio//await readAndCompressImage(romaneio, { quality: 0.90 })
+      const compressed = romaneio //await readAndCompressImage(romaneio, { quality: 0.90 })
       const timestamp = Date.now()
       const image = storage.child(`Romaneios/${nameOfFile}-${timestamp}`)
       const uploadTask = await image.put(compressed)
@@ -122,12 +122,8 @@ const sendToBackend = state => () => {
       const baseUrl = process.env.HOMOLOG ? 'http://localhost:8080/pagamento/' : 'https://ziro.app/pagamento/'
       const nowDate = fs.FieldValue.serverTimestamp()
       const requestSheet = pixKey ? await axios(getSheet(['PIX!A:C'])) : await axios(getSheet(['TED!A:F']))
-      console.log('pixKey', pixKey)
-      console.log('requestSheet', requestSheet)
       const objectSheet = await arrayObject(requestSheet.data.valueRanges[0])
       const discountedValue = total - total * (discount / 100)
-      console.log('objectSheet', objectSheet)
-      console.log('requestSheet.data', requestSheet.data)
       const updateObj = pixKey
         ? { chave: pixKey, uid: time }
         : {
@@ -141,32 +137,24 @@ const sendToBackend = state => () => {
       let arrayUpdate = {}
       const supplierNameFormatted = supplierName.split(' -')[0]
       const supplierNameFormattedBankData = supplierName.split(' - ')[1]
-      console.log('supplierNameFormattedBankData',supplierNameFormattedBankData)
-      console.log('!!supplierNameFormattedBankData',!!supplierNameFormattedBankData)
-      console.log('!!!supplierNameFormattedBankData',!!!supplierNameFormattedBankData)
       const tab = pixKey ? 'PIX' : 'TED'
-      console.log('supplierNameFormatted', supplierNameFormatted)
-      console.log('suppliers', suppliers)
-      console.log('Object.keys(bank).length', Object.keys(bank).length)
-      console.log(
-        'suppliers.find(supplier => supplier.fabricante === supplierNameFormatted)',
-        suppliers.find(supplier => supplier.fabricante === supplierNameFormatted),
-      )
-      if (paymentType !== 'Cheque' ){//&& typeof suppliers.find(supplier => supplier.fabricante === supplierNameFormatted) !== 'undefined' && Object.keys(suppliers.find(supplier => supplier.fabricante === supplierNameFormatted)).length > 0) {
-        console.log('entrou onde não encontrou')
-        //console.log('entrou length',Object.keys(suppliers.find(supplier => supplier.banco === pixKey)).length)
-        //console.log('entrou find',suppliers.find(supplier => supplier.banco === pixKey))//Object.keys(bank).length === 0
-        console.log('entrou pixkey',pixKey)
+      if (paymentType !== 'Cheque') {
+        //&& typeof suppliers.find(supplier => supplier.fabricante === supplierNameFormatted) !== 'undefined' && Object.keys(suppliers.find(supplier => supplier.fabricante === supplierNameFormatted)).length > 0) {
+
         arrayUpdate = pixKey
           ? [supplierNameFormatted, pixKey, time]
           : [supplierNameFormatted, bankName, agencia, conta, beneficiary, beneficiaryDocument, time]
-          if(!suppliers.find(supplier => supplier.banco === pixKey) && !!supplierNameFormattedBankData === false){
-              console.log('entrou no if',suppliers.find(supplier => supplier.banco === pixKey))
-            await axios(postSheet(arrayUpdate, tab, 'append'))
-          } else if(pixKey === '' && suppliers.find(supplier => supplier.fabricante === supplierNameFormatted) && !!supplierNameFormattedBankData === false) await axios(postSheet(arrayUpdate, tab, 'append'))
+        if (!suppliers.find(supplier => supplier.banco === pixKey) && !!supplierNameFormattedBankData === false) {
+          await axios(postSheet(arrayUpdate, tab, 'append'))
+        } else if (
+          pixKey === '' &&
+          suppliers.find(supplier => supplier.fabricante === supplierNameFormatted) &&
+          !!supplierNameFormattedBankData === false
+        )
+          await axios(postSheet(arrayUpdate, tab, 'append'))
       } //else if(paymentType !== 'Cheque') {
-        //arrayUpdate = pixKey ? dataPostBatch(objectSheet, 'uid', uid, updateObj, 'PIX') : dataPostBatch(objectSheet, 'uid', uid, updateObj, 'TED')
-        //await axios(postSheet(arrayUpdate, tab))
+      //arrayUpdate = pixKey ? dataPostBatch(objectSheet, 'uid', uid, updateObj, 'PIX') : dataPostBatch(objectSheet, 'uid', uid, updateObj, 'TED')
+      //await axios(postSheet(arrayUpdate, tab))
       //}
       /* teste */
       let bodyLinkPayment = {}
@@ -188,13 +176,13 @@ const sendToBackend = state => () => {
                 discount,
                 paymentType,
                 imgUrl,
-                paymentTypeReceivable||'Cheque',
+                paymentTypeReceivable || 'Cheque',
                 paymentTypeReceivable === 'TED' ? beneficiary : '-',
                 paymentTypeReceivable === 'TED' ? bankName : '-',
                 paymentTypeReceivable === 'TED' ? agencia : '-',
                 paymentTypeReceivable === 'TED' ? conta : '-',
                 paymentTypeReceivable === 'TED' ? doc : '-',
-                pixKey||'-',
+                pixKey || '-',
                 obs,
                 nickname,
               ],
@@ -224,7 +212,7 @@ const sendToBackend = state => () => {
                 paymentTypeReceivable === 'TED' ? agencia : '-',
                 paymentTypeReceivable === 'TED' ? conta : '-',
                 paymentTypeReceivable === 'TED' ? doc : '-',
-                pixKey||'-',
+                pixKey || '-',
                 obs,
                 nickname,
               ],

@@ -220,14 +220,14 @@ export function getFilterQuery({storageFilterSeller, storageFilterStatus, storag
 export const round = (num, places) => {
     if (!(`${  num}`).includes("e")) {
         return +(`${Math.round(`${num  }e+${  places}`)  }e-${  places}`);
-    } 
+    }
         const arr = (`${  num}`).split("e");
         let sig = ""
         if (+arr[1] + places > 0) {
             sig = "+";
         }
         return +(`${Math.round(`${+arr[0]  }e${  sig  }${+arr[1] + places}`)  }e-${  places}`);
-    
+
 },
 
     dateFormat = (date) => {
@@ -260,23 +260,23 @@ export const round = (num, places) => {
                 const noFormat = (parseInt(value, 10) / 100).toFixed(2)
                 if (noFormat.length <= '6')
                     return `R$${noFormat.replace('.', ',')}`
-                
+
                     const [integer, decimal] = noFormat.split('.')
                     const indexToSlice = integer.length - 3
                     const format = [integer.slice(0, indexToSlice), integer.slice(indexToSlice)].join('.')
                     return `R$${[format, decimal].join(',')}`
-                
-            } 
-                const noFormat = `${round(value, 2)}`
+
+            }
+                const noFormat = `${round(value, 2).toFixed(2)}`
                 if (noFormat.length <= '7')
                     return `R$${noFormat.replace('.', ',')}`
-                
+
                     const [integer, decimal] = noFormat.split('.')
                     const indexToSlice = integer.length - 3
                     const format = [integer.slice(0, indexToSlice), integer.slice(indexToSlice)].join('.')
                     return `R$${[format, decimal].join(',')}`
-                
-            
+
+
         }
         return ''
     }
