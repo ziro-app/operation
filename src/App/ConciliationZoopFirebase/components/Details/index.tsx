@@ -82,7 +82,7 @@ export default ({ dataRows, transactionId }) => {
             },
             {
               title: 'Parcelas',
-              content: [actualTransaction.installment_plan.number_installments || '-'],
+              content: [actualTransaction.installment_plan ? actualTransaction.installment_plan.number_installments : '-'],
             },
           ],
         },
