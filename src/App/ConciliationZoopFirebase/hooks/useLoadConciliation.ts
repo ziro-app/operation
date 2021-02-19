@@ -5,7 +5,7 @@ import fetchZoop from '../utils/fetchZoop'
 import axios from 'axios'
 import usePinScroll from './usePinScroll'
 
-const arrayTestCards = []//"alessandro m gentil",'vitor a barbosa', 'cardholder']
+const arrayTestCards = [] //"alessandro m gentil",'vitor a barbosa', 'cardholder']
 
 const useLoadConciliation = () => {
   const [dataRows, setDataRows] = useState([])
@@ -20,7 +20,7 @@ const useLoadConciliation = () => {
 
   const handleClick = () => {
     setLoadingMore(true)
-    setQuantityItems(quantityItems + 40)
+    setQuantityItems(quantityItems + 100)
     //fetchZoop(setZoopData, setLoading, setError, setMessage, quantityItems)
     //fetchFirebase(setFirebaseData, setLoading, setError, setMessage, quantityItems)
   }
@@ -34,11 +34,12 @@ const useLoadConciliation = () => {
   const firebaseListId = firebaseData.map(element => (element.transactionZoopId ? element.transactionZoopId : null)).filter(element => element)
   const fusionZoopFirebaseData = []
   useEffect(() => {
-    if (zoopData.length > 0 && firebaseData.length > 0) {
-      setLoadingMore(true)
-      zoopData.map(zoopElement => {
-        if (firebaseListId.includes(zoopElement.id)) {
-          /*firebaseData.map(firebaseElement => {
+    try {
+      if (zoopData.length > 0 && firebaseData.length > 0) {
+        setLoadingMore(true)
+        zoopData.map(zoopElement => {
+          if (firebaseListId.includes(zoopElement.id)) {
+            /*firebaseData.map(firebaseElement => {
             if (zoopElement.id === firebaseElement.transactionZoopId) {
               const { buyerRazao, id } = firebaseElement
               const existFirebase = true
@@ -46,22 +47,31 @@ const useLoadConciliation = () => {
               if (Number(zoopElement.amount) > 2) fusionZoopFirebaseData.push(newEelement)
             }
           })*/
-        } else {
-          const existFirebase = false
-          const newElement = { ...zoopElement, existFirebase }
-          const existVoidPending = zoopElement.history.filter(item => item.operation_type === 'void')
-          if (
-            Number(zoopElement.amount) > 2 &&
-            zoopElement.status !== 'failed' &&
-            (existVoidPending[0] ? existVoidPending[0].status !== 'pending' : true )&&
-            (Object.prototype.hasOwnProperty.call(zoopElement, 'payment_method')
-              ? !arrayTestCards.includes(zoopElement.payment_method.holder_name)
-              : true)
-          )
-            fusionZoopFirebaseData.push(newElement)
-        }
-      })
-      setLoadingMore(false)
+          } else {
+            const existFirebase = false
+            const newElement = { ...zoopElement, existFirebase }
+            const existVoidPending = zoopElement.history.filter(item => item.operation_type === 'void')
+            if (
+              Number(zoopElement.amount) > 2 &&
+              zoopElement.status !== 'failed' &&
+              (existVoidPending[0] ? existVoidPending[0].status !== 'pending' : true) &&
+              (Object.prototype.hasOwnProperty.call(zoopElement, 'payment_method') && zoopElement.payment_method !== null
+                ? Object.prototype.hasOwnProperty.call(zoopElement.payment_method, 'holder_name')
+                  ? !arrayTestCards.includes(zoopElement.payment_method.holder_name)
+                  : false
+                : true)
+            )
+              fusionZoopFirebaseData.push(newElement)
+          }
+        })
+        if (fusionZoopFirebaseData.length < 10) {
+          setLoadingMore(true)
+          setQuantityItems(quantityItems + 40)
+        } else setLoadingMore(false)
+      }
+    } catch (e) {
+      console.log(e)
+      setError(true)
     }
   }, [zoopData])
 

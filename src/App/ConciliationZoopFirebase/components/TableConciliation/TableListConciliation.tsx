@@ -23,9 +23,15 @@ const TableListConciliation: React.FC<TableListConciliation> = ({ dataRows,loadi
       title: 'Transações Zoop',
       header: ['Razão', 'Data', 'Status', 'Conciliado'],
       rows: dataRows.map(data => [
-        <label>{data.buyerRazao ? String(data.buyerRazao).toUpperCase() : 'NÃO EXISTE NO FIREBASE'}</label>,
-        <label>{getShortDate(new Date(data.created_at))}</label>,
-        <label>{translateStatus(data.status).toUpperCase()}</label>,
+        <label onClick={() => {
+            setLocation(`/conciliacao/${data.id}`)
+          }}>{data.buyerRazao ? String(data.buyerRazao).toUpperCase() : 'NÃO EXISTE NO FIREBASE'}</label>,
+        <label onClick={() => {
+            setLocation(`/conciliacao/${data.id}`)
+          }}>{getShortDate(new Date(data.created_at))}</label>,
+        <label onClick={() => {
+            setLocation(`/conciliacao/${data.id}`)
+          }}>{translateStatus(data.status).toUpperCase()}</label>,
         <label onClick={() => {
           setLocation(`/conciliacao/${data.id}`)
         }}>{data.existFirebase ? 'Sim' : 'Não'}</label>,

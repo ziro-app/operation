@@ -8,7 +8,7 @@ import TableListConciliation from './components/TableConciliation/TableListConci
 import Empty from './components/Empty'
 import useLoadConciliation from './hooks/useLoadConciliation'
 
-const TableConciliation = ({transactionId}) => {
+const ConciliationZoopFirebase = ({transactionId}) => {
     const { dataRows, removeRow, isLoading, isError, hasMore, loadingMore, handleClick } = useLoadConciliation()
     /*console.log('dataRows',dataRows)
     console.log('hasMore',hasMore)
@@ -29,4 +29,4 @@ const TableConciliation = ({transactionId}) => {
 
 }
 
-export default TableConciliation
+export default ConciliationZoopFirebase
