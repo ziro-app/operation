@@ -1,8 +1,7 @@
 import React, { useEffect, useContext } from 'react'
 import Table from '@bit/vitorbarbosa19.ziro.table'
 import { useLocation } from 'wouter'
-import useLoadConciliation from '../../hooks/useLoadConciliation'
-import usePinScroll from '../../hooks/usePinScroll'
+import {linesTable} from './styles'
 import Spinner from '@bit/vitorbarbosa19.ziro.spinner-with-div'
 import { getShortDate, translateStatus } from '../../utils/functions'
 import Button from '@bit/vitorbarbosa19.ziro.button'
@@ -23,16 +22,16 @@ const TableListConciliation: React.FC<TableListConciliation> = ({ dataRows,loadi
       title: 'Transações Zoop',
       header: ['Razão', 'Data', 'Status', 'Conciliado'],
       rows: dataRows.map(data => [
-        <label onClick={() => {
+        <label style={linesTable} onClick={() => {
             setLocation(`/conciliacao/${data.id}`)
           }}>{data.buyerRazao ? String(data.buyerRazao).toUpperCase() : 'NÃO EXISTE NO FIREBASE'}</label>,
-        <label onClick={() => {
+        <label style={linesTable} onClick={() => {
             setLocation(`/conciliacao/${data.id}`)
           }}>{getShortDate(new Date(data.created_at))}</label>,
-        <label onClick={() => {
+        <label style={linesTable} onClick={() => {
             setLocation(`/conciliacao/${data.id}`)
           }}>{translateStatus(data.status).toUpperCase()}</label>,
-        <label onClick={() => {
+        <label style={linesTable} onClick={() => {
           setLocation(`/conciliacao/${data.id}`)
         }}>{data.existFirebase ? 'Sim' : 'Não'}</label>,
       ]),
