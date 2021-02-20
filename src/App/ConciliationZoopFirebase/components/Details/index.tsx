@@ -50,6 +50,7 @@ export default ({ dataRows, transactionId }) => {
           const {statement_descriptor} = data
           setActualTransaction({...transactionWithoutBusinessName,statement_descriptor})
           if(actualTransaction){
+              console.log(actualTransaction)
       const block = [
         {
           header: 'Transação',

@@ -9,14 +9,18 @@ import Empty from './components/Empty'
 import useLoadConciliation from './hooks/useLoadConciliation'
 
 const ConciliationZoopFirebase = ({transactionId}) => {
-    const { dataRows, removeRow, isLoading, isError, hasMore, loadingMore, handleClick } = useLoadConciliation()
+    const { dataRows, quantityItems, isLoading, isError, hasMore, loadingMore, handleClick } = useLoadConciliation()
     /*console.log('dataRows',dataRows)
     console.log('hasMore',hasMore)
     console.log('isLoading',isLoading)
     console.log('loadingMore',loadingMore)
-    console.log('transactionId',transactionId)*/
-    if (isLoading && dataRows.length === 0) return <Spinner />
-    if (!isLoading && !loadingMore && dataRows.length === 0) {
+    console.log('transactionId',transactionId)
+    console.log('quantityItems',quantityItems)
+    console.log('isLoading',isLoading)
+    console.log('loadingMore',loadingMore)
+    console.log('dataRows',dataRows)*/
+    if (isLoading && quantityItems < 300) return <Spinner />
+    if (quantityItems > 500 || !isLoading && !loadingMore && dataRows.length === 0) {
       return <Empty />
     }
     //console.log(dataRows)

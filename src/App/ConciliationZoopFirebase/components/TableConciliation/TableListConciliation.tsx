@@ -23,16 +23,16 @@ const TableListConciliation: React.FC<TableListConciliation> = ({ dataRows,loadi
       header: ['Razão', 'Data', 'Status', 'Conciliado'],
       rows: dataRows.map(data => [
         <label style={linesTable} onClick={() => {
-            setLocation(`/conciliacao/${data.id}`)
+            loadingMore ? null : setLocation(`/conciliacao/${data.id}`)
           }}>{data.buyerRazao ? String(data.buyerRazao).toUpperCase() : 'NÃO EXISTE NO FIREBASE'}</label>,
         <label style={linesTable} onClick={() => {
-            setLocation(`/conciliacao/${data.id}`)
+            loadingMore ? null : setLocation(`/conciliacao/${data.id}`)
           }}>{getShortDate(new Date(data.created_at))}</label>,
         <label style={linesTable} onClick={() => {
-            setLocation(`/conciliacao/${data.id}`)
+            loadingMore ? null : setLocation(`/conciliacao/${data.id}`)
           }}>{translateStatus(data.status).toUpperCase()}</label>,
         <label style={linesTable} onClick={() => {
-          setLocation(`/conciliacao/${data.id}`)
+            loadingMore ? null : setLocation(`/conciliacao/${data.id}`)
         }}>{data.existFirebase ? 'Sim' : 'Não'}</label>,
       ]),
       totals: [],

@@ -12,7 +12,7 @@ export function getShortDate(date: Date) {
 }
 const fetchZoop = async (zoopData, setZoopData, setLoading, setError, setMessage, hasMore, setHasMore, quantityItems,setLoadingMore) => {
   try {
-    setLoading(true)
+    //setLoading(true)
     setLoadingMore(true)
     const last8DaysSeconds = Math.floor((new Date().getTime() - 700000000) / 1000)
     var date = new Date()
@@ -22,7 +22,7 @@ const fetchZoop = async (zoopData, setZoopData, setLoading, setError, setMessage
     const { data } = await axios.get(
       `https://api.zoop.ws/v1/marketplaces/${
         process.env.ZIRO_MARKETPLACE
-      }/transactions?limit=100&sort=time-descending&offset=${quantityItems}`, //await axios.get(`https://api.zoop.ws/v1/marketplaces/${process.env.ZIRO_MARKETPLACE}/transactions?limit=100&sort=time-descending&status=pre_authorized`,
+      }/transactions?limit=100&sort=time-descending&offset=${quantityItems}&payment_type=credit`, //await axios.get(`https://api.zoop.ws/v1/marketplaces/${process.env.ZIRO_MARKETPLACE}/transactions?limit=100&sort=time-descending&status=pre_authorized`,
       { headers: { Authorization: process.env.ZOOP_TOKEN } },
     )
     let arrayItems = []
