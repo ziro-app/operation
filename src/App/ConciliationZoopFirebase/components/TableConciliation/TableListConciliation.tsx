@@ -20,11 +20,8 @@ const TableListConciliation: React.FC<TableListConciliation> = ({ dataRows,loadi
   const dataTableFormatted = dataRows => [
     {
       title: 'Transações Zoop',
-      header: ['Razão', 'Data', 'Status', 'Conciliado'],
+      header: ['Data', 'Status', 'Conciliado'],
       rows: dataRows.map(data => [
-        <label style={linesTable} onClick={() => {
-            loadingMore ? null : setLocation(`/conciliacao/${data.id}`)
-          }}>{data.buyerRazao ? String(data.buyerRazao).toUpperCase() : 'NÃO EXISTE NO FIREBASE'}</label>,
         <label style={linesTable} onClick={() => {
             loadingMore ? null : setLocation(`/conciliacao/${data.id}`)
           }}>{getShortDate(new Date(data.created_at))}</label>,
@@ -36,7 +33,7 @@ const TableListConciliation: React.FC<TableListConciliation> = ({ dataRows,loadi
         }}>{data.existFirebase ? 'Sim' : 'Não'}</label>,
       ]),
       totals: [],
-      align: ['left', 'center', 'center', 'center'],
+      align: ['center', 'center', 'center'],
     },
   ]
   return (
@@ -45,7 +42,7 @@ const TableListConciliation: React.FC<TableListConciliation> = ({ dataRows,loadi
         <Table
           data={dataTableFormatted(dataRows)}
           customGrid={{
-            gridTemplateColumns: device === 'smallMobile' ? '1fr auto 50px auto' : '1fr auto auto auto',
+            gridTemplateColumns: 'auto auto auto',
             gridRowGap: '5px',
             gridColumnGap: '5px',
           }}
