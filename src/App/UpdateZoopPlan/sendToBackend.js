@@ -5,36 +5,40 @@ import { db } from '../../Firebase/index'
 import { translateFeesToFirebase, translateFirebaseToFees, translateFeesToZoop } from './functions'
 
 const sendToBackend = async state => {
-  const { docId, selectedPlan, nickname, sellerZoopPlan2, setSettingActivePlan, sellerId } = state
+  const { docId, selectedPlan, nickname, sellerZoopPlan2, setSettingActivePlan, existSupplierId, supplier } = state
   const nome = nickname ? nickname.trim() : ''
   const allowedUsers = ['Uiller', 'Vitor', 'Wermeson', 'Ale', 'Russi']
-  console.log('allowedUsers',allowedUsers)
-  console.log('actualUser',nome)
   return new Promise(async (resolve, reject) => {
     try {
       if (translateFeesToZoop(selectedPlan) != null) {
         if (process.env.HOMOLOG ? true : allowedUsers.includes(nome)) {
+          const oldActivePlan = sellerZoopPlan2.activePlan
           const sellerPlanWithNewActivePlan = sellerZoopPlan2
           sellerPlanWithNewActivePlan.activePlan = translateFeesToFirebase(selectedPlan)
-          if (nome === 'Ale') {
-            const url = 'https://api.zoop.ws/v1/marketplaces/d3efdd7939974e0dbec700624a741cf6/subscriptions'
-
-
-            fetch(url, {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-                Authorization: process.env.ZOOP_TOKEN,
-              },
-              body: {"plan":translateFeesToZoop(selectedPlan),"customer":sellerId},
-            })
-              .then(response => {
-                console.log(response)
+              const urlGetPlan = `https://api.zoop.ws/v1/marketplaces/${process.env.ZIRO_MARKETPLACE}/sellers/${supplier.zoopId}/subscriptions`
+              const { data: dataOldPlan } = await axios(urlGetPlan, {
+                method: 'GET',
+                headers: {
+                  'Content-Type': 'application/json',
+                  Authorization: process.env.ZOOP_TOKEN,
+                },
               })
-              .catch(err => {
-                throw { msg: 'Erro na troca do plano com a Zoop', customError: true }
-              })
-          }
+              const headers = {
+                Authorization: `Basic ${process.env.PAY_TOKEN}`,
+              };
+              if(dataOldPlan.items.length > 0){
+              const urlDisassociate = `${process.env.PAY}/plan-subscription-disassociate?plan=${dataOldPlan.items[0].id}`;
+              const methodDisassociate = "DELETE";
+              await axios({ url:urlDisassociate, method:methodDisassociate, headers });
+              }
+              const url = `${process.env.PAY}/plan-subscription-update`;
+              const method = "POST";
+              const data = {
+                              customer: supplier.zoopId, 
+                              quantity: 1,
+                              plan: translateFeesToZoop(selectedPlan), 
+                            }
+              await axios({ url, method, headers, data });
           setSettingActivePlan(translateFirebaseToFees(selectedPlan))
           await db.collection('suppliers').doc(docId).update({
             sellerZoopPlan: sellerPlanWithNewActivePlan,
@@ -47,7 +51,6 @@ const sendToBackend = async state => {
       if (error.customError) reject(error)
       else if (error.response && error.response.data && error.response.data.erro) {
         const { erro, message } = error.response.data
-        // console.log(message)
         reject({ msg: erro, customError: true })
       } else reject(error)
     }

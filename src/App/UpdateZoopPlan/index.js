@@ -49,7 +49,6 @@ const UpdateZoopPlan = () => {
   const setMessage = useMessage()
   const { nickname } = useContext(userContext)
   const setState = { setAntifraudPercentage, setSupplier, setMarkupPercentage }
-  console.log(`selectedPlan`,selectedPlan,translateFeesToZoop(selectedPlan))
   const state = {
     docId: supplier.docId,
     selectedPlan,
@@ -59,6 +58,7 @@ const UpdateZoopPlan = () => {
     supplier,
     markupPercentage,
     sellerId,
+    existSupplierId,
     setSettingActivePlan,
     ...setState,
   }
@@ -162,12 +162,12 @@ const UpdateZoopPlan = () => {
   }
   useEffect(() => {
     const query = db.collection('suppliers').where('tipoCadastro', '==', 'Completo')
-    query.onSnapshot(snapshot => {
+    query.get().then(snapshot => {
       const fantasyList = []
       const suppliersFetch = []
       snapshot.forEach(sup => {
         const docId = sup.id
-        const { fantasia, razao, nome, sobrenome, sellerZoopPlan } = sup.data()
+        const { fantasia, razao, nome, sobrenome, sellerZoopPlan, zoopId } = sup.data()
         const name = fantasia ? (fantasyList.includes(fantasia) ? capitalize(`${fantasia} - ${nome}`) : capitalize(fantasia)) : `${nome} ${sobrenome}`
         fantasyList.push(fantasia)
         suppliersFetch.push({
@@ -175,6 +175,7 @@ const UpdateZoopPlan = () => {
           name,
           reason: razao ? capitalize(razao) : '-',
           sellerZoopPlan: sellerZoopPlan || null,
+          zoopId: zoopId || null
         })
         if (snapshot.size === suppliersFetch.length) {
           setSuppliers(suppliersFetch)
