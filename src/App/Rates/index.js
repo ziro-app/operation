@@ -12,7 +12,7 @@ const Rates = () => {
   const [, setLocation] = useLocation()
   const [matchSellerId, paramsSellerId] = useRoute('/tarifas/:sellerId?/:sellerName?')
   const { sellerId } = paramsSellerId
-  const { dataRows, isLoading, isError } = useLoadRates(sellerId)
+  const { dataRows, isLoading, isError, activePlan } = useLoadRates(sellerId)
   const dataTable = (data, title) => [
     {
       title,
@@ -42,18 +42,22 @@ const Rates = () => {
 
   return (
     <div>
-        <div style={{
-        textAlign:'center',
-        margin:'0px 0px 15px'}}>
-      <label
+      <div
         style={{
-          fontFamily: 'Rubik',
-          textTransform: 'uppercase',
-          fontSize: '1.8rem',
+          textAlign: 'center',
+          margin: '0px 0px 15px',
         }}
       >
-        {localStorage.getItem('activePlan')}
-      </label></div>
+        <label
+          style={{
+            fontFamily: 'Rubik',
+            textTransform: 'uppercase',
+            fontSize: '1.8rem',
+          }}
+        >
+          {activePlan}
+        </label>
+      </div>
       <Button type="button" cta="Alterar Plano de Venda" click={() => setLocation(`/atualizar-plano-venda/${sellerId}`)} />
       {dataRows.map(data => (
         <div aria-label="table" key={data.brand} style={{ marginTop: '20px' }}>
