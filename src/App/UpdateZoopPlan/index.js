@@ -148,7 +148,7 @@ const UpdateZoopPlan = () => {
     }
     localStorage.removeItem('selectedPlan')
     setOpenModalDeletePlan(false)
-    await updatePlan(sellerZoopPlan2, nickname, supplier.docId,translateFeesToZoop(selectedPlan))
+    await updatePlan(sellerZoopPlan2, nickname, supplier.docId, translateFeesToZoop(selectedPlan))
     setAllPlans(newAllPlans)
     setSelectedPlan('')
     setLocation('/atualizar-plano-venda')
@@ -175,7 +175,7 @@ const UpdateZoopPlan = () => {
           name,
           reason: razao ? capitalize(razao) : '-',
           sellerZoopPlan: sellerZoopPlan || null,
-          zoopId: zoopId || null
+          zoopId: zoopId || null,
         })
         if (snapshot.size === suppliersFetch.length) {
           setSuppliers(suppliersFetch)
@@ -243,6 +243,7 @@ const UpdateZoopPlan = () => {
         setPlansFromCurrentZoopFee,
         sellerId,
       )
+      console.log(sellerId)
       const person = localStorage.getItem('sellerName')
         ? suppliers.find(storeowner => storeowner.name.toUpperCase() === localStorage.getItem('sellerName').toUpperCase())
         : null

@@ -9,39 +9,6 @@ import ButtonsManualApproval from './components/ButtonsManualApproval'
 import conditionalBlocks from './conditionalBlocks/index'
 
 export default ({ removeRow, dataRows, cardId, card }) => {
-  /*var treeWalker = document.createTreeWalker(document.body, NodeFilter.SHOW_ELEMENT)
-  var currentNode = treeWalker.currentNode
-  var emptyNodes = []
-
-  // test if a node has no text, regardless of whitespaces
-  var isNodeEmpty = node => !node.textContent.trim()
-
-  // find all empty nodes
-  while (currentNode) {
-    isNodeEmpty(currentNode) && emptyNodes.push(currentNode)
-    currentNode = treeWalker.nextNode()
-  }
-
-  // remove found empty nodes
-  emptyNodes.forEach(node => node.parentNode.removeChild(node))
-
-
-
-  outro
-
-
-      let nodes = document.querySelector('label').querySelectorAll(':only-child')
-
-      nodes.forEach(node => {
-        if (!node.childNodes.length) {
-          let parent = node.parentNode
-          node.parentNode.removeChild(node)
-          if (!parent.children.length) {
-            parent.parentNode.removeChild(parent)
-          }
-        }
-      })
-  */
   const [isLoadingButton, setIsLoading] = useState(false)
   const [location, setLocation] = useLocation()
   const [blocksDetails, setBlocksDetails] = useState([])
@@ -68,7 +35,7 @@ export default ({ removeRow, dataRows, cardId, card }) => {
               title: 'Nome',
               content: [actualCardCollection.extracted.nome || '-'], //aqui é o nome do document, preciso pegar o nome do cliente!
             },
-            ...conditionalBlocks(howMuchImages,actualCardCollection,whichDocumentType,whichDocumentF,whichDocumentV),
+            ...conditionalBlocks(howMuchImages, actualCardCollection, whichDocumentType, whichDocumentF, whichDocumentV),
             {
               title: 'Tipo Documento',
               content: [whichDocumentType.split(' ')[0] || '-'],
@@ -152,7 +119,6 @@ export default ({ removeRow, dataRows, cardId, card }) => {
         },
       ]
       setBlocksDetails(block)
-
     }
   }, [card])
 
@@ -167,7 +133,13 @@ export default ({ removeRow, dataRows, cardId, card }) => {
   }
   return (
     <>
-      <ButtonsManualApproval removeRow={removeRow} setLocation={setLocation} isLoadingButton={isLoadingButton} setIsLoading={setIsLoading} actualCardCollection={actualCardCollection} />
+      <ButtonsManualApproval
+        removeRow={removeRow}
+        setLocation={setLocation}
+        isLoadingButton={isLoadingButton}
+        setIsLoading={setIsLoading}
+        actualCardCollection={actualCardCollection}
+      />
       {howMuchImages === 2 ? (
         <div
           style={{
@@ -192,10 +164,17 @@ export default ({ removeRow, dataRows, cardId, card }) => {
           <RImg src={actualCardCollection.selfie.url} style={{ width: '100%' }} alt="preview" />
         </div>
       )}
-      <div style={{marginTop:'20px'}}>
-      <Details blocks={blocksDetails} blockGap={'20px'} />
+      <div style={{ marginTop: '20px' }}>
+        <Details blocks={blocksDetails} blockGap={'20px'} />
       </div>
-      <ButtonsManualApproval removeRow={removeRow} setLocation={setLocation} isLoadingButton={isLoadingButton} setIsLoading={setIsLoading} actualCardCollection={actualCardCollection} marginTop={'40px'} />
+      <ButtonsManualApproval
+        removeRow={removeRow}
+        setLocation={setLocation}
+        isLoadingButton={isLoadingButton}
+        setIsLoading={setIsLoading}
+        actualCardCollection={actualCardCollection}
+        marginTop={'40px'}
+      />
     </>
   )
 }

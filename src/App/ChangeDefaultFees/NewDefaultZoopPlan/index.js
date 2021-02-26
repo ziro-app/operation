@@ -10,7 +10,7 @@ import sendToBackend from './sendToBackend'
 import { translateFees } from '../functions'
 import fetch from './fetch'
 
-const NewZoopPlan = () => {
+const NewDefaultZoopPlan = () => {
   const defaultValues = {
     ziroAntifraudFee: {
       visa: {
@@ -251,14 +251,12 @@ const NewZoopPlan = () => {
   const [selectedPlan, setSelectedPlan] = useState(null)
 
   const [planName, setPlanName] = useState('')
-  const [matchSellerId, paramsSellerId] = useRoute('/atualizar-plano-venda/:sellerId?/newPlan')
-  const { sellerId } = paramsSellerId
-  useEffect(() => fetch(setIsLoading, setErrorLoading, setSellerZoopPlan2, selectedPlan, sellerId), [])
+  useEffect(() => fetch(setIsLoading, setErrorLoading, setSellerZoopPlan2), [])
   const newPlan = {}
 
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={containerWithPadding}>
-      <Header type="icon-link" title="Adicionar Plano de Venda" navigateTo={`atualizar-plano-venda/${sellerId}`} icon="back" />
+      <Header type="icon-link" title="Adicionar novo plano aos Planos Padrões" navigateTo={'alterar-tarifas-padrao'} icon="back" />
       <div style={{ padding: '5px' }}>
         <InputText
           value={planName}
@@ -292,7 +290,7 @@ const NewZoopPlan = () => {
               }
 
               sendToBackend && Object.keys(sellerZoopPlanForFirebase).length !== 0
-                ? sendToBackend(sellerZoopPlanForFirebase, nickname, sellerId, setPlanName)
+                ? sendToBackend(sellerZoopPlanForFirebase, nickname, setPlanName)
                 : () => null
             }
           }}
@@ -302,4 +300,4 @@ const NewZoopPlan = () => {
   )
 }
 
-export default memo(NewZoopPlan)
+export default memo(NewDefaultZoopPlan)

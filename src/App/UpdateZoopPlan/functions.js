@@ -107,7 +107,9 @@ export const createNewPlan = async (sellerZoopPlanForFirebase, nickname, sellerI
 export function translateFirebaseToFees(text) {
   const financed30 = 'd+30'
   const financed14 = 'd+14'
+  const financed1 = 'd+1'
   const standard = 'fluxo'
+  if (text === 'financed1') return financed1
   if (text === 'financed30') return financed30
   if (text === 'financed14') return financed14
   if (text === 'standard') return standard
@@ -115,20 +117,24 @@ export function translateFirebaseToFees(text) {
 }
 export function translateFeesToFirebase(text) {
   const d30 = 'financed30'
+  const d1 = 'tested1'
   const d14 = 'financed14'
   const fluxo = 'standard'
+  if (text === 'd+1') return d1
   if (text === 'd+30') return d30
   if (text === 'd+14') return d14
   if (text === 'fluxo') return fluxo
   return 'Taxa sem nome cadastrado'
 }
 
-export function translateFeesToZoop(text){
-    const d30 = 'plano_pro_ziro_d30smkup_d1'
-    const d14 = 'plano_pro_ziro_antd14s_d1'
-    const fluxo = 'plano_std_ziro_smarkup_d30'
-    if (text === 'd+30') return d30
-    if (text === 'd+14') return d14
-    if (text === 'fluxo') return fluxo
-    return null
+export function translateFeesToZoop(text) {
+  const d30 = 'plano_pro_ziro_d30smkup_d1'
+  const d14 = 'plano_pro_ziro_antd14s_d1'
+  const fluxo = 'plano_std_ziro_smarkup_d30'
+  const d1 = 'tested1'
+  if (text === 'd+1') return d1
+  if (text === 'd+30') return d30
+  if (text === 'd+14') return d14
+  if (text === 'fluxo') return fluxo
+  return 'Taxa sem nome cadastrado'
 }

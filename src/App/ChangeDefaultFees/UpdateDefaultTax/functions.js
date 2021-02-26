@@ -25,9 +25,11 @@ export function translateTaxes(text) {
   const standard = 'Fluxo'
   const financed14 = 'D+14'
   const financed30 = 'D+30'
+  const financed1 = 'D+1'
   if (text === 'standard') return standard
   if (text === 'financed14') return financed14
   if (text === 'financed30') return financed30
+  if (text === 'financed1') return financed1
   return 'Taxa sem nome cadastrado'
 }
 export function alphanum(a, b) {

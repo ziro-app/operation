@@ -54,8 +54,8 @@ import UploadImages from './UploadImages/index'
 import ValidateEmail from './ValidateEmail/index'
 import UpdateTax from './UpdateZoopPlan/UpdateTax'
 import UpdateDefaultTax from './ChangeDefaultFees/UpdateDefaultTax'
-import CreateAndUpdate from './UpdateZoopPlan/CreateUpdateZoopPlan'
 import NewZoopPlan from './UpdateZoopPlan/NewZoopPlan'
+import NewDefaultZoopPlan from './ChangeDefaultFees/NewDefaultZoopPlan'
 import TestingPercentagesSplitRules from './TestingPercentagesSplitRules'
 import ChangeDefaultFees from './ChangeDefaultFees'
 import Adjustment from './Adjustment/index'
@@ -78,6 +78,7 @@ const Router = ({ isLogged }) => {
   const [matchSeller, paramsSeller] = useRoute('/atualizar-plano-venda/:sellerId?')
   const [matchSellerRates, paramsSellerRates] = useRoute('/tarifas/:sellerId?/:sellerName?')
   const [matchSellerNewPlan, paramsSellerNewPlan] = useRoute('/atualizar-plano-venda/:sellerId?/newPlan')
+  const [matchSellerNewDefaultPlan, paramsSellerNewDefaultPlan] = useRoute('/alterar-tarifas-padrao/newPlan')
   const [matchFee, paramsFee] = useRoute('/atualizar-plano-venda/:sellerId?/:fee?/:selectedPlan?')
   const [matchDefaultFee, paramsDefaultFee] = useRoute('/alterar-tarifas-padrao/:fee?/:selectedPlan?')
   const { sellerId, sellerName } = matchSellerRates ? paramsSellerRates : {}
@@ -119,14 +120,14 @@ const Router = ({ isLogged }) => {
       </HeaderBack>
     ),
     '/tarifas': (
-        <Menu title="Tarifas">
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-                <Rates />
-            </motion.div>
-        </Menu>
+      <Menu title="Tarifas">
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+          <Rates />
+        </motion.div>
+      </Menu>
     ),
     [matchCardManualApproval ? location : null]: (
-      <HeaderBack title="Aprovação manual" navigateTo={paramsCardManualApproval ? "/aprovacao-manual" : "/suporte"}>
+      <HeaderBack title="Aprovação manual" navigateTo={paramsCardManualApproval ? '/aprovacao-manual' : '/suporte'}>
         <ManualApproval {...paramsCardManualApproval} />
       </HeaderBack>
     ),
@@ -146,6 +147,7 @@ const Router = ({ isLogged }) => {
       </HeaderBack>
     ),
     [matchSellerNewPlan ? location : null]: <NewZoopPlan {...paramsSellerNewPlan} />,
+    [matchSellerNewDefaultPlan ? location : null]: <NewDefaultZoopPlan {...paramsSellerNewDefaultPlan} />,
     [matchConciliation ? location : null]: (
       <HeaderBack title="Conciliação" navigateTo="/conciliacao">
         <ConciliationZoopFirebase {...paramsConciliationZoop} />
