@@ -18,8 +18,10 @@ import { createNewPlan, translateFirebaseToFees, translateFeesToFirebase, transl
 import Modal from '../utils/Modal/Modal'
 import updatePlan from './updatePlan'
 import { db } from '../../Firebase'
+import useRollback from '../utils/useRollback'
 
 const UpdateZoopPlan = () => {
+  const { createRollbackItem, startRollback, cleanRollback } = useRollback()
   const [blocks, setBlocks] = useState([])
   const [sellerZoopPlan2, setSellerZoopPlan2] = useState({})
   const [currentZoopFee, setCurrentZoopFee] = useState({})
@@ -48,7 +50,16 @@ const UpdateZoopPlan = () => {
   const setPromiseMessage = useMessagePromise()
   const setMessage = useMessage()
   const { nickname } = useContext(userContext)
-  const setState = { setAntifraudPercentage, setSupplier, setMarkupPercentage, setIsLoadingFunction }
+  const setState = {
+    setAntifraudPercentage,
+    setSupplier,
+    setMarkupPercentage,
+    setIsLoadingFunction,
+    setActivePlan,
+    createRollbackItem,
+    startRollback,
+    cleanRollback,
+  }
   const state = {
     docId: supplier.docId,
     selectedPlan,
@@ -59,7 +70,6 @@ const UpdateZoopPlan = () => {
     markupPercentage,
     sellerId,
     existSupplierId,
-    setActivePlan,
     ...setState,
   }
   const PromptMessage = new ZiroPromptMessage({

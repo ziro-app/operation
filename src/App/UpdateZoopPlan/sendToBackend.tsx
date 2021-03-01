@@ -3,9 +3,21 @@ import currencyFormat from '@ziro/currency-format'
 import Error from '@bit/vitorbarbosa19.ziro.error'
 import { db } from '../../Firebase/index'
 import { translateFeesToFirebase, translateFirebaseToFees, translateFeesToZoop } from './functions'
+import { IApiData, IFirebaseData } from '../utils/useRollback/IRollbackData'
 
 const sendToBackend = async state => {
-  const { docId, selectedPlan, nickname, sellerZoopPlan2, setActivePlan, existSupplierId, supplier, setIsLoadingFunction } = state
+  const {
+    docId,
+    selectedPlan,
+    nickname,
+    sellerZoopPlan2,
+    setActivePlan,
+    createRollbackItem,
+    startRollback,
+    cleanRollback,
+    supplier,
+    setIsLoadingFunction,
+  } = state
   const nome = nickname ? nickname.trim() : ''
   const allowedUsers = ['Uiller', 'Vitor', 'Wermeson', 'Ale', 'Russi']
   return new Promise(async (resolve, reject) => {
@@ -38,17 +50,41 @@ const sendToBackend = async state => {
             quantity: 1,
             plan: translateFeesToZoop(selectedPlan),
           }
+          const zoopData: IApiData = {
+            origin: 'api',
+            url: `${process.env.PAY}/plan-subscription-update`,
+            headers,
+            method: 'POST',
+            data: {
+              customer: supplier.zoopId,
+              quantity: 1,
+              plan: dataOldPlan.items[0].plan.id,
+            },
+          }
+          createRollbackItem(zoopData)
           await axios({ url, method, headers, data })
-          setActivePlan(translateFirebaseToFees(selectedPlan))
+          const firebaseData: IFirebaseData = {
+            method: 'update',
+            collection: 'suppliers',
+            field: 'sellerZoopPlan',
+            identifier: docId,
+            origin: 'firebase',
+            fieldUpdated: 'sellerZoopPlan',
+            valueUpdated: sellerZoopPlan2,
+          }
+          createRollbackItem(firebaseData)
           await db.collection('suppliers').doc(docId).update({
             sellerZoopPlan: sellerPlanWithNewActivePlan,
           })
+          cleanRollback()
+          setActivePlan(translateFirebaseToFees(selectedPlan))
           resolve('Plano atualizado')
         } else throw { msg: 'Permissão insuficiente', customError: true }
       } else throw { msg: 'ID do plano é inválido!', customError: true }
     } catch (error) {
       setIsLoadingFunction(false)
       console.log(error)
+      startRollback()
       reject({ msg: 'Erro na troca do plano! Nada mudou!', customError: true })
     }
   })
