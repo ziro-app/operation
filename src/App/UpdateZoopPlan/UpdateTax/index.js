@@ -44,7 +44,7 @@ const UpdateTax = ({ fee, setFee }) => {
   const { sellerId, selectedPlan } = paramsSellerId
   const { activePlan } = sellerZoopPlan
   const otherPlans = Object.entries(sellerZoopPlan).filter(item => item[0] !== selectedPlan && item[0] !== 'activePlan')
-  const typeOfToast = 'alert'
+  const typeOfToast = 'success'
   let newPlan = {}
   const mountBlock = (name, reason, activePlan, plans = []) => {
     const plansFormatted = plans ? plans.join(' , ') : ''

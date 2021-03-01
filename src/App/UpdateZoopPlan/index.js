@@ -44,11 +44,11 @@ const UpdateZoopPlan = () => {
   const [matchSellerId, paramsSellerId] = useRoute('/atualizar-plano-venda/:sellerId?/:fee?/:selectedPlan?')
   const { sellerId } = paramsSellerId
   const existSupplierId = supplier.docId || sellerId
-  const [settingActivePlan, setSettingActivePlan] = useState('')
+  const [activePlan, setActivePlan] = useState('')
   const setPromiseMessage = useMessagePromise()
   const setMessage = useMessage()
   const { nickname } = useContext(userContext)
-  const setState = { setAntifraudPercentage, setSupplier, setMarkupPercentage }
+  const setState = { setAntifraudPercentage, setSupplier, setMarkupPercentage, setIsLoadingFunction }
   const state = {
     docId: supplier.docId,
     selectedPlan,
@@ -59,7 +59,7 @@ const UpdateZoopPlan = () => {
     markupPercentage,
     sellerId,
     existSupplierId,
-    setSettingActivePlan,
+    setActivePlan,
     ...setState,
   }
   const PromptMessage = new ZiroPromptMessage({
@@ -216,7 +216,7 @@ const UpdateZoopPlan = () => {
               setSelectedPlan('')
             }
             if (Object.prototype.hasOwnProperty.call(person.sellerZoopPlan, 'activePlan')) {
-              setSettingActivePlan(person.sellerZoopPlan.activePlan)
+              setActivePlan(person.sellerZoopPlan.activePlan)
             }
           } else {
             setAllPlans([''])
@@ -243,18 +243,17 @@ const UpdateZoopPlan = () => {
         setPlansFromCurrentZoopFee,
         sellerId,
       )
-      console.log(sellerId)
       const person = localStorage.getItem('sellerName')
         ? suppliers.find(storeowner => storeowner.name.toUpperCase() === localStorage.getItem('sellerName').toUpperCase())
         : null
       if (person) {
         setSupplier(person)
         localStorage.setItem('sellerObject', JSON.stringify(person))
-        let activePlan = 'Nenhum plano ativo'
+        let activePlanBlock = 'Nenhum plano ativo'
         const { sellerZoopPlan } = supplier
         if (sellerZoopPlan && Object.prototype.hasOwnProperty.call(sellerZoopPlan, 'activePlan'))
-          activePlan = settingActivePlan || supplier.sellerZoopPlan.activePlan || 'Nenhum plano ativo'
-        if (supplier.name) setBlocks(mountBlock(supplier.name, supplier.reason, activePlan, Object.keys(sellerZoopPlan2)))
+          activePlanBlock = activePlan || supplier.sellerZoopPlan.activePlan || 'Nenhum plano ativo'
+        if (supplier.name) setBlocks(mountBlock(supplier.name, supplier.reason, activePlanBlock, Object.keys(sellerZoopPlan2)))
         if (person.sellerZoopPlan) setAllPlans(Object.keys(person.sellerZoopPlan).filter(item => item !== 'activePlan'))
         else {
           setAllPlans([''])
@@ -263,7 +262,7 @@ const UpdateZoopPlan = () => {
       }
     }
     fetchData()
-  }, [supplier, settingActivePlan, suppliers])
+  }, [supplier, activePlan, suppliers])
   const asyncClick = React.useCallback(async planName => {
     try {
       await setPromiseMessage(PromptMessage)
@@ -422,7 +421,7 @@ const UpdateZoopPlan = () => {
             if (createNewPlan && Object.keys(sellerZoopPlanForFirebase).length !== 0) {
               setIsLoadingFunction(true)
               await createNewPlan(sellerZoopPlanForFirebase, nickname, existSupplierId)
-              setTypeOfToast('alert')
+              setTypeOfToast('success')
               setMessageToast('Plano criado!')
               setOpenToast(true)
               setIsLoadingFunction(false)
@@ -452,11 +451,23 @@ const UpdateZoopPlan = () => {
         }
         click={async () => {
           setIsLoadingFunction(true)
-          await sendToBackend(state)
-          setTypeOfToast('alert')
-          setMessageToast('Plano ativado!')
-          setOpenToast(true)
-          setIsLoadingFunction(false)
+          try {
+            await sendToBackend(state)
+            setTypeOfToast('success')
+            setMessageToast('Plano ativado!')
+            setOpenToast(true)
+            setIsLoadingFunction(false)
+          } catch (e) {
+            if (e.msg) {
+              setTypeOfToast('alert')
+              setMessageToast(e.msg)
+              setOpenToast(true)
+            } else {
+              setTypeOfToast('alert')
+              setMessageToast('Ocorreu um erro, contate o suporte!')
+              setOpenToast(true)
+            }
+          }
         }}
       />
       <Button
