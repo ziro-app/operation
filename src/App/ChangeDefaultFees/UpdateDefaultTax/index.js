@@ -40,7 +40,7 @@ const UpdateDefaulTax = () => {
   const [supplier, setSupplier] = useState({ docId: '', name: '', reason: '', markupPercentage: '', antifraudPercentage: '', sellerZoopPlan: '' })
   const [error, setError] = useState(false)
   const [matchSellerId, paramsSellerId] = useRoute('/alterar-tarifas-padrao/:fee?/:selectedPlan?')
-  const typeOfToast = 'alert'
+  const typeOfToast = 'success'
   const { selectedPlan, fee } = paramsSellerId
   let newPlan = {}
   useEffect(() => {

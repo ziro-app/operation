@@ -21,9 +21,8 @@ const sendToBackend = (state, newPlan) => {
     try {
       if (process.env.HOMOLOG ? true : allowedUsers.includes(nome)) {
         const standardPlans = newPlan
-        const main = { standardPlans }
         await db.collection('utilities').doc(process.env.DOCUMENT_ID_FOR_UTILITIES_MAIN).update({
-          main,
+          'main.standardPlans': standardPlans,
         })
         // setSellerZoopPlanForFirebase({})
         resolve('Plano atualizado')

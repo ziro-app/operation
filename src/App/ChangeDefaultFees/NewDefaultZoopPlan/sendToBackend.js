@@ -6,15 +6,9 @@ const sendToBackend = (sellerZoopPlanForFirebase, nickname, setPlanName) => {
   return new Promise(async (resolve, reject) => {
     try {
       if (process.env.HOMOLOG ? true : allowedUsers.includes(nome)) {
-        await db
-          .collection('utilities')
-          .doc(process.env.DOCUMENT_ID_FOR_UTILITIES_MAIN)
-          .update({
-            main: {
-              // note the square brackets
-              standardPlans: sellerZoopPlanForFirebase,
-            },
-          })
+        await db.collection('utilities').doc(process.env.DOCUMENT_ID_FOR_UTILITIES_MAIN).update({
+          'main.standardPlans': sellerZoopPlanForFirebase,
+        })
         setPlanName('')
         resolve('Plano atualizado')
         // } else throw { msg: 'Atualize ao menos um campo', customError: true }

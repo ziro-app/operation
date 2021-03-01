@@ -32,7 +32,7 @@ const ChangeDefaultFees = () => {
   const [markupPercentage, setMarkupPercentage] = useState('')
   const [antifraudPercentage, setAntifraudPercentage] = useState('')
   const [suppliers, setSuppliers] = useState([])
-  const [typeOfToast, setTypeOfToast] = useState('alert')
+  const [typeOfToast, setTypeOfToast] = useState('success')
   const [supplier, setSupplier] = useState({ docId: '', name: '', reason: '', markupPercentage: '', antifraudPercentage: '', sellerZoopPlan: '' })
   const [, setLocation] = useLocation()
   const [settingActivePlan, setSettingActivePlan] = useState('')
