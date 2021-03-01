@@ -1,7 +1,7 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable prefer-const */
 /* eslint-disable no-lone-blocks */
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState, useContext } from 'react'
 import { alertColor, containerWithPadding, successColor } from '@ziro/theme'
 
 import Button from '@bit/vitorbarbosa19.ziro.button'
@@ -19,8 +19,9 @@ import { motion } from 'framer-motion'
 import { useLocation } from 'wouter'
 import fetch from './fetch'
 import { db, fs } from '../../../Firebase/index'
-import { dateFormat, parcelFormat, round, stringToFloat } from '../utils'
+import { allowedUsersToUpdateTransactions, dateFormat, parcelFormat, round, stringToFloat } from '../utils'
 import { btn, btnRed, buttonContainer, custom, illustrationContainer, modalContainer, modalLabel, spinner } from './styles'
+import { userContext } from '../../appContext'
 
 const TransactionDetails = ({ transactions, transactionId, transaction, setTransaction }) => {
   const [amount, setAmount] = useState('')
@@ -43,10 +44,9 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
   const [validationMessage, setValidationMessage] = useState('')
   const [loadingButton, setLoadingButton] = useState(false)
   const [olderTransaction, setOlderTransaction] = useState(false)
-  const [remakeBlockTransaction, setRemakeBlockTransaction] = useState(false)
+  const { nickname } = useContext(userContext)
   let markupTransaction = {}
   let antiFraudTransaction = {}
-
   async function getTransaction(transactionId, setTransaction, setError, transaction, setIsLoading, setNothing) {
     await fetch(transactionId, setTransaction, setError, transaction, setIsLoading, setNothing)
 
@@ -101,33 +101,37 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
 
   const cancelTransaction = async (transaction_id, on_behalf_of, amountBeforeConvert) => {
     try {
-      const snapRef = db.collection('credit-card-payments').doc(transactionId)
-      const amount = amountBeforeConvert.replace('R$', '').replace(',', '').replace('.', '')
-      setLoadingButton(true)
-      await axios
-        .post(
-          `${process.env.PAY}/payments-void`,
-          {
-            transaction_id,
-            on_behalf_of,
-            amount,
-          },
-          {
-            headers: {
-              Authorization: `Basic ${process.env.PAY_TOKEN}`,
+      if (process.env.HOMOLOG ? true : allowedUsersToUpdateTransactions.includes(nickname)) {
+        const snapRef = db.collection('credit-card-payments').doc(transactionId)
+        const amount = amountBeforeConvert.replace('R$', '').replace(',', '').replace('.', '')
+        setLoadingButton(true)
+        await axios
+          .post(
+            `${process.env.PAY}/payments-void`,
+            {
+              transaction_id,
+              on_behalf_of,
+              amount,
             },
-          },
-        )
-        .then(result => {
-          setLoadingButton(false)
-          const { data } = result
-          const { status } = data
-          setCancelModal(false)
-          if (status === 'succeeded') {
-            transaction.status = 'Cancelado'
-          }
-          snapRef.update({ status: 'Atualizando', dateLastUpdate: nowDate })
-        })
+            {
+              headers: {
+                Authorization: `Basic ${process.env.PAY_TOKEN}`,
+              },
+            },
+          )
+          .then(result => {
+            setLoadingButton(false)
+            const { data } = result
+            const { status } = data
+            setCancelModal(false)
+            if (status === 'succeeded') {
+              transaction.status = 'Cancelado'
+            }
+            snapRef.update({ status: 'Atualizando', dateLastUpdate: nowDate })
+          })
+      } else {
+        setValidationMessage('Sem permissão para cancelar transações!')
+      }
     } catch (e) {
       setLoadingButton(false)
       console.log('erro na requisição para o cancelamento da zoop')
@@ -139,18 +143,22 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
   }
 
   const deleteTransaction = async () => {
-    setIsLoading(true)
-    setIsDeleting(true)
-    try {
-      await db.collection('credit-card-payments').doc(transactionId).delete()
-      setLocation('/transacoes')
-      setIsLoading(false)
-    } catch (error) {
-      console.log(error)
-      if (error.response) console.log(error.response)
-      setCopyResultStatus(false)
-      setCopyResultText('Erro ao excluir transação!')
-      setIsLoading(false)
+    if (process.env.HOMOLOG ? true : allowedUsersToUpdateTransactions.includes(nickname)) {
+      setIsLoading(true)
+      setIsDeleting(true)
+      try {
+        await db.collection('credit-card-payments').doc(transactionId).delete()
+        setLocation('/transacoes')
+        setIsLoading(false)
+      } catch (error) {
+        console.log(error)
+        if (error.response) console.log(error.response)
+        setCopyResultStatus(false)
+        setCopyResultText('Erro ao excluir transação!')
+        setIsLoading(false)
+      }
+    } else {
+      setValidationMessage('Sem permissão para cancelar links!')
     }
   }
 
@@ -551,7 +559,7 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
         {isApproved && (
           <>
             <Modal boxStyle={modalContainer} isOpen={cancelModal} setIsOpen={() => setCancelModal(false)}>
-              <div style={{ display: 'grid', gridTemplateRows: '1fr auto', gridRowGap: '20px' }}>
+              <div style={{ display: 'grid', gridTemplateRows: validationMessage ? '1fr auto 1fr' : '1fr auto', gridRowGap: '20px' }}>
                 <label style={modalLabel}>Confirma cancelamento?</label>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gridColumnGap: '20px' }}>
                   {loadingButton ? (
@@ -611,12 +619,13 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
             </div>
             <div>
               <Modal boxStyle={modalContainer} isOpen={cancelModal} setIsOpen={() => setCancelModal(false)}>
-                <div style={{ display: 'grid', gridTemplateRows: '1fr auto', gridRowGap: '20px' }}>
+                <div style={{ display: 'grid', gridTemplateRows: validationMessage ? '1fr auto 1fr' : '1fr auto', gridRowGap: '20px' }}>
                   <label style={modalLabel}>Deseja realmente cancelar o link ?</label>
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gridColumnGap: '20px' }}>
                     <Button type="button" cta="Sim" click={deleteTransaction} template="regular" />
                     <Button type="button" cta="Não" click={() => setCancelModal(false)} template="light" />
                   </div>
+                  {validationMessage && <label style={{ color: alertColor }}>{validationMessage}</label>}
                 </div>
               </Modal>
               <Button style={btnRed} type="button" cta="Cancelar link" click={() => setCancelModal(true)} template="destructive" />

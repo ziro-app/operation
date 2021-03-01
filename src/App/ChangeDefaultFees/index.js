@@ -177,11 +177,6 @@ const ChangeDefaultFees = () => {
       setMessage(result ? SuccessMessage : FailureMessage)
     } catch (error) {}
   }, [])
-  console.log(sellerZoopPlan2)
-  console.log(selectedPlan)
-  console.log(Object.keys(sellerZoopPlan2).includes(translateFeesToFirebase(selectedPlan)))
-  console.log(Object.keys(sellerZoopPlan2))
-  console.log(translateFeesToFirebase(selectedPlan))
   if (isLoading) return <SpinnerWithDiv size="5rem" />
   if (errorLoading) return <Error />
   return (

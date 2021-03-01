@@ -277,7 +277,6 @@ const NewDefaultZoopPlan = () => {
           cta="Criar plano"
           template="regular"
           click={() => {
-            console.log('sellerZoopPlan2', sellerZoopPlan2)
             if (sellerZoopPlan2 === null || !Object.keys(sellerZoopPlan2).includes(planName)) {
               let sellerZoopPlanForFirebase = sellerZoopPlan2
               const defaultValue = 'standard'
