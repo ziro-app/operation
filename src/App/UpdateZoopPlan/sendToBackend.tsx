@@ -82,10 +82,15 @@ const sendToBackend = async state => {
         } else throw { msg: 'Permissão insuficiente', customError: true }
       } else throw { msg: 'ID do plano é inválido!', customError: true }
     } catch (error) {
-      setIsLoadingFunction(false)
-      console.log(error)
       startRollback()
-      reject({ msg: 'Erro na troca do plano! Nada mudou!', customError: true })
+      setIsLoadingFunction(false)
+      if (error.customError) {
+        const { msg } = error
+        reject({ msg, customError: true })
+      } else {
+        reject({ msg: 'Erro na troca do plano! Nada mudou!', customError: true })
+      }
+      console.log(error)
     }
   })
 }
