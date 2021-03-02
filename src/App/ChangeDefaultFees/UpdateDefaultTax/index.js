@@ -31,6 +31,7 @@ const UpdateDefaulTax = () => {
   const [sellerActualZoopPlanForFirebase, setActualZoopPlanForFirebase] = useState({})
   const [otherPlansForFirebase, setOtherPlansForFirebase] = useState({})
   const [selectedPlanForFirebase, setSelectedPlanForFirebase] = useState('')
+  const [typeOfToast, setTypeOfToast] = useState('success')
   const [isLoading, setIsLoading] = useState(true)
   const [openToast, setOpenToast] = useState(false)
   const [messageToast, setMessageToast] = useState('')
@@ -40,7 +41,7 @@ const UpdateDefaulTax = () => {
   const [supplier, setSupplier] = useState({ docId: '', name: '', reason: '', markupPercentage: '', antifraudPercentage: '', sellerZoopPlan: '' })
   const [error, setError] = useState(false)
   const [matchSellerId, paramsSellerId] = useRoute('/alterar-tarifas-padrao/:fee?/:selectedPlan?')
-  const typeOfToast = 'success'
+
   const { selectedPlan, fee } = paramsSellerId
   let newPlan = {}
   useEffect(() => {
@@ -69,6 +70,9 @@ const UpdateDefaulTax = () => {
     sellerZoopPlan,
     otherPlansForFirebase,
     sellerActualZoopPlanForFirebase,
+    setMessageToast,
+    setOpenToast,
+    setTypeOfToast,
   }
   if (isLoading || fee === null) return <SpinnerWithDiv size="5rem" />
   if (typeof fee !== 'undefined') {
@@ -193,8 +197,6 @@ const UpdateDefaulTax = () => {
           // console.log('newPlan', newPlan)
           if (sendToBackend && Object.keys(newPlan).length !== 0) {
             sendToBackend(state, newPlan)
-            setMessageToast('Taxa atualizada!')
-            setOpenToast(true)
           } else {
             return () => null
           }
