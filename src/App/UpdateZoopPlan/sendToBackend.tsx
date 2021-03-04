@@ -50,18 +50,20 @@ const sendToBackend = async state => {
             quantity: 1,
             plan: translateFeesToZoop(selectedPlan),
           }
-          const zoopData: IApiData = {
-            origin: 'api',
-            url: `${process.env.PAY}/plan-subscription-update`,
-            headers,
-            method: 'POST',
-            data: {
-              customer: supplier.zoopId,
-              quantity: 1,
-              plan: dataOldPlan.items[0].plan.id,
-            },
+          if (dataOldPlan.items.length > 0) {
+            const zoopData: IApiData = {
+              origin: 'api',
+              url: `${process.env.PAY}/plan-subscription-update`,
+              headers,
+              method: 'POST',
+              data: {
+                customer: supplier.zoopId,
+                quantity: 1,
+                plan: dataOldPlan.items[0].plan.id,
+              },
+            }
+            createRollbackItem(zoopData)
           }
-          createRollbackItem(zoopData)
           await axios({ url, method, headers, data })
           const firebaseData: IFirebaseData = {
             method: 'update',
