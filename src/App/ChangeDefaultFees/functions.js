@@ -131,7 +131,7 @@ export function translateFeesToZoop(text) {
   const d30 = 'plano_pro_ziro_d30smkup_d1'
   const d14 = 'plano_pro_ziro_antd14s_d1'
   const fluxo = 'plano_std_ziro_smarkup_d30'
-  const d1 = 'tested1'
+  const d1 = 'plano_pro_ziro_antd1smk_d1'
   if (text === 'd+1') return d1
   if (text === 'd+30') return d30
   if (text === 'd+14') return d14
