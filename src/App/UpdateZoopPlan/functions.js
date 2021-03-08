@@ -117,7 +117,7 @@ export function translateFirebaseToFees(text) {
 }
 export function translateFeesToFirebase(text) {
   const d30 = 'financed30'
-  const d1 = 'tested1'
+  const d1 = 'financed1'
   const d14 = 'financed14'
   const fluxo = 'standard'
   if (text === 'd+1') return d1
