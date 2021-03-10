@@ -309,7 +309,7 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
             header: 'Venda',
             body: [
               {
-                title: 'Lojista',
+                title: 'Fabricante',
                 content: transaction.buyerReason ? transaction.buyerReason : '-',
               },
               {
