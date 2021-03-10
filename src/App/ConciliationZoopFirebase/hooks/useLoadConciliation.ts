@@ -5,7 +5,7 @@ import fetchZoop from '../utils/fetchZoop'
 import axios from 'axios'
 import usePinScroll from './usePinScroll'
 
-const arrayTestCards = []//"alessandro m gentil",'vitor a barbosa', 'cardholder', 'uiller roger m o jesus']
+const arrayTestCards = ["alessandro m gentil",'vitor a barbosa', 'cardholder', 'uiller roger m o jesus']
 
 const useLoadConciliation = () => {
   const [dataRows, setDataRows] = useState([])

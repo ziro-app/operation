@@ -66,7 +66,7 @@ const TransactionsSellers = ({ transactionId, receivableId }) => {
         return <TransactionDetails transactions={payments} transactionId={transactionId} transaction={transaction}
             setTransaction={setTransaction} />;
   return (
-    <Menu title="Transações com Fabricantes">
+    <Menu title="Vendas de Créditos">
       <div style={container}>
         <form>
           <label aria-label="filtro por fabricante" />

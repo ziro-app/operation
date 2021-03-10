@@ -18,7 +18,7 @@ const VisualizationBackgroundCheck = () => {
   }, [])
   const dataTableFormatted = suppliers => [
     {
-      title: 'Fabricantes com os créditos',
+      title: 'Créditos por fabricante',
       header: ['Fantasia', 'Gratuitos', 'Pagos'],
       rows: suppliers.map(data => [
         <label>{data.fantasia.toUpperCase()}</label>,
@@ -26,7 +26,7 @@ const VisualizationBackgroundCheck = () => {
         <label>{data.backgroundCheckRequestsAvailablePaid}</label>,
       ]),
       totals: [],
-      align: ['center', 'center', 'center'],
+      align: ['left', 'center', 'center'],
     },
   ]
   if (suppliers.length === 0 || isLoading) return <Spinner />
