@@ -1,19 +1,21 @@
+// @ts-nocheck
 import React, { memo, useEffect, useState } from 'react'
-import { dateFormat, parcelFormat, round, stringToFloat } from '../utils'
+import { dateFormat, parcelFormat, round, stringToFloat } from '../../utils'
 
 import Details from '@bit/vitorbarbosa19.ziro.details'
 import Error from '@bit/vitorbarbosa19.ziro.error'
 import Header from '@bit/vitorbarbosa19.ziro.header'
 import { containerWithPadding } from '@ziro/theme'
 import currencyFormat from '@ziro/currency-format'
-import fetch from '../TransactionDetails/fetch'
-import matchStatusColor from '../matchStatusColor'
+import fetch from '../TransactionsSellersDetails/fetch'
+import matchStatusColor from '../../matchStatusColor'
 import { motion } from 'framer-motion'
 import { useLocation } from 'wouter'
 
-const ReceivableDetails = ({ transactions, transactionId, receivableId, transaction, setTransaction }) => {
+const ReceivableSellersDetails = ({ transactions, transactionId, receivableId, transaction, setTransaction }) => {
     const [blocks, setBlocks] = useState([])
     const [receivable, setReceivable] = useState({})
+    const [isLoading,setIsLoading] = useState(false)
     const [, setLocation] = useLocation()
     const [nothing, setNothing] = useState(false)
     const [error, setError] = useState(false)
@@ -27,7 +29,7 @@ const ReceivableDetails = ({ transactions, transactionId, receivableId, transact
     let antiFraudTransaction = {}
 
     async function getTransaction(transactionId, setTransaction, setError, transaction) {
-        if (Object.keys(transaction).length === 0 && transaction.constructor === Object) await fetch(transactionId, setTransaction, setError, transaction)
+        if (Object.keys(transaction).length === 0 && transaction.constructor === Object) await fetch(transactionId, setTransaction, setError, transaction,setNothing, setIsLoading)
     }
 
     useEffect(() => {
@@ -129,7 +131,7 @@ const ReceivableDetails = ({ transactions, transactionId, receivableId, transact
                 message="Transação inválida ou não encontrada, retorne e tente novamente."
                 type="noData"
                 title="Erro ao buscar detalhes da transação"
-                backRoute="/transacoes"
+                backRoute="/transacoes-fabricantes"
                 backRouteFunction={route => {
                     setLocation(route)
                 }}
@@ -138,7 +140,7 @@ const ReceivableDetails = ({ transactions, transactionId, receivableId, transact
 
     return (
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={containerWithPadding}>
-            <Header type="icon-link" title="Detalhes do lançamento" navigateTo={`transacoes/${transactionId}`} icon="back" />
+            <Header type="icon-link" title="Detalhes do lançamento" navigateTo={`transacoes-fabricantes/${transactionId}`} icon="back" />
             <div style={{ display: 'grid' }}>
                 <Details blocks={blocks} />
             </div>
@@ -146,4 +148,4 @@ const ReceivableDetails = ({ transactions, transactionId, receivableId, transact
     )
 }
 
-export default memo(ReceivableDetails)
+export default memo(ReceivableSellersDetails)

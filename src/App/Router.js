@@ -40,6 +40,7 @@ import ResetPass from './ResetPass/index'
 import ShowInfo from './ShowInfo/index'
 import SplitPayment from './SplitPayment/index'
 import Transactions from './Transactions/index'
+import TransactionsSellers from './TransactionsSellers/index'
 import SellersPlans from './SellersPlans/index'
 import UpdateAffiliate from './UpdateAffiliate/index'
 import UpdateBrandsInfos from './UpdateBrandsInfos'
@@ -74,6 +75,7 @@ const Router = ({ isLogged }) => {
   const [matchCardManualApproval, paramsCardManualApproval] = useRoute('/aprovacao-manual/:cardId?')
   const [matchConciliation, paramsConciliationZoop] = useRoute('/conciliacao/:transactionId?')
   const [matchTransactions, paramsTransactions] = useRoute('/transacoes/:transactionId?/:receivableId?')
+  const [matchTransactionsSellers, paramsTransactionsSellers] = useRoute('/transacoes-fabricantes/:transactionId?/:receivableId?')
   const [matchTransactionsSplit, paramsTransactionsSplit] = useRoute('/transacoes/:transactionId?/split')
   const [matchSeller, paramsSeller] = useRoute('/atualizar-plano-venda/:sellerId?')
   const [matchSellerRates, paramsSellerRates] = useRoute('/tarifas/:sellerId?/:sellerName?')
@@ -114,6 +116,7 @@ const Router = ({ isLogged }) => {
     '/trocar-email': <UpdateEmail />,
     '/trocar-senha': <UpdatePass />,
     '/transacoes': <Transactions {...paramsTransactions} />,
+    '/transacoes-fabricantes': <TransactionsSellers {...paramsTransactions} />,
     '/planos-fabricantes': (
       <HeaderBack title="Planos dos Fabricantes" navigateTo="/suporte">
         <SellersPlans {...paramsTransactions} />
@@ -132,6 +135,7 @@ const Router = ({ isLogged }) => {
       </HeaderBack>
     ),
     [matchTransactions ? location : null]: <Transactions {...paramsTransactions} />,
+    [matchTransactionsSellers ? location : null]: <TransactionsSellers {...paramsTransactionsSellers} />,
     [matchTransactionsSplit ? location : null]: <SplitPayment {...paramsTransactionsSplit} />,
     // [matchFee ? location : null]: <CreateAndUpdate {...paramsFee} />,
     [matchFee ? location : null]: <UpdateTax {...paramsFee} />,
