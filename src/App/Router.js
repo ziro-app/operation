@@ -41,6 +41,7 @@ import ShowInfo from './ShowInfo/index'
 import SplitPayment from './SplitPayment/index'
 import Transactions from './Transactions/index'
 import TransactionsSellers from './TransactionsSellers/index'
+import VisualizationBackgroundCheck from './VisualizationBackgroundCheck/index'
 import SellersPlans from './SellersPlans/index'
 import UpdateAffiliate from './UpdateAffiliate/index'
 import UpdateBrandsInfos from './UpdateBrandsInfos'
@@ -223,6 +224,7 @@ const Router = ({ isLogged }) => {
               ['Fabricantes: Visualizar planos ativos', '/planos-fabricantes'],
               ['Aprovação Manual', 'aprovacao-manual'],
               ['Conciliação de pagamento', 'conciliacao'],
+              ['Visualização de Créditos', 'visualizacao-background'],
             ]}
           />
         </motion.div>
@@ -286,6 +288,11 @@ const Router = ({ isLogged }) => {
     '/visualizar-afiliado': (
       <HeaderBack title="Visualizar afiliado" navigateTo="/assessoria">
         <UpdateAffiliate />
+      </HeaderBack>
+    ),
+    '/visualizacao-background': (
+      <HeaderBack title="Visualização de Créditos" navigateTo="/suporte">
+        <VisualizationBackgroundCheck />
       </HeaderBack>
     ),
     '/upload-imagem': (

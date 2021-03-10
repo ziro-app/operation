@@ -103,6 +103,12 @@ export const Menu = ({ title, children }) => {
               text: 'Transações',
             },
             {
+              path: '/transacoes-fabricantes',
+              onClick: () => setIsOpen(false),
+              icon: <Icon type="card" size={15} strokeWidth={2} />,
+              text: 'Vendas de créditos',
+            },
+            {
               path: 'criar-cobranca',
               onClick: () => setIsOpen(false),
               icon: <Icon type="money" size={15} strokeWidth={2} />,
