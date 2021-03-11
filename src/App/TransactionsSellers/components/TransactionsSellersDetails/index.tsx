@@ -160,7 +160,6 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
               const docSupplier = await snapRefSuppliers.get()
               const {backgroundCheckRequestsAvailablePaid} = docSupplier.data()
               const newValue = backgroundCheckRequestsAvailablePaid - quantityToRemove
-        console.log(newValue < 0 ? 0 : newValue)
         const snapRef = db.collection('payments-sellers-ziro').doc(transactionId)
         const amount = amountBeforeConvert.replace('R$', '').replace(',', '').replace('.', '')
         setLoadingButton(true)
@@ -190,8 +189,6 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
             await writeToSheet(transaction_id,installments,["","Cancelado"])
 
             const canceledReceivables = transaction?.receivables?.map(receivable => {receivable.status = 'refunded'; return receivable})
-            console.log('canceledReceivables',canceledReceivables)
-            console.log('canceledReceivables',canceledReceivables)
             snapRefSuppliers.update({backgroundCheckRequestsAvailablePaid: newValue < 0 ? 0 : newValue})
             snapRef.update({ receivables:canceledReceivables, status: 'Cancelado', dateLastUpdated: nowDate })
           })
@@ -272,9 +269,6 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
 
   useEffect(() => {
     getTransaction(transactionId, setTransaction, setError, transaction, setIsLoading, setNothing)
-    console.log('transaction',)
-    //const snapRef = db.collection('payments-sellers-ziro').doc(transactionId)
-    //snapRef.get().then((result) => console.log("foi",result.data().receivables[0]))
     if (Object.prototype.hasOwnProperty.call(transaction, 'dateLinkCreated')) {
       if (error) {
         setNothing(true)
@@ -605,7 +599,7 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
                     <Button
                       type="button"
                       cta="Sim"
-                      click={() => cancelTransaction(transaction.transactionZoopId, transactions.installments,transaction.sellerZoopId, transaction.charge,transaction.buyerDocId,transaction.quantity)}
+                      click={() => cancelTransaction(transaction.transactionZoopId, transaction.installments,transaction.sellerZoopId, transaction.charge,transaction.buyerDocId,transaction.quantity)}
                       template="regular"
                     />
                   )}
