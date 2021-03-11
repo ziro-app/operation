@@ -30,6 +30,51 @@ interface ISplit {
     amount:number
     receivable_gross_amount:any
 }
+const url = process.env.SHEET_URL;
+const sheetId = '1FxCECEMVa66vpHsmucgFow6DVPpCGHgOiIfthEzJwPc'
+const writeToSheet = async (transactionZoopId, installment, dataToWrite) => {
+	const config = {
+		url,
+		method: 'POST',
+		headers: {
+			'Authorization': process.env.SHEET_TOKEN,
+			'Content-Type': 'application/json'
+		}
+	}
+	const { data: { valueRanges } } = await axios({
+		...config, data: {
+			'apiResource': 'values',
+			'apiMethod': 'batchGet',
+			'spreadsheetId': sheetId,
+			'ranges': ['Recebiveis!A2:B']
+		}
+	})
+	const [{ values: receivables }] = valueRanges
+	if (!receivables) throw { status: 500, msg: 'Incorrect sheet configuration' }
+	const rowToUpdate = receivables.findIndex(([idInSheet, installmentInSheet]) => {
+		const indexInSheet = `${idInSheet}${installmentInSheet}`
+		const indexToMatch = `${transactionZoopId}${installment}`
+		return indexInSheet === indexToMatch
+	})
+	if (rowToUpdate !== -1) {
+		await axios({
+			...config, data: {
+				'apiResource': 'values',
+				'apiMethod': 'batchUpdate',
+				'spreadsheetId': sheetId,
+				'resource': {
+					'data': [
+						{
+							'range': `Recebiveis!F${rowToUpdate + 2}`,
+							'values': [dataToWrite]
+						}
+					]
+				},
+				'valueInputOption': 'user_entered'
+			}
+		})
+	}
+}
 
 const TransactionDetails = ({ transactions, transactionId, transaction, setTransaction }) => {
   const [amount, setAmount] = useState('')
@@ -63,7 +108,6 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
       else setOlderTransaction(false)
     } else setOlderTransaction(false)
   }
-
   useEffect(() => {
     setTransaction({})
   }, [])
@@ -107,7 +151,7 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
     }
   }
 
-  const cancelTransaction = async (transaction_id, on_behalf_of, amountBeforeConvert, buyerDocId,quantityToRemove) => {
+  const cancelTransaction = async (transaction_id,installments, on_behalf_of, amountBeforeConvert, buyerDocId,quantityToRemove) => {
     try {
       if (process.env.HOMOLOG ? true : allowedUsersToUpdateTransactions.includes(nickname)) {
 
@@ -134,7 +178,7 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
               },
             },
           )
-          .then(result => {
+          .then(async result => {
             setLoadingButton(false)
             const { data } = result
             const { status } = data
@@ -142,8 +186,14 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
             if (status === 'succeeded') {
               transaction.status = 'Cancelado'
             }
+
+            await writeToSheet(transaction_id,installments,["","Cancelado"])
+
+            const canceledReceivables = transaction?.receivables?.map(receivable => {receivable.status = 'refunded'; return receivable})
+            console.log('canceledReceivables',canceledReceivables)
+            console.log('canceledReceivables',canceledReceivables)
             snapRefSuppliers.update({backgroundCheckRequestsAvailablePaid: newValue < 0 ? 0 : newValue})
-            snapRef.update({ status: 'Cancelado', dateLastUpdate: nowDate })
+            snapRef.update({ receivables:canceledReceivables, status: 'Cancelado', dateLastUpdated: nowDate })
           })
       } else {
         setValidationMessage('Sem permissão para cancelar transações!')
@@ -222,7 +272,9 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
 
   useEffect(() => {
     getTransaction(transactionId, setTransaction, setError, transaction, setIsLoading, setNothing)
-
+    console.log('transaction',)
+    //const snapRef = db.collection('payments-sellers-ziro').doc(transactionId)
+    //snapRef.get().then((result) => console.log("foi",result.data().receivables[0]))
     if (Object.prototype.hasOwnProperty.call(transaction, 'dateLinkCreated')) {
       if (error) {
         setNothing(true)
@@ -329,26 +381,8 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
                 content: feesFormatted,
               },
               {
-                title: 'Tarifa Ziro Seguro Antifraude',
-                content: insuranceValueFormatted,
-              },
-              {
                 title: 'Valor líquido',
                 content: transaction.status !== 'Cancelado' ? liquidFormatted : '-',
-              },
-              {
-                title: 'Transação com seguro',
-                content: transaction.insurance ? 'Sim' : 'Não',
-              },
-              {
-                title: 'Transação com cadastro',
-                content: transaction.checkoutWithoutRegister ? 'Não' : 'Sim',
-              },
-              {
-                title: 'Parcela máxima',
-                content: `${transaction.installmentsMax}`.startsWith('0')
-                  ? `${parseInt(transaction.installmentsMax)}x`
-                  : transaction.installmentsMax ? `${transaction.installmentsMax}x` : '1x',
               },
               {
                 title: 'Parcela escolhida',
@@ -357,18 +391,6 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
               {
                 title: 'Data de pagamento',
                 content: transaction.datePaid ? `${transaction.datePaid}` : '-',
-              },
-              {
-                title: 'Data de criação do link',
-                content: transaction.dateLinkCreated ? `${transaction.dateLinkCreated}` : '-',
-              },
-              {
-                title: 'Link criado por',
-                content: transaction.collaboratorName ? `${transaction.collaboratorName}` : 'Admin',
-              },
-              {
-                title: 'Observações',
-                content: transaction.observations ? `${transaction.observations}` : '-',
               },
               {
                 title: 'Status',
@@ -532,8 +554,6 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
   const isApproved = transaction.status === 'Aprovado' || transaction.status === 'Pago' || transaction.status === 'Pré Autorizado'
   const isCanceled = transaction.status === 'Cancelado' || transaction.status === 'Falhado'
   const isWaiting = transaction.status === 'Aguardando Pagamento' || transaction.status === 'Aprovação Pendente'
-  console.log('blocksStoreowner',blocksStoreowner)
-  console.log('blocks',blocks)
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={containerWithPadding}>
       <input type="text" style={{ position: 'absolute', left: '-9999px' }} value={paymentLink} ref={textAreaRef} readOnly />
@@ -585,7 +605,7 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
                     <Button
                       type="button"
                       cta="Sim"
-                      click={() => cancelTransaction(transaction.transactionZoopId, transaction.sellerZoopId, transaction.charge,transaction.buyerDocId,transaction.quantity)}
+                      click={() => cancelTransaction(transaction.transactionZoopId, transactions.installments,transaction.sellerZoopId, transaction.charge,transaction.buyerDocId,transaction.quantity)}
                       template="regular"
                     />
                   )}
