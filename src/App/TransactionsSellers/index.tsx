@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useContext, useEffect, useState } from 'react'
 
 import Spinner from '@bit/vitorbarbosa19.ziro.spinner-with-div'

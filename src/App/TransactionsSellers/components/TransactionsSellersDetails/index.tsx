@@ -371,7 +371,11 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
                 content: transaction.charge,
               },
               {
-                title: 'Tarifa Ziro Pay',
+                title:'Valor cobrado em 1 crédito',
+                content: transaction.valueCreditBackgroundCheck.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })
+              },
+              {
+                title: 'Tarifa Zoop',
                 content: feesFormatted,
               },
               {
@@ -379,7 +383,7 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
                 content: transaction.status !== 'Cancelado' ? liquidFormatted : '-',
               },
               {
-                title: 'Parcela escolhida',
+                title: 'Parcelamento',
                 content: transaction.installments ? `${transaction.installments}x` : '1x',
               },
               {

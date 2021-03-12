@@ -94,12 +94,8 @@ const ReceivableSellersDetails = ({ transactions, transactionId, receivableId, t
                                 )}`,
                             },
                             {
-                                title: 'Tarifa Ziro Pay',
+                                title: 'Tarifa Zoop',
                                 content: feesFormatted !== '- R$0,00' ? feesFormatted : '-',
-                            },
-                            {
-                                title: 'Tarifa Ziro Seguro Antifraude',
-                                content: zoopSplitFormatted !== '- R$0,00' ? zoopSplitFormatted : '-',
                             },
                             {
                                 title: 'Valor líquido',
