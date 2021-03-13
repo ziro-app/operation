@@ -367,7 +367,7 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
                 content: transaction.quantity,
               },
               {
-                title: 'Valor',
+                title: 'Valor da compra',
                 content: transaction.charge,
               },
               {
