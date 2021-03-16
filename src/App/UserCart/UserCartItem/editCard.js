@@ -1,3 +1,6 @@
+/* eslint-disable no-useless-escape */
+/* eslint-disable prefer-object-spread */
+/* eslint-disable no-else-return */
 import React, { useMemo } from 'react';
 import currencyFormat from '@ziro/currency-format';
 import maskInput from '@ziro/mask-input';

@@ -1,8 +1,9 @@
+/* eslint-disable no-nested-ternary */
 import React, { useCallback, useEffect, useState } from 'react';
 import RImg from 'react-image';
+import SpinnerWithDiv from '@bit/vitorbarbosa19.ziro.spinner-with-div';
 import { image } from './styles';
 import { db, fs } from '../../../Firebase';
-import SpinnerWithDiv from '@bit/vitorbarbosa19.ziro.spinner-with-div';
 import EditCard from './editCard';
 import SummaryCard from './summaryCard';
 import InfoCard from './infoCard';
@@ -15,7 +16,6 @@ export default ({ productId, cartProduct, setURL, setPrice }) => {
     const [initialStatus, setInitialStatus] = useState();
     const [sizes, setSizes] = useState([]);
     const [colors, setColors] = useState([]);
-
     useEffect(
         () =>
             productRef.onSnapshot(snap => {
