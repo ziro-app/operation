@@ -24,7 +24,7 @@ const sendToBackend = state => () => {
   const nome = nickname ? nickname.trim() : ''
   const baseUrl = process.env.HOMOLOG ? 'http://localhost:8080/pagamento/' : 'https://ziro.app/pagamento/'
   const nowDate = fs.FieldValue.serverTimestamp()
-  const allowedUsers = ['Uiller', 'Vitor', 'Bruno', 'João', 'Cesar', 'Ale', 'Vivian', 'Elisa', 'Paulo', 'Antonio', 'Russi']
+  const allowedUsers = ['Uiller', 'Vitor', 'Bruno', 'João', 'Cesar', 'Ale', 'Vivian', 'Elisa', 'Paulo', 'Antonio', 'Russi','David']
   return new Promise(async (resolve, reject) => {
     try {
       if (process.env.HOMOLOG ? true : allowedUsers.includes(nome)) {
