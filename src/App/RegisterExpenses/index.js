@@ -31,7 +31,7 @@ const RegisterExpenses = () => {
     const [focusDate, setFocusDate] = useState(false)
     // DADOS DO OPERACIONAL
     const [operationalDescription, setOperacionalDescription] = useState('')
-    const ODList = ['MARCOS MOTOBOY', 'CORREIOS SEDEX', 'CORREIOS PAC', '99TAXI', 'AZUL CARGO', 'LOGGI', 'GOLLOG', 'TAXI', 'UBER', 'CLIENTES'].sort()
+    const ODList = ['M. MOTOBOY', 'CORREIOS SEDEX', 'CORREIOS PAC', '99TAXI', 'AZUL CARGO', 'LOGGI', 'GOLLOG', 'TAXI', 'UBER', 'CLIENTES'].sort()
     const [attendance, setAttendance] = useState('')
     const [attendanceList, setAttendanceList] = useState([])
     const [haveRefound, setHaveRefound] = useState('')
