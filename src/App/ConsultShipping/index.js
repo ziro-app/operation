@@ -126,11 +126,11 @@ const ConsultShipping = ( {envio} ) => {
 						<div style ={{display:'flex', justifyContent:'space-between'}}><p >Prazo</p> <p>{`${cotacaoSedex.prazo} dias`}</p></div>
 						{valorComSeguro && (
 						<>
-						<div style ={{display:'flex', justifyContent:'space-between'}}><p>Seguro</p> <p>{`R$ ${cotacaoSedex.valorSeguro}`}</p></div>
-						<div style ={{display:'flex', justifyContent:'space-between'}}><p>Envio</p> <p>{`R$ ${cotacaoSedex.valorSem}`}</p></div>
+						<div style ={{display:'flex', justifyContent:'space-between'}}><p>Seguro</p> <p>{cotacaoSedex.valorSeguro}</p></div>
+						<div style ={{display:'flex', justifyContent:'space-between'}}><p>Envio</p> <p>{cotacaoSedex.valorSem}</p></div>
 						</>
 						)}
-						<div style ={{display:'flex', justifyContent:'space-between'}}><p>{valorComSeguro ? 'Valor Total' : 'Valor Sem Seguro'}</p> <p>{`R$ ${valorComSeguro ? cotacaoSedex.valorTotal : cotacaoSedex.valorSem}`}</p></div>
+						<div style ={{display:'flex', justifyContent:'space-between'}}><p>{valorComSeguro ? 'Valor Total' : 'Valor Sem Seguro'}</p> <p>{valorComSeguro ? cotacaoSedex.valorTotal : cotacaoSedex.valorSem}</p></div>
 						</div>
 					</div>
 					<label>Pac</label>
@@ -147,11 +147,11 @@ const ConsultShipping = ( {envio} ) => {
 						<div style ={{display:'flex', justifyContent:'space-between'}}><p >Prazo</p> <p>{`${cotacaoPac.prazo} dias`}</p></div>
 						{valorComSeguro && (
 							<>
-							<div style ={{display:'flex', justifyContent:'space-between'}}><p>Seguro</p> <p>{`R$ ${cotacaoPac.valorSeguro}`}</p></div>
-							<div style ={{display:'flex', justifyContent:'space-between'}}><p>Envio</p> <p>{`R$ ${cotacaoPac.valorSem}`}</p></div>
+							<div style ={{display:'flex', justifyContent:'space-between'}}><p>Seguro</p> <p>{cotacaoPac.valorSeguro}</p></div>
+							<div style ={{display:'flex', justifyContent:'space-between'}}><p>Envio</p> <p>{cotacaoPac.valorSem}</p></div>
 							</>
 						)}
-						<div style ={{display:'flex', justifyContent:'space-between'}}><p>{valorComSeguro ? 'Valor Total' : 'Valor Sem Seguro'}</p> <p>{`R$ ${valorComSeguro ? cotacaoPac.valorTotal : cotacaoPac.valorSem}`}</p></div>
+						<div style ={{display:'flex', justifyContent:'space-between'}}><p>{valorComSeguro ? 'Valor Total' : 'Valor Sem Seguro'}</p> <p>{valorComSeguro ? cotacaoPac.valorTotal : cotacaoPac.valorSem}</p></div>
 						</div>
 					</div>
 					<div style={{display:'flex', justifyContent: 'space-between', marginTop:'6%'}}>

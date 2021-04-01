@@ -1,4 +1,5 @@
 import axios from 'axios'
+import currencyFormat from '@ziro/currency-format';
 
 const sendToBackend = state => async () => {
 	const { setCotacaoSedex, servico, lojista, peso, valor, setPrazoSedex, setEndereco,setError,setLoad, setCotacaoPac, setPrazoPac, setSeguro } = state
@@ -79,14 +80,26 @@ const sendToBackend = state => async () => {
                     'Content-Type': 'application/json'
 				}
 			}
-			console.log('aqui!')
         try {
-				const requestSedex = await axios(config('sedex'))
-				const requestPac = await axios(config('pac'))
-				const {Valor:valorSedex, PrazoEntrega:prazoSedex, ValorValorDeclarado:declaroSedex, ValorSemAdicionais:semAdicionarSedex} = requestSedex.data.Servicos.cServico
-				const {Valor:valorPac, PrazoEntrega:prazoPac, ValorValorDeclarado:declaroPac, ValorSemAdicionais:semAdicionarPac} = requestPac.data.Servicos.cServico
-				setCotacaoSedex({valorTotal:valorSedex._text, prazo:prazoSedex._text, valorSeguro: declaroSedex._text, valorSem:semAdicionarSedex._text})
-				setCotacaoPac({valorTotal:valorPac._text, prazo:prazoPac._text, valorSeguro: declaroPac._text, valorSem: semAdicionarPac._text})
+					const objValues = (valorSeguro, valorSemSeguro) => {
+						const changeToNumber = (valor) => Math.round(Number(valor.replace(',','.').trim()) * 100)/100
+						const newValorSemSeguro = Math.round(Number(valorSemSeguro.replace(',','.').trim()) * 0.93 * 100)/100
+						const newValorSeguro = changeToNumber(valorSeguro)
+						const newValorTotal = newValorSemSeguro + newValorSeguro
+						return {
+							valorTotal: currencyFormat(newValorTotal*100),
+							valorSeguro: `R$ ${String(newValorSeguro)?.replace('.',',')}`,
+							valorSem: currencyFormat(newValorSemSeguro*100)
+						}
+					}
+					const requestSedex = await axios(config('sedex'))
+					const requestPac = await axios(config('pac'))
+					const {PrazoEntrega:prazoSedex, ValorValorDeclarado:declaroSedex, ValorSemAdicionais:semAdicionarSedex} = requestSedex.data.Servicos.cServico
+					const {PrazoEntrega:prazoPac, ValorValorDeclarado:declaroPac, ValorSemAdicionais:semAdicionarPac} = requestPac.data.Servicos.cServico
+					const newCotacaoSedex = objValues(declaroSedex._text, semAdicionarSedex._text)
+					const newCotacaoPac = objValues(declaroPac._text, semAdicionarPac._text)
+					setCotacaoSedex({ prazo:prazoSedex._text, ...newCotacaoSedex})
+					setCotacaoPac({prazo:prazoPac._text, ...newCotacaoPac})
 			try {
 				const requestVia = await axios(configCEP)
 				if(!requestVia.data.erro){
