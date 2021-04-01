@@ -12,6 +12,7 @@ const ManualApproval = ({cardId}) => {
   const { removeRow, dataRows, isLoading, isError, modifyCardId, card } = useLoadManualApproval();
     const [timeout, setTimeoutFunction] = useState(false)
     const [submitMsg, setSubmitMsg] = useState('')
+    const [timeoutMessage, setTimeoutMessageFunction] = useState(false)
     useEffect(() => {
         if(cardId)
       modifyCardId(cardId)
@@ -21,6 +22,11 @@ const ManualApproval = ({cardId}) => {
       const clearMsg = setTimeout(() => submitMsg ? setSubmitMsg("") : null, 10000);
       return () => clearTimeout(clearMsg);
   }, [submitMsg]);
+  useEffect(() => {
+    // if user start typing on any field, reset submit message after 10 seconds
+    const clearMsg = setTimeout(() => dataRows.length === 0 ? setTimeoutMessageFunction(true) : setTimeoutMessageFunction(false) , 10000);
+    return () => clearTimeout(clearMsg);
+}, [dataRows]);
 
   if (isError)
     return (
@@ -29,7 +35,7 @@ const ManualApproval = ({cardId}) => {
 
   if (isLoading) return <Spinner />
   //return (<CardsList dataRows={dataRows} />)setTimeout(
-    if (dataRows.length === 0 && !isLoading && timeout) {
+    if (dataRows.length === 0 && !isLoading && timeoutMessage) {
         return (
           <div>
             <div style={illustration}>
