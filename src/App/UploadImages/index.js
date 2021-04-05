@@ -3,6 +3,8 @@ import Button from '@bit/vitorbarbosa19.ziro.button'
 import ImageUpload from '@bit/vitorbarbosa19.ziro.image-upload'
 import Spinner from '@bit/vitorbarbosa19.ziro.spinner-with-div'
 import { v4 as uuid } from 'uuid'
+import AutoSizer from 'react-virtualized-auto-sizer'
+import { Virtuoso } from 'react-virtuoso'
 import fetch from './fetch'
 import { cardContainerClass, fileContainerClass } from './styles'
 import sendToBackend from './sendToBackend'
@@ -77,7 +79,7 @@ const UploadImages = () => {
   return (
     <>
       <BrandChoose isSubmitting={isSubmitting} brand={brand} setBrand={setBrand} brands={brands} />
-      <div style={fileContainerClass} className="fileContainer" onDragOver={onDragOver}>
+      <div className="fileContainer" onDragOver={onDragOver}>
         <ToastNotification openToastRoot={openToast} setOpenToastRoot={setOpenToast} messageToastRoot={messageToast} type={typeOfToast} />
         {showUpload && (
           <>
@@ -105,8 +107,46 @@ const UploadImages = () => {
                   <Button click={() => sendToBackend(state)} submitting={isSubmitting} cta="Enviar todas fotos" type="button" />
                 </>
               )}
+              <div style={{ display: 'flex' }}>
+                <div style={{ flex: '1 1 auto', height: '100vh' }}>
+                  <AutoSizer defaultHeight={1200} defaultWidth={800}>
+                    {({ width, height }) => {
+                      return (
+                        <Virtuoso
+                          style={{ height, width }}
+                          data={filesList}
+                          itemContent={(index, data) => {
+                            return (
+                              <div key={index}>
+                                <Card
+                                  key={index}
+                                  identifierOfPicture={pictures[index].identifier}
+                                  states={states}
+                                  filesList={filesList}
+                                  setFiles={setFiles}
+                                  index={index}
+                                  picture={pictures[index].urlImage}
+                                  removeImage={removeImage}
+                                  duplicateImage={duplicateImage}
+                                  arrayOfInputs={inputs(states, pictures[index].identifier, dispatch, defaultQuantityValue, device, isSubmitting)}
+                                  pictures={pictures}
+                                  setPictures={setPictures}
+                                  dispatch={dispatch}
+                                  uuid={uuid}
+                                  thumbPhoto={thumbPhoto}
+                                  setThumbPhoto={setThumbPhoto}
+                                />
+                              </div>
+                            )
+                          }}
+                        />
+                      )
+                    }}
+                  </AutoSizer>
+                </div>
+              </div>
 
-              {pictures === oldPictures &&
+              {/* pictures === oldPictures &&
                 pictures.map((picture, index) => {
                   console.log('index inside the MAP UploadImages', index)
                   return (
@@ -131,7 +171,7 @@ const UploadImages = () => {
                       />
                     </div>
                   )
-                })}
+                }) */}
               {showButtonBot && (
                 <Button click={() => sendToBackend(state)} submitting={!showButtonBot || isSubmitting} cta="Enviar todas fotos" type="button" />
               )}
