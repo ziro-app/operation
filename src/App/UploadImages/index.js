@@ -115,9 +115,24 @@ const UploadImages = () => {
                         <Virtuoso
                           style={{ height, width }}
                           data={filesList}
+                          useWindowScroll
+                          components={{
+                            Footer: () => {
+                              return (
+                                <div
+                                  style={{
+                                    marginTop: '50px',
+                                    marginBottom: '50px',
+                                  }}
+                                >
+                                  {showButtonBot && <Button click={() => sendToBackend(state)} submitting={!showButtonBot || isSubmitting} cta="Enviar todas fotos" type="button" />}
+                                </div>
+                              );
+                            },
+                          }}
                           itemContent={(index, data) => {
                             return (
-                              <div key={index}>
+                              <div key={index} style={{marginTop:'2rem'}}>
                                 <Card
                                   key={index}
                                   identifierOfPicture={pictures[index].identifier}
@@ -172,9 +187,6 @@ const UploadImages = () => {
                     </div>
                   )
                 }) */}
-              {showButtonBot && (
-                <Button click={() => sendToBackend(state)} submitting={!showButtonBot || isSubmitting} cta="Enviar todas fotos" type="button" />
-              )}
             </div>
           </>
         )}
