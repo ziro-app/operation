@@ -5,7 +5,7 @@ import Error from '@bit/vitorbarbosa19.ziro.error'
 import Dropdown from '@bit/vitorbarbosa19.ziro.dropdown'
 import Calendar from '@bit/vitorbarbosa19.ziro.calendar'
 import currencyFormat from '@ziro/currency-format'
-import Form from '@bit/vitorbarbosa19.ziro.form'    
+import Form from '@bit/vitorbarbosa19.ziro.form'
 import FormInput from '@bit/vitorbarbosa19.ziro.form-input'
 import maskInput from '@ziro/mask-input'
 import InputText from '@bit/vitorbarbosa19.ziro.input-text'
@@ -18,36 +18,36 @@ import sendToBackend from './sendToBackend'
 import { userContext } from '../appContext'
 
 const CommissionModels = () => {
-    const [apelidos, setApelidos] = useState([]) 
-    const [apelido, setApelido] = useState('') 
-    const [parcela, setParcela] = useState('') 
-    const [escopo, setEscopo] = useState('') 
-    const [inputDate, setInputDate] = useState('') 
-    const [focused, setFocused] = useState('') 
-    const [modeloParcela, setModeloParcela] = useState('') 
-    const [dataReajuste, setDataReajuste] = useState('') 
-    const [informacoes, setInformacoes] = useState('') 
+    const [apelidos, setApelidos] = useState([])
+    const [apelido, setApelido] = useState('')
+    const [parcela, setParcela] = useState('')
+    const [escopo, setEscopo] = useState('')
+    const [inputDate, setInputDate] = useState('')
+    const [focused, setFocused] = useState('')
+    const [modeloParcela, setModeloParcela] = useState('')
+    const [dataReajuste, setDataReajuste] = useState('')
+    const [informacoes, setInformacoes] = useState('')
     const [isLoading, setIsLoading] = useState(true)
     const [isOpen, setIsOpen] = useState(false)
     const [error, setError] = useState(false)
     const { nickname } = useContext(userContext)
     const nome = nickname ? nickname.trim() : ''
-    const state = {setIsLoading, setError, setApelidos, setIsOpen, setApelido, setDataReajuste, parcela, modeloParcela, escopo, apelido, inputDate}
+    const state = { setIsLoading, setError, setApelidos, setIsOpen, setApelido, setDataReajuste, parcela, modeloParcela, escopo, apelido, inputDate }
     const newListModelos = [...listModeloParcela2(), 'nenhum']
-    const allowedUsers = ['Mud','Uiller', 'Vitor', 'Claudia', 'Cesar', 'Guilherme']
-    useEffect(() => fetch(state),[])
+    const allowedUsers = ['Mud', 'Uiller', 'Vitor', 'Claudia', 'Cesar', 'Guilherme', 'Carolina']
+    useEffect(() => fetch(state), [])
     useEffect(() => {
-        if(apelido && apelidos.includes(apelido)){
+        if (apelido && apelidos.includes(apelido)) {
             const filter = dataReajuste.filter(item => item.apelido === apelido)[0]
             setInformacoes(filter)
             setParcela(`${filter.parcela1}00`)
             setModeloParcela(filter.modeloParcela2)
             setEscopo(filter.escopo)
         }
-    },[apelido])
+    }, [apelido])
     if (process.env.HOMOLOG ? false : !allowedUsers.includes(nome)) return <Error type='paymentError' title='Sem acesso' message='Sem permissão para acessar essa página' btnMsg='Voltar' backRoute='/administrativo' />
-    if(error) return <Error />
-    if(isLoading) return <Spinner />
+    if (error) return <Error />
+    if (isLoading) return <Spinner />
     const validations = [
         {
             name: 'parcela',
@@ -68,25 +68,25 @@ const CommissionModels = () => {
             message: 'Escopo incorreto'
         }
     ]
-    return(
+    return (
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
             <Dropdown
-                    value={apelido || ''}
-                    list={apelidos}
-                    placeholder="Escolha um membro do time"
-                    onChange={({ target: { value } }) => {setApelido(value)}}
-                    onChangeKeyboard={element => element ? setApelido(element.value) : null}
-                />
-                {apelidos.includes(apelido) && (
-                    <div style={{marginTop:'20px'}}>
+                value={apelido || ''}
+                list={apelidos}
+                placeholder="Escolha um membro do time"
+                onChange={({ target: { value } }) => { setApelido(value) }}
+                onChangeKeyboard={element => element ? setApelido(element.value) : null}
+            />
+            {apelidos.includes(apelido) && (
+                <div style={{ marginTop: '20px' }}>
                     <Form
                         validations={validations}
                         sendToBackend={() => sendToBackend(state)}
                         inputs={[
                             <FormInput
-                            name="inputDate"
-                            label="Data do Reajuste"
-                            input={
+                                name="inputDate"
+                                label="Data do Reajuste"
+                                input={
                                     <Calendar
                                         inputDate={inputDate}
                                         setInputDate={setInputDate}
@@ -96,11 +96,11 @@ const CommissionModels = () => {
                                     />
                                 }
                             />,
-                        <FormInput
-                            name="parcela"
-                            label="Parcela 1"
-                            input={
-                                <InputText
+                            <FormInput
+                                name="parcela"
+                                label="Parcela 1"
+                                input={
+                                    <InputText
                                         value={currencyFormat(parcela)}
                                         onChange={({ target: { value } }) => {
                                             const toInteger = parseInt(value.replace(/[R$\.,]/g, ''), 10)
@@ -109,38 +109,38 @@ const CommissionModels = () => {
                                         placeholder='Digite a nova parcela 1'
                                         inputMode="numeric"
                                     />
-                            }
-                        />,
-                        <FormInput
-                            name="modeloParcela"
-                            label="Modelo Parcela 2"
-                            input={
-                                <Dropdown
-                                    value={modeloParcela || ''}
-                                    list={newListModelos}
-                                    placeholder="Digite o novo modelo de parcela"
-                                    onChange={({ target: { value } }) => {setModeloParcela(value)}}
-                                    onChangeKeyboard={element => element ? setModeloParcela(element.value) : null}
-                                />
-                            }
-                        />,
-                        <FormInput
-                            name="escopo"
-                            label="Escopo"
-                            input={
-                                <InputText
+                                }
+                            />,
+                            <FormInput
+                                name="modeloParcela"
+                                label="Modelo Parcela 2"
+                                input={
+                                    <Dropdown
+                                        value={modeloParcela || ''}
+                                        list={newListModelos}
+                                        placeholder="Digite o novo modelo de parcela"
+                                        onChange={({ target: { value } }) => { setModeloParcela(value) }}
+                                        onChangeKeyboard={element => element ? setModeloParcela(element.value) : null}
+                                    />
+                                }
+                            />,
+                            <FormInput
+                                name="escopo"
+                                label="Escopo"
+                                input={
+                                    <InputText
                                         value={escopo}
                                         onChange={({ target: { value } }) => {
                                             return setEscopo(value)
                                         }}
                                         placeholder='Digite o novo escopo'
                                     />
-                            }
-                        />,
-                    ]} 
+                                }
+                            />,
+                        ]}
                     />
-                        {/* <div style={{marginTop:'20px'}}>
-                            <Button type="button" cta="Desligamento" template="destructive" click={() => setIsOpen(true)}/>           
+                    {/* <div style={{marginTop:'20px'}}>
+                            <Button type="button" cta="Desligamento" template="destructive" click={() => setIsOpen(true)}/>
                         </div>
                         <Modal isOpen={isOpen} setIsOpen={() => setIsOpen(false)}>
                             {!inputDate ? (
@@ -164,8 +164,8 @@ const CommissionModels = () => {
                                 </>
                             )}
                         </Modal> */}
-                    </div>
-                )}
+                </div>
+            )}
         </motion.div>
     )
 }
