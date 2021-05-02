@@ -4,7 +4,6 @@ import Spinner from '@bit/vitorbarbosa19.ziro.spinner-with-div'
 import Error from '@bit/vitorbarbosa19.ziro.error'
 import Table from '@bit/vitorbarbosa19.ziro.table'
 import { useLocation, useRoute } from 'wouter'
-import { supportPhoneNumber } from '@bit/vitorbarbosa19.ziro.utils.support-phone-number'
 
 import useLoadRates from './hooks/useLoadRates'
 
@@ -34,7 +33,7 @@ const Rates = () => {
         btnMsg="Falar com suporte"
         backRoute="/transacoes"
         backRouteFunction={route => {
-          window.open(`https://api.whatsapp.com/send?phone=${supportPhoneNumber.replace(/\+|\s|\(|\)|-/g, '')}`, '_blank')
+          window.open(`https://api.whatsapp.com/send?phone=5511985660341`, '_blank')
           setLocation(route)
         }}
       />
