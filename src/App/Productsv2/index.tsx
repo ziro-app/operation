@@ -30,10 +30,11 @@ const Productsv2 = () => {
   const [lastProduct, setLastProduct] = useState<timestamp | string | null>("")
   const { status, products } = useProducts(supplierUid, maxItems, lastProduct)
   const [pageEnd, hasScrollBar] = useScrollEnd()
+  const lastProductInArray = products[products.length - 1]
   /** if user reaches end of page, set the last product fetched so useProducts can trigger a new fetch */
   useEffect(() => {
     if (pageEnd === true)
-      setLastProduct(products[products.length - 1] === undefined ? null : products[products.length - 1].dateUpdated)
+      setLastProduct(!lastProductInArray ? null : lastProductInArray.dateUpdated)
   }, [pageEnd, products])
   /** if new products are fetched, concat with the old products */
   useEffect(() => {
@@ -43,7 +44,7 @@ const Productsv2 = () => {
       setInfiniteScroll(false)
       setIsLoading(false)
     }
-  }, [status, products])
+  }, [status, products, lastProductInArray])
   return (
     <Switch>
       <Route path="/produtos/:fantasia/:supplierUid">
@@ -56,7 +57,7 @@ const Productsv2 = () => {
           <Button
             onClick={() =>
               setLastProduct(
-                products[products.length - 1] === undefined ? null : products[products.length - 1].dateUpdated,
+                !lastProductInArray ? null : lastProductInArray.dateUpdated,
               )
             }
             style={{ marginTop: "20px" }}
