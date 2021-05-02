@@ -6,7 +6,7 @@ const useSuppliers = () => {
   useEffect(() => {
     const fetch = async () => {
       const _suppliers = []
-      const querySnapshot = await db.collection('suppliers').get()
+      const querySnapshot = await db.collection('suppliers').orderBy('fantasia').get()
       querySnapshot.forEach(doc => _suppliers.push(doc.data()))
       setSuppliers(_suppliers)
     }

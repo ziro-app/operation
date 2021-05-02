@@ -9,6 +9,7 @@ import { auth } from '../../Firebase/index'
 import { containerWithPadding } from '@ziro/theme'
 import { HeaderBack } from '../HeaderBack'
 import { userContext } from '../appContext'
+import { ImageIcon } from './ImageIcon'
 
 export const Menu = ({ title, children, back }) => {
   const [isOpen, setIsOpen] = useState(false)
@@ -27,6 +28,12 @@ export const Menu = ({ title, children, back }) => {
               onClick: () => setIsOpen(false),
               icon: <Icon type="cart" size={15} strokeWidth={2} />,
               text: 'Pedidos',
+            },
+            {
+              path: '/produtos',
+              onClick: () => setIsOpen(false),
+              icon: <ImageIcon />,
+              text: 'Produtos',
             },
             {
               path: '/transacoes',
@@ -102,6 +109,12 @@ export const Menu = ({ title, children, back }) => {
               onClick: () => setIsOpen(false),
               icon: <Icon type="cart" size={15} strokeWidth={2} />,
               text: 'Pedidos',
+            },
+            {
+              path: '/produtos',
+              onClick: () => setIsOpen(false),
+              icon: <ImageIcon />,
+              text: 'Produtos',
             },
             {
               path: '/transacoes',
