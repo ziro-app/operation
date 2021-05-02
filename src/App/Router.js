@@ -86,7 +86,7 @@ const Router = ({ isLogged }) => {
   const [matchSellerNewDefaultPlan, paramsSellerNewDefaultPlan] = useRoute('/alterar-tarifas-padrao/newPlan')
   const [matchFee, paramsFee] = useRoute('/atualizar-plano-venda/:sellerId?/:fee?/:selectedPlan?')
   const [matchDefaultFee, paramsDefaultFee] = useRoute('/alterar-tarifas-padrao/:fee?/:selectedPlan?')
-  const [matchProductsRoot] = useRoute('/produtos/:fantasia/:supplierUid')
+  const [matchProductsRoot, paramsRoot] = useRoute('/produtos/:fantasia/:supplierUid')
   const [matchProductsNew, paramsNew] = useRoute('/produtos/:fantasia/:supplierUid/novo')
   const [matchProductsEdit, paramsEdit] = useRoute('/produtos/:fantasia/:supplierUid/:productId/editar')
   const { sellerId, sellerName } = matchSellerRates ? paramsSellerRates : {}
@@ -411,7 +411,15 @@ const Router = ({ isLogged }) => {
     [matchProductsRoot || matchProductsNew || matchProductsEdit ? location : null]: (
       <Menu
         // eslint-disable-next-line no-nested-ternary
-        title={matchProductsEdit ? 'Editar produto' : matchProductsNew ? 'Novo produto' : 'Produtos'}
+        title={
+          matchProductsEdit
+            ? 'Editar produto'
+            : matchProductsNew
+            ? 'Novo produto'
+            : matchProductsRoot
+            ? decodeURIComponent(paramsRoot.fantasia)
+            : 'Produtos'
+        }
         back={
           matchProductsEdit
             ? `/produtos/${paramsEdit.fantasia}/${paramsEdit.supplierUid}`

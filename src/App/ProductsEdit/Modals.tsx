@@ -8,8 +8,8 @@ import { useBackRoute } from '../Componentsv2/history'
 export const TextSuccess = () => (
   <>
     <Title>Sucesso!</Title>
-    <Text>Seu produto foi cadastrado e estará exposto na sua galeria.</Text>
-    <Link isButton href="/produtos" style={{ marginTop: '15px' }}>
+    <Text>Seu produto foi editado.</Text>
+    <Link isButton href={useBackRoute('/produtos')} style={{ marginTop: '15px' }}>
       Ok
     </Link>
   </>

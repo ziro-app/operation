@@ -1,7 +1,7 @@
-import { fs, db, storage } from "../../Firebase/index"
-import clearForm from "./clearForm"
-import validateImages from "./validateImages"
-import { stateType, setStateType } from "./types"
+import { fs, db, storage } from '../../Firebase/index'
+import clearForm from './clearForm'
+import validateImages from './validateImages'
+import { stateType, setStateType } from './types'
 
 const onSubmit = async (state: stateType, setState: setStateType) => {
   const { setIsLoading } = setState
@@ -18,14 +18,14 @@ const onSubmit = async (state: stateType, setState: setStateType) => {
           const url = await uploadTask.ref.getDownloadURL()
           return url
         } catch (error) {
-          throw new Error("Não foi possível enviar as imagens do produto")
+          throw new Error('Não foi possível enviar as imagens do produto')
         }
       }),
     )
-    const docRef = await db
-      .collection("suppliers")
+    await db
+      .collection('suppliers')
       .doc(uid)
-      .collection("products")
+      .collection('products')
       .add({
         dateCreated: now,
         dateUpdated: now,
