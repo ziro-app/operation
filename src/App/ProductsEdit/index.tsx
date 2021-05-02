@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react"
+import React, { useState } from "react"
 import { useRoute } from "wouter"
 import Form from "../Componentsv2/Form"
 import Title from "../Componentsv2/Title"
@@ -8,7 +8,6 @@ import DotsLoader from "../Componentsv2/DotsLoader"
 import Slider from "../Componentsv2/Slider"
 import { Modal } from "../Componentsv2/Modal"
 import ProductImages from "../Componentsv2/ProductGallery/ProductImages"
-import { userContext } from "../appContext"
 import validations from "./validations"
 import onSubmit from "./onSubmit"
 import useProduct from "./useProduct"
@@ -17,7 +16,7 @@ import { TextSuccess, TextError, TextSuccessDelete, TextErrorDelete, TextConfirm
 import { buttonDelete, buttonSubmit, confirmDeleteModal, confirmDeleteButtons } from "./styles"
 
 const ProductsEdit = () => {
-  const [, params] = useRoute("/produtos/:productId/editar")
+  const [, params] = useRoute("/produtos/:fantasia/:supplierUid/:productId/editar")
   const [isLoading, setIsLoading] = useState(true)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [confirmDelete, setConfirmDelete] = useState(false)
@@ -29,7 +28,8 @@ const ProductsEdit = () => {
   const [reference, setReference] = useState("")
   const [colors, setColors] = useState("")
   const [sizes, setSizes] = useState("")
-  const { uid, fantasy } = useContext(userContext)
+  const uid = params && params.supplierUid
+  const fantasy = params && params.fantasia
   const productId = params && params.productId
   const state = {
     fetchedImages,

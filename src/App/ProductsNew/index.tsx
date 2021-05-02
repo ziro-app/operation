@@ -1,14 +1,15 @@
-import React, { useState, useContext } from "react"
+import React, { useState } from "react"
+import { useRoute } from "wouter"
 import Form from "../Componentsv2/Form"
 import Title from "../Componentsv2/Title"
 import { InputFile, InputText, InputMoney, InputPercentage } from "../Componentsv2/Input"
 import Button from "../Componentsv2/Button"
-import { userContext } from "../appContext"
 import validations from "./validations"
 import onSubmit from "./onSubmit"
 import { TextSuccess, TextError } from "./Modals"
 
 const ProductsNew = () => {
+  const [, params] = useRoute("/produtos/:fantasia/:supplierUid/novo")
   const [isLoading, setIsLoading] = useState(false)
   const [images, setImages] = useState<File[]>()
   const [description, setDescription] = useState("")
@@ -17,7 +18,8 @@ const ProductsNew = () => {
   const [reference, setReference] = useState("")
   const [colors, setColors] = useState("")
   const [sizes, setSizes] = useState("")
-  const { uid, fantasy } = useContext(userContext)
+  const uid = params && params.supplierUid
+  const fantasy = params && params.fantasia
   const state = { images, description, price, discount, reference, colors, sizes, uid, fantasy }
   const setState = { setIsLoading, setImages, setDescription, setPrice, setDiscount, setReference, setColors, setSizes }
   return (

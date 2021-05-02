@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from "react"
-import { Switch, Route } from "wouter"
+import { Switch, Route, useRoute } from "wouter"
 import useScrollEnd from "../Componentsv2/useScrollEnd"
 import Link from "../Componentsv2/Link"
 import DotsLoader from "../Componentsv2/DotsLoader"
 import Button from "../Componentsv2/Button"
 import ProductsNew from "../ProductsNew"
 import ProductsEdit from "../ProductsEdit"
-import SelectSupplier from "./SelectSupplier"
 
 import ProductGallery, { CardType } from "../Componentsv2/ProductGallery"
 import { useProducts } from "./useProducts"
@@ -16,10 +15,15 @@ type timestamp = {
   nanoseconds: number
 }
 
-const supplierUid = "mjx0FJZgOVNiDpAjSumVwuzIY3y1"
 const maxItems = 10
 
 const Productsv2 = () => {
+  const [, params] = useRoute("/produtos/:fantasia/:supplierUid")
+  const [, paramsNew] = useRoute("/produtos/:fantasia/:supplierUid/novo")
+  const [, paramsEdit] = useRoute("/produtos/:fantasia/:supplierUid/:productId/editar")
+  const fantasia = params && params.fantasia || paramsNew && paramsNew.fantasia || paramsEdit && paramsEdit.fantasia
+  const supplierUid = params && params.supplierUid || paramsNew && paramsNew.supplierUid || paramsEdit && paramsEdit.supplierUid
+  const baseUrl = `/produtos/${fantasia}/${supplierUid}`
   const [isLoading, setIsLoading] = useState(true)
   const [infiniteScroll, setInfiniteScroll] = useState(false)
   const [productList, setProductList] = useState<CardType[]>([])
@@ -42,16 +46,13 @@ const Productsv2 = () => {
   }, [status, products])
   return (
     <Switch>
-      <Route path="/produtos">
-        <SelectSupplier />
-      </Route>
-      <Route path="/produtos/:fantasia/:supplierId">
-        <Link isButton href="/produtos/:fantasia/:supplierId/novo" style={{ marginBottom: "20px" }}>
+      <Route path="/produtos/:fantasia/:supplierUid">
+        <Link isButton href={`${baseUrl}/novo`} style={{ marginBottom: "20px" }}>
           Adicionar novo
         </Link>
-        <ProductGallery cards={productList} isLoading={isLoading} skeletonCount={maxItems} />
+        <ProductGallery cards={productList} isLoading={isLoading} baseUrl={baseUrl} skeletonCount={maxItems} />
         {!isLoading && infiniteScroll && lastProduct !== null ? <DotsLoader /> : null}
-        {!isLoading && !hasScrollBar && !lastProduct && (
+        {!isLoading && !hasScrollBar && !lastProduct && productList.length === maxItems && (
           <Button
             onClick={() =>
               setLastProduct(
@@ -64,10 +65,10 @@ const Productsv2 = () => {
           </Button>
         )}
       </Route>
-      <Route path="/produtos/:fantasia/:supplierId/novo">
+      <Route path="/produtos/:fantasia/:supplierUid/novo">
         <ProductsNew />
       </Route>
-      <Route path="/produtos/:fantasia/:supplierId/:productId/editar">
+      <Route path="/produtos/:fantasia/:supplierUid/:productId/editar">
         <ProductsEdit />
       </Route>
     </Switch>

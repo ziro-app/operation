@@ -1,19 +1,15 @@
-import React, { Dispatch, SetStateAction } from "react"
-import Title from "../Componentsv2/Title"
-import Text from "../Componentsv2/Text"
-import Link from "../Componentsv2/Link"
-import Illustration from "../Componentsv2/Illustration"
-import Button from "../Componentsv2/Button"
+import React from 'react'
+import Title from '../Componentsv2/Title'
+import Text from '../Componentsv2/Text'
+import Link from '../Componentsv2/Link'
+import Illustration from '../Componentsv2/Illustration'
+import { useBackRoute } from '../Componentsv2/history'
 
-type TextSuccessProps = {
-  setShowModal?: Dispatch<SetStateAction<boolean>>
-}
-
-export const TextSuccess = ({ setShowModal }: TextSuccessProps) => (
+export const TextSuccess = () => (
   <>
     <Title>Sucesso!</Title>
     <Text>Seu produto foi cadastrado e estará exposto na sua galeria.</Text>
-    <Link isButton href="/produtos" style={{ marginTop: "15px" }}>
+    <Link isButton href="/produtos" style={{ marginTop: '15px' }}>
       Ok
     </Link>
   </>
@@ -22,15 +18,15 @@ export const TextSuccess = ({ setShowModal }: TextSuccessProps) => (
 export const TextError = ({ error }: { error?: Error }) => (
   <>
     <Title>Ocorreu um erro</Title>
-    <Text>{(error && error.message) || "Tente novamente ou contate suporte."}</Text>
+    <Text>{(error && error.message) || 'Tente novamente ou contate suporte.'}</Text>
   </>
 )
 
-export const TextSuccessDelete = ({ setShowModal }: TextSuccessProps) => (
+export const TextSuccessDelete = () => (
   <>
     <Title>Sucesso!</Title>
     <Text>Seu produto foi excluido.</Text>
-    <Link isButton href="/produtos" style={{ marginTop: "15px" }}>
+    <Link isButton href={useBackRoute('/produtos')} style={{ marginTop: '15px' }}>
       Ok
     </Link>
   </>
@@ -39,11 +35,11 @@ export const TextSuccessDelete = ({ setShowModal }: TextSuccessProps) => (
 export const TextErrorDelete = ({ error }: { error?: Error }) => (
   <>
     <Title>Ocorreu um erro</Title>
-    <Text>{(error && error.message) || "Tente novamente ou contate suporte."}</Text>
+    <Text>{(error && error.message) || 'Tente novamente ou contate suporte.'}</Text>
   </>
 )
 
-export const TextConfirmDelete = ({ error }: { error?: Error }) => (
+export const TextConfirmDelete = () => (
   <div>
     <Illustration name="PaymentError" height={110} />
     <Title>Confirmar exclusão</Title>

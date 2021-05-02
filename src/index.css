@@ -11,12 +11,16 @@ body {
     scrollbar-width: none;  /* Firefox */
 }
 
-body::-webkit-scrollbar { 
+body::-webkit-scrollbar {
     display: none;  /* Safari and Chrome */
 }
 
 h1 {
     font-size: 1.8rem;
+}
+
+h2 {
+    margin: 0;
 }
 
 p {

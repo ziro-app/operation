@@ -69,6 +69,7 @@ import Pagamentos from './Pagamentos'
 import ManualApproval from './ManualApproval'
 import ConciliationZoopFirebase from './ConciliationZoopFirebase'
 import Productsv2 from './Productsv2'
+import SelectSupplier from './Productsv2/SelectSupplier'
 import Rates from './Rates'
 // import FirebaseMigration from './FirebaseMigration/index' -> Inacabado
 
@@ -85,10 +86,9 @@ const Router = ({ isLogged }) => {
   const [matchSellerNewDefaultPlan, paramsSellerNewDefaultPlan] = useRoute('/alterar-tarifas-padrao/newPlan')
   const [matchFee, paramsFee] = useRoute('/atualizar-plano-venda/:sellerId?/:fee?/:selectedPlan?')
   const [matchDefaultFee, paramsDefaultFee] = useRoute('/alterar-tarifas-padrao/:fee?/:selectedPlan?')
-  const [matchSuppliers] = useRoute('/produtos')
-  const [matchProductsRoot, paramsRoot] = useRoute('/produtos/:fantasia/:supplierId')
-  const [matchProductsNew] = useRoute('/produtos/:fantasia/:supplierId/novo')
-  const [matchProductsEdit] = useRoute('/produtos/:fantasia/:supplierId/:productId/editar')
+  const [matchProductsRoot] = useRoute('/produtos/:fantasia/:supplierUid')
+  const [matchProductsNew, paramsNew] = useRoute('/produtos/:fantasia/:supplierUid/novo')
+  const [matchProductsEdit, paramsEdit] = useRoute('/produtos/:fantasia/:supplierUid/:productId/editar')
   const { sellerId, sellerName } = matchSellerRates ? paramsSellerRates : {}
   const { nickname } = useContext(userContext)
   const allowedUsers = ['Vitor']
@@ -401,16 +401,29 @@ const Router = ({ isLogged }) => {
         <UserCart {...params} />
       </Suspense>
     ),
-    [matchSuppliers || matchProductsRoot || matchProductsNew || matchProductsEdit ? location : null]: (
+    '/produtos': (
+      <Menu title="Fabricantes">
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+          <SelectSupplier />
+        </motion.div>
+      </Menu>
+    ),
+    [matchProductsRoot || matchProductsNew || matchProductsEdit ? location : null]: (
       <Menu
         // eslint-disable-next-line no-nested-ternary
-        title={matchProductsEdit ? 'Editar produto' : matchProductsNew ? 'Novo produto' : matchProductsRoot ? 'Produtos' : 'Fabricantes'}
+        title={matchProductsEdit ? 'Editar produto' : matchProductsNew ? 'Novo produto' : 'Produtos'}
         back={
-          matchProductsEdit || matchProductsNew ? `/produtos/${paramsRoot.fantasia}/${paramsRoot.supplierId}` : matchProductsRoot ? '/produtos' : null
+          matchProductsEdit
+            ? `/produtos/${paramsEdit.fantasia}/${paramsEdit.supplierUid}`
+            : matchProductsNew
+            ? `/produtos/${paramsNew.fantasia}/${paramsNew.supplierUid}`
+            : matchProductsRoot
+            ? '/produtos'
+            : null
         }
       >
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-          <Productsv2 />
+          <Productsv2 paramsNew={paramsNew} />
         </motion.div>
       </Menu>
     ),
