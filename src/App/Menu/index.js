@@ -7,9 +7,10 @@ import Icon from '@bit/vitorbarbosa19.ziro.icon'
 import PropTypes from 'prop-types'
 import { auth } from '../../Firebase/index'
 import { containerWithPadding } from '@ziro/theme'
+import { HeaderBack } from '../HeaderBack'
 import { userContext } from '../appContext'
 
-export const Menu = ({ title, children }) => {
+export const Menu = ({ title, children, back }) => {
   const [isOpen, setIsOpen] = useState(false)
   const { nickname, cpf } = useContext(userContext)
   const allowedUsers = ['Vitor']
@@ -160,9 +161,20 @@ export const Menu = ({ title, children }) => {
         />
       )
   }
-
+  if (back) {
+    return (
+      <div style={{ ...containerWithPadding, padding: '20px 12px 60px' }}>
+        <HeaderBack title={title} navigateTo={back} withoutContainer>
+          <Drawer isOpen={isOpen} setIsOpen={() => setIsOpen(false)}>
+            {mountDrawerpanel()}
+          </Drawer>
+          {children}
+        </HeaderBack>
+      </div>
+    )
+  }
   return (
-    <div style={containerWithPadding}>
+    <div style={{ ...containerWithPadding, padding: '20px 12px 60px' }}>
       <Header type="icon" title={title} icon="menu" setIsOpen={() => setIsOpen(true)} />
       <Drawer isOpen={isOpen} setIsOpen={() => setIsOpen(false)}>
         {mountDrawerpanel()}

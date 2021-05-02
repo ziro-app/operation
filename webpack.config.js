@@ -11,7 +11,7 @@ module.exports = (env, { mode }) => {
         {
           test: /\.tsx?$/,
           use: 'ts-loader',
-          exclude: /node_modules/
+          exclude: /node_modules/,
         },
         {
           test: /\.js$/,
@@ -31,7 +31,7 @@ module.exports = (env, { mode }) => {
       ],
     },
     resolve: {
-        extensions: ['.ts', '.tsx', '.js']
+      extensions: ['.ts', '.tsx', '.js'],
     },
     plugins: [new HtmlWebpackPlugin({ template: './src/index.html' })],
   }
@@ -74,7 +74,7 @@ module.exports = (env, { mode }) => {
       document_id_for_utilities_main,
       homolog,
       zoop_token,
-      ziro_marketplace
+      ziro_marketplace,
     } = require('./credentials')
     config.devtool = 'cheap-module-eval-source-map'
     config.devServer = { historyApiFallback: true, hot: true, port: 9090 }
@@ -179,7 +179,7 @@ module.exports = (env, { mode }) => {
           SHEET_ID_PESSOAS: JSON.stringify(process.env.SHEET_ID_PESSOAS),
           DOCUMENT_ID_FOR_UTILITIES_MAIN: JSON.stringify(process.env.DOCUMENT_ID_FOR_UTILITIES_MAIN),
           ZOOP_TOKEN: JSON.stringify(process.env.ZOOP_TOKEN),
-          ZIRO_MARKETPLACE: JSON.stringify(process.env.ZIRO_MARKETPLACE)
+          ZIRO_MARKETPLACE: JSON.stringify(process.env.ZIRO_MARKETPLACE),
         },
       }),
     )

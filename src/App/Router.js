@@ -68,6 +68,7 @@ import ShowAttendance from './ShowAttendance/index'
 import Pagamentos from './Pagamentos'
 import ManualApproval from './ManualApproval'
 import ConciliationZoopFirebase from './ConciliationZoopFirebase'
+import Productsv2 from './Productsv2'
 import Rates from './Rates'
 // import FirebaseMigration from './FirebaseMigration/index' -> Inacabado
 
@@ -84,6 +85,10 @@ const Router = ({ isLogged }) => {
   const [matchSellerNewDefaultPlan, paramsSellerNewDefaultPlan] = useRoute('/alterar-tarifas-padrao/newPlan')
   const [matchFee, paramsFee] = useRoute('/atualizar-plano-venda/:sellerId?/:fee?/:selectedPlan?')
   const [matchDefaultFee, paramsDefaultFee] = useRoute('/alterar-tarifas-padrao/:fee?/:selectedPlan?')
+  const [matchSuppliers] = useRoute('/produtos')
+  const [matchProductsRoot, paramsRoot] = useRoute('/produtos/:fantasia/:supplierId')
+  const [matchProductsNew] = useRoute('/produtos/:fantasia/:supplierId/novo')
+  const [matchProductsEdit] = useRoute('/produtos/:fantasia/:supplierId/:productId/editar')
   const { sellerId, sellerName } = matchSellerRates ? paramsSellerRates : {}
   const { nickname } = useContext(userContext)
   const allowedUsers = ['Vitor']
@@ -395,6 +400,19 @@ const Router = ({ isLogged }) => {
       <Suspense fallback={<SpinnerWithDiv />}>
         <UserCart {...params} />
       </Suspense>
+    ),
+    [matchSuppliers || matchProductsRoot || matchProductsNew || matchProductsEdit ? location : null]: (
+      <Menu
+        // eslint-disable-next-line no-nested-ternary
+        title={matchProductsEdit ? 'Editar produto' : matchProductsNew ? 'Novo produto' : matchProductsRoot ? 'Produtos' : 'Fabricantes'}
+        back={
+          matchProductsEdit || matchProductsNew ? `/produtos/${paramsRoot.fantasia}/${paramsRoot.supplierId}` : matchProductsRoot ? '/produtos' : null
+        }
+      >
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+          <Productsv2 />
+        </motion.div>
+      </Menu>
     ),
     // [match && !params.userId ? location : null]: <HeaderBack title='Procurar pedidos' navigateTo='/assessoria'><SearchUserCart /></HeaderBack>,
     // [match && params.userId && !params.requestId ? location : null]: <UserCart />,
