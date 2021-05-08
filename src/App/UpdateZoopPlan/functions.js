@@ -77,7 +77,7 @@ export function returnUniqueKey(card) {
 }
 
 export const createNewPlan = async (sellerZoopPlanForFirebase, nickname, sellerId) => {
-  const allowedUsers = ['Uiller', 'Vitor', 'Alessandro', 'Wermeson', 'Ale', 'Russi']
+  const allowedUsers = ['Uiller', 'Vitor', 'Fernanda', 'Wermeson', 'Ale', 'Russi']
   const nome = nickname ? nickname.trim() : ''
   return new Promise(async (resolve, reject) => {
     try {

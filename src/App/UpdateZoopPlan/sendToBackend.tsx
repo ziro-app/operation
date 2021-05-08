@@ -19,7 +19,7 @@ const sendToBackend = async state => {
     setIsLoadingFunction,
   } = state
   const nome = nickname ? nickname.trim() : ''
-  const allowedUsers = ['Uiller', 'Vitor', 'Wermeson', 'Ale', 'Russi']
+  const allowedUsers = ['Uiller', 'Vitor', 'Wermeson', 'Ale', 'Russi', 'Fernanda']
   return new Promise(async (resolve, reject) => {
     try {
       if (translateFeesToZoop(selectedPlan) != null) {
