@@ -41,6 +41,10 @@ const onSubmit = async (state: stateType, setState: setStateType) => {
           sizes,
         },
       })
+    /** update suppliers collection with the timestamp of the updated gallery */
+    await db.collection('suppliers').doc(uid).update({
+      lastGalleryUpdate: now,
+    })
   } catch (error) {
     if (error.response) console.log(error.response)
     console.log(error)
