@@ -4,11 +4,9 @@ import validateImages from './validateImages'
 import { stateType, setStateType } from './types'
 
 const onSubmit = async (state: stateType, setState: setStateType) => {
-  const { setIsLoading } = setState
   const { images, description, price, discount, reference, colors, sizes, uid, fantasy } = state
   try {
     validateImages(images)
-    setIsLoading(true)
     const now = fs.FieldValue.serverTimestamp()
     const imagesUrls = await Promise.all(
       images.map(async (image: File) => {
@@ -46,8 +44,6 @@ const onSubmit = async (state: stateType, setState: setStateType) => {
     if (error.response) console.log(error.response)
     console.log(error)
     throw error
-  } finally {
-    setIsLoading(false)
   }
 }
 

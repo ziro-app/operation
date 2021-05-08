@@ -55,6 +55,7 @@ const Productsv2 = () => {
         {!isLoading && infiniteScroll && lastProduct !== null ? <DotsLoader /> : null}
         {!isLoading && !hasScrollBar && !lastProduct && productList.length === maxItems && (
           <Button
+            type="button"
             onClick={() =>
               setLastProduct(
                 !lastProductInArray ? null : lastProductInArray.dateUpdated,

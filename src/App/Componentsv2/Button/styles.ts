@@ -1,5 +1,5 @@
-import themes from '../themes';
-import React from 'react';
+import React from 'react'
+import themes from '../themes'
 
 export const regular: React.CSSProperties = {
   width: '100%',
@@ -18,18 +18,18 @@ export const regular: React.CSSProperties = {
   textAlign: 'center',
   background: themes.gradient.primary,
   boxShadow: themes.shadow.primaryAlt,
-};
+}
 
 export const light: React.CSSProperties = {
   ...regular,
   background: themes.gradient.secondary,
   color: themes.colors.primary,
-};
+}
 
 export const destructive: React.CSSProperties = {
   ...regular,
   background: themes.colors.alert,
-};
+}
 
 export const disabled: React.CSSProperties = {
   ...regular,
@@ -37,4 +37,4 @@ export const disabled: React.CSSProperties = {
   color: themes.colors.primary,
   background: themes.colors.gray4,
   boxShadow: 'none',
-};
+}

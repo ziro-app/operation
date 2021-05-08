@@ -1,24 +1,10 @@
-import { fs, db, storage } from "../../Firebase/index"
-import validateImages from "./validateImages"
-import { stateType, setStateType } from "./types"
+import { fs, db, storage } from '../../Firebase/index'
+import validateImages from './validateImages'
+import { stateType, setStateType } from './types'
 
 const onSubmit = async (state: stateType, setState: setStateType) => {
-  const { setIsSubmitting } = setState
-  const {
-    fetchedImages,
-    images,
-    description,
-    price,
-    discount,
-    reference,
-    colors,
-    sizes,
-    uid,
-    fantasy,
-    productId,
-  } = state
+  const { fetchedImages, images, description, price, discount, reference, colors, sizes, uid, fantasy, productId } = state
   try {
-    setIsSubmitting(true)
     let _images
     if (images) {
       validateImages(images)
@@ -30,16 +16,16 @@ const onSubmit = async (state: stateType, setState: setStateType) => {
             const url = await uploadTask.ref.getDownloadURL()
             return url
           } catch (error) {
-            throw new Error("Não foi possível enviar as imagens do produto")
+            throw new Error('Não foi possível enviar as imagens do produto')
           }
         }),
       )
     }
     const now = fs.FieldValue.serverTimestamp()
     await db
-      .collection("suppliers")
+      .collection('suppliers')
       .doc(uid)
-      .collection("products")
+      .collection('products')
       .doc(productId)
       .update({
         dateUpdated: now,
@@ -59,8 +45,6 @@ const onSubmit = async (state: stateType, setState: setStateType) => {
     if (error.response) console.log(error.response)
     console.log(error)
     throw error
-  } finally {
-    setIsSubmitting(false)
   }
 }
 
