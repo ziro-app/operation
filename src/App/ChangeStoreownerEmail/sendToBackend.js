@@ -41,7 +41,8 @@ const sendToBackend = state => () => {
                         const urlChangeEmail = `${process.env.FIREBASE_AUTH_URL}updateUserInfo`;
                         const configChangeEmail = {
                             headers: {
-                                'Content-type': 'application/json'
+                                'Content-type': 'application/json',
+                                'Authorization': process.env.FIREBASE_AUTH_TOKEN
                             }
                         };
                         const bodyChangeEmail = {

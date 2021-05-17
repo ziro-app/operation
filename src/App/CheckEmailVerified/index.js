@@ -71,7 +71,8 @@ const CheckEmailVerified = () => {
         const url = `${process.env.FIREBASE_AUTH_URL}resendConfirmEmail`;
         const config = {
             headers: {
-                'Content-type': 'application/json'
+                'Content-type': 'application/json',
+                'Authorization': process.env.FIREBASE_AUTH_TOKEN
             }
         };
         try {

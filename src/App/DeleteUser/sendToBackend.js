@@ -37,7 +37,8 @@ const sendToBackend = state => () => {
                 const urlDeleteUser = `${process.env.FIREBASE_AUTH_URL}deleteAuthUser`;
                 const configDeleteUser = {
                     headers: {
-                        'Content-type': 'application/json'
+                        'Content-type': 'application/json',
+                        'Authorization': process.env.FIREBASE_AUTH_TOKEN
                     }
                 };
                 const bodyDeleteUser = { uid };

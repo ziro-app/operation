@@ -13,7 +13,8 @@ const sendToBackend = state => () => {
     const url = `${process.env.FIREBASE_AUTH_URL}checkEmail`;
     const config = {
         headers: {
-            'Content-type': 'application/json'
+            'Content-type': 'application/json',
+            'Authorization': process.env.FIREBASE_AUTH_TOKEN
         }
     };
 
