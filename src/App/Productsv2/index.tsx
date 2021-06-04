@@ -45,6 +45,8 @@ const Productsv2 = () => {
       setIsLoading(false)
     }
   }, [status, products, lastProductInArray])
+  console.log(products)
+  console.log(supplierUid)
   return (
     <Switch>
       <Route path="/produtos/:fantasia/:supplierUid">
