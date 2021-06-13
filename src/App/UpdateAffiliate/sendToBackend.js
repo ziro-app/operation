@@ -1,7 +1,7 @@
 import { post } from 'axios'
 
 export const inputEditUpdate = (column, row, newProp, setIsLoading, setError) => () => {
-    const url = process.env.SHEET_URL
+    const url = 'https://ziro-sheets.netlify.app/.netlify/functions/api'
     const body = {
         apiResource: 'values',
         apiMethod: 'update',
@@ -41,7 +41,7 @@ export const inputEditUpdate = (column, row, newProp, setIsLoading, setError) =>
 
 export const dropdownUpdate = (state, row) => async () => {
     const { brand, branch, setBrand, setBranch } = state
-    const url = process.env.SHEET_URL
+    const url = 'https://ziro-sheets.netlify.app/.netlify/functions/api'
     const body = {
         apiResource: 'values',
         apiMethod: 'update',

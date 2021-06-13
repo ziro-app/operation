@@ -99,7 +99,7 @@ const SplitPayment = ({ transactionId }) => {
     try {
       setLoadingButton(true)
       await axios
-        .delete(`${process.env.PAY}/split-rules-delete?transaction_id=${transaction.transactionZoopId}&id=${id}`, {
+        .delete(`https://ziro-pay.netlify.app/.netlify/functions/split-rules-delete?transaction_id=${transaction.transactionZoopId}&id=${id}`, {
           headers: {
             Authorization: `Basic ${process.env.PAY_TOKEN}`,
           },
@@ -139,21 +139,21 @@ const SplitPayment = ({ transactionId }) => {
           sendToBackend={
             sendToBackend
               ? sendToBackend(
-                  transactionId,
-                  transaction.transactionZoopId,
-                  transaction.sellerZoopId,
-                  amount,
-                  validationMessage,
-                  setValidationMessage,
-                  chargeType,
-                  transaction.charge,
-                  setAmount,
-                  setChargeTypeInput,
-                  list,
-                  setList,
-                  splitName,
-                  setSplitName,
-                )
+                transactionId,
+                transaction.transactionZoopId,
+                transaction.sellerZoopId,
+                amount,
+                validationMessage,
+                setValidationMessage,
+                chargeType,
+                transaction.charge,
+                setAmount,
+                setChargeTypeInput,
+                list,
+                setList,
+                splitName,
+                setSplitName,
+              )
               : () => null
           }
           inputs={[
@@ -176,7 +176,7 @@ const SplitPayment = ({ transactionId }) => {
                   }}
                   onChangeKeyboard={element => {
                     if (element) {
-                      const {value} = element
+                      const { value } = element
                       setChargeTypeInput(value)
                       if (chargeTypeInput === '') {
                         setChargeType('')

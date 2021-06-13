@@ -7,9 +7,9 @@ const sendToBackend = state => () => {
   const nome = nickname ? nickname.trim() : ''
   const valor = numberFormatter(value) ? numberFormatter(value) / 100 : 0.0
   const descricao = description ? description.trim() : ''
-  const url = process.env.SHEET_URL
+  const url = 'https://ziro-sheets.netlify.app/.netlify/functions/api'
   const data = formatDateUTC3(new Date())
-  const allowedUsers = ['Claudia', 'Vitor', 'Uiller', 'Guilherme','Carolina','Thiago Lucas','Victor']
+  const allowedUsers = ['Claudia', 'Vitor', 'Uiller', 'Guilherme', 'Carolina', 'Thiago Lucas', 'Victor']
 
   const body = {
     apiResource: 'values',

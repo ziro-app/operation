@@ -58,7 +58,7 @@ const UpdateAffiliate = () => {
     ]
 
     const findAffiliateRow = async cpf => {
-        const url = process.env.SHEET_URL
+        const url = 'https://ziro-sheets.netlify.app/.netlify/functions/api'
         let pos
         const config = {
             headers: {

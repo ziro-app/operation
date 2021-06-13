@@ -3,7 +3,7 @@ import axios from 'axios';
 import { fbauth, auth, db } from '../../../Firebase/index';
 import { IZoopData, IFirebaseData, IApiData, ISheetsData, IUserData } from './IRollbackData';
 
-const url = process.env.SHEET_URL;
+const url = 'https://ziro-sheets.netlify.app/.netlify/functions/api';
 const config = {
   headers: {
     'Content-type': 'application/json',
@@ -65,7 +65,7 @@ const useRollback = () => {
               const { id, rangeToSearch, rangeToUpdate, spreadsheetId, values } = item[1] as unknown as ISheetsData;
               const sheetsRow = await findSheetsRow(id,rangeToSearch,spreadsheetId)
               const rangeWithRow = `${rangeToUpdate}${sheetsRow}`
-              const url = process.env.SHEET_URL;
+              const url = 'https://ziro-sheets.netlify.app/.netlify/functions/api';
               const config = {
                 headers: {
                   'Content-type': 'application/json',
@@ -86,7 +86,7 @@ const useRollback = () => {
             } else if (origin === 'zoop') {
               const { zoopId } = item[1] as unknown as IZoopData;
               await axios.post(
-                `${process.env.PAY_URL}sellers-delete?seller_id=${zoopId}`,
+                `https://ziro-pay.netlify.app/.netlify/functions/sellers-delete?seller_id=${zoopId}`,
                 {},
                 {
                   headers: {

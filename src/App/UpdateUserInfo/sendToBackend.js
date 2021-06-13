@@ -6,7 +6,7 @@ const sendToBackend = (uid, column, row, obj, newProp, setIsLoading, setError) =
     if (Object.keys(obj)[0] === 'altura') property = newProp.replace('.', ',')
     else if (Object.keys(obj)[0] === 'agencia') property = `'${newProp}`
     else property = newProp
-    const url = process.env.SHEET_URL
+    const url = 'https://ziro-sheets.netlify.app/.netlify/functions/api'
     const body = {
         apiResource: 'values',
         apiMethod: 'update',

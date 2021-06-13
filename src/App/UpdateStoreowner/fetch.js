@@ -9,7 +9,7 @@ const fetch = (setIsLoading, setIsError, setStoreowners, setAdvisors, setAffilia
     const run = async () => {
         const config = {
             method: 'POST',
-            url: process.env.SHEET_URL,
+            url: 'https://ziro-sheets.netlify.app/.netlify/functions/api',
             data: {
                 apiResource: 'values',
                 apiMethod: 'get',
@@ -24,7 +24,7 @@ const fetch = (setIsLoading, setIsError, setStoreowners, setAdvisors, setAffilia
         }
         const configAffiliate = {
             method: 'POST',
-            url: process.env.SHEET_URL,
+            url: 'https://ziro-sheets.netlify.app/.netlify/functions/api',
             data: {
                 apiResource: 'values',
                 apiMethod: 'get',
@@ -39,7 +39,7 @@ const fetch = (setIsLoading, setIsError, setStoreowners, setAdvisors, setAffilia
         }
         const configPeople = {
             method: 'POST',
-            url: process.env.SHEET_URL,
+            url: 'https://ziro-sheets.netlify.app/.netlify/functions/api',
             data: {
                 apiResource: 'values',
                 apiMethod: 'get',

@@ -86,7 +86,7 @@ const CheckEmailVerified = () => {
     }
 
     const apiResendEmail = async () => {
-        const urlEmail = process.env.API_EMAIL;
+        const urlEmail = 'https://ziro-email.netlify.app/.netlify/functions/send-email';
         const configEmail = {
             headers: {
                 'Content-type': 'application/json',

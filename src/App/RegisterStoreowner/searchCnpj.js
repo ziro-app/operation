@@ -5,7 +5,7 @@ const searchCnpj = state => () => {
         setComplemento, setBairro, setCep, setCidade, setEstado, setFone, setEmail } = state
     const config = {
         method: 'POST',
-        url: process.env.CNPJ_URL,
+        url: 'https://query-cnpj.netlify.app/.netlify/functions/cnpj',
         data: { cnpj },
         headers: {
             'Authorization': process.env.CNPJ_TOKEN

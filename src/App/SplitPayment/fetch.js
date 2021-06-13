@@ -5,25 +5,25 @@ import matchStatusColor from '../Transactions/matchStatusColor';
 import { dateFormat } from '../Transactions/utils';
 
 const getSplitRules = async (transaction_id, setTransaction, transaction, setList, setIsLoading) => {
-  try {
-    await axios
-      .get(`${process.env.PAY}/split-rules-get?transaction_id=${transaction_id}`, {
-        headers: {
-          Authorization: `Basic ${process.env.PAY_TOKEN}`,
-        },
-      })
-      .then(result => {
-          const { data } = result;
+    try {
+        await axios
+            .get(`https://ziro-pay.netlify.app/.netlify/functions/split-rules-get?transaction_id=${transaction_id}`, {
+                headers: {
+                    Authorization: `Basic ${process.env.PAY_TOKEN}`,
+                },
+            })
+            .then(result => {
+                const { data } = result;
 
-          const splitItems = data.items;
-          setList(splitItems);
-          setIsLoading(false);
-      })
-  } catch (e) {
-      console.log(e);
-      console.log('erro na requisição para o get de split rules da zoop');
-      setIsLoading(false);
-  }
+                const splitItems = data.items;
+                setList(splitItems);
+                setIsLoading(false);
+            })
+    } catch (e) {
+        console.log(e);
+        console.log('erro na requisição para o get de split rules da zoop');
+        setIsLoading(false);
+    }
 }
 
 const fetch = (transactionId, setTransaction, setError, transaction, setList, setIsLoading) => {
@@ -39,12 +39,12 @@ const fetch = (transactionId, setTransaction, setError, transaction, setList, se
                             charge,
                             datePaid,
                             fees,
-              installments,
-              dateLinkCreated,
-              transactionZoopId,
+                            installments,
+                            dateLinkCreated,
+                            transactionZoopId,
                             installmentsMax,
-              sellerZoopId,
-              status,
+                            sellerZoopId,
+                            status,
                             buyerRazao,
                             receivables,
                             receivement,
@@ -68,18 +68,18 @@ const fetch = (transactionId, setTransaction, setError, transaction, setList, se
                                                         .replace(" de ", "/"); */
                         const statusColor = matchStatusColor(status);
                         paymentDoc.push({
-              transactionZoopId: transactionZoopId || '',
-              transactionId: snapshot.id,
-              charge: chargeFormatted,
-              dateLinkCreated,
+                            transactionZoopId: transactionZoopId || '',
+                            transactionId: snapshot.id,
+                            charge: chargeFormatted,
+                            dateLinkCreated,
                             datePaid: dateFormatted,
-              fees: fees || '',
-              installments: installments || '',
+                            fees: fees || '',
+                            installments: installments || '',
                             installmentsMax: installmentsMax || '',
-              seller: buyerRazao || '-',
-              sellerZoopId: sellerZoopId || '',
-              status: status || '',
-              statusColor: matchStatusColor(status),
+                            seller: buyerRazao || '-',
+                            sellerZoopId: sellerZoopId || '',
+                            status: status || '',
+                            statusColor: matchStatusColor(status),
                             buyerRazao,
                             receivables: receivables || [],
                             receivement,

@@ -10,286 +10,286 @@ import postSheet from './utils/postSheet'
 import dataPostBatch from './utils/dataPostBatch'
 
 const defineCardValue = ({ discount, installment, totalAmount }) => {
-  const valueAmount = totalAmount / 100
-  if (discount === '' || discount == 0) {
-    if (installment.indexOf('1') !== -1) return round(valueAmount / 0.96, 2)
-    if (installment.indexOf('2') !== -1) return round(valueAmount / 0.95, 2)
-    if (installment.indexOf('3') !== -1 || installment.indexOf('4') !== -1) return round(valueAmount / 0.93, 2)
-    return round(valueAmount / 0.92, 2)
-  }
-  return totalAmount
+    const valueAmount = totalAmount / 100
+    if (discount === '' || discount == 0) {
+        if (installment.indexOf('1') !== -1) return round(valueAmount / 0.96, 2)
+        if (installment.indexOf('2') !== -1) return round(valueAmount / 0.95, 2)
+        if (installment.indexOf('3') !== -1 || installment.indexOf('4') !== -1) return round(valueAmount / 0.93, 2)
+        return round(valueAmount / 0.92, 2)
+    }
+    return totalAmount
 }
 
 const defineTEDValue = ({ hasCommission, commissionValue, totalAmount }) => {
-  if (hasCommission === 'Sim') {
-    const percent = commissionValue / 100
-    return totalAmount - totalAmount * percent
-  }
-  return totalAmount
+    if (hasCommission === 'Sim') {
+        const percent = commissionValue / 100
+        return totalAmount - totalAmount * percent
+    }
+    return totalAmount
 }
 
 const randStr = () => {
-  let result = ''
-  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
-  const charactersLength = characters.length
-  for (let i = 0; i < 5; i++) {
-    result += characters.charAt(Math.floor(Math.random() * charactersLength))
-  }
-  return result
+    let result = ''
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+    const charactersLength = characters.length
+    for (let i = 0; i < 5; i++) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength))
+    }
+    return result
 }
 
 const sendToBackend = state => () => {
-  const {
-    totalAmount,
-    type,
-    storeownerName,
-    supplierName,
-    romaneio,
-    bankCheckEntry,
-    installment,
-    discount,
-    paymentType,
-    beneficiary,
-    beneficiaryDocument,
-    bankName,
-    accountNumber,
-    agency,
-    note,
-    suppliers,
-    billet,
-    setTotalAmount,
-    setType,
-    setStoreowner,
-    setStoreownerName,
-    setSupplier,
-    setSupplierName,
-    setRomaneio,
-    setBankCheckEntry,
-    setFilename,
-    setFilenameBankCheckEntry,
-    setInstallment,
-    setDiscount,
-    setPaymentType,
-    setBeneficiary,
-    setBeneficiaryDocument,
-    setBankName,
-    setAccountNumber,
-    setAgency,
-    setBank,
-    setHasCommission,
-    setCommissionValue,
-    setNote,
-    setBillet,
-    setReceivableAmount,
-    setPaymentTypeReceivable,
-    setPixKey,
-    paymentTypeReceivable,
-    pixKey,
-    needUpdateBankAccount,
-    bank,
-    setNeedUpdateBankAccount,
-    nickname,
-    hasSellerZoopPlan,
-    uid,
-  } = state
-  const linkValue = type === 'Cartão de Crédito' ? internalFormat(defineCardValue(state)) : internalFormat(defineTEDValue(state))
-  const linkValueInternal = linkValue.replace(/\./g, '').replace(/\,/g, '').replace(/\R/g, '').replace(/\$/g, '')
-  const total = totalAmount ? internalFormat(totalAmount) : ''
+    const {
+        totalAmount,
+        type,
+        storeownerName,
+        supplierName,
+        romaneio,
+        bankCheckEntry,
+        installment,
+        discount,
+        paymentType,
+        beneficiary,
+        beneficiaryDocument,
+        bankName,
+        accountNumber,
+        agency,
+        note,
+        suppliers,
+        billet,
+        setTotalAmount,
+        setType,
+        setStoreowner,
+        setStoreownerName,
+        setSupplier,
+        setSupplierName,
+        setRomaneio,
+        setBankCheckEntry,
+        setFilename,
+        setFilenameBankCheckEntry,
+        setInstallment,
+        setDiscount,
+        setPaymentType,
+        setBeneficiary,
+        setBeneficiaryDocument,
+        setBankName,
+        setAccountNumber,
+        setAgency,
+        setBank,
+        setHasCommission,
+        setCommissionValue,
+        setNote,
+        setBillet,
+        setReceivableAmount,
+        setPaymentTypeReceivable,
+        setPixKey,
+        paymentTypeReceivable,
+        pixKey,
+        needUpdateBankAccount,
+        bank,
+        setNeedUpdateBankAccount,
+        nickname,
+        hasSellerZoopPlan,
+        uid,
+    } = state
+    const linkValue = type === 'Cartão de Crédito' ? internalFormat(defineCardValue(state)) : internalFormat(defineTEDValue(state))
+    const linkValueInternal = linkValue.replace(/\./g, '').replace(/\,/g, '').replace(/\R/g, '').replace(/\$/g, '')
+    const total = totalAmount ? internalFormat(totalAmount) : ''
 
-  const doc = beneficiaryDocument.startsWith('0') ? `'${beneficiaryDocument}` : beneficiaryDocument
-  const agencia = agency.startsWith('0') ? `'${agency}` : agency
-  const conta = accountNumber.startsWith('0') ? `'${accountNumber}` : accountNumber
-  const obs = note ? note.trim() : ''
-  const url = process.env.SHEET_URL
-  const config = {
-    headers: {
-      'Content-type': 'application/json',
-      Authorization: process.env.SHEET_TOKEN,
-    },
-  }
-  return new Promise(async (resolve, reject) => {
-    try {
-      const date = new Date()
-      const time = date.getTime().toString()
-      if (romaneio.size === 0) throw { msg: 'Imagem com tamanho vazio', customError: true }
-      const nameOfFile = md5(`${romaneio.name}${randStr()}`).substr(0, 5)
-      const compressed = romaneio //await readAndCompressImage(romaneio, { quality: 0.90 })
-      const timestamp = Date.now()
-      const image = storage.child(`Romaneios/${nameOfFile}-${timestamp}`)
-      const uploadTask = await image.put(compressed)
-      const imgUrl = await uploadTask.ref.getDownloadURL()
-      const body = {}
-      const baseUrl = process.env.HOMOLOG ? 'http://localhost:8080/pagamento/' : 'https://ziro.app/pagamento/'
-      const nowDate = fs.FieldValue.serverTimestamp()
-      const requestSheet = pixKey ? await axios(getSheet(['PIX!A:C'])) : await axios(getSheet(['TED!A:F']))
-      const objectSheet = await arrayObject(requestSheet.data.valueRanges[0])
-      const discountedValue = total - total * (discount / 100)
-      const updateObj = pixKey
-        ? { chave: pixKey, uid: time }
-        : {
-            banco: bankName,
-            agencia,
-            conta,
-            razao: beneficiary,
-            cnpj: beneficiaryDocument,
-            uid: time,
-          }
-      let arrayUpdate = {}
-      const supplierNameFormatted = supplierName.split(' -')[0]
-      const supplierNameFormattedBankData = supplierName.split(' - ')[1]
-      const tab = pixKey ? 'PIX' : 'TED'
-      if (paymentType !== 'Cheque') {
-        //&& typeof suppliers.find(supplier => supplier.fabricante === supplierNameFormatted) !== 'undefined' && Object.keys(suppliers.find(supplier => supplier.fabricante === supplierNameFormatted)).length > 0) {
-
-        arrayUpdate = pixKey
-          ? [supplierNameFormatted, pixKey, time]
-          : [supplierNameFormatted, bankName, agencia, conta, beneficiary, beneficiaryDocument, time]
-        if (!suppliers.find(supplier => supplier.banco === pixKey) && !!supplierNameFormattedBankData === false) {
-          await axios(postSheet(arrayUpdate, tab, 'append'))
-        } else if (
-          pixKey === '' &&
-          suppliers.find(supplier => supplier.fabricante === supplierNameFormatted) &&
-          !!supplierNameFormattedBankData === false
-        )
-          await axios(postSheet(arrayUpdate, tab, 'append'))
-      } //else if(paymentType !== 'Cheque') {
-      //arrayUpdate = pixKey ? dataPostBatch(objectSheet, 'uid', uid, updateObj, 'PIX') : dataPostBatch(objectSheet, 'uid', uid, updateObj, 'TED')
-      //await axios(postSheet(arrayUpdate, tab))
-      //}
-      /* teste */
-      let bodyLinkPayment = {}
-      if (type === 'Cartão de Crédito') {
-        bodyLinkPayment = {
-          apiResource: 'values',
-          apiMethod: 'append',
-          spreadsheetId: process.env.SHEET_ID_LINK_PAYMENTS,
-          range: 'Base Link Pagamentos!A1:R1',
-          resource: {
-            values: [
-              [
-                formatDateUTC3(new Date()),
-                storeownerName,
-                supplierNameFormatted,
-                linkValue,
-                total,
-                '4',
-                discount,
-                paymentType,
-                imgUrl,
-                paymentTypeReceivable || 'Cheque',
-                paymentTypeReceivable === 'TED' ? beneficiary : '-',
-                paymentTypeReceivable === 'TED' ? bankName : '-',
-                paymentTypeReceivable === 'TED' ? agencia : '-',
-                paymentTypeReceivable === 'TED' ? conta : '-',
-                paymentTypeReceivable === 'TED' ? doc : '-',
-                pixKey || '-',
-                obs,
-                nickname,
-              ],
-            ],
-          },
-          valueInputOption: 'user_entered',
-        }
-      } else {
-        bodyLinkPayment = {
-          apiResource: 'values',
-          apiMethod: 'append',
-          spreadsheetId: process.env.SHEET_ID_LINK_PAYMENTS,
-          range: 'Link TED!A1:P1',
-          resource: {
-            values: [
-              [
-                formatDateUTC3(new Date()),
-                storeownerName,
-                supplierNameFormatted,
-                total,
-                linkValue,
-                paymentType,
-                imgUrl,
-                paymentTypeReceivable,
-                paymentTypeReceivable === 'TED' ? beneficiary : '-',
-                paymentTypeReceivable === 'TED' ? bankName : '-',
-                paymentTypeReceivable === 'TED' ? agencia : '-',
-                paymentTypeReceivable === 'TED' ? conta : '-',
-                paymentTypeReceivable === 'TED' ? doc : '-',
-                pixKey || '-',
-                obs,
-                nickname,
-              ],
-            ],
-          },
-          valueInputOption: 'user_entered',
-        }
-      }
-      await post(url, bodyLinkPayment, config)
-      /* fim teste */
-      console.log('state', state)
-      console.log('total', total)
-      console.log('teste totalAmount', totalAmount)
-      console.log('teste linkValueInternal', linkValueInternal)
-      console.log('teste linkValue', linkValue)
-      if (type === 'Cartão de Crédito') {
-        const docRef = await db.collection('credit-card-payments').add({
-          dateLinkCreated: nowDate,
-          dateLastUpdate: nowDate,
-          seller: 'Ziro',
-          onBehalfOfBrand: supplierNameFormatted,
-          sellerZoopId: '13c09ab817014ae6843634493177afb2',
-          charge: linkValueInternal,
-          installmentsMax: '4',
-          status: 'Aguardando Pagamento',
-          observations: note,
-          insurance: totalAmount > 300000,
-          sellerZoopPlan: hasSellerZoopPlan || null,
-          checkoutWithoutRegister: false,
-        })
-        try {
-          const doc = await docRef.get()
-          if (doc) {
-            await navigator.clipboard.writeText(`${baseUrl}${doc.id}`)
-          }
-        } catch (error) {
-          console.log('error', error)
-          throw { msg: 'Erro ao realizar a cópia', copyError: true }
-        }
-      }
-      setReceivableAmount('')
-      setPaymentTypeReceivable('')
-      setReceivableAmount('')
-      setType('')
-      setTotalAmount('')
-      setStoreowner({})
-      setStoreownerName('')
-      setSupplier({})
-      setSupplierName('')
-      setRomaneio('')
-      setBankCheckEntry('')
-      setFilename('')
-      setFilenameBankCheckEntry('')
-      setInstallment('')
-      setDiscount('')
-      setPaymentType('')
-      setBank({})
-      setBeneficiary('')
-      setBeneficiaryDocument('')
-      setBankName('')
-      setAccountNumber('')
-      setAgency('')
-      setHasCommission('')
-      setCommissionValue('')
-      setNote('')
-      setBillet('')
-      setPixKey('')
-      resolve('Link cadastrado com sucesso.')
-    } catch (error) {
-      if (error.customError) reject(error)
-      else {
-        console.log(error)
-        if (error.response) console.log(error.response)
-        reject(error)
-      }
+    const doc = beneficiaryDocument.startsWith('0') ? `'${beneficiaryDocument}` : beneficiaryDocument
+    const agencia = agency.startsWith('0') ? `'${agency}` : agency
+    const conta = accountNumber.startsWith('0') ? `'${accountNumber}` : accountNumber
+    const obs = note ? note.trim() : ''
+    const url = 'https://ziro-sheets.netlify.app/.netlify/functions/api'
+    const config = {
+        headers: {
+            'Content-type': 'application/json',
+            Authorization: process.env.SHEET_TOKEN,
+        },
     }
-  })
+    return new Promise(async (resolve, reject) => {
+        try {
+            const date = new Date()
+            const time = date.getTime().toString()
+            if (romaneio.size === 0) throw { msg: 'Imagem com tamanho vazio', customError: true }
+            const nameOfFile = md5(`${romaneio.name}${randStr()}`).substr(0, 5)
+            const compressed = romaneio //await readAndCompressImage(romaneio, { quality: 0.90 })
+            const timestamp = Date.now()
+            const image = storage.child(`Romaneios/${nameOfFile}-${timestamp}`)
+            const uploadTask = await image.put(compressed)
+            const imgUrl = await uploadTask.ref.getDownloadURL()
+            const body = {}
+            const baseUrl = process.env.HOMOLOG ? 'http://localhost:8080/pagamento/' : 'https://ziro-app.netlify.app/pagamento/'
+            const nowDate = fs.FieldValue.serverTimestamp()
+            const requestSheet = pixKey ? await axios(getSheet(['PIX!A:C'])) : await axios(getSheet(['TED!A:F']))
+            const objectSheet = await arrayObject(requestSheet.data.valueRanges[0])
+            const discountedValue = total - total * (discount / 100)
+            const updateObj = pixKey
+                ? { chave: pixKey, uid: time }
+                : {
+                    banco: bankName,
+                    agencia,
+                    conta,
+                    razao: beneficiary,
+                    cnpj: beneficiaryDocument,
+                    uid: time,
+                }
+            let arrayUpdate = {}
+            const supplierNameFormatted = supplierName.split(' -')[0]
+            const supplierNameFormattedBankData = supplierName.split(' - ')[1]
+            const tab = pixKey ? 'PIX' : 'TED'
+            if (paymentType !== 'Cheque') {
+                //&& typeof suppliers.find(supplier => supplier.fabricante === supplierNameFormatted) !== 'undefined' && Object.keys(suppliers.find(supplier => supplier.fabricante === supplierNameFormatted)).length > 0) {
+
+                arrayUpdate = pixKey
+                    ? [supplierNameFormatted, pixKey, time]
+                    : [supplierNameFormatted, bankName, agencia, conta, beneficiary, beneficiaryDocument, time]
+                if (!suppliers.find(supplier => supplier.banco === pixKey) && !!supplierNameFormattedBankData === false) {
+                    await axios(postSheet(arrayUpdate, tab, 'append'))
+                } else if (
+                    pixKey === '' &&
+                    suppliers.find(supplier => supplier.fabricante === supplierNameFormatted) &&
+                    !!supplierNameFormattedBankData === false
+                )
+                    await axios(postSheet(arrayUpdate, tab, 'append'))
+            } //else if(paymentType !== 'Cheque') {
+            //arrayUpdate = pixKey ? dataPostBatch(objectSheet, 'uid', uid, updateObj, 'PIX') : dataPostBatch(objectSheet, 'uid', uid, updateObj, 'TED')
+            //await axios(postSheet(arrayUpdate, tab))
+            //}
+            /* teste */
+            let bodyLinkPayment = {}
+            if (type === 'Cartão de Crédito') {
+                bodyLinkPayment = {
+                    apiResource: 'values',
+                    apiMethod: 'append',
+                    spreadsheetId: process.env.SHEET_ID_LINK_PAYMENTS,
+                    range: 'Base Link Pagamentos!A1:R1',
+                    resource: {
+                        values: [
+                            [
+                                formatDateUTC3(new Date()),
+                                storeownerName,
+                                supplierNameFormatted,
+                                linkValue,
+                                total,
+                                '4',
+                                discount,
+                                paymentType,
+                                imgUrl,
+                                paymentTypeReceivable || 'Cheque',
+                                paymentTypeReceivable === 'TED' ? beneficiary : '-',
+                                paymentTypeReceivable === 'TED' ? bankName : '-',
+                                paymentTypeReceivable === 'TED' ? agencia : '-',
+                                paymentTypeReceivable === 'TED' ? conta : '-',
+                                paymentTypeReceivable === 'TED' ? doc : '-',
+                                pixKey || '-',
+                                obs,
+                                nickname,
+                            ],
+                        ],
+                    },
+                    valueInputOption: 'user_entered',
+                }
+            } else {
+                bodyLinkPayment = {
+                    apiResource: 'values',
+                    apiMethod: 'append',
+                    spreadsheetId: process.env.SHEET_ID_LINK_PAYMENTS,
+                    range: 'Link TED!A1:P1',
+                    resource: {
+                        values: [
+                            [
+                                formatDateUTC3(new Date()),
+                                storeownerName,
+                                supplierNameFormatted,
+                                total,
+                                linkValue,
+                                paymentType,
+                                imgUrl,
+                                paymentTypeReceivable,
+                                paymentTypeReceivable === 'TED' ? beneficiary : '-',
+                                paymentTypeReceivable === 'TED' ? bankName : '-',
+                                paymentTypeReceivable === 'TED' ? agencia : '-',
+                                paymentTypeReceivable === 'TED' ? conta : '-',
+                                paymentTypeReceivable === 'TED' ? doc : '-',
+                                pixKey || '-',
+                                obs,
+                                nickname,
+                            ],
+                        ],
+                    },
+                    valueInputOption: 'user_entered',
+                }
+            }
+            await post(url, bodyLinkPayment, config)
+            /* fim teste */
+            console.log('state', state)
+            console.log('total', total)
+            console.log('teste totalAmount', totalAmount)
+            console.log('teste linkValueInternal', linkValueInternal)
+            console.log('teste linkValue', linkValue)
+            if (type === 'Cartão de Crédito') {
+                const docRef = await db.collection('credit-card-payments').add({
+                    dateLinkCreated: nowDate,
+                    dateLastUpdate: nowDate,
+                    seller: 'Ziro',
+                    onBehalfOfBrand: supplierNameFormatted,
+                    sellerZoopId: '13c09ab817014ae6843634493177afb2',
+                    charge: linkValueInternal,
+                    installmentsMax: '4',
+                    status: 'Aguardando Pagamento',
+                    observations: note,
+                    insurance: totalAmount > 300000,
+                    sellerZoopPlan: hasSellerZoopPlan || null,
+                    checkoutWithoutRegister: false,
+                })
+                try {
+                    const doc = await docRef.get()
+                    if (doc) {
+                        await navigator.clipboard.writeText(`${baseUrl}${doc.id}`)
+                    }
+                } catch (error) {
+                    console.log('error', error)
+                    throw { msg: 'Erro ao realizar a cópia', copyError: true }
+                }
+            }
+            setReceivableAmount('')
+            setPaymentTypeReceivable('')
+            setReceivableAmount('')
+            setType('')
+            setTotalAmount('')
+            setStoreowner({})
+            setStoreownerName('')
+            setSupplier({})
+            setSupplierName('')
+            setRomaneio('')
+            setBankCheckEntry('')
+            setFilename('')
+            setFilenameBankCheckEntry('')
+            setInstallment('')
+            setDiscount('')
+            setPaymentType('')
+            setBank({})
+            setBeneficiary('')
+            setBeneficiaryDocument('')
+            setBankName('')
+            setAccountNumber('')
+            setAgency('')
+            setHasCommission('')
+            setCommissionValue('')
+            setNote('')
+            setBillet('')
+            setPixKey('')
+            resolve('Link cadastrado com sucesso.')
+        } catch (error) {
+            if (error.customError) reject(error)
+            else {
+                console.log(error)
+                if (error.response) console.log(error.response)
+                reject(error)
+            }
+        }
+    })
 }
 
 export default sendToBackend

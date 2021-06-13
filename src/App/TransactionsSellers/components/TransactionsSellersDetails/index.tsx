@@ -30,7 +30,7 @@ interface ISplit {
     amount:number
     receivable_gross_amount:any
 }
-const url = process.env.SHEET_URL;
+const url = 'https://ziro-sheets.netlify.app/.netlify/functions/api';
 const sheetId = '1FxCECEMVa66vpHsmucgFow6DVPpCGHgOiIfthEzJwPc'
 const writeToSheet = async (transactionZoopId, installment, dataToWrite) => {
 	const config = {
@@ -92,7 +92,7 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
   const [captureModal, setCaptureModal] = useState(false)
   const [splitTransactionModal, setSplitTransactionModal] = useState(false)
   const textAreaRef = useRef(null)
-  const paymentLink = process.env.HOMOLOG ? `http://localhost:8080/pagamento/${transactionId}` : `https://ziro.app/pagamento/${transactionId}`
+  const paymentLink = process.env.HOMOLOG ? `http://localhost:8080/pagamento/${transactionId}` : `https://ziro-app.netlify.app/pagamento/${transactionId}`
   const [blocksStoreowner, setBlocksStoreowner] = useState([])
   const [validationMessage, setValidationMessage] = useState('')
   const [loadingButton, setLoadingButton] = useState(false)
@@ -125,7 +125,7 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
       amount = amount.replace('R$', '').replace(',', '').replace('.', '')
       await axios
         .post(
-          `${process.env.PAY}/payments-capture?transaction_id=${transaction_id}`,
+          `https://ziro-pay.netlify.app/.netlify/functions/payments-capture?transaction_id=${transaction_id}`,
           {
             transaction_id,
             on_behalf_of,
@@ -165,7 +165,7 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
         setLoadingButton(true)
         await axios
           .post(
-            `${process.env.PAY}/payments-void`,
+            `https://ziro-pay.netlify.app/.netlify/functions/payments-void`,
             {
               transaction_id,
               on_behalf_of,

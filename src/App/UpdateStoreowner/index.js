@@ -119,7 +119,7 @@ const UpdateStoreowner = () => {
         }
     ]
     const findStoreownerRow = async cnpj => {
-        const url = process.env.SHEET_URL
+        const url = 'https://ziro-sheets.netlify.app/.netlify/functions/api'
         let pos
         const config = {
             headers: {
@@ -360,10 +360,10 @@ const UpdateStoreowner = () => {
                         </div>
                     </Modal>
                 ) : (
-                        <div style={{ marginBottom: '20px' }}>
-                            <GetCnpj cnpj={storeowner.cnpj} setState={setCnpjInfo} setErrorMsg={setErrorMsg} />
-                        </div>
-                    )}
+                    <div style={{ marginBottom: '20px' }}>
+                        <GetCnpj cnpj={storeowner.cnpj} setState={setCnpjInfo} setErrorMsg={setErrorMsg} />
+                    </div>
+                )}
                 {copyResultText ?
                     <div style={{ padding: '5px 0 0', fontSize: '15px', color: copyResultStatus ? successColor : alertColor, textAlign: 'center' }} >
                         <span>{copyResultText}</span>

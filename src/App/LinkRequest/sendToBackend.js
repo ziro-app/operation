@@ -47,7 +47,7 @@ const sendToBackend = state => () => {
     const agencia = agency.startsWith('0') ? `'${agency}` : agency;
     const conta = accountNumber.startsWith('0') ? `'${accountNumber}` : accountNumber;
     const obs = note ? note.trim() : '';
-    const url = process.env.SHEET_URL;
+    const url = 'https://ziro-sheets.netlify.app/.netlify/functions/api';
     const config = {
         headers: {
             'Content-type': 'application/json',

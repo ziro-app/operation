@@ -77,7 +77,7 @@ const sendToBackend = state => () => {
   const agencia = agency.startsWith('0') ? `'${agency}` : agency
   const conta = accountNumber.startsWith('0') ? `'${accountNumber}` : accountNumber
   const obs = note ? note.trim() : ''
-  const url = process.env.SHEET_URL
+  const url = 'https://ziro-sheets.netlify.app/.netlify/functions/api'
   const config = {
     headers: {
       'Content-type': 'application/json',
@@ -105,7 +105,7 @@ const sendToBackend = state => () => {
         spreadsheetId: process.env.SHEET_ID_LINK_PAYMENTS,
         range: 'Link Cheques!A1',
         resource: {
-          values: [[formatDateUTC3(new Date()), billet, storeownerName, supplierName, total, imgUrlBankCheckEntry, obs, timestamp,bankCheckDateFormatted]],
+          values: [[formatDateUTC3(new Date()), billet, storeownerName, supplierName, total, imgUrlBankCheckEntry, obs, timestamp, bankCheckDateFormatted]],
         },
         valueInputOption: 'user_entered',
       }

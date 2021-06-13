@@ -10,7 +10,7 @@ const sendToBackend = state => () => {
         setType, setSubmitCount, setPercentage, setFile, setFilename } = state
     const comissao = numberFormatter(percentage) ? numberFormatter(percentage) / 100 : 0.00
     const today = new Date()
-    const url = process.env.SHEET_URL
+    const url = 'https://ziro-sheets.netlify.app/.netlify/functions/api'
 
     const config = {
         headers: {

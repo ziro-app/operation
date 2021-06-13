@@ -5,7 +5,7 @@ export const inputEditUpdate = (cnpj, column, row, obj, newProp, setIsLoading, s
     let property
     if (Object.keys(obj)[0] === 'ie') property = `'${newProp}`
     else property = newProp
-    const url = process.env.SHEET_URL
+    const url = 'https://ziro-sheets.netlify.app/.netlify/functions/api'
     const body = {
         apiResource: 'values',
         apiMethod: 'update',
@@ -61,7 +61,7 @@ export const formUpdate = (state, cnpj, row) => async () => {
     const assessor = advisor ? advisor.trim() : ''
     const vendedor = salesman ? salesman.trim() : ''
     const vinculo = link ? link.trim() : ''
-    const url = process.env.SHEET_URL
+    const url = 'https://ziro-sheets.netlify.app/.netlify/functions/api'
     const body = {
         apiResource: 'values',
         apiMethod: 'update',

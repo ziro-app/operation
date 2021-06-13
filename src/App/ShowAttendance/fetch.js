@@ -6,7 +6,7 @@ const fetch = (setIsLoading, setIsError, setStoreowner, atendimento) => {
     const run = async () => {
         const config = {
             method: 'POST',
-            url: process.env.SHEET_URL,
+            url: 'https://ziro-sheets.netlify.app/.netlify/functions/api',
             data: {
                 apiResource: 'values',
                 apiMethod: 'get',
@@ -20,23 +20,23 @@ const fetch = (setIsLoading, setIsError, setStoreowner, atendimento) => {
         }
         try {
             const dataStoreowners = await axios(configGet(
-                    ["'Em trânsito'!A1001:AE1500","'Em trânsito'!A1501:AE"],
-                    process.env.SHEET_URL,
-                    process.env.SHEET_ID_TRANSITO,
-                    process.env.SHEET_TOKEN
-                ))
+                ["'Em trânsito'!A1001:AE1500", "'Em trânsito'!A1501:AE"],
+                'https://ziro-sheets.netlify.app/.netlify/functions/api',
+                process.env.SHEET_ID_TRANSITO,
+                process.env.SHEET_TOKEN
+            ))
             const [data1, data2] = dataStoreowners.data.valueRanges
             const listStoreowners = [...data1.values, ...data2.values]
             listStoreowners.map(attendance => {
                 if (attendance[0] === atendimento) {
-                    setStoreowner({ 
+                    setStoreowner({
                         assessor: attendance[1] || '',
-                        lojista:attendance[2] || '',
+                        lojista: attendance[2] || '',
                         despacho: attendance[3] || '',
                         horario: attendance[4] || '',
-                        transporte:attendance[5] || '',
-                        endereco:attendance[6] || '',
-                        nota:attendance[7] || '',
+                        transporte: attendance[5] || '',
+                        endereco: attendance[6] || '',
+                        nota: attendance[7] || '',
                         obs: attendance[8] || '',
                         retirados: attendance[11] || '',
                         rastreio: attendance[13] || '',

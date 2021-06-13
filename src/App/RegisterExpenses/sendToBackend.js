@@ -18,7 +18,7 @@ const sendToBackend = state => () => {
     const transfer = mountBankTransfer(state)
     const value = expenseAmount ? numberFormatter(expenseAmount) / 100 : ''
     const atendimento = attendance ? attendance.split(' - ')[0] : ''
-    const url = process.env.SHEET_URL
+    const url = 'https://ziro-sheets.netlify.app/.netlify/functions/api'
     const body = {
         apiResource: 'values',
         apiMethod: 'append',

@@ -39,11 +39,11 @@ const sendToBackend = async state => {
             Authorization: `Basic ${process.env.PAY_TOKEN}`,
           }
           if (dataOldPlan.items.length > 0) {
-            const urlDisassociate = `${process.env.PAY}/plan-subscription-disassociate?plan=${dataOldPlan.items[0].id}`
+            const urlDisassociate = `https://ziro-pay.netlify.app/.netlify/functions/plan-subscription-disassociate?plan=${dataOldPlan.items[0].id}`
             const methodDisassociate = 'DELETE'
             await axios({ url: urlDisassociate, method: methodDisassociate, headers })
           }
-          const url = `${process.env.PAY}/plan-subscription-update`
+          const url = `https://ziro-pay.netlify.app/.netlify/functions/plan-subscription-update`
           const method = 'POST'
           const data = {
             customer: supplier.zoopId,
@@ -53,7 +53,7 @@ const sendToBackend = async state => {
           if (dataOldPlan.items.length > 0) {
             const zoopData: IApiData = {
               origin: 'api',
-              url: `${process.env.PAY}/plan-subscription-update`,
+              url: `https://ziro-pay.netlify.app/.netlify/functions/plan-subscription-update`,
               headers,
               method: 'POST',
               data: {
