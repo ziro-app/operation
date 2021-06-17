@@ -234,8 +234,8 @@ const App = () => {
           if (!docRefCreditCardPayments.empty) {
             docRefCreditCardPayments.forEach(async doc => {
               const data = doc.data()
-              StatusDocuments.push(data.status)
-              SellersDocuments.push(data.seller)
+              if (data.status) StatusDocuments.push(data.status)
+              if (data.seller) SellersDocuments.push(data.seller)
             })
           }
 
