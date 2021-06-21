@@ -1,6 +1,6 @@
 import { post } from 'axios';
 
-export const generateConfirmLink = async email => {
+export const generateConfirmLink = async (email, continueUrl) => {
     const url = `${process.env.FIREBASE_AUTH_URL}resendConfirmEmail`;
     const config = {
         headers: {
@@ -9,6 +9,7 @@ export const generateConfirmLink = async email => {
         }
     };
     const body = {
+        continueUrl,
         email,
         type: 'Email'
     }

@@ -37,6 +37,7 @@ const sendToBackend = state => () => {
                     const docCollection = await db.collection(collectionName).where('email', '==', email).get();
 
                     if (!docCollection.empty) {
+                        let continueUrl = ''
                         const uid = docCollection.docs[0].data().uid;
                         const urlChangeEmail = `${process.env.FIREBASE_AUTH_URL}updateUserInfo`;
                         const configChangeEmail = {
@@ -52,7 +53,11 @@ const sendToBackend = state => () => {
                                 emailVerified: false
                             }
                         };
-
+                        if (collectionName === 'suppliers') continueUrl = 'https://fabricantes.ziro.app'
+                        else {
+                            const { linkOrigin } = docCollection.docs[0].data()
+                            continueUrl = linkOrigin ? `https://ziro.app/pagamento/${linkOrigin}/escolher-cartao?doc` : 'https://ziro.app'
+                        }
                         // ATUALIZANDO AS INFORMAÇÕES NO FIREBASE AUTH
                         const { data: { ok } } = await post(urlChangeEmail, bodyChangeEmail, configChangeEmail);
 
@@ -67,7 +72,7 @@ const sendToBackend = state => () => {
 
                             // ENVIANDO EMAIL DE CONFIRMAÇÃO
                             try {
-                                const link = await generateConfirmLink(newEmail);
+                                const link = await generateConfirmLink(newEmail, continueUrl);
                                 await apiResendEmail(newEmail, link);
                             } catch (error) {
                                 throw { msg: 'Atualizado. Envie email de confirmação manualmente', emailError: true };

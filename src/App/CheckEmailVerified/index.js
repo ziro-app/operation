@@ -14,6 +14,7 @@ import { modalBox, container, title, svg } from './styles'
 import validateDocuments from '../utils/validateDocuments'
 
 const CheckEmailVerified = () => {
+    const [continueUrl, setContinueUrl] = useState('');
     const [app, setApp] = useState('');
     const appList = ['Catálogo', 'Fabricantes'];
     const [type, setType] = useState('');
@@ -28,8 +29,8 @@ const CheckEmailVerified = () => {
     const [resendStatus, setResendStatus] = useState('');
     const [uid, setUid] = useState('');
     const [appName, setAppName] = useState('');
-    const setState = { setCnpj, setEmail, setType, setApp, setIsOpen, resendingEmail, setResendingEmail, setResendStatus, setLink, setFinished, setUid, setAppName };
-    const state = { cnpj, email, type, link, app, appList, uid, appName, ...setState };
+    const setState = { setCnpj, setEmail, setType, setApp, setIsOpen, resendingEmail, setResendingEmail, setResendStatus, setLink, setFinished, setUid, setAppName, setContinueUrl };
+    const state = { cnpj, email, type, link, app, appList, uid, appName, continueUrl, ...setState };
     const validations = [
         {
             name: 'cnpj',
@@ -58,14 +59,15 @@ const CheckEmailVerified = () => {
         let body;
         if (type === 'Email') {
             body = {
+                continueUrl,
                 email,
                 type
             };
         } else {
             body = {
-                type,
+                continueUrl,
                 uid,
-                app: appName
+                type
             };
         }
         const url = `${process.env.FIREBASE_AUTH_URL}resendConfirmEmail`;
@@ -102,6 +104,7 @@ const CheckEmailVerified = () => {
                     link: confirmLink
                 }
             };
+            setContinueUrl('')
             setCnpj('');
             setEmail('');
             setApp('');
