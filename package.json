@@ -109,7 +109,7 @@
         "@ziro/router": "^3.0.0",
         "@ziro/theme": "^1.0.3",
         "apexcharts": "^3.22.0",
-        "axios": "^0.19.0",
+        "axios": "^0.21.1",
         "browser-image-resizer": "^2.1.0",
         "date-fns": "^2.21.1",
         "firebase": "^8.1.0",
