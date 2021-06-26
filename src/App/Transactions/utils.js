@@ -1,7 +1,7 @@
 import currencyFormat from '@ziro/currency-format'
 import { db } from '../../Firebase/index'
 
-export const allowedUsersToUpdateTransactions = ['Claudia', 'Vitor', 'Uiller', 'Fernanda', 'Ale']
+export const allowedUsersToUpdateTransactions = ['Claudia', 'Vitor', 'Uiller', 'Fernanda', 'Ale', 'Antonio']
 
 export const toMMMYYY = date => {
   if (date) {
