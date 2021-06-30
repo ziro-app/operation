@@ -4,23 +4,9 @@ import configGet from './utils/getSheets'
 const fetch = (setIsLoading, setIsError, setStoreowner, atendimento) => {
     const source = axios.CancelToken.source()
     const run = async () => {
-        const config = {
-            method: 'POST',
-            url: 'https://ziro-sheets.netlify.app/.netlify/functions/api',
-            data: {
-                apiResource: 'values',
-                apiMethod: 'get',
-                spreadsheetId: process.env.SHEET_ID_TRANSITO,
-                range: 'Em trânsito'
-            },
-            headers: {
-                'Authorization': process.env.SHEET_TOKEN,
-                'Content-Type': 'application/json'
-            }
-        }
         try {
             const dataStoreowners = await axios(configGet(
-                ["'Em trânsito'!A1001:AE1500", "'Em trânsito'!A1501:AE"],
+                ["Em trânsito!A1001:AE1500", "Em trânsito!A1501:AE"],
                 'https://ziro-sheets.netlify.app/.netlify/functions/api',
                 process.env.SHEET_ID_TRANSITO,
                 process.env.SHEET_TOKEN
@@ -46,6 +32,7 @@ const fetch = (setIsLoading, setIsError, setStoreowner, atendimento) => {
                 }
             })
         } catch (error) {
+            console.log(error)
             if (error.response) console.log(error.response)
             else console.log(error)
             setIsError(true)
