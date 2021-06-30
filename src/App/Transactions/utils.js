@@ -1,7 +1,8 @@
 import currencyFormat from '@ziro/currency-format'
 import { db } from '../../Firebase/index'
 
-export const allowedUsersToUpdateTransactions = ['Claudia', 'Vitor', 'Uiller', 'Fernanda', 'Ale', 'Antonio']
+export const allowedUsersToUpdateTransactions = ['Claudia', 'Vitor', 'Uiller', 'Fernanda', 'Antonio'] // Users allowed to exclude or update payment link
+// Criar isAdmin na collection team
 
 export const toMMMYYY = date => {
   if (date) {
