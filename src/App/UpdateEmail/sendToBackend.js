@@ -3,7 +3,7 @@ import { post } from 'axios'
 
 const sendToBackend = state => () => {
     const { row, pass, newEmail } = state
-    const url = process.env.SHEET_URL
+    const url = 'https://ziro-sheets.netlify.app/.netlify/functions/api'
     const body = {
         apiResource: 'values',
         apiMethod: 'update',

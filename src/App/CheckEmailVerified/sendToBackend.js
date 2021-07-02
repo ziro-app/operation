@@ -9,7 +9,7 @@ const collectionsApp = {
 const sendToBackend = state => () => {
     const { cnpj, email, type, app, setCnpj, setEmail, setType, setApp,
         setIsOpen, setResendingEmail, setResendStatus, setFinished,
-        setUid, setAppName } = state;
+        setUid, setAppName, setContinueUrl } = state;
     const url = `${process.env.FIREBASE_AUTH_URL}checkEmail`;
     const config = {
         headers: {
@@ -20,6 +20,7 @@ const sendToBackend = state => () => {
 
     return new Promise(async (resolve, reject) => {
         try {
+            let continueUrl = 'https://fabricantes.ziro.app'
             let body;
             if (type === 'Email') {
                 body = {
@@ -34,6 +35,10 @@ const sendToBackend = state => () => {
                     setUid(snap.docs[0].data().uid);
                     setEmail(snap.docs[0].data().email);
                     setAppName(app === 'Catálogo' ? 'catalog' : 'suppliers');
+                    if (app === 'Catálogo') {
+                        const { linkOrigin } = snap.docs[0].data()
+                        continueUrl = linkOrigin ? `https://ziro.app/pagamento/${linkOrigin}/escolher-cartao?doc` : 'https://ziro.app'
+                    }
                     body = {
                         email: snap.docs[0].data().email,
                         type
@@ -42,6 +47,7 @@ const sendToBackend = state => () => {
             }
             const { data: { ok } } = await post(url, body, config);
             if (!ok) {
+                setContinueUrl(continueUrl);
                 setIsOpen(true);
                 setResendingEmail(false);
                 setFinished(false);

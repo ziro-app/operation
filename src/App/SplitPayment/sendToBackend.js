@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { db } from '../../Firebase/index'
 
-const addRuleToFirebase = () => {}
+const addRuleToFirebase = () => { }
 
 const sendToBackend = (
   transactionId,
@@ -34,7 +34,7 @@ const sendToBackend = (
           else amountToSend = amount
           await axios
             .post(
-              `${process.env.PAY}/split-rules-create?transaction_id=${transactionZoopId}`,
+              `https://ziro-pay.netlify.app/.netlify/functions/split-rules-create?transaction_id=${transactionZoopId}`,
               {
                 transaction_id: transactionZoopId,
                 recipient: on_behalf_of,

@@ -1,6 +1,6 @@
 import { post } from 'axios';
 
-const url = process.env.SHEET_URL;
+const url = 'https://ziro-sheets.netlify.app/.netlify/functions/api';
 const config = {
     headers: {
         'Content-type': 'application/json',

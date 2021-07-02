@@ -9,7 +9,6 @@ import { userContext } from './appContext'
 import { auth, db } from '../Firebase/index'
 import Router from './Router'
 
-
 const App = () => {
   const [loading, setLoading] = useState(true)
   const [errorLoading, setErrorLoading] = useState(false)
@@ -45,7 +44,7 @@ const App = () => {
   const [listSellersForFilter, setListSellersForFilter] = useState([])
   const [device, setDevice] = useState('phone')
 
-  const url = process.env.SHEET_URL
+  const url = 'https://ziro-sheets.netlify.app/.netlify/functions/api'
   const config = {
     headers: {
       'Content-type': 'application/json',
@@ -235,8 +234,8 @@ const App = () => {
           if (!docRefCreditCardPayments.empty) {
             docRefCreditCardPayments.forEach(async doc => {
               const data = doc.data()
-              StatusDocuments.push(data.status)
-              SellersDocuments.push(data.seller)
+              if (data.status) StatusDocuments.push(data.status)
+              if (data.seller) SellersDocuments.push(data.seller)
             })
           }
 

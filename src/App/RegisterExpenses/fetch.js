@@ -1,12 +1,12 @@
 import axios from 'axios'
 
 const fetch = (setIsLoading, setIsError, setAttendanceList) => {
-    let attendances = []
-    const source = axios.CancelToken.source()
+	let attendances = []
+	const source = axios.CancelToken.source()
 	const run = async () => {
 		const config = {
 			method: 'POST',
-			url: process.env.SHEET_URL,
+			url: 'https://ziro-sheets.netlify.app/.netlify/functions/api',
 			data: {
 				apiResource: 'values',
 				apiMethod: 'get',
@@ -21,12 +21,12 @@ const fetch = (setIsLoading, setIsError, setAttendanceList) => {
 		}
 		try {
 			const { data: { values } } = await axios(config)
-            const [, ...dataWithoutHeaderRow] = values
-            dataWithoutHeaderRow.map(attendance => {
-                if(attendance[13] !== 'Cancelado')
-                    attendances.push(`${attendance[0]} - ${attendance[3]}`)
-            })
-            setAttendanceList(attendances)
+			const [, ...dataWithoutHeaderRow] = values
+			dataWithoutHeaderRow.map(attendance => {
+				if (attendance[13] !== 'Cancelado')
+					attendances.push(`${attendance[0]} - ${attendance[3]}`)
+			})
+			setAttendanceList(attendances)
 		} catch (error) {
 			if (error.response) console.log(error.response)
 			else console.log(error)

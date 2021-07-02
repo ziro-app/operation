@@ -10,7 +10,7 @@ const fetch = (setIsLoading, setIsError, setStoreowners, setBanks, setSuppliers)
     const run = async () => {
         const config = {
             method: 'POST',
-            url: process.env.SHEET_URL,
+            url: 'https://ziro-sheets.netlify.app/.netlify/functions/api',
             data: {
                 apiResource: 'values',
                 apiMethod: 'get',

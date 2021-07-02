@@ -2,7 +2,7 @@ import { db } from '../../Firebase/index'
 import { post } from 'axios'
 
 const updateSheet = async (row, endDate) => {
-    const url = process.env.SHEET_URL
+    const url = 'https://ziro-sheets.netlify.app/.netlify/functions/api'
     const body = {
         apiResource: 'values',
         apiMethod: 'update',

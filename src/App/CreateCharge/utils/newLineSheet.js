@@ -1,7 +1,7 @@
 const configPost = (arrayUpdate, apiMethod = 'batchUpdate') => {
     return {
         method: 'POST',
-        url: process.env.SHEET_URL,
+        url: 'https://ziro-sheets.netlify.app/.netlify/functions/api',
         data: {
             apiResource: 'values',
             apiMethod,

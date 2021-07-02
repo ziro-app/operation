@@ -13,9 +13,9 @@ const sendToBackend = state => () => {
     const fnameTrim = fname ? fname.trim() : ''
     const lnameTrim = lname ? lname.trim() : ''
     const nomeAfiliado = affiliateName.split(' - ')[1] ? affiliateName.split(' - ')[1] : 'NENHUM'
-    const formattedCep = cep? maskInput(cep, '##.###-###', true) : ''
+    const formattedCep = cep ? maskInput(cep, '##.###-###', true) : ''
     const today = new Date()
-    const url = process.env.SHEET_URL
+    const url = 'https://ziro-sheets.netlify.app/.netlify/functions/api'
     const config = {
         headers: {
             'Content-type': 'application/json',

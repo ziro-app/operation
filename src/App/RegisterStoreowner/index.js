@@ -8,7 +8,7 @@ import searchCnpj from './searchCnpj'
 const RegisterStoreowner = () => {
   const [isLoading, setIsLoading] = useState(true)
   const validCnaes = ['47.81-4-00', '14.12-6-01', '14.12-6-03', '46.16-8-00']
-  const cnpjUrl = process.env.CNPJ_URL || ''
+  const cnpjUrl = 'https://query-cnpj.netlify.app/.netlify/functions/cnpj' || ''
   const cnpjToken = process.env.CNPJ_TOKEN || ''
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>

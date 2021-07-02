@@ -2,7 +2,7 @@ import consultCnpj from './utils/consultCnpj';
 import checkResult from './utils/checkResult';
 import updateReceita from './utils/updateReceita';
 
-const lastReq = async (config, cnpj, setErrorMsg, validCnaes,setStoreowner) => {
+const lastReq = async (config, cnpj, setErrorMsg, validCnaes, setStoreowner) => {
     let result = {};
     try {
         const [status, result] = await consultCnpj(config)
@@ -16,12 +16,12 @@ const lastReq = async (config, cnpj, setErrorMsg, validCnaes,setStoreowner) => {
         return result
     }
 }
-const searchCnpj = (state,setStoreowner) => () =>
+const searchCnpj = (state, setStoreowner) => () =>
     new Promise(async (resolve, reject) => {
-        const { cnpj, setFirstLabel, setIsOpen, setErrorMsg,validCnaes } = state;
+        const { cnpj, setFirstLabel, setIsOpen, setErrorMsg, validCnaes } = state;
         let config = {
             method: 'POST',
-            url: process.env.CNPJ_URL,
+            url: 'https://query-cnpj.netlify.app/.netlify/functions/cnpj',
             data: { cnpj, "ignore_db": true },
             headers: {
                 'Authorization': process.env.CNPJ_TOKEN
@@ -29,7 +29,7 @@ const searchCnpj = (state,setStoreowner) => () =>
         }
         try {
             setIsOpen(true);
-            if (cnpj.length !== 18){
+            if (cnpj.length !== 18) {
                 setErrorMsg('CNPJ Deve ter 14 números')
                 throw { msg: 'Deve ter 14 números', customError: true }
             }
@@ -41,7 +41,7 @@ const searchCnpj = (state,setStoreowner) => () =>
             setFirstLabel(true);
             resolve('CNPJ válido');
         } catch (error) {
-            if(error.tryAgain){
+            if (error.tryAgain) {
                 setFirstLabel(false);
                 await setTimeout(async () => {
                     config['data']['ignore_db'] = false;

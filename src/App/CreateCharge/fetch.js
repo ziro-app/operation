@@ -34,7 +34,7 @@ const fetch = (
     let configStoreOwner = {}
     configStoreOwner = {
       method: 'POST',
-      url: process.env.SHEET_URL,
+      url: 'https://ziro-sheets.netlify.app/.netlify/functions/api',
       data: {
         apiResource: 'values',
         apiMethod: 'get',
@@ -50,7 +50,7 @@ const fetch = (
     let configSupplierTrends = {}
     configSupplierTrends = {
       method: 'POST',
-      url: process.env.SHEET_URL,
+      url: 'https://ziro-sheets.netlify.app/.netlify/functions/api',
       data: {
         apiResource: 'values',
         apiMethod: 'get',
@@ -66,7 +66,7 @@ const fetch = (
     let configBanKData = {}
     configBanKData = {
       method: 'POST',
-      url: process.env.SHEET_URL,
+      url: 'https://ziro-sheets.netlify.app/.netlify/functions/api',
       data: {
         apiResource: 'values',
         apiMethod: 'get',
@@ -82,7 +82,7 @@ const fetch = (
     if (paymentTypeReceivable === 'PIX') {
       configBanKData = {
         method: 'POST',
-        url: process.env.SHEET_URL,
+        url: 'https://ziro-sheets.netlify.app/.netlify/functions/api',
         data: {
           apiResource: 'values',
           apiMethod: 'get',
@@ -114,9 +114,9 @@ const fetch = (
             //console.log('store',store)
             //console.log('data[0]',data[0])
             //console.log('teste includes',reasonsStoreowners.includes(data[0]))
-            if(!reasonsStoreowners.includes(data[0]) && !storeowners.includes(store)){
-                reasonsStoreowners.push(data[0])
-                storeowners.push(store)
+            if (!reasonsStoreowners.includes(data[0]) && !storeowners.includes(store)) {
+              reasonsStoreowners.push(data[0])
+              storeowners.push(store)
             }
           }
         })

@@ -4,31 +4,31 @@ import { storage } from '../../Firebase/index'
 
 const configSheet = (array) => {
     return {
-      method:'POST',
-      url:process.env.SHEET_URL,
-      data:{
-        "apiResource": "values",
-        "apiMethod": "append",
-        "spreadsheetId": process.env.SHEET_ID_FORM_DUPLICATES,
-        "range": "Base!A1",
-        "resource": {
-            "values": [array]
+        method: 'POST',
+        url: 'https://ziro-sheets.netlify.app/.netlify/functions/api',
+        data: {
+            "apiResource": "values",
+            "apiMethod": "append",
+            "spreadsheetId": process.env.SHEET_ID_FORM_DUPLICATES,
+            "range": "Base!A1",
+            "resource": {
+                "values": [array]
+            },
+            "valueInputOption": "user_entered"
         },
-        "valueInputOption": "user_entered"
-      },
-      headers:{
-        'Content-Type': 'application/json',
-        Authorization: process.env.SHEET_TOKEN
-      }
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: process.env.SHEET_TOKEN
+        }
     }
-  }
+}
 
 const sendToBackend = state => () => {
-    const {codigoBarra, setCodigoBarra,type, setType, setInputDate, inputDate, duplicateValue, setDuplicateValue, provider, setProvider, setFileDuplicate, duplicate, setDuplicate, isLoading} = state
+    const { codigoBarra, setCodigoBarra, type, setType, setInputDate, inputDate, duplicateValue, setDuplicateValue, provider, setProvider, setFileDuplicate, duplicate, setDuplicate, isLoading } = state
     return new Promise(async (resolve, reject) => {
         try {
             const timestamp = Date.now();
-            if(duplicate.size > 0){
+            if (duplicate.size > 0) {
                 const image = storage.child(`Duplicataprovider/provider-${provider}-${timestamp}`);
                 const uploadTask = await image.put(duplicate);
                 const imgUrl = await uploadTask.ref.getDownloadURL();
@@ -43,7 +43,7 @@ const sendToBackend = state => () => {
                 setDuplicateValue('')
                 setCodigoBarra('')
                 setType('')
-            }else{
+            } else {
                 reject('Imagem sem tamanho!')
             }
         } catch (error) {

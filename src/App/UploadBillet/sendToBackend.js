@@ -3,7 +3,7 @@ import { readAndCompressImage } from 'browser-image-resizer';
 import { storage } from '../../Firebase/index';
 
 const findBilletRow = async billetNumber => {
-    const url = process.env.SHEET_URL;
+    const url = 'https://ziro-sheets.netlify.app/.netlify/functions/api';
     let pos;
     const config = {
         headers: {
@@ -38,7 +38,7 @@ const sendToBackend = state => () => {
             const image = storage.child(`Boletos/${billet}-${timestamp}`);
             const uploadTask = await image.put(compressed);
             const imgUrl = await uploadTask.ref.getDownloadURL();
-            const url = process.env.SHEET_URL
+            const url = 'https://ziro-sheets.netlify.app/.netlify/functions/api'
             const body = {
                 apiResource: 'values',
                 apiMethod: 'update',

@@ -39,7 +39,9 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
   const [captureModal, setCaptureModal] = useState(false)
   const [splitTransactionModal, setSplitTransactionModal] = useState(false)
   const textAreaRef = useRef(null)
-  const paymentLink = process.env.HOMOLOG ? `http://localhost:8080/pagamento/${transactionId}` : `https://ziro.app/pagamento/${transactionId}`
+  const paymentLink = process.env.HOMOLOG
+    ? `http://localhost:8080/pagamento/${transactionId}`
+    : `https://ziro-app.netlify.app/pagamento/${transactionId}`
   const [blocksStoreowner, setBlocksStoreowner] = useState([])
   const [validationMessage, setValidationMessage] = useState('')
   const [loadingButton, setLoadingButton] = useState(false)
@@ -73,7 +75,7 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
       amount = amount.replace('R$', '').replace(',', '').replace('.', '')
       await axios
         .post(
-          `${process.env.PAY}/payments-capture?transaction_id=${transaction_id}`,
+          `https://ziro-pay.netlify.app/.netlify/functions/payments-capture?transaction_id=${transaction_id}`,
           {
             transaction_id,
             on_behalf_of,
@@ -107,7 +109,7 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
         setLoadingButton(true)
         await axios
           .post(
-            `${process.env.PAY}/payments-void`,
+            `https://ziro-pay.netlify.app/.netlify/functions/payments-void`,
             {
               transaction_id,
               on_behalf_of,
@@ -148,6 +150,18 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
       setIsDeleting(true)
       try {
         await db.collection('credit-card-payments').doc(transactionId).delete()
+
+        if (transaction.createdIn === 'Retailers') {
+          const now = fs.FieldValue.serverTimestamp()
+
+          await db
+            .collection('retailers')
+            .doc(transaction.retailerUid)
+            .collection('orders')
+            .doc(transaction.orderId)
+            .set({ dateUpdated: now, status: 'pendente-pagar', paymentId: fs.FieldValue.delete() }, { merge: true })
+        }
+
         setLocation('/transacoes')
         setIsLoading(false)
       } catch (error) {
@@ -343,6 +357,10 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
                 title: 'Link criado por',
                 content: transaction.collaboratorName ? `${transaction.collaboratorName}` : 'Admin',
               },
+              transaction.createdIn === 'Retailers' && {
+                title: 'Link criado pelo',
+                content: 'Carrinho',
+              },
               {
                 title: 'Observações',
                 content: transaction.observations ? `${transaction.observations}` : '-',
@@ -519,6 +537,7 @@ const TransactionDetails = ({ transactions, transactionId, transaction, setTrans
   const isApproved = transaction.status === 'Aprovado' || transaction.status === 'Pago' || transaction.status === 'Pré Autorizado'
   const isCanceled = transaction.status === 'Cancelado' || transaction.status === 'Falhado'
   const isWaiting = transaction.status === 'Aguardando Pagamento' || transaction.status === 'Aprovação Pendente'
+
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={containerWithPadding}>
       <input type="text" style={{ position: 'absolute', left: '-9999px' }} value={paymentLink} ref={textAreaRef} readOnly />

@@ -26,7 +26,7 @@ const sendToBackend = state => () => {
     const conta = accountNumber ? accountNumber.trim() : ''
     const agencia = agency ? agency.trim() : ''
 
-    const url = process.env.SHEET_URL
+    const url = 'https://ziro-sheets.netlify.app/.netlify/functions/api'
 
     const body = {
         apiResource: 'values',
