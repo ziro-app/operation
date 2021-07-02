@@ -16,6 +16,7 @@ export interface CardType {
     images: string[]
     price: string
     reference: string
+    title: string
   }
   variations: {
     colors: string

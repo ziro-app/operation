@@ -11,6 +11,7 @@ import { TextSuccess, TextError } from "./Modals"
 const ProductsNew = () => {
   const [, params] = useRoute("/produtos/:fantasia/:supplierUid/novo")
   const [images, setImages] = useState<File[]>()
+  const [title, setTitle] = useState("")
   const [description, setDescription] = useState("")
   const [price, setPrice] = useState("")
   const [discount, setDiscount] = useState("")
@@ -19,8 +20,8 @@ const ProductsNew = () => {
   const [sizes, setSizes] = useState("")
   const uid = params && params.supplierUid
   const fantasy = params && params.fantasia
-  const state = { images, description, price, discount, reference, colors, sizes, uid, fantasy }
-  const setState = { setImages, setDescription, setPrice, setDiscount, setReference, setColors, setSizes }
+  const state = { images, title, description, price, discount, reference, colors, sizes, uid, fantasy }
+  const setState = { setImages, setTitle, setDescription, setPrice, setDiscount, setReference, setColors, setSizes }
   return (
     <Form
       validations={validations(state)}
@@ -30,8 +31,10 @@ const ProductsNew = () => {
     >
       <Title size="smallMedium">Imagens</Title>
       <InputFile inputName="images" value={images} setValue={setImages} />
+      <Title size="smallMedium">Título</Title>
+      <InputText inputName="title" value={title} setValue={setTitle} placeholder="Blusa com alça" />
       <Title size="smallMedium">Descrição</Title>
-      <InputText inputName="description" value={description} setValue={setDescription} placeholder="Blusa com alça" />
+      <InputText inputName="description" value={description} setValue={setDescription} placeholder="Algodão" />
       <Title size="smallMedium">Preço</Title>
       <InputMoney inputName="price" value={price} setValue={setPrice} placeholder="R$100,00" />
       <Title size="smallMedium">Desconto</Title>

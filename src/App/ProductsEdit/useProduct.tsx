@@ -10,6 +10,7 @@ const useProduct = (supplierUid: string, productId: string, setState: setStateTy
       setIsLoading,
       setFetchedImages,
       setDescription,
+      setTitle,
       setPrice,
       setDiscount,
       setReference,
@@ -17,10 +18,11 @@ const useProduct = (supplierUid: string, productId: string, setState: setStateTy
       setSizes,
     } = setState
     const { information, variations } = data
-    const { images, description, price, discount, reference } = information
+    const { images, title, description, price, discount, reference } = information
     const { colors, sizes } = variations
     setIsLoading(false)
     setFetchedImages(images)
+    setTitle(title)
     setDescription(description)
     setPrice(price)
     setDiscount(discount)

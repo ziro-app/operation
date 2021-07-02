@@ -21,6 +21,7 @@ const ProductsEdit = () => {
   const [confirmDelete, setConfirmDelete] = useState(false)
   const [fetchedImages, setFetchedImages] = useState<string[]>()
   const [images, setImages] = useState<File[]>()
+  const [title, setTitle] = useState("")
   const [description, setDescription] = useState("")
   const [price, setPrice] = useState("")
   const [discount, setDiscount] = useState("")
@@ -33,6 +34,7 @@ const ProductsEdit = () => {
   const state = {
     fetchedImages,
     images,
+    title,
     description,
     price,
     discount,
@@ -47,6 +49,7 @@ const ProductsEdit = () => {
     setIsLoading,
     setFetchedImages,
     setImages,
+    setTitle,
     setDescription,
     setPrice,
     setDiscount,
@@ -70,8 +73,10 @@ const ProductsEdit = () => {
       >
         <Title size="smallMedium">Imagens</Title>
         <InputFile inputName="images" value={images} setValue={setImages} />
+        <Title size="smallMedium">Título</Title>
+        <InputText inputName="title" value={title} setValue={setTitle} placeholder="Blusa com alça" />
         <Title size="smallMedium">Descrição</Title>
-        <InputText inputName="description" value={description} setValue={setDescription} placeholder="Blusa com alça" />
+        <InputText inputName="description" value={description} setValue={setDescription} placeholder="Algodão" />
         <Title size="smallMedium">Preço</Title>
         <InputMoney inputName="price" value={price} setValue={setPrice} placeholder="R$100,00" />
         <Title size="smallMedium">Desconto</Title>

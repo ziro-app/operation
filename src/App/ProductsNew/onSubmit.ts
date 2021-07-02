@@ -4,7 +4,7 @@ import validateImages from './validateImages'
 import { stateType, setStateType } from './types'
 
 const onSubmit = async (state: stateType, setState: setStateType) => {
-  const { images, description, price, discount, reference, colors, sizes, uid, fantasy } = state
+  const { images, title, description, price, discount, reference, colors, sizes, uid, fantasy } = state
   try {
     validateImages(images)
     const now = fs.FieldValue.serverTimestamp()
@@ -33,6 +33,7 @@ const onSubmit = async (state: stateType, setState: setStateType) => {
           images: imagesUrls,
           price,
           reference,
+          title,
         },
         variations: {
           colors,

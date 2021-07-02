@@ -3,7 +3,7 @@ import validateImages from './validateImages'
 import { stateType, setStateType } from './types'
 
 const onSubmit = async (state: stateType, setState: setStateType) => {
-  const { fetchedImages, images, description, price, discount, reference, colors, sizes, uid, fantasy, productId } = state
+  const { fetchedImages, images, title, description, price, discount, reference, colors, sizes, uid, fantasy, productId } = state
   try {
     let _images
     if (images) {
@@ -35,6 +35,7 @@ const onSubmit = async (state: stateType, setState: setStateType) => {
           images: images ? _images : fetchedImages,
           price,
           reference,
+          title,
         },
         variations: {
           colors,
