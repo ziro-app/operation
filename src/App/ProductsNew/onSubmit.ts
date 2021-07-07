@@ -1,4 +1,5 @@
 import { fs, db, storage } from '../../Firebase/index'
+import { readAndCompressImage } from 'browser-image-resizer'
 import clearForm from './clearForm'
 import validateImages from './validateImages'
 import { stateType, setStateType } from './types'
@@ -11,8 +12,9 @@ const onSubmit = async (state: stateType, setState: setStateType) => {
     const imagesUrls = await Promise.all(
       images.map(async (image: File) => {
         try {
+          const compressed = await readAndCompressImage(image, { quality: 0.65 })
           const imageRef = storage.child(`${fantasy}/${fantasy}-${Date.now()}-${image.name}`)
-          const uploadTask = await imageRef.put(image)
+          const uploadTask = await imageRef.put(compressed)
           const url = await uploadTask.ref.getDownloadURL()
           return url
         } catch (error) {
